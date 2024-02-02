@@ -1,14 +1,23 @@
 package com.example.csci3130_group_3;
 
 public class Employer extends User {
-    String employer_id;
+    protected String employerId;
 
-    Employer(String name, String id) {
-        super(name);
-        employer_id = id;
+    /**
+     * Required by Firebase.
+     */
+    Employer() {
+        super();
+        this.employerId = "";
+    }
+
+    Employer(String name, String employerId) {
+        //super(name);
+        this.name = name;
+        this.employerId = employerId;
     }
 
     public String getEmployerId() {
-        return employer_id;
+        return employerId;
     }
 }

@@ -31,7 +31,8 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         recvBtn.setOnClickListener(v -> {
             db.read(
                 "test",
-                (String message) -> Log.d("recv", message),
+                User.class,
+                user -> Log.d("recv", user.getName()),
                 error -> Log.d("recv", error)
             );
         });

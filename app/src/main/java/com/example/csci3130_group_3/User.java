@@ -1,7 +1,17 @@
 package com.example.csci3130_group_3;
 
-public abstract class User {
-    String name;
+/**
+ * This is not abstract so that we can instantiate a generic user when reading from a database.
+ */
+public class User {
+    protected String name;
+
+    /**
+     * Required by Firebase.
+     */
+    User() {
+        name = "";
+    }
 
     User(String name) {
         this.name = name;

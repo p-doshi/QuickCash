@@ -19,9 +19,10 @@ public interface Database {
      * the database.
      *
      * @param location The location in the database to read the value.
+     * @param type The type of the data to read. NOTE: This is necessary due to Java's type erasure.
      * @param readFunction The function to receive the data.
      * @param errorFunction The function that will be called in case of an error.
      * @param <T> Can read any type of data from firebase.
      */
-    <T> void read(String location, Consumer<T> readFunction, Consumer<String> errorFunction);
+    <T> void read(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction);
 }
