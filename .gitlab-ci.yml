@@ -15,13 +15,8 @@ cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 before_script:
-  # Install kvm for hardware virtualization.
-  - yes | apt-get update 2>&1
-  - yes | apt-get upgrade 2>&1
-  - yes | apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
-
-  # Make sure kvm installed.
-  - kvm-ok
+  # Check for hardware virtualization support.
+  - egrep -c '(vmx|svm)' /proc/cpuinfo
 
   # Create an android emulator and launch it.
   - avdmanager create avd -n default_avd -k "system-images;android-24;google_apis;x86_64" --device "pixel"
