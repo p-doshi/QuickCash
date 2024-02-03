@@ -1,5 +1,8 @@
 # This file comes from a basic template for GitLab CI/CD
 
+default:
+  image: openjdk:11-jdk
+
 stages:
   - test
 
@@ -19,7 +22,7 @@ variables:
 
 cache:
   # Cache the SDK and the NDK to speed up the build
-  key: "$CI_JOB_NAME"
+  key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
   paths:
     - .android-sdk/
     - .android-ndk/
