@@ -16,8 +16,8 @@ cache:
 
 before_script:
   # Create an android emulator and launch it.
-  - avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-24;google_apis;x86_64"
-  - emulator -avd first_avd -no-window -no-audio &
+  - avdmanager create avd -n default_avd -k "system-images;android-24;google_apis;x86_64"
+  - emulator -avd default_avd -no-window -no-audio &
 
   # Make the gradle wrapper executable
   - chmod +x $GRADLE_WRAPPER
