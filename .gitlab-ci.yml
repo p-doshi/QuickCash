@@ -16,7 +16,7 @@ cache:
 
 before_script:
   # Install kvm for hardware virtualization.
-  - yes | apt-get udpate
+  - yes | apt-get update
   - yes | apt-get upgrade
   - yes | apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
 
