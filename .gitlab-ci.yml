@@ -16,7 +16,8 @@ cache:
 
 before_script:
   # Create an android emulator and launch it.
-  - avdmanager create avd -n default_avd -k "system-images;android-24;google_apis;x86_64"
+  - avdmanager list device
+  - avdmanager create avd -n default_avd -k "system-images;android-24;google_apis;x86_64" --device "Pixel"
   - emulator -avd default_avd -no-window -no-audio &
 
   # Make the gradle wrapper executable
