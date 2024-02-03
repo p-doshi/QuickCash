@@ -1,39 +1,27 @@
 # This file comes from a basic template for GitLab CI/CD
 
 default:
-  image: openjdk:11-jdk
+  image: androidsdk/android-24:latest
 
 stages:
   - test
 
 variables:
-  # Define the SDK version and build tools version
-  ANDROID_SDK_VERSION: "24"
-  ANDROID_BUILD_TOOLS_VERSION: "24.0.0"
-
-  # Define where to store the SDK and the NDK
-  ANDROID_SDK_ROOT: "$CI_PROJECT_DIR/android-sdk"
-  ANDROID_HOME: "$ANDROID_SDK_ROOT"
-  ANDROID_NDK_ROOT: "$CI_PROJECT_DIR/android-ndk"
-  ANDROID_NDK_HOME: "$ANDROID_NDK_ROOT"
-
   # Define the gradle wrapper path
   GRADLE_WRAPPER: "$CI_PROJECT_DIR/gradlew"
 
 cache:
   # Cache the SDK and the NDK to speed up the build
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
-  paths:
-    - .android-sdk/
-    - .android-ndk/
 
 before_script:
-  # Install the SDK and the NDK
-  - bash scripts/install-sdk.sh
-  - bash scripts/install-ndk.sh
+  # Create an android emulator and launch it.
+  # - avdmanager create avd -n first_avd --abi google_apis/x86_64 -k "system-images;android-24;google_apis;x86_64"
+  # - emulator -avd first_avd -no-window -no-audio &
 
-  # Make the gradle wrapper executable
-  - chmod +x $GRADLE_WRAPPER
+  # View installed files.
+  - sdkmanager --list
+  - avdmanager list avd
 
 test:
   stage: test
