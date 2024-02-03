@@ -15,10 +15,6 @@ cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 before_script:
-  # Check for virtualization support.
-  - yes | apt install cpu-checker
-  - egrep -c '(vmx|svm)' /proc/cpuinfo
-
   # Install kvm for hardware virtualization.
   - yes | apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
 
