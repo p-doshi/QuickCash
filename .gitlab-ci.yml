@@ -4,7 +4,8 @@ default:
   image: androidsdk/android-24:latest
 
 stages:
-  - test
+  - JUnitTest
+  - EspressoTest
 
 variables:
   # Define the gradle wrapper path
@@ -26,10 +27,12 @@ before_script:
   - chmod +x $GRADLE_WRAPPER
 
 test:
-  stage: test
+  stage: JUnitTest
   script:
     # Run the unit tests
     - $GRADLE_WRAPPER :app:testDebugUnitTest
 
+  stage: EspressoTest
+  script:
     # Run the espresso tests
     - $GRADLE_WRAPPER :app:connectedDebugAndroidTest
