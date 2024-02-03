@@ -4,8 +4,8 @@ default:
   image: androidsdk/android-24:latest
 
 stages:
-  - JUnitTest
-  - EspressoTest
+  - build
+  - test
 
 variables:
   # Define the gradle wrapper path
@@ -16,9 +16,6 @@ cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 before_script:
-  # Check for hardware virtualization support.
-  - egrep -c '(vmx|svm)' /proc/cpuinfo
-
   # Create an android emulator and launch it.
   - avdmanager create avd -n default_avd -k "system-images;android-24;google_apis;x86_64" --device "pixel"
   - emulator -avd default_avd -no-window -no-audio &
@@ -26,13 +23,20 @@ before_script:
   # Make the gradle wrapper executable
   - chmod +x $GRADLE_WRAPPER
 
-test:
-  stage: JUnitTest
+build:
+  stage: build
+  script:
+    # rebuild command
+    - gradle build --refresh-dependencies
+
+JUnitTest:
+  stage: test
   script:
     # Run the unit tests
     - $GRADLE_WRAPPER :app:testDebugUnitTest
 
-  stage: EspressoTest
+EspressoTest:
+  stage: test
   script:
     # Run the espresso tests
     - $GRADLE_WRAPPER :app:connectedDebugAndroidTest
