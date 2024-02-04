@@ -16,9 +16,8 @@ cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 before_script:
-  # Create an android emulator and launch it.
-  - avdmanager create avd -n default_avd -k "system-images;android-24;google_apis;x86_64" --device "pixel"
-  - emulator -avd default_avd -no-window -no-audio &
+  # Launch the android emulator.
+  - $EMU_HEADLESS
 
   # Make the gradle wrapper executable
   - chmod +x $GRADLE_WRAPPER
@@ -33,10 +32,10 @@ JUnitTest:
   stage: test
   script:
     # Run the unit tests
-    - $GRADLE_WRAPPER :app:testDebugUnitTest
+    - $GRADLE_WRAPPER :app:testDebugUnitTest --console verbose
 
 EspressoTest:
   stage: test
   script:
     # Run the espresso tests
-    - $GRADLE_WRAPPER :app:connectedDebugAndroidTest
+    - $GRADLE_WRAPPER :app:connectedDebugAndroidTest --console verbose
