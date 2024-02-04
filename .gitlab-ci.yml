@@ -1,7 +1,9 @@
 # This file comes from a basic template for GitLab CI/CD
 
 default:
-  image: androidsdk/android-24:latest
+  image: docker.io/ethrozee/android-emulator
+  devices:
+  - /dev/kvm:/dev/kvm
 
 stages:
   - build
