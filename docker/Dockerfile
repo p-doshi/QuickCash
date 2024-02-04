@@ -24,7 +24,7 @@ RUN apt update && apt install -y curl sudo wget unzip bzip2 libdrm-dev libxkbcom
 #==============================
 ARG ARCH="x86_64" 
 ARG TARGET="google_apis"  
-ARG API_LEVEL="24"
+ARG API_LEVEL="34"
 ARG BUILD_TOOLS="34.0.0"
 ARG ANDROID_ARCH=${ANDROID_ARCH_DEFAULT}
 ARG ANDROID_API_LEVEL="android-${API_LEVEL}"
