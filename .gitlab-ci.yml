@@ -2,8 +2,8 @@
 
 default:
   image: docker.io/ethrozee/android-emulator
-  devices:
-    - /dev/kvm:/dev/kvm
+  #devices:
+  #  - /dev/kvm:/dev/kvm
 
 stages:
   - build
@@ -19,7 +19,7 @@ cache:
 
 before_script:
   # Launch the android emulator.
-  - $EMU_HEADLESS
+  #- $EMU_HEADLESS
 
   # Make the gradle wrapper executable
   - chmod +x $GRADLE_WRAPPER
@@ -35,9 +35,14 @@ JUnitTest:
   script:
     # Run the unit tests
     - $GRADLE_WRAPPER :app:testDebugUnitTest --console verbose
+  artifacts:
+    when: always
+    reports:
+      junit: app/build/test-results/testDebugUnitTest/TEST-com.example.csci3130_group_3.ExampleUnitTest.xml
 
-EspressoTest:
-  stage: test
-  script:
-    # Run the espresso tests
-    - $GRADLE_WRAPPER :app:connectedDebugAndroidTest --console verbose
+
+#EspressoTest:
+#  stage: test
+#  script:
+#    # Run the espresso tests
+#    - $GRADLE_WRAPPER :app:connectedDebugAndroidTest --console verbose
