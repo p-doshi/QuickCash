@@ -28,7 +28,7 @@ build:
   stage: build
   script:
     # rebuild command
-    - $GRADLE_WRAPPER build --refresh-dependencies
+    - $GRADLE_WRAPPER assemble --refresh-dependencies
 
 JUnitTest:
   stage: test
