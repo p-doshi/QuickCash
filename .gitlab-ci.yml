@@ -3,7 +3,7 @@
 default:
   image: docker.io/ethrozee/android-emulator
   devices:
-  - /dev/kvm:/dev/kvm
+    - /dev/kvm:/dev/kvm
 
 stages:
   - build
