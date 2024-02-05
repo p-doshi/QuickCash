@@ -28,7 +28,7 @@ JUnitTest:
   artifacts:
     when: always
     paths:
-      - JUnitTest-results.xml
+      - app/build/test-results/testDebugUnitTest/TEST-*.xml
     reports:
       junit: app/build/test-results/testDebugUnitTest/TEST-*.xml
 
