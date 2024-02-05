@@ -28,7 +28,7 @@ JUnitTest:
   artifacts:
     when: always
     reports:
-      junit: app/build/test-results/test/testDebugUnitTest/TEST-*.xml
+      junit: app/build/test-results/testDebugUnitTest/TEST-*.xml
 
 #EspressoTest:
 #  stage: test
@@ -41,4 +41,4 @@ JUnitTest:
 #  artifacts:
 #    when: always
 #    reports:
-#      junit: app/build/test-results/test/connectedDebugAndroidTest/TEST-*.xml
+#      junit: app/build/test-results/connectedDebugAndroidTest/TEST-*.xml
