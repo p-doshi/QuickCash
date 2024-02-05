@@ -46,9 +46,10 @@ ENV DOCKER="true"
 # Install required Android CMD-line tools
 #============================================
 RUN wget https://dl.google.com/android/repository/${ANDROID_CMD} -P /tmp && \
-              unzip -d $ANDROID_SDK_ROOT /tmp/$ANDROID_CMD && \
-              mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/tools && cd $ANDROID_SDK_ROOT/cmdline-tools &&  mv NOTICE.txt source.properties bin lib tools/  && \
-              cd $ANDROID_SDK_ROOT/cmdline-tools/tools && ls
+    unzip -d $ANDROID_SDK_ROOT /tmp/$ANDROID_CMD && \
+    mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/tools && \
+    cd $ANDROID_SDK_ROOT/cmdline-tools &&  mv NOTICE.txt source.properties bin lib tools/  && \
+    cd / && rm -rf /tmp/*
 
 #============================================
 # Install required package using SDK manager
@@ -70,11 +71,10 @@ RUN echo "no" | avdmanager --verbose create avd --force --name "${EMULATOR_NAME}
 #===================
 ENV EMU_HEADLESS=/start_emu_headless.sh
 
-#=========================
-# Copying Scripts to root
-#=========================
+#==================================
+# Copying Emulator Script to root
+#==================================
 COPY . /
-
 RUN chmod a+x start_emu_headless.sh
 
 #=======================

@@ -6,7 +6,6 @@ default:
   #  - /dev/kvm:/dev/kvm
 
 stages:
-  - build
   - test
 
 variables:
@@ -18,31 +17,28 @@ cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 before_script:
-  # Launch the android emulator.
-  #- $EMU_HEADLESS
-
   # Make the gradle wrapper executable
   - chmod +x $GRADLE_WRAPPER
-
-build:
-  stage: build
-  script:
-    # rebuild command
-    - $GRADLE_WRAPPER assemble --refresh-dependencies
 
 JUnitTest:
   stage: test
   script:
     # Run the unit tests
-    - $GRADLE_WRAPPER :app:testDebugUnitTest --console verbose
+    - $GRADLE_WRAPPER :app:testDebugUnitTest
   artifacts:
     when: always
     reports:
-      junit: app/build/test-results/testDebugUnitTest/TEST-com.example.csci3130_group_3.ExampleUnitTest.xml
-
+      junit: app/build/test-results/testDebugUnitTest/*
 
 #EspressoTest:
 #  stage: test
 #  script:
+#    # Launch the android emulator.
+#    - $EMU_HEADLESS
+#    
 #    # Run the espresso tests
-#    - $GRADLE_WRAPPER :app:connectedDebugAndroidTest --console verbose
+#    - $GRADLE_WRAPPER :app:connectedDebugAndroidTest
+#  artifacts:
+#    when: always
+#    reports:
+#      junit: app/build/test-results/connectedDebugAndroidTest/*
