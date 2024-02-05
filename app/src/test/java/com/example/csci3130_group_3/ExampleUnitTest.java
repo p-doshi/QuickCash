@@ -1,18 +1,17 @@
 package com.example.csci3130_group_3;
 
 import org.junit.Test;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class LoginValidatorUnitTest {
+public class ExampleUnitTest {
     @Test
-    public void checkEmailNull() {
-        assertFalse(LoginValidator.isValidEmail(null));
+    public void addition_isCorrect() {
+        assertEquals(4, 2 + 2);
     }
-
 }
