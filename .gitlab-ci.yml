@@ -27,7 +27,7 @@ JUnitTest:
   script:
     # Run the unit tests
     - $GRADLE_WRAPPER :app:$JUNIT_TEST
-  after-script:
+  after_script:
     # Copy test results
     - $ZIP_TEST_RESULTS $JUNIT_TEST
   artifacts:
@@ -45,7 +45,7 @@ JUnitTest:
 #    
 #    # Run the espresso tests
 #    - $GRADLE_WRAPPER :app:$ESPRESSO_TEST
-#  after-script:
+#  after_script:
 #    # Copy test results
 #    - $ZIP_TEST_RESULTS $ESPRESSO_TEST
 #  artifacts:
