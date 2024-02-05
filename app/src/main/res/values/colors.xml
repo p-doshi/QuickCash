@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gunmetal">#FF27363F</color>
+    <color name="cerulean">#FF247BA0</color>
+    <color name="uranian_blue">#FFA8D5EE</color>
+    <color name="anti_flash_white">#FFF0F0F0</color>
+    <color name="brunswick_green">#FF273F31</color>
+    <color name="shamrock_green">#FF249E57</color>
+    <color name="celadon">#FFAAEEC6</color>
 </resources>
