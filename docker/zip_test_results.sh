@@ -4,8 +4,8 @@
 subdir=$1
 
 # Zip the contents of the subdirectory and name the zip file as the subdirectory name
-cd app/build/reports/tests
-zip -r "${subdir}.zip" "$subdir"
+cd "app/build/reports/tests/${subdir}"
+zip -r "${subdir}.zip" *
 
 # Copy the zip file to the current directory
-cp "${subdir}.zip" ../../../../
+cp "${subdir}.zip" ../../../../../
