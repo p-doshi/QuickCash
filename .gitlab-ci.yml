@@ -27,6 +27,8 @@ JUnitTest:
     - $GRADLE_WRAPPER :app:testDebugUnitTest
   artifacts:
     when: always
+    paths:
+      - JUnitTest-results.xml
     reports:
       junit: app/build/test-results/testDebugUnitTest/TEST-*.xml
 
