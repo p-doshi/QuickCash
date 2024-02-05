@@ -17,7 +17,7 @@ WORKDIR /
 #=============================
 SHELL ["/bin/bash", "-c"]   
 
-RUN apt update && apt install -y curl sudo wget unzip bzip2 libdrm-dev libxkbcommon-dev libgbm-dev libasound-dev libnss3 libxcursor1 libxshmfence-dev xauth libdbus-glib-1-2
+RUN apt update && apt install -y curl sudo wget zip unzip bzip2 libdrm-dev libxkbcommon-dev libgbm-dev libasound-dev libnss3 libxcursor1 libxshmfence-dev xauth libdbus-glib-1-2
 
 #==============================
 # Android SDK ARGS
@@ -70,12 +70,13 @@ RUN echo "no" | avdmanager --verbose create avd --force --name "${EMULATOR_NAME}
 # Alias
 #===================
 ENV EMU_HEADLESS=/start_emu_headless.sh
+ENV ZIP_TEST_RESULTS=/zip_test_results.sh
 
 #==================================
 # Copying Emulator Script to root
 #==================================
 COPY . /
-RUN chmod a+x start_emu_headless.sh
+RUN chmod a+x $EMU_HEADLESS $ZIP_TEST_RESULTS
 
 #=======================
 # framework entry point

@@ -11,6 +11,8 @@ stages:
 variables:
   # Define the gradle wrapper path
   GRADLE_WRAPPER: "$CI_PROJECT_DIR/gradlew"
+  JUNIT_TEST: "testDebugUnitTest"
+  ESPRESSO_TEST: "connectedDebugAndroidTest"
 
 cache:
   # Cache the SDK and the NDK to speed up the build
@@ -24,13 +26,16 @@ JUnitTest:
   stage: test
   script:
     # Run the unit tests
-    - $GRADLE_WRAPPER :app:testDebugUnitTest
+    - $GRADLE_WRAPPER :app:$JUNIT_TEST
+  after-script:
+    # Copy test results
+    - $ZIP_TEST_RESULTS $JUNIT_TEST
   artifacts:
     when: always
     paths:
-      - app/build/test-results/testDebugUnitTest/TEST-*.xml
+      - $JUNIT_TEST.zip
     reports:
-      junit: app/build/test-results/testDebugUnitTest/TEST-*.xml
+      junit: $JUNIT_TEST.zip
 
 #EspressoTest:
 #  stage: test
@@ -39,8 +44,13 @@ JUnitTest:
 #    - $EMU_HEADLESS
 #    
 #    # Run the espresso tests
-#    - $GRADLE_WRAPPER :app:connectedDebugAndroidTest
+#    - $GRADLE_WRAPPER :app:$ESPRESSO_TEST
+#  after-script:
+#    # Copy test results
+#    - $ZIP_TEST_RESULTS $ESPRESSO_TEST
 #  artifacts:
 #    when: always
+#    paths:
+#      - $ESPRESSO_TEST.zip
 #    reports:
-#      junit: app/build/test-results/connectedDebugAndroidTest/TEST-*.xml
+#      junit: $ESPRESSO_TEST.zip
