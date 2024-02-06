@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Continue"
+        android:id="@+id/continueButton"
         android:layout_width="248dp"
         android:layout_height="49dp"
         android:text="@string/continue_login"

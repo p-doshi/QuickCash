@@ -3,7 +3,6 @@ package com.example.csci3130_group_3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         toastMsg = Toast.makeText(this, getResources().getString(R.string.TOAST_STRING), Toast.LENGTH_SHORT);
 
         // Set the button functionality.
-        Button continueButton = findViewById(R.id.Continue);
+        Button continueButton = findViewById(R.id.continueButton);
         continueButton.setOnClickListener(v -> {
             validateAndLogin();
         });
