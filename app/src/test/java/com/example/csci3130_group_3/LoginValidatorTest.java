@@ -14,4 +14,9 @@ public class LoginValidatorTest {
     public void checkValidEmail() {
         assertTrue(LoginValidator.isValidEmail("ethroz@dal.ca"));
     }
+    @Test
+    public void checkInvalidEmail() {
+        assertFalse(LoginValidator.isValidEmail("ksdksdfn"));
+    }
+
 }
