@@ -19,6 +19,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+//need to change the name according to your file
+//import com.example.csci3130_group_3.[employeeDashboard];
 
 public class EmployeeDashboardUITest {
     private static final int LAUNCH_TIMEOUT = 5000;
@@ -37,13 +39,13 @@ public class EmployeeDashboardUITest {
 
     @Test
     public void checkIfEmployeeDashboardPageIsVisible() {
-        UiObject mapIcon = device.findObject(new UiSelector().resourceId("mapPage"));
-        assertTrue(mapIcon.exists());
-        UiObject searchIcon = device.findObject(new UiSelector().resourceId("searchPage"));
-        assertTrue(searchIcon.exists());
-        UiObject receiptIcon = device.findObject(new UiSelector().textContains("receiptPage"));
-        assertTrue(receiptIcon.exists());
-        UiObject profileIcon = device.findObject(new UiSelector().text("profilePage"));
-        assertTrue(profileIcon.exists());
+        UiObject employeeMapIcon = device.findObject(new UiSelector().resourceId("employeeMapPage"));
+        assertTrue(employeeMapIcon.exists());
+        UiObject employeeSearchIcon = device.findObject(new UiSelector().resourceId("employeeSearchPage"));
+        assertTrue(employeeSearchIcon.exists());
+        UiObject employeeReceiptIcon = device.findObject(new UiSelector().resourceId("employeeReceiptPage"));
+        assertTrue(employeeReceiptIcon.exists());
+        UiObject employeeProfileIcon = device.findObject(new UiSelector().resourceId("employeeProfilePage"));
+        assertTrue(employeeProfileIcon.exists());
     }
 }
