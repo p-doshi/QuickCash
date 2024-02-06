@@ -5,6 +5,9 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="checkIfEmployeeDashboardPageIsVisible()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
