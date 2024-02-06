@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class LoginValidatorTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void checkValidEmail() {
+        assertTrue(LoginValidator.isValidEmail("ethroz@dal.ca"));
     }
 }
