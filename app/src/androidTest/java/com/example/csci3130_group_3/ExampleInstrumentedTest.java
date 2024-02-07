@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.not;
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -32,18 +33,41 @@ public class ExampleInstrumentedTest {
     @Before
     public void setup() {
         scenario = ActivityScenario.launch(MainActivity.class);
-        scenario.onActivity((ActivityScenario.ActivityAction<MainActivity>) activity -> {
+        scenario.onActivity(activity -> {
             decorView = activity.getWindow().getDecorView();
         });
     }
 
     @Test
     public void testValidCredentials() {
-        onView(withId(R.id.emailaddress)).perform(typeText("5")).perform(closeSoftKeyboard());
-        onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailaddress)).perform(typeText("5"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.etPassword)).perform(typeText("hi"));
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.continueButton)).perform(click());
-        onView(withText(R.string.TOAST_STRING))
+        onView(withText(R.string.VALID_TOAST))
             .inRoot(withDecorView(not(is(decorView))))
             .check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void testEmptyCredentialsOne() {
+        onView(withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
+        onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
+        onView(withId(R.id.continueButton)).perform(click());
+        onView(withText(R.string.EMPTY_EMAIL_TOAST))
+                .inRoot(withDecorView(not(is(decorView))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEmptyCredentialsTwo() {
+        onView(withId(R.id.emailaddress)).perform(typeText("hi")).perform(closeSoftKeyboard());
+        onView(withId(R.id.etPassword)).perform(typeText("")).perform(closeSoftKeyboard());
+        onView(withId(R.id.continueButton)).perform(click());
+        onView(withText(R.string.EMPTY_PASSWORD_TOAST))
+                .inRoot(withDecorView(not(is(decorView))))
+                .check(matches(isDisplayed()));
     }
 }

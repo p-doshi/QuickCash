@@ -2,10 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ExampleInstrumentedTest">
+        <State />
+      </entry>
+      <entry key="UIAutomatorTest">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
+      <entry key="testEmptyCredentialsTwo()">
+        <State />
+      </entry>
       <entry key="testValidCredentials()">
+        <State />
+      </entry>
+      <entry key="testValidCredentials() (1)">
         <State />
       </entry>
     </value>

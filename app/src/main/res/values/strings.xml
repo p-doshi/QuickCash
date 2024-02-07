@@ -9,6 +9,9 @@
     <string name="remember_me">Remember Me</string>
     <string name="log_in">Log In</string>
     <string name="or">Or</string>
-    <string name="TOAST_STRING">Successful Login</string>
+    <string name="VALID_TOAST">Successful Login</string>
+    <string name="EMPTY_EMAIL_TOAST">Email Required</string>
+    <string name="EMPTY_PASSWORD_TOAST">Password Required</string>
+
 
 </resources>

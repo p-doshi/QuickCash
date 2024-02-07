@@ -7,13 +7,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText emailInput;
     TextInputEditText passwordInput;
-    Toast toastMsg;
+    Snackbar toastMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.etPassword);
 
         // Create a toast message.
-        toastMsg = Toast.makeText(this, getResources().getString(R.string.TOAST_STRING), Toast.LENGTH_SHORT);
+        toastMsg = Snackbar.make(findViewById(android.R.id.content), R.string.VALID_TOAST, Snackbar.LENGTH_SHORT);
+
 
         // Set the button functionality.
         Button continueButton = findViewById(R.id.continueButton);
