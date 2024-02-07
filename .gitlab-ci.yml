@@ -2,8 +2,6 @@
 
 default:
   image: docker.io/ethrozee/android-emulator
-  #devices:
-  #  - /dev/kvm:/dev/kvm
 
 stages:
   - test
@@ -37,20 +35,24 @@ JUnitTest:
     reports:
       junit: $JUNIT_TEST.zip
 
-#EspressoTest:
-#  stage: test
-#  script:
-#    # Launch the android emulator.
-#    - $EMU_HEADLESS
-#    
-#    # Run the espresso tests
-#    - $GRADLE_WRAPPER :app:$ESPRESSO_TEST
-#  after_script:
-#    # Copy test results
-#    - $ZIP_TEST_RESULTS $ESPRESSO_TEST
-#  artifacts:
-#    when: always
-#    paths:
-#      - $ESPRESSO_TEST.zip
-#    reports:
-#      junit: $ESPRESSO_TEST.zip
+EspressoTest:
+  tags: 
+    - dalfcs_docker_kvm
+  devices:
+    - /dev/kvm:/dev/kvm
+  stage: test
+  script:
+    # Launch the android emulator.
+    - $EMU_HEADLESS
+    
+    # Run the espresso tests
+    - $GRADLE_WRAPPER :app:$ESPRESSO_TEST
+  after_script:
+    # Copy test results
+    - $ZIP_TEST_RESULTS $ESPRESSO_TEST
+  artifacts:
+    when: always
+    paths:
+      - $ESPRESSO_TEST.zip
+    reports:
+      junit: $ESPRESSO_TEST.zip
