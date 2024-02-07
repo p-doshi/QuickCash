@@ -38,8 +38,6 @@ JUnitTest:
 EspressoTest:
   tags: 
     - dalfcs_docker_kvm
-  devices:
-    - /dev/kvm:/dev/kvm
   stage: test
   script:
     # Launch the android emulator.
