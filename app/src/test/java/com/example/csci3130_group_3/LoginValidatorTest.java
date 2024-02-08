@@ -9,9 +9,14 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class LoginValidatorTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void checkValidEmail() {
+        assertTrue(LoginValidator.isValidEmail("ethroz@dal.ca"));
     }
+    @Test
+    public void checkInvalidEmail() {
+        assertFalse(LoginValidator.isValidEmail("ksdksdfn"));
+    }
+
 }
