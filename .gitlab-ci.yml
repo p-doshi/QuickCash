@@ -21,7 +21,6 @@ test:
   stage: test
   script:
     # Launch the android emulator.
-    - export HW_ACCEL_OVERRIDE="-accel off"
     - $EMU_HEADLESS
     
     # Run the connected tests
