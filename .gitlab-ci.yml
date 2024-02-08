@@ -1,56 +1,35 @@
-# This file comes from a basic template for GitLab CI/CD
-
 default:
-  image: docker.io/ethrozee/android-emulator
+  image: ethrozee/android-emulator
 
 stages:
   - test
 
 variables:
-  # Define the gradle wrapper path
   GRADLE_WRAPPER: "$CI_PROJECT_DIR/gradlew"
-  JUNIT_TEST: "testDebugUnitTest"
-  ESPRESSO_TEST: "connectedDebugAndroidTest"
+  CONNECTED_TEST: "connectedDebugAndroidTest"
 
 cache:
-  # Cache the SDK and the NDK to speed up the build
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 before_script:
   # Make the gradle wrapper executable
   - chmod +x $GRADLE_WRAPPER
 
-JUnitTest:
-  stage: test
-  script:
-    # Run the unit tests
-    - $GRADLE_WRAPPER :app:$JUNIT_TEST
-  after_script:
-    # Copy test results
-    - $ZIP_TEST_RESULTS $JUNIT_TEST
-  artifacts:
-    when: always
-    paths:
-      - $JUNIT_TEST.zip
-    reports:
-      junit: $JUNIT_TEST.zip
-
-EspressoTest:
+test:
   tags: 
     - dalfcs_docker_kvm
   stage: test
   script:
     # Launch the android emulator.
+    - export HW_ACCEL_OVERRIDE="-accel off"
     - $EMU_HEADLESS
     
-    # Run the espresso tests
-    - $GRADLE_WRAPPER :app:$ESPRESSO_TEST
+    # Run the connected tests
+    - $GRADLE_WRAPPER :app:$CONNECTED_TEST
   after_script:
-    # Copy test results
-    - $ZIP_TEST_RESULTS $ESPRESSO_TEST
+    # Reposition test results
+    - mv ./app/build/reports/tests/$CONNECTED_TEST ./$CONNECTED_TEST
   artifacts:
     when: always
     paths:
-      - $ESPRESSO_TEST.zip
-    reports:
-      junit: $ESPRESSO_TEST.zip
+      - $CONNECTED_TEST
