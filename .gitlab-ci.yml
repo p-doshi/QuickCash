@@ -26,8 +26,9 @@ Build:
 
   artifacts:
     paths:
-      # Give everything to the next stage.
-      - ./
+      # Give the results of compilation to the next stage.
+      - app/build/
+      - .gradle/
 
 UnitTests:
   image: ethrozee/android
