@@ -1,11 +1,12 @@
 default:
-  image: ethrozee/android-emulator
+image: ethrozee/android-emulator
 
 stages:
   - test
 
 variables:
   GRADLE_WRAPPER: "$CI_PROJECT_DIR/gradlew"
+  UNIT_TEST: "testDebugUnitTest"
   CONNECTED_TEST: "connectedDebugAndroidTest"
 
 cache:
@@ -15,7 +16,22 @@ before_script:
   # Make the gradle wrapper executable
   - chmod +x $GRADLE_WRAPPER
 
-test:
+UnitTests:
+  stage: test
+  script:
+    # Run the unit tests
+    - $GRADLE_WRAPPER :app:$UNIT_TEST
+  after_script:
+    # Reposition test results
+    - mv ./app/build/reports/tests/$UNIT_TEST ./$UNIT_TEST
+  artifacts:
+    when: always
+    paths:
+      - $UNIT_TEST
+    reports:
+      junit: $UNIT_TEST
+
+ConnectedTests:
   tags: 
     - dalfcs_docker_kvm
   stage: test
@@ -23,12 +39,14 @@ test:
     # Launch the android emulator.
     - $EMU_HEADLESS
     
-    # Run the connected tests
+    # Run the espresso tests
     - $GRADLE_WRAPPER :app:$CONNECTED_TEST
   after_script:
     # Reposition test results
-    - mv ./app/build/reports/tests/$CONNECTED_TEST ./$CONNECTED_TEST
+    - mv ./app/build/reports/androidTests/connected/debug/ ./$CONNECTED_TEST
   artifacts:
     when: always
     paths:
       - $CONNECTED_TEST
+    reports:
+      junit: $CONNECTED_TEST

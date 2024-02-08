@@ -34,6 +34,6 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void launchAppContext() {
-        onView(withId(R.id.mainText)).check(matches(withText("")));
+        onView(withId(R.id.mainText)).check(matches(withText("Hello World!")));
     }
 }
