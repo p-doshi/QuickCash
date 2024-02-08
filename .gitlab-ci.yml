@@ -1,6 +1,3 @@
-default:
-image: ethrozee/android-emulator
-
 stages:
   - test
 
@@ -17,6 +14,7 @@ before_script:
   - chmod +x $GRADLE_WRAPPER
 
 UnitTests:
+  image: ethrozee/android
   stage: test
   script:
     # Run the unit tests
@@ -27,11 +25,12 @@ UnitTests:
   artifacts:
     when: always
     paths:
-      - $UNIT_TEST
+      - $UNIT_TEST/
     reports:
-      junit: $UNIT_TEST
+      junit: $UNIT_TEST/
 
 ConnectedTests:
+  image: ethrozee/android-emulator
   tags: 
     - dalfcs_docker_kvm
   stage: test
@@ -47,6 +46,6 @@ ConnectedTests:
   artifacts:
     when: always
     paths:
-      - $CONNECTED_TEST
+      - $CONNECTED_TEST/
     reports:
-      junit: $CONNECTED_TEST
+      junit: $CONNECTED_TEST/
