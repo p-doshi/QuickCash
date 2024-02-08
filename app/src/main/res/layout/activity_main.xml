@@ -4,66 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    >
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etPasswordLayout"
-        android:layout_width="340dp"
-        android:layout_height="64dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailaddress"
-        app:layout_constraintVertical_bias="0.247"
-        app:passwordToggleEnabled="true">
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <EditText
-        android:id="@+id/emailaddress"
-        android:layout_width="347dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="104dp"
-        android:autofillHints="emailAddress"
-        android:ems="10"
-        android:hint="@string/email_address"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Login" />
+    tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/Login"
-        android:layout_width="93dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="60dp"
-        android:text="@string/log_in"
-        android:textSize="32sp"
+        android:id="@+id/mainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/continueButton"
-        android:layout_width="248dp"
-        android:layout_height="49dp"
-        android:text="@string/continue_login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPasswordLayout" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etPassword"
-        android:layout_width="322dp"
-        android:layout_height="53dp"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="@+id/etPasswordLayout"
-        app:layout_constraintEnd_toEndOf="@+id/etPasswordLayout"
-        app:layout_constraintStart_toStartOf="@+id/etPasswordLayout"
-        app:layout_constraintTop_toTopOf="@+id/etPasswordLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
