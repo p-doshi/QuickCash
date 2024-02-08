@@ -11,17 +11,17 @@ cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
 before_script:
-  # Make the gradle wrapper executable
+  # Make the gradle wrapper executable.
   - chmod +x ./gradlew
 
-Assemble:
+Build:
   image: ethrozee/android
   interruptible: true
   tags:
     - dalfcs_docker_kvm
   stage: build
   script:
-    # Build the application
+    # Build the application.
     - ./gradlew assembleDebug
 
   artifacts:
@@ -35,11 +35,11 @@ UnitTests:
     - dalfcs_docker_kvm
   stage: test
   script:
-    # Run the unit tests
+    # Run the unit tests.
     - ./gradlew :app:testDebugUnitTest
 
   after_script:
-    # Reposition test results
+    # Reposition test results.
     - mv app/build/reports/tests/testDebugUnitTest testDebugUnitTest
 
   artifacts:
@@ -58,11 +58,11 @@ ConnectedTests:
     # Launch the android emulator.
     - $EMU_HEADLESS
 
-    # Run the espresso tests
+    # Run the connected tests.
     - ./gradlew :app:connectedDebugAndroidTest
 
   after_script:
-    # Reposition test results
+    # Reposition test results.
     - mv app/build/reports/androidTests/connected/debug connectedDebugAndroidTest
 
   artifacts:
