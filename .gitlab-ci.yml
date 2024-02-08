@@ -28,8 +28,6 @@ Build:
     paths:
       # Give the compiled artifacts to the next stage.
       - app/build/
-      # Pass the gradle install to the next builds to avoid downloading again.
-      - .gradle/
 
 UnitTests:
   image: ethrozee/android
