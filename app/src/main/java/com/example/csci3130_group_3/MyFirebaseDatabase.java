@@ -1,14 +1,7 @@
 package com.example.csci3130_group_3;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.function.Consumer;
 
 public class MyFirebaseDatabase implements Database {
@@ -20,9 +13,18 @@ public class MyFirebaseDatabase implements Database {
     }
 
     @Override
-    public <T> void write(String location, T value) {
-        db.getReference(location).setValue(value);
+    public <T> void write(String location, T value, Consumer<String> errorFunction) {
+        db.getReference(location).setValue(value)
+            .addOnFailureListener(e -> errorFunction.accept(e.getMessage()));
     }
+
+    @Override
+    public <T> void write(String location, T value, Runnable successFunction, Consumer<String> errorFunction) {
+        db.getReference(location).setValue(value)
+            .addOnSuccessListener(unused -> successFunction.run())
+            .addOnFailureListener(e -> errorFunction.accept(e.getMessage()));
+    }
+
 
     @Override
     public <T> void read(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction) {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
 
@@ -19,22 +20,25 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
 
         db = new MyFirebaseDatabase(this);
-        Employer emp = new Employer("Parth", "alkjo139ksdf09812n");
+        Employer emp = new Employer("Ethan", "lasd7911d091jh1hi");
+        String dbKey = "user2";
+
+        // Get the text view.
+        TextView output = findViewById(R.id.dbOutput);
 
         Button sendBtn = findViewById(R.id.sendButton);
-        sendBtn.setOnClickListener(v -> {
-            db.write("test", emp);
-            Log.d("send", "sent");
-        });
+        sendBtn.setOnClickListener(
+            v -> db.write(dbKey, emp,
+                () -> output.setText("Sent"),
+                error -> output.setText("Error sending: " + error)
+            )
+        );
 
         Button recvBtn = findViewById(R.id.recvButton);
-        recvBtn.setOnClickListener(v -> {
-            db.read(
-                "test",
-                User.class,
-                user -> Log.d("recv", user.getName()),
-                error -> Log.d("recv", error)
-            );
-        });
+        recvBtn.setOnClickListener(
+            v -> db.read(dbKey, Employer.class,
+                employer -> output.setText("Emp ID: " + employer.getEmployerId()),
+                error -> output.setText("Error: " + error)
+        ));
     }
 }
