@@ -20,24 +20,23 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
 
         db = new MyFirebaseDatabase(this);
-        Employer emp = new Employer("Ethan", "lasd7911d091jh1hi");
-        String dbKey = "user2";
+        String dbKey = "test";
 
         // Get the text view.
         TextView output = findViewById(R.id.dbOutput);
 
         Button sendBtn = findViewById(R.id.sendButton);
-        sendBtn.setOnClickListener(
-            v -> db.write(dbKey, emp,
-                () -> output.setText("Sent"),
-                error -> output.setText("Error sending: " + error)
-            )
-        );
+        sendBtn.setOnClickListener(v -> {
+            String temp = RandomStringGenerator.generate(10);
+            db.write(dbKey, temp,
+                () -> output.setText("Sent: " + temp),
+                error -> output.setText("Error sending: " + error));
+        });
 
         Button recvBtn = findViewById(R.id.recvButton);
         recvBtn.setOnClickListener(
-            v -> db.read(dbKey, Employer.class,
-                employer -> output.setText("Emp ID: " + employer.getEmployerId()),
+            v -> db.read(dbKey, String.class,
+                temp -> output.setText("Received: " + temp),
                 error -> output.setText("Error: " + error)
         ));
     }
