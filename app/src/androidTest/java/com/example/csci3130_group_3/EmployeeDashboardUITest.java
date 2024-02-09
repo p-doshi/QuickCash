@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 //need to change the name according to your file
-//import com.example.csci3130_group_3.[employeeDashboard];
+//import com.example.csci3130_group_3.EmployeeDashboard;
 
 public class EmployeeDashboardUITest {
     private static final int LAUNCH_TIMEOUT = 5000;

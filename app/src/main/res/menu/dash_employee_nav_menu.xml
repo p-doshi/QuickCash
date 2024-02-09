@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/employee_reciepts"
+    <item android:id="@+id/employeeReceiptPage"
         android:title="Reciepts"
         android:icon="@drawable/ic_reciept_foreground" />
-    <item android:id="@+id/employee_search"
+    <item android:id="@+id/employeeSearchPage"
         android:title="Search"
         android:icon="@drawable/ic_search_foreground" />
-    <item android:id="@+id/employee_map"
+    <item android:id="@+id/employeeMapPage"
         android:title="Map"
         android:icon="@drawable/ic_map_foreground" />
-    <item android:id="@+id/employee_profile"
+    <item android:id="@+id/employeeProfilePage"
         android:title="Profile"
         android:icon="@drawable/ic_profile_box_foreground" />
 
