@@ -50,7 +50,7 @@ public class LoginEspressoTest {
         onView(withId(R.id.emailaddress)).perform(typeText("hi")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
-
+        onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));
     }
 
 }
