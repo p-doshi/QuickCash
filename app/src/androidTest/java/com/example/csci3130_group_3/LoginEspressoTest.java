@@ -26,12 +26,12 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {
-    public ActivityScenario<MainActivity> scenario;
+    public ActivityScenario<LoginActivity> scenario;
 
 
     @Before
     public void setup() {
-        scenario = ActivityScenario.launch(MainActivity.class);
+        scenario = ActivityScenario.launch(LoginActivity.class);
         scenario.onActivity(activity -> {
             activity.clickLoginButton();
         });

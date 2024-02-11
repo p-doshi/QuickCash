@@ -7,16 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    EditText emailInput;
-    TextInputEditText passwordInput;
-    Snackbar toastMsg;
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
