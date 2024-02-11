@@ -1,0 +1,38 @@
+package com.example.csci3130_group_3;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
+import androidx.test.core.app.ActivityScenario;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class EmployerDashEspresso {
+    public ActivityScenario<EmployerDashboard> scenario;
+
+    @Before
+    public void setup(){
+        scenario = ActivityScenario.launch(EmployerDashboard.class);
+        scenario.onActivity(activity -> {
+
+        });
+    }
+
+    @Test
+    public void testEmployerAddJobButtonExist(){
+        onView(withId(R.id.employer_add_job)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEmployerReceiptsButtonExist(){
+        onView(withId(R.id.employer_reciepts)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEmployerProfileButtonExist(){
+        onView(withId(R.id.employer_profile)).check(matches(isDisplayed()));
+    }
+}
