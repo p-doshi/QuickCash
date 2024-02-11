@@ -17,7 +17,7 @@ public class LoginValidatorTest {
     @Test
     public void checkEmptyEmail(){assertTrue(LoginValidator.isEmptyEmail(""));}
     @Test
-    public void checkEmptyPassword(){assertTrue();};
+    public void checkEmptyPassword(){assertTrue(LoginValidator.isEmptyPassword(""));};
     @Test
     public void checkInvalidEmail() {
         assertFalse(LoginValidator.isValidEmail("ksdksdfn"));
