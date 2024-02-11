@@ -2,6 +2,7 @@ package com.example.csci3130_group_3;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
@@ -61,4 +62,6 @@ public class UIAutomatorTest {
                 .inRoot(withDecorView(not(is(decorView))))
                 .check(matches(isDisplayed()));
     }
+
+
 }
