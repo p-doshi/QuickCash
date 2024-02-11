@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             errorMessage=getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
         }
         if(!(LoginValidator.isValidEmail(emailAddress))&&!(LoginValidator.isEmptyEmail(emailAddress))){
+            errorMessage=getResources().getString(R.string.INVALID_EMAIL_TOAST);
         }
 
         setStatusMessage(errorMessage);
