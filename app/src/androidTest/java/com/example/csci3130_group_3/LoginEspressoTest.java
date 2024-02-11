@@ -47,10 +47,10 @@ public class LoginEspressoTest {
 
     @Test
     public void testEmptyPassword() {
-        onView(withId(R.id.emailaddress)).perform(typeText("hi")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailaddress)).perform(typeText("pdoshi@gmail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
-        onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));
+        onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_PASSWORD_TOAST)));
     }
 
 }
