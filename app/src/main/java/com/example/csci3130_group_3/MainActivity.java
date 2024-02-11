@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText emailInput;
     TextInputEditText passwordInput;
@@ -23,5 +23,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.clickLoginButton();
+    }
+    protected String getEmailAddress(){
+        EditText emailInput = findViewById(R.id.emailaddress);
+        return emailInput.getText().toString().trim();
+    }
+    protected String getPassword(){
+        EditText passwordInput = findViewById(R.id.etPassword);
+        return passwordInput.getText().toString().trim();
+    }
+
+    protected void clickLoginButton(){
+        Button loginButton = findViewById(R.id.continueButton);
+        loginButton.setOnClickListener(this);
+    }
+    protected void moveToDashboard(){
+
+    }
+    protected void moveToRegistration(){
+
+    }
+    protected void setStatusMessage(String message){
+        TextView statusLabel = findViewById(R.id.statusLabel);
+        statusLabel.setText(message.trim());
+    }
+    @Override
+    public void onClick(View v) {
+        String emailAddress = getEmailAddress();
+        String password = getPassword();
+        String errorMessage = new String();
+
+        if(LoginValidator.isEmptyEmail(emailAddress)){
+            errorMessage=getResources().getString(R.string.EMPTY_EMAIL_TOAST);
+        }
+        if(!(LoginValidator.isValidEmail(emailAddress))&&!(LoginValidator.isEmptyEmail(emailAddress))){
+            errorMessage=getResources().getString(R.string.INVALID_EMAIL_TOAST);
+        }
+
+        setStatusMessage(errorMessage);
     }
 }
