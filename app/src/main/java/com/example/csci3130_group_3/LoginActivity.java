@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_main);
 
         this.clickLoginButton();
-        setContentView(R.layout.activity_database_example);
+
 
     }
     protected void userValidator(){
@@ -54,6 +54,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithCustomToken:failure", task.getException());
+                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.INVALID_CREDENTIALS), Toast.LENGTH_SHORT);
+                                toast.show();
                                 setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
 
                             }
@@ -80,7 +82,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginButton.setOnClickListener(this);
     }
     protected void moveToDashboard(){
-
+        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT);
+        toast.show();
     }
     protected void moveToRegistration(){
 

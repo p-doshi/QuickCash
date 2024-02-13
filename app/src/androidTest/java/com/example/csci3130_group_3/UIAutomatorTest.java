@@ -11,6 +11,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -20,6 +22,7 @@ import android.view.View;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.Until;
@@ -29,10 +32,10 @@ import org.junit.Test;
 
 public class UIAutomatorTest {
     private static final int LAUNCH_TIMEOUT = 5000;
-    public View decorView;
-
     final String launcherPackage = "com.example.csci3130_group_3";
     private UiDevice device;
+    public View decorView;
+
     @Before
     public void setup() {
         // Get an instance of UiDevice for interacting with the device
@@ -47,18 +50,16 @@ public class UIAutomatorTest {
         context.startActivity(appIntent);
         // Wait for the launcher package to be in the foreground
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
-
-
     }
 
     @Test
-    public void testValidCredentials() {
+    public void testInvalidCredentials() {
         onView(withId(R.id.emailaddress)).perform(typeText("pdoshi@gmail.com"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.etPassword)).perform(typeText("hi"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.continueButton)).perform(click());
-        onView(withText(R.string.VALID_TOAST))
+        onView(withText(R.string.INVALID_CREDENTIALS))
                 .inRoot(withDecorView(not(is(decorView))))
                 .check(matches(isDisplayed()));
     }

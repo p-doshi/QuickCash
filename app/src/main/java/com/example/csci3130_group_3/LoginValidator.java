@@ -23,7 +23,5 @@ public class LoginValidator {
     public static boolean isEmptyPassword (String password){
         return password.isEmpty();
     }
-    public static boolean isEmailInDatabase(String email){
-        return false;
-    }
+
 }
