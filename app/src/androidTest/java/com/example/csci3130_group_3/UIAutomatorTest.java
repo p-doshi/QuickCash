@@ -53,7 +53,7 @@ public class UIAutomatorTest {
 
     @Test
     public void testValidCredentials() {
-        onView(withId(R.id.emailaddress)).perform(typeText("5"));
+        onView(withId(R.id.emailaddress)).perform(typeText("pdoshi@gmail.com"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.etPassword)).perform(typeText("hi"));
         Espresso.closeSoftKeyboard();

@@ -1,22 +1,71 @@
 package com.example.csci3130_group_3;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    Database db;
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
+    private String dbKey = "test";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         this.clickLoginButton();
+        setContentView(R.layout.activity_database_example);
+
     }
+    protected void userValidator(){
+        db = new MyFirebaseDatabase(this);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            mAuth.signInWithEmailAndPassword(getEmailAddress(), getPassword())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithCustomToken:success");
+                                user = mAuth.getCurrentUser();
+                                moveToDashboard();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithCustomToken:failure", task.getException());
+                                setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
+
+                            }
+                        }
+                    });
+        }
+        else {
+            moveToDashboard();
+        }
+    }
+
+
     protected String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);
         return emailInput.getText().toString().trim();
@@ -54,7 +103,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(!(LoginValidator.isValidEmail(emailAddress))&&!(LoginValidator.isEmptyEmail(emailAddress))){
             errorMessage=getResources().getString(R.string.INVALID_EMAIL_TOAST);
         }
-
+        if(LoginValidator.isValidEmail(emailAddress)&&!(LoginValidator.isEmptyPassword(password))){
+            userValidator();
+        }
         setStatusMessage(errorMessage);
     }
+
 }

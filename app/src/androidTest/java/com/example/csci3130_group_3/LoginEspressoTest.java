@@ -7,15 +7,11 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
-import android.view.View;
+import static java.time.temporal.TemporalQueries.precision;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -23,6 +19,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {
@@ -33,7 +30,7 @@ public class LoginEspressoTest {
     public void setup() {
         scenario = ActivityScenario.launch(LoginActivity.class);
         scenario.onActivity(activity -> {
-            activity.clickLoginButton();
+           activity.clickLoginButton();
         });
     }
 
