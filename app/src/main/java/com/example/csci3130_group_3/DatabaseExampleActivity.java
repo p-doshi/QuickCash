@@ -21,7 +21,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         // The easiest way to run this example is to change the launch activity in the android manifest file.
         // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
 
-        db = new MySignedFirebaseDatabase(this);
+        db = new MySecureFirebaseDatabase(this);
         String dbKey = "test";
 
         // Get the text view.
