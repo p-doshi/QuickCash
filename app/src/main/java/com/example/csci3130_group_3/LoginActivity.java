@@ -5,6 +5,8 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +38,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         db = new MyFirebaseDatabase(this);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        //SharedPreferences preferences =getPreferences(Context.MODE_PRIVATE);
+        //preferences.contains("email"); //how to get stuff from preferences
+        //preferences.getString("password","");
+        //SharedPreferences.Editor editor = preferences.edit() ;
+        //editor.putString("email",getEmailAddress());
+        //editor.apply();
+
+        SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
 
         if (user == null) {
             mAuth.signInWithEmailAndPassword(getEmailAddress(), getPassword())
@@ -46,14 +57,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCustomToken:success");
                                 user = mAuth.getCurrentUser();
+                                editor.putString("email", getEmailAddress());
+                                editor.putString("password", getPassword());
+                                editor.apply();
                                 moveToDashboard();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithCustomToken:failure", task.getException());
-                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.INVALID_CREDENTIALS), Toast.LENGTH_SHORT);
-                                toast.show();
                                 setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
-
                             }
                         }
                     });

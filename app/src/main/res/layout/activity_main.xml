@@ -18,13 +18,24 @@
         app:layout_constraintTop_toBottomOf="@+id/emailaddress"
         app:passwordToggleEnabled="true">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="322dp"
+            android:layout_height="53dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toBottomOf="@+id/etPasswordLayout"
+            app:layout_constraintEnd_toEndOf="@+id/etPasswordLayout"
+            app:layout_constraintStart_toStartOf="@+id/etPasswordLayout"
+            app:layout_constraintTop_toTopOf="@+id/etPasswordLayout" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/statusLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPasswordLayout" />
@@ -43,7 +54,7 @@
         android:id="@+id/emailaddress"
         android:layout_width="340dp"
         android:layout_height="67dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:autofillHints="emailAddress"
         android:ems="10"
         android:hint="@string/email_address"
@@ -56,7 +67,7 @@
         android:id="@+id/textView2"
         android:layout_width="93dp"
         android:layout_height="48dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:text="@string/log_in"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,17 +128,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etPassword"
-        android:layout_width="322dp"
-        android:layout_height="53dp"
-        android:layout_marginEnd="8dp"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="@+id/etPasswordLayout"
-        app:layout_constraintEnd_toEndOf="@+id/etPasswordLayout"
-        app:layout_constraintStart_toStartOf="@+id/etPasswordLayout"
-        app:layout_constraintTop_toTopOf="@+id/etPasswordLayout" />
+
 
     <Button
         android:id="@+id/signupManually"

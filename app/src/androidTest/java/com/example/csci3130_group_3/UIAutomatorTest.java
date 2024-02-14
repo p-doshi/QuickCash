@@ -15,7 +15,10 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertTrue;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -25,52 +28,58 @@ import androidx.test.espresso.Espresso;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
+import android.provider.Settings;
+
+// Disable animations programmatically
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.List;
+
 public class UIAutomatorTest {
-    private static final int LAUNCH_TIMEOUT = 5000;
+    private static final int LAUNCH_TIMEOUT = 10000;
     final String launcherPackage = "com.example.csci3130_group_3";
     private UiDevice device;
-    public View decorView;
-
+    public Context context;
     @Before
     public void setup() {
-        // Get an instance of UiDevice for interacting with the device
         device = UiDevice.getInstance(getInstrumentation());
-        // Get the application context
         Context context = ApplicationProvider.getApplicationContext();
-        // Retrieve the launch intent for the specified package
         final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
-        // Add the flag to clear the task before launching the application
         appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        // Start the application using the launch intent
         context.startActivity(appIntent);
-        // Wait for the launcher package to be in the foreground
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
     }
 
     @Test
-    public void testInvalidCredentials() {
-        onView(withId(R.id.emailaddress)).perform(typeText("pdoshi@gmail.com"));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.etPassword)).perform(typeText("hi"));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.continueButton)).perform(click());
-        onView(withText(R.string.INVALID_CREDENTIALS))
-                .inRoot(withDecorView(not(is(decorView))))
-                .check(matches(isDisplayed()));
+    public void checkIfLandingPageIsVisible() {
+
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        assertTrue(emailIDBox.exists());
+        UiObject roleSpinner = device.findObject(new UiSelector().textContains("Password"));
+        assertTrue(roleSpinner.exists());
+        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        assertTrue(registerButton.exists());
     }
 
     @Test
-    public void testManualSignup() {
+    public void checkIfMovedToDashboard() throws UiObjectNotFoundException {
 
-        onView(withId(R.id.signupManually)).perform(click());
-        onView(withText(R.string.SIGNUP_TOAST))
-                .inRoot(withDecorView(not(is(decorView))))
-                .check(matches(isDisplayed()));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        emailIDBox.setText("parthdoshi135@gmail.com");
+        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
+        passwordBox.setText("Password");
+        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        registerButton.clickAndWaitForNewWindow();
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
+        assertTrue(welcomeLabel.exists());
     }
 
 
