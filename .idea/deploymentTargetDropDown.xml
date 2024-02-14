@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="UIAutomatorTest">
+      <entry key="LoginEspressoTest">
         <State />
       </entry>
       <entry key="app">
@@ -14,10 +14,10 @@
       <entry key="checkIfMoved2WelcomePage()">
         <State />
       </entry>
-      <entry key="testInvalidCredentials()">
+      <entry key="testEmptyPassword()">
         <State />
       </entry>
-      <entry key="testManualSignup()">
+      <entry key="testInvalidEmail()">
         <State />
       </entry>
     </value>

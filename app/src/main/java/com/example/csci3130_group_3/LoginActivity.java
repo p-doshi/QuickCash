@@ -44,8 +44,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         this.preferences= getSharedPreferences("UserData", Context.MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        if(user!=null){
-           userValidator("","");
+        this.editor = preferences.edit();
+
+        for (String key:
+                preferences.getAll().keySet()) {
+            Log.d("key", key);
+        }
+        Log.d(getResources().getString(R.string.LOGINACTIVITY_TAG), String.valueOf(preferences.getBoolean("remember",false)));
+        if(user!=null && preferences.getBoolean("remember",false)){
+           moveToDashboard();
+        }else{
+            editor.putBoolean("remember",false);
+            editor.apply();
+            mAuth.signOut();
         }
         
         this.clickLoginButton();
@@ -68,36 +79,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void userValidator(String email, String password){
 
         CheckBox rememberMe = findViewById(R.id.checkBox);
-        this.editor = preferences.edit();
-
-        if (user == null) {
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful() && rememberMe.isChecked()) { // refactor nested ifs
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:success");
-                                user = mAuth.getCurrentUser();
-                                editor.putString(getResources().getString(R.string.EMAIL_KEY), email);
-                                editor.putString(getResources().getString(R.string.PASSWORD_KEY), password);
-                                editor.apply();
-                                moveToDashboard();
-                            } else if(task.isSuccessful() && !(rememberMe.isChecked())) {
-                                Log.d(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:success");
-                                user = mAuth.getCurrentUser();
-                                moveToDashboard();
-                            }else{
-                                // If sign in fails, display a message to the user.
-                                Log.w(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:failure", task.getException());
-                                setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
-                            }
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:success");
+                            user = mAuth.getCurrentUser();
+                            //editor.putString(getResources().getString(R.string.EMAIL_KEY), email);
+                            //editor.putString(getResources().getString(R.string.PASSWORD_KEY), password);
+                            editor.putBoolean("remember", rememberMe.isChecked());
+                            Log.d("iscchecked",String.valueOf(rememberMe.isChecked()));
+                            editor.apply();
+                            Log.d(getResources().getString(R.string.LOGINACTIVITY_TAG), String.valueOf(preferences.getBoolean("remember",false)));
+                            moveToDashboard();
+                        }else{
+                            // If sign in fails, display a message to the user.
+                            Log.w(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:failure", task.getException());
+                            setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
                         }
-                    });
-        }
-        else {
-            moveToDashboard();
-        }
+                    }
+                });
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -201,6 +205,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         setStatusMessage(errorMessage);
     }
-
-
 }

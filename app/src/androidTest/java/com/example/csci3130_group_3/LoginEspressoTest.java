@@ -49,6 +49,7 @@ public class LoginEspressoTest {
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_PASSWORD_TOAST)));
     }
+
     @Test
     public void testInvalidEmail() {
         onView(withId(R.id.emailaddress)).perform(typeText("pdoshigmail.com")).perform(closeSoftKeyboard());
