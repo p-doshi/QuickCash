@@ -9,26 +9,15 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public class GenericResource implements IdlingResource {
-    private final IdlingRegistry registry;
     private final Supplier<Boolean> idleFunction;
     private ResourceCallback callback;
 
     /**
      * Creates an idle resource and attaches itself to the idling registry.
-     * @param registry The idling registry to attach to.
      * @param idleFunction Iff this function returns true, this resource will be marked as idle.
      */
-    public GenericResource(@NonNull IdlingRegistry registry, Supplier<Boolean> idleFunction) {
-        this.registry = registry;
+    public GenericResource(Supplier<Boolean> idleFunction) {
         this.idleFunction = idleFunction;
-        registry.register(this);
-    }
-
-    /**
-     * Unregister this idling resource from the idling registry.
-     */
-    public void unregister() {
-        registry.unregister(this);
     }
 
     @Override

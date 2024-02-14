@@ -32,7 +32,8 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(registry, () -> passed.get() || error.get() != null);
+        GenericResource resource = new GenericResource(() -> passed.get() || error.get() != null);
+        registry.register(resource);
 
         db.write("test", "Hello", () -> passed.set(true), error::set);
 
@@ -42,7 +43,7 @@ public class DatabaseTest {
         Assert.assertFalse(passed.get());
         Assert.assertEquals("Firebase Database error: Permission denied", error.get());
 
-        resource.unregister();
+        registry.unregister(resource);
     }
 
     @Test
@@ -55,7 +56,8 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(registry, () -> !randomValue.equals(value.get()) || error.get() != null);
+        GenericResource resource = new GenericResource(() -> !randomValue.equals(value.get()) || error.get() != null);
+        registry.register(resource);
 
         db.read("test", String.class, value::set, error::set);
 
@@ -65,7 +67,7 @@ public class DatabaseTest {
         Assert.assertEquals(randomValue, value.get());
         Assert.assertEquals("Permission denied", error.get());
 
-        resource.unregister();
+        registry.unregister(resource);
     }
 
     @Test
@@ -75,7 +77,8 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(registry, () -> passed.get() || error.get() != null);
+        GenericResource resource = new GenericResource(() -> passed.get() || error.get() != null);
+        registry.register(resource);
 
         db.write("test", "Hello", () -> passed.set(true), error::set);
 
@@ -85,7 +88,7 @@ public class DatabaseTest {
         Assert.assertTrue(passed.get());
         Assert.assertNull(error.get());
 
-        resource.unregister();
+        registry.unregister(resource);
     }
 
     @Test
@@ -98,7 +101,8 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(registry, () -> !randomValue.equals(value.get()) || error.get() != null);
+        GenericResource resource = new GenericResource(() -> !randomValue.equals(value.get()) || error.get() != null);
+        registry.register(resource);
 
         db.read("test", String.class, value::set, error::set);
 
@@ -110,7 +114,7 @@ public class DatabaseTest {
         Assert.assertNotEquals(randomValue, value.get());
         Assert.assertNull(error.get());
 
-        resource.unregister();
+        registry.unregister(resource);
     }
 
     @Test
@@ -120,7 +124,8 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(registry, () -> value.get() != null || error.get() != null);
+        GenericResource resource = new GenericResource(() -> value.get() != null || error.get() != null);
+        registry.register(resource);
 
         final String dir = "test";
         final String val = "Hello";
@@ -136,7 +141,7 @@ public class DatabaseTest {
         Assert.assertEquals(val, value.get());
         Assert.assertNull(error.get());
 
-        resource.unregister();
+        registry.unregister(resource);
     }
 
     @Test
@@ -146,7 +151,8 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(registry, () -> passed.get() || error.get() != null);
+        GenericResource resource = new GenericResource(() -> passed.get() || error.get() != null);
+        registry.register(resource);
 
         db.write("public/test", "Hello", () -> passed.set(true), error::set);
 
@@ -156,7 +162,7 @@ public class DatabaseTest {
         Assert.assertFalse(passed.get());
         Assert.assertEquals("Firebase Database error: Permission denied", error.get());
 
-        resource.unregister();
+        registry.unregister(resource);
     }
 
     @Test
@@ -169,7 +175,8 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(registry, () -> !randomValue.equals(value.get()) || error.get() != null);
+        GenericResource resource = new GenericResource(() -> !randomValue.equals(value.get()) || error.get() != null);
+        registry.register(resource);
 
         db.read("public/test", String.class, value::set, error::set);
 
@@ -179,6 +186,6 @@ public class DatabaseTest {
         Assert.assertEquals(randomValue, value.get());
         Assert.assertEquals("Permission denied", error.get());
 
-        resource.unregister();
+        registry.unregister(resource);
     }
 }
