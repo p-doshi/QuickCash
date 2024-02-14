@@ -1,0 +1,184 @@
+package com.example.csci3130_group_3;
+
+import android.content.Context;
+
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
+@RunWith(AndroidJUnit4.class)
+public class DatabaseTest {
+    IdlingRegistry registry = IdlingRegistry.getInstance();
+    Context context;
+
+    @Before
+    public void setup() {
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
+
+    @Test
+    public void writeDatabaseFailure() {
+        Database db = new MyFirebaseDatabase(context);
+        AtomicBoolean passed = new AtomicBoolean(false);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        GenericResource resource = new GenericResource(registry, () -> passed.get() || error.get() != null);
+
+        db.write("test", "Hello", () -> passed.set(true), error::set);
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertFalse(passed.get());
+        Assert.assertEquals("Firebase Database error: Permission denied", error.get());
+
+        resource.unregister();
+    }
+
+    @Test
+    public void readDatabaseFailure() {
+        Database db = new MyFirebaseDatabase(context);
+
+        // We need a value that shows that we have not received anything.
+        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
+        AtomicReference<String> value = new AtomicReference<>(randomValue);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        GenericResource resource = new GenericResource(registry, () -> !randomValue.equals(value.get()) || error.get() != null);
+
+        db.read("test", String.class, value::set, error::set);
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertEquals(randomValue, value.get());
+        Assert.assertEquals("Permission denied", error.get());
+
+        resource.unregister();
+    }
+
+    @Test
+    public void writeSecureDatabaseSuccess() {
+        Database db = new MySecureFirebaseDatabase(context);
+        AtomicBoolean passed = new AtomicBoolean(false);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        GenericResource resource = new GenericResource(registry, () -> passed.get() || error.get() != null);
+
+        db.write("test", "Hello", () -> passed.set(true), error::set);
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertTrue(passed.get());
+        Assert.assertNull(error.get());
+
+        resource.unregister();
+    }
+
+    @Test
+    public void readSecureDatabaseSuccess() {
+        Database db = new MySecureFirebaseDatabase(context);
+
+        // We need a value that shows that we have not received anything.
+        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
+        AtomicReference<String> value = new AtomicReference<>(randomValue);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        GenericResource resource = new GenericResource(registry, () -> !randomValue.equals(value.get()) || error.get() != null);
+
+        db.read("test", String.class, value::set, error::set);
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        // We cannot guarantee what will be read from the database.
+        // We just know we will receive _something_ or null.
+        Assert.assertNotEquals(randomValue, value.get());
+        Assert.assertNull(error.get());
+
+        resource.unregister();
+    }
+
+    @Test
+    public void writeReadSecureDatabaseSuccess() {
+        Database db = new MySecureFirebaseDatabase(context);
+        AtomicReference<String> value = new AtomicReference<>(null);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        GenericResource resource = new GenericResource(registry, () -> value.get() != null || error.get() != null);
+
+        final String dir = "test";
+        final String val = "Hello";
+        db.write(
+            dir,
+            val,
+            () -> db.read(dir, String.class, value::set, error::set),
+            error::set);
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertEquals(val, value.get());
+        Assert.assertNull(error.get());
+
+        resource.unregister();
+    }
+
+    @Test
+    public void writeSecureAuthorizedDatabaseFailure() {
+        Database db = new MySecureFirebaseDatabase(context);
+        AtomicBoolean passed = new AtomicBoolean(false);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        GenericResource resource = new GenericResource(registry, () -> passed.get() || error.get() != null);
+
+        db.write("public/test", "Hello", () -> passed.set(true), error::set);
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertFalse(passed.get());
+        Assert.assertEquals("Firebase Database error: Permission denied", error.get());
+
+        resource.unregister();
+    }
+
+    @Test
+    public void readSecureAuthorizedDatabaseFailure() {
+        Database db = new MySecureFirebaseDatabase(context);
+
+        // We need a value that shows that we have not received anything.
+        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
+        AtomicReference<String> value = new AtomicReference<>(randomValue);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        GenericResource resource = new GenericResource(registry, () -> !randomValue.equals(value.get()) || error.get() != null);
+
+        db.read("public/test", String.class, value::set, error::set);
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertEquals(randomValue, value.get());
+        Assert.assertEquals("Permission denied", error.get());
+
+        resource.unregister();
+    }
+}
