@@ -64,5 +64,14 @@ public class UIAutomatorTest {
                 .check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testManualSignup() {
+
+        onView(withId(R.id.signupManually)).perform(click());
+        onView(withText(R.string.SIGNUP_TOAST))
+                .inRoot(withDecorView(not(is(decorView))))
+                .check(matches(isDisplayed()));
+    }
+
 
 }

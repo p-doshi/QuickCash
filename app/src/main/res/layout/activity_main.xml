@@ -25,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPasswordLayout" />
@@ -99,7 +98,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView4" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/signupGoogle"
         android:layout_width="275dp"
         android:layout_height="49dp"
         android:layout_marginTop="30dp"
@@ -131,13 +130,13 @@
         app:layout_constraintTop_toTopOf="@+id/etPasswordLayout" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/signupManually"
         android:layout_width="275dp"
         android:layout_height="49dp"
         android:layout_marginTop="25dp"
         android:text="@string/signup_manually"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/signupGoogle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,8 +5,6 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,10 +29,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         this.clickLoginButton();
-
-
+        this.clickSignUpButtonManual();
     }
     protected void userValidator(){
         db = new MyFirebaseDatabase(this);
@@ -80,13 +76,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void clickLoginButton(){
         Button loginButton = findViewById(R.id.continueButton);
         loginButton.setOnClickListener(this);
+    }protected void clickSignUpButtonManual(){
+        Button signupButton = findViewById(R.id.signupManually);
+        signupButton.setOnClickListener(this);
     }
     protected void moveToDashboard(){
         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT);
         toast.show();
     }
     protected void moveToRegistration(){
-
+        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT);
+        toast.show();
     }
     protected void setStatusMessage(String message){
         TextView statusLabel = findViewById(R.id.statusLabel);
@@ -94,22 +94,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     @Override
     public void onClick(View v) {
+
+        if(v.getId()==R.id.continueButton){
+            handleLoginButtonClick();}
+        else if (v.getId()==R.id.signupManually) {
+            moveToRegistration();
+        }
+    }
+
+    public void handleLoginButtonClick(){
         String emailAddress = getEmailAddress();
         String password = getPassword();
         String errorMessage = new String();
 
-        if(LoginValidator.isEmptyEmail(emailAddress)){
-            errorMessage=getResources().getString(R.string.EMPTY_EMAIL_TOAST);
-        }if(LoginValidator.isEmptyPassword(password)){
-            errorMessage=getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
+        if (LoginValidator.isEmptyEmail(emailAddress)) {
+            errorMessage = getResources().getString(R.string.EMPTY_EMAIL_TOAST);
         }
-        if(!(LoginValidator.isValidEmail(emailAddress))&&!(LoginValidator.isEmptyEmail(emailAddress))){
-            errorMessage=getResources().getString(R.string.INVALID_EMAIL_TOAST);
+        if (LoginValidator.isEmptyPassword(password)) {
+            errorMessage = getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
         }
-        if(LoginValidator.isValidEmail(emailAddress)&&!(LoginValidator.isEmptyPassword(password))){
+        if (!(LoginValidator.isValidEmail(emailAddress)) && !(LoginValidator.isEmptyEmail(emailAddress))) {
+            errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
+        }
+        if (LoginValidator.isValidEmail(emailAddress) && !(LoginValidator.isEmptyPassword(password))) {
             userValidator();
+            return;
         }
         setStatusMessage(errorMessage);
     }
+
 
 }
