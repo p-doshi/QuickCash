@@ -1,20 +1,27 @@
 package com.example.csci3130_group_3;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,47 +30,66 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Database db;
     private FirebaseUser user;
     private FirebaseAuth mAuth;
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    private SharedPreferences preferences ;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.clickLoginButton();
-        this.clickSignUpButtonManual();
-    }
-    protected void userValidator(){
-        db = new MyFirebaseDatabase(this);
+        this.preferences= getSharedPreferences("UserData", Context.MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        //SharedPreferences preferences =getPreferences(Context.MODE_PRIVATE);
-        //preferences.contains("email"); //how to get stuff from preferences
-        //preferences.getString("password","");
-        //SharedPreferences.Editor editor = preferences.edit() ;
-        //editor.putString("email",getEmailAddress());
-        //editor.apply();
+        if(user!=null){
+           userValidator("","");
+        }
+        
+        this.clickLoginButton();
+        this.clickSignUpButtonManual();
+        this.clickSignUpButtonGoogle();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.WebClient))
+                .requestEmail()
+                .build();
 
-        SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        SignInButton signInButton = findViewById(R.id.signupGoogle);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
+    }
+    protected void userValidator(String email, String password){
+
+        CheckBox rememberMe = findViewById(R.id.checkBox);
+        this.editor = preferences.edit();
 
         if (user == null) {
-            mAuth.signInWithEmailAndPassword(getEmailAddress(), getPassword())
+            mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+                            if (task.isSuccessful() && rememberMe.isChecked()) { // refactor nested ifs
                                 // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInWithCustomToken:success");
+                                Log.d(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:success");
                                 user = mAuth.getCurrentUser();
-                                editor.putString("email", getEmailAddress());
-                                editor.putString("password", getPassword());
+                                editor.putString(getResources().getString(R.string.EMAIL_KEY), email);
+                                editor.putString(getResources().getString(R.string.PASSWORD_KEY), password);
                                 editor.apply();
                                 moveToDashboard();
-                            } else {
+                            } else if(task.isSuccessful() && !(rememberMe.isChecked())) {
+                                Log.d(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:success");
+                                user = mAuth.getCurrentUser();
+                                moveToDashboard();
+                            }else{
                                 // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithCustomToken:failure", task.getException());
+                                Log.w(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInWithCustomToken:failure", task.getException());
                                 setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
                             }
                         }
@@ -73,8 +99,43 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             moveToDashboard();
         }
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
 
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(getResources().getString(R.string.LOGINACTIVITY_TAG), "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+            Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+        if (account != null) {
+            moveToDashboard();
+        } else {
+            return;
+        }
+    }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
     protected String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);
         return emailInput.getText().toString().trim();
@@ -87,7 +148,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void clickLoginButton(){
         Button loginButton = findViewById(R.id.continueButton);
         loginButton.setOnClickListener(this);
-    }protected void clickSignUpButtonManual(){
+    }
+    protected void clickSignUpButtonManual(){
+        Button signupButton = findViewById(R.id.signupManually);
+        signupButton.setOnClickListener(this);
+    }
+    protected void clickSignUpButtonGoogle(){
         Button signupButton = findViewById(R.id.signupManually);
         signupButton.setOnClickListener(this);
     }
@@ -110,6 +176,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             handleLoginButtonClick();}
         else if (v.getId()==R.id.signupManually) {
             moveToRegistration();
+        }else if(v.getId()==R.id.signupGoogle){
+
         }
     }
 
@@ -128,7 +196,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
         }
         if (LoginValidator.isValidEmail(emailAddress) && !(LoginValidator.isEmptyPassword(password))) {
-            userValidator();
+            userValidator(emailAddress,password);
             return;
         }
         setStatusMessage(errorMessage);

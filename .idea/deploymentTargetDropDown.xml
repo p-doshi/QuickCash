@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="LoginEspressoTest">
-        <State />
-      </entry>
       <entry key="UIAutomatorTest">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
+      <entry key="checkIfLandingPageIsVisible()">
+        <State />
+      </entry>
+      <entry key="checkIfMoved2WelcomePage()">
+        <State />
+      </entry>
       <entry key="testInvalidCredentials()">
         <State />
       </entry>
       <entry key="testManualSignup()">
-        <State />
-      </entry>
-      <entry key="testValidCredentials()">
         <State />
       </entry>
     </value>

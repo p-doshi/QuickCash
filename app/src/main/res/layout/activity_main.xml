@@ -108,7 +108,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView4" />
 
-    <Button
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/signupGoogle"
         android:layout_width="275dp"
         android:layout_height="49dp"

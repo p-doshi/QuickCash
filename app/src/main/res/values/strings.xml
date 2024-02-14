@@ -16,6 +16,12 @@
     <string name="INVALID_EMAIL_TOAST">Email Not In Format</string>
     <string name="EMPTY_PASSWORD_TOAST">Password Required</string>
     <string name="INVALID_CREDENTIALS">Wrong email or password</string>
+    <string name="WebClient">User X</string>
+    <string name="EMAIL_KEY">email</string>
+    <string name="PASSWORD_KEY">password</string>
+    <string name="LOGINACTIVITY_TAG">Login user validator tag</string>
+
+
 
 
 
