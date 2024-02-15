@@ -31,7 +31,8 @@ public class EmployeeDashboardUITest {
     public void setup() {
         device = UiDevice.getInstance(getInstrumentation());
         Context context = ApplicationProvider.getApplicationContext();
-        final Intent appIntent = new Intent(context, EmployerDashboard.class);
+        final Intent appIntent = new Intent(context, EmployeeDashboard.class);
+        appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // try this
         appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
