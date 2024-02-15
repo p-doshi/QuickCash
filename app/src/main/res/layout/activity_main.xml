@@ -15,7 +15,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etPasswordLayout"
         android:layout_width="340dp"
-        android:layout_height="64dp"
+        android:layout_height="67dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPassword"
             android:layout_width="340dp"
-            android:layout_height="64dp"
+            android:layout_height="60dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/password"
             android:inputType="textPassword"
@@ -70,10 +70,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailaddress"
             android:layout_width="340dp"
-            android:layout_height="67dp"
+            android:layout_height="60dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/email_address"
-            android:inputType="text"
+            android:inputType="textNoSuggestions"
             app:layout_constraintBottom_toBottomOf="@+id/emailaddressLayout"
             app:layout_constraintEnd_toEndOf="@+id/emailaddressLayout"
             app:layout_constraintStart_toStartOf="@+id/emailaddressLayout"
