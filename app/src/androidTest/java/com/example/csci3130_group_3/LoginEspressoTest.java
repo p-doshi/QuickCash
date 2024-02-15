@@ -30,7 +30,7 @@ public class LoginEspressoTest {
     public void setup() {
         scenario = ActivityScenario.launch(LoginActivity.class);
         scenario.onActivity(activity -> {
-           activity.clickLoginButton();
+           activity.setUpLoginButton();
         });
     }
 

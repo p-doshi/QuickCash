@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
@@ -15,13 +19,13 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailaddress"
+        app:layout_constraintTop_toBottomOf="@+id/emailaddressLayout"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPassword"
-            android:layout_width="322dp"
-            android:layout_height="53dp"
+            android:layout_width="340dp"
+            android:layout_height="64dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/password"
             android:inputType="textPassword"
@@ -50,8 +54,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statusLabel" />
 
-    <EditText
-        android:id="@+id/emailaddress"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailaddressLayout"
         android:layout_width="340dp"
         android:layout_height="67dp"
         android:layout_marginTop="30dp"
@@ -59,12 +63,25 @@
         android:ems="10"
         android:hint="@string/email_address"
         android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@+id/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailaddress"
+            android:layout_width="340dp"
+            android:layout_height="67dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/email_address"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="@+id/emailaddressLayout"
+            app:layout_constraintEnd_toEndOf="@+id/emailaddressLayout"
+            app:layout_constraintStart_toStartOf="@+id/emailaddressLayout"
+            app:layout_constraintTop_toTopOf="@+id/emailaddressLayout" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/login"
         android:layout_width="93dp"
         android:layout_height="48dp"
         android:layout_marginTop="30dp"
@@ -110,10 +127,11 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/signupGoogle"
-        android:layout_width="275dp"
+        android:layout_width="200dp"
         android:layout_height="49dp"
         android:layout_marginTop="30dp"
         android:text="@string/signup_google"
+        android:theme="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -129,15 +147,17 @@
         app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
 
-
     <Button
         android:id="@+id/signupManually"
-        android:layout_width="275dp"
+        android:layout_width="200dp"
         android:layout_height="49dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/signup_manually"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signupGoogle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
