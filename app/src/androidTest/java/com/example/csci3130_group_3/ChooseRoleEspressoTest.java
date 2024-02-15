@@ -35,22 +35,17 @@ public class ChooseRoleEspressoTest {
 
     @Test
     public void employeeButtonExists() {
-        //onView(withId(R.id.employeeButton)).check(matches(isDisplayed()));
         onView(withId(R.id.employeeButton)).perform(click());
-        //onView(allOf(withId(R.id.employeeButton), isDisplayed()));
-
     }
 
     @Test
     public void employerButtonExists() {
         onView(withId(R.id.employerButton)).perform(click());
-        //onView(withId(R.id.employerButton)).check(matches(isDisplayed()));
     }
 
     @Test
     public void roleConfirmationButtonExists() {
         onView(withId(R.id.chooseRoleConfirm)).perform(click());
-        //onView(withId(R.id.chooseRoleConfirm)).check(matches(isDisplayed()));
     }
 
 

@@ -38,30 +38,26 @@ public class ChooseRoleUITests {
     public void setup() {
         device = UiDevice.getInstance(getInstrumentation());
         Context context = ApplicationProvider.getApplicationContext();
-        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
-        appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        final Intent appIntent = new Intent(context, ChooseRoleActivity.class);
+        appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
     }
 
     @Test
     public void checkIfEmployeeBoxVisible(){
-
-
         UiObject employeeBox = device.findObject(new UiSelector().text("Employee"));
         assertTrue(employeeBox.exists());
     }
 
     @Test
     public void checkIfEmployerBoxVisable(){
-
         UiObject employerBox = device.findObject(new UiSelector().textContains("Employer"));
         assertTrue(employerBox.exists());
     }
 
     @Test
     public void checkIfConfirmBoxVisable(){
-
         UiObject employerBox = device.findObject(new UiSelector().textContains("Confirm"));
         assertTrue(employerBox.exists());
     }
