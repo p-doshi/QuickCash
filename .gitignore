@@ -1,7 +1,11 @@
 *.iml
 .gradle
 /local.properties
+<<<<<<< HEAD
 .idea/*
+=======
+.idea
+>>>>>>> development
 .DS_Store
 /build
 /captures

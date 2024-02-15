@@ -1,15 +1,16 @@
 package com.example.csci3130_group_3;
 
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,10 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity  {
 
@@ -52,7 +50,7 @@ public class LoginActivity extends AppCompatActivity  {
             mAuth.signOut();
         }
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         this.setUpLoginButton();
         this.setUpSignUpButtonManual();
@@ -61,12 +59,19 @@ public class LoginActivity extends AppCompatActivity  {
                 .requestIdToken(getString(R.string.WebClient))
                 .requestEmail()
                 .build();
-
+        ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    // Handle the sign-in success
+                    Intent data = result.getData();
+                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                    handleSignInResult(task);
+                });
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         SignInButton signInButton = findViewById(R.id.signupGoogle);
-        signInButton.setOnClickListener((view) -> {
+        signInButton.setOnClickListener(view -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+            signInLauncher.launch(signInIntent);
         });
     }
 
@@ -94,10 +99,8 @@ public class LoginActivity extends AppCompatActivity  {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-        }
     }
 
 
