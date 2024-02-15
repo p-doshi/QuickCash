@@ -3,8 +3,8 @@ package com.example.csci3130_group_3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
 
@@ -19,22 +19,24 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
 
         db = new MyFirebaseDatabase(this);
-        Employer emp = new Employer("Parth", "alkjo139ksdf09812n");
+        String dbKey = "test";
+
+        // Get the text view.
+        TextView output = findViewById(R.id.dbOutput);
 
         Button sendBtn = findViewById(R.id.sendButton);
         sendBtn.setOnClickListener(v -> {
-            db.write("test", emp);
-            Log.d("send", "sent");
+            String temp = RandomStringGenerator.generate(10);
+            db.write(dbKey, temp,
+                () -> output.setText("Sent: " + temp),
+                error -> output.setText("Error sending: " + error));
         });
 
         Button recvBtn = findViewById(R.id.recvButton);
-        recvBtn.setOnClickListener(v -> {
-            db.read(
-                "test",
-                User.class,
-                user -> Log.d("recv", user.getName()),
-                error -> Log.d("recv", error)
-            );
-        });
+        recvBtn.setOnClickListener(
+            v -> db.read(dbKey, String.class,
+                temp -> output.setText("Received: " + temp),
+                error -> output.setText("Error: " + error)
+        ));
     }
 }
