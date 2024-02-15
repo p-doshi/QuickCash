@@ -8,9 +8,22 @@ public interface Database {
      *
      * @param location The location in the database to write the value.
      * @param value The value to write to the database at the given location.
+     * @param errorFunction The function that will be called in case of an error.
      * @param <T> Can write any type of data to firebase.
      */
-    <T> void write(String location, T value);
+    <T> void write(String location, T value, Consumer<String> errorFunction);
+
+    /**
+     * Asynchronously writes the value to the database.
+     *
+     * @param location The location in the database to write the value.
+     * @param value The value to write to the database at the given location.
+     * @param errorFunction The function that will be called in case of an error.
+     * @param successFunction The function that will be called after the asynchronous operation
+     *                        completes successfully.
+     * @param <T> Can write any type of data to firebase.
+     */
+    <T> void write(String location, T value, Runnable successFunction, Consumer<String> errorFunction);
 
     /**
      * Asynchronously reads the value to the database.
