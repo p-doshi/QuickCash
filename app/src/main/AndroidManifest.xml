@@ -21,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".EmployeeDashboard"
+            android:exported="true"/>
+        <activity
+            android:name=".EmployerDashboard"
+            android:exported="true"/>
     </application>
 
 </manifest>
