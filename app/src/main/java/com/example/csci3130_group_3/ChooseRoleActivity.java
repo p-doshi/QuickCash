@@ -64,11 +64,14 @@ public class ChooseRoleActivity extends AppCompatActivity implements AdapterView
         Intent dbIntent;
 
         if (role.equals("Employer")) {
-            dbIntent = new Intent(getBaseContext(), EmployerDashboard.class);
+            //dbIntent = new Intent(getBaseContext(), EmployerDashboard.class);
+            Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
         } else {
-            dbIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
+            //dbIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
+            Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
+
         }
 
-        startActivity(dbIntent);
+        //startActivity(dbIntent);
     }
 }
