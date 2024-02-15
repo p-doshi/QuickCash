@@ -7,7 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
@@ -51,13 +50,13 @@ public class ChooseRoleUITests {
     }
 
     @Test
-    public void checkIfEmployerBoxVisable(){
+    public void checkIfEmployerBoxVisible(){
         UiObject employerBox = device.findObject(new UiSelector().textContains("Employer"));
         assertTrue(employerBox.exists());
     }
 
     @Test
-    public void checkIfConfirmBoxVisable(){
+    public void checkIfConfirmBoxVisible(){
         UiObject employerBox = device.findObject(new UiSelector().textContains("Confirm"));
         assertTrue(employerBox.exists());
     }

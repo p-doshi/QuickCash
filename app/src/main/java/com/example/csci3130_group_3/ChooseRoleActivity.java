@@ -1,12 +1,10 @@
 package com.example.csci3130_group_3;
 
-import android.content.Intent;
+//import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,28 +22,15 @@ public class ChooseRoleActivity extends AppCompatActivity implements AdapterView
         Button chooseEmployeeButton = findViewById(R.id.employeeButton);
         Button confirmRoleButton = findViewById(R.id.chooseRoleConfirm);
 
-        chooseEmployerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Employer";
-            }
-        });
+        chooseEmployerButton.setOnClickListener(view -> role = "Employer");
 
-        chooseEmployeeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Employee";
-            }
-        });
+        chooseEmployeeButton.setOnClickListener(view -> role = "Employee");
 
-        confirmRoleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (role == null) {
-                    Toast.makeText(getApplicationContext(), "Please choose a role!", Toast.LENGTH_LONG).show();
-                } else {
-                    move2DashboardWindow(role);
-                }
+        confirmRoleButton.setOnClickListener(view -> {
+            if (role == null) {
+                Toast.makeText(getApplicationContext(), "Please choose a role!", Toast.LENGTH_LONG).show();
+            } else {
+                move2DashboardWindow(role);
             }
         });
 
@@ -61,7 +46,8 @@ public class ChooseRoleActivity extends AppCompatActivity implements AdapterView
     }
 
     protected void move2DashboardWindow(String role) {
-        Intent dbIntent;
+        //commented code are for when all the activities are connected
+        //Intent dbIntent;
 
         if (role.equals("Employer")) {
             //dbIntent = new Intent(getBaseContext(), EmployerDashboard.class);
