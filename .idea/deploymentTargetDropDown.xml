@@ -8,6 +8,12 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="checkInvalidPassWordConfirmError()">
+        <State />
+      </entry>
+      <entry key="fillRegistrationForm()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

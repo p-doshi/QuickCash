@@ -5,6 +5,7 @@ import androidx.test.core.app.ActivityScenario;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -45,34 +46,35 @@ public class RegistrationFormUITest {
     @Test
     public void fillRegistrationForm() {
 
-        onView(withId(R.id.firstName)).perform(typeText("John"));
-        onView(withId(R.id.lastName)).perform(typeText("Doe"));
-        onView(withId(R.id.address)).perform(typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(typeText("1985"));
-        onView(withId(R.id.birthMonth)).perform(typeText("01"));
-        onView(withId(R.id.birthDay)).perform(typeText("01"));
-        onView(withId(R.id.userName)).perform(typeText("john_doe"));
-        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"));
-        onView(withId(R.id.password)).perform(typeText("password123"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("password123"));
+        onView(withId(R.id.firstName)).perform(typeText("John"),closeSoftKeyboard());
+        onView(withId(R.id.lastName)).perform(typeText("Doe"),closeSoftKeyboard());
+        onView(withId(R.id.address)).perform(typeText("123 Main Street"),closeSoftKeyboard());
+        onView(withId(R.id.birthYear)).perform(typeText("1985"),closeSoftKeyboard());
+        onView(withId(R.id.birthMonth)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.birthDay)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.userName)).perform(typeText("john_doe"),closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"),closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("Password123"),closeSoftKeyboard());
+        onView(withId(R.id.confirmPassword)).perform(typeText("Password123"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
+        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText("Registration successful!")));
     }
 
     @Test
     public void checkInvalidNameError(){
-        onView(withId(R.id.firstName)).perform(typeText(""));
-        onView(withId(R.id.lastName)).perform(typeText("Doe"));
-        onView(withId(R.id.address)).perform(typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(typeText("1985"));
-        onView(withId(R.id.birthMonth)).perform(typeText("01"));
-        onView(withId(R.id.birthDay)).perform(typeText("01"));
-        onView(withId(R.id.userName)).perform(typeText("john_doe"));
-        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"));
-        onView(withId(R.id.password)).perform(typeText("password123"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("password123"));
+        onView(withId(R.id.firstName)).perform(typeText(""),closeSoftKeyboard());
+        onView(withId(R.id.lastName)).perform(typeText("Doe"),closeSoftKeyboard());
+        onView(withId(R.id.address)).perform(typeText("123 Main Street"),closeSoftKeyboard());
+        onView(withId(R.id.birthYear)).perform(typeText("1985"),closeSoftKeyboard());
+        onView(withId(R.id.birthMonth)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.birthDay)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.userName)).perform(typeText("john_doe"),closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"),closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("Password123"),closeSoftKeyboard());
+        onView(withId(R.id.confirmPassword)).perform(typeText("Password123"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
 
@@ -82,16 +84,16 @@ public class RegistrationFormUITest {
 
     @Test
     public void checkInvalidDateError(){
-        onView(withId(R.id.firstName)).perform(typeText("John"));
-        onView(withId(R.id.lastName)).perform(typeText("Doe"));
-        onView(withId(R.id.address)).perform(typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(typeText(""));
-        onView(withId(R.id.birthMonth)).perform(typeText("01"));
-        onView(withId(R.id.birthDay)).perform(typeText("01"));
-        onView(withId(R.id.userName)).perform(typeText("john_doe"));
-        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"));
-        onView(withId(R.id.password)).perform(typeText("password123"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("password123"));
+        onView(withId(R.id.firstName)).perform(typeText("John"),closeSoftKeyboard());
+        onView(withId(R.id.lastName)).perform(typeText("Doe"),closeSoftKeyboard());
+        onView(withId(R.id.address)).perform(typeText("123 Main Street"),closeSoftKeyboard());
+        onView(withId(R.id.birthYear)).perform(typeText(""),closeSoftKeyboard());
+        onView(withId(R.id.birthMonth)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.birthDay)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.userName)).perform(typeText("john_doe"),closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"),closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("Password123"),closeSoftKeyboard());
+        onView(withId(R.id.confirmPassword)).perform(typeText("Password123"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
         onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid birth date")));
@@ -99,16 +101,16 @@ public class RegistrationFormUITest {
 
     @Test
     public void checkInvalidUserNameError(){
-        onView(withId(R.id.firstName)).perform(typeText("John"));
-        onView(withId(R.id.lastName)).perform(typeText("Doe"));
-        onView(withId(R.id.address)).perform(typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(typeText("1985"));
-        onView(withId(R.id.birthMonth)).perform(typeText("01"));
-        onView(withId(R.id.birthDay)).perform(typeText("01"));
-        onView(withId(R.id.userName)).perform(typeText(""));
-        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"));
-        onView(withId(R.id.password)).perform(typeText("password123"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("password123"));
+        onView(withId(R.id.firstName)).perform(typeText("John"),closeSoftKeyboard());
+        onView(withId(R.id.lastName)).perform(typeText("Doe"),closeSoftKeyboard());
+        onView(withId(R.id.address)).perform(typeText("123 Main Street"),closeSoftKeyboard());
+        onView(withId(R.id.birthYear)).perform(typeText("1985"),closeSoftKeyboard());
+        onView(withId(R.id.birthMonth)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.birthDay)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.userName)).perform(typeText(""),closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"),closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("Password123"),closeSoftKeyboard());
+        onView(withId(R.id.confirmPassword)).perform(typeText("Password123"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
 
@@ -118,16 +120,16 @@ public class RegistrationFormUITest {
 
     @Test
     public void checkInvalidEmailError(){
-        onView(withId(R.id.firstName)).perform(typeText("John"));
-        onView(withId(R.id.lastName)).perform(typeText("Doe"));
-        onView(withId(R.id.address)).perform(typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(typeText("1985"));
-        onView(withId(R.id.birthMonth)).perform(typeText("01"));
-        onView(withId(R.id.birthDay)).perform(typeText("01"));
-        onView(withId(R.id.userName)).perform(typeText("john_doe"));
-        onView(withId(R.id.emailAddress)).perform(typeText("john.doeexample.com"));
-        onView(withId(R.id.password)).perform(typeText("password123"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("password123"));
+        onView(withId(R.id.firstName)).perform(typeText("John"),closeSoftKeyboard());
+        onView(withId(R.id.lastName)).perform(typeText("Doe"),closeSoftKeyboard());
+        onView(withId(R.id.address)).perform(typeText("123 Main Street"),closeSoftKeyboard());
+        onView(withId(R.id.birthYear)).perform(typeText("1985"),closeSoftKeyboard());
+        onView(withId(R.id.birthMonth)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.birthDay)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.userName)).perform(typeText("john_doe"),closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doeexample.com"),closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("Password123"),closeSoftKeyboard());
+        onView(withId(R.id.confirmPassword)).perform(typeText("Password123"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
 
@@ -137,16 +139,16 @@ public class RegistrationFormUITest {
 
     @Test
     public void checkInvalidPassWordError(){
-        onView(withId(R.id.firstName)).perform(typeText("John"));
-        onView(withId(R.id.lastName)).perform(typeText("Doe"));
-        onView(withId(R.id.address)).perform(typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(typeText("1985"));
-        onView(withId(R.id.birthMonth)).perform(typeText("01"));
-        onView(withId(R.id.birthDay)).perform(typeText("01"));
-        onView(withId(R.id.userName)).perform(typeText("john_doe"));
-        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"));
-        onView(withId(R.id.password)).perform(typeText("xxx"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("xxx"));
+        onView(withId(R.id.firstName)).perform(typeText("John"),closeSoftKeyboard());
+        onView(withId(R.id.lastName)).perform(typeText("Doe"),closeSoftKeyboard());
+        onView(withId(R.id.address)).perform(typeText("123 Main Street"),closeSoftKeyboard());
+        onView(withId(R.id.birthYear)).perform(typeText("1985"),closeSoftKeyboard());
+        onView(withId(R.id.birthMonth)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.birthDay)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.userName)).perform(typeText("john_doe"),closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"),closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("xxx"),closeSoftKeyboard());
+        onView(withId(R.id.confirmPassword)).perform(typeText("xxx"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
 
@@ -156,16 +158,16 @@ public class RegistrationFormUITest {
 
     @Test
     public void checkInvalidPassWordConfirmError(){
-        onView(withId(R.id.firstName)).perform(typeText("John"));
-        onView(withId(R.id.lastName)).perform(typeText("Doe"));
-        onView(withId(R.id.address)).perform(typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(typeText("1985"));
-        onView(withId(R.id.birthMonth)).perform(typeText("01"));
-        onView(withId(R.id.birthDay)).perform(typeText("01"));
-        onView(withId(R.id.userName)).perform(typeText("john_doe"));
-        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"));
-        onView(withId(R.id.password)).perform(typeText("password123"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("xxx"));
+        onView(withId(R.id.firstName)).perform(typeText("John"),closeSoftKeyboard());
+        onView(withId(R.id.lastName)).perform(typeText("Doe"),closeSoftKeyboard());
+        onView(withId(R.id.address)).perform(typeText("123 Main Street"),closeSoftKeyboard());
+        onView(withId(R.id.birthYear)).perform(typeText("1985"),closeSoftKeyboard());
+        onView(withId(R.id.birthMonth)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.birthDay)).perform(typeText("01"),closeSoftKeyboard());
+        onView(withId(R.id.userName)).perform(typeText("john_doe"),closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com"),closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("Password123"),closeSoftKeyboard());
+        onView(withId(R.id.confirmPassword)).perform(typeText("xxx"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
 
