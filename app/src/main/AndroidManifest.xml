@@ -17,7 +17,7 @@
             android:exported="false" />
         <activity
             android:name=".DatabaseExampleActivity"
-            android:exported="false"></activity>
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
