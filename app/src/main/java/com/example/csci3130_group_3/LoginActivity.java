@@ -27,7 +27,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity  {
 
 
     private FirebaseAuth mAuth;
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         this.setUpLoginButton();
         this.setUpSignUpButtonManual();
-        this.setUpSignUpButtonGoogle();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.WebClient))
                 .requestEmail()
@@ -75,18 +75,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         CheckBox rememberMe = findViewById(R.id.checkBox);
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
+                .addOnSuccessListener(this, task -> {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("Login_Tag", "signInWithCustomToken:success");
                         editor.putBoolean("remember", rememberMe.isChecked());
                         editor.apply();
                         moveToDashboard();
-                    } else {
+                })
+                .addOnFailureListener(this, task -> {
                         // If sign in fails, display a message to the user.
-                        Log.w("Login_Tag", "signInWithCustomToken:failure", task.getException());
+                        Log.w("Login_Tag", "signInWithCustomToken:failure", task.getCause());
                         setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
-                    }
                 });
     }
 
@@ -138,10 +137,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signupButton.setOnClickListener(view -> moveToRegistration());
     }
 
-    protected void setUpSignUpButtonGoogle(){
-        Button signupButton = findViewById(R.id.signupManually);
-        signupButton.setOnClickListener(this);
-    }
+
 
     protected void moveToDashboard(){
         Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
@@ -157,9 +153,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    @Override
-    public void onClick(View v) {
-    }
 
 
     public void handleLoginButtonClick(){
