@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Location Permissions for Mat's UserStory7 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- Might need FINE location for later -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="31">
+        <service
+            android:name="AndroidLocationProvider"
+            android:foregroundServiceType="location" >
+        </service>
         <activity
             android:name=".DatabaseExampleActivity"
             android:exported="false">

@@ -27,6 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildToolsVersion '34.0.0'
 }
 
 dependencies {
@@ -40,4 +41,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+
+    // Trying to add mockito, it's not going well
+    testImplementation "org.mockito:mockito-core:5.10.0"
+    testImplementation "io.mockk:mockk:1.13.9"
 }
