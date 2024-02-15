@@ -2,10 +2,7 @@ package com.example.csci3130_group_3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,7 +18,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         // The easiest way to run this example is to change the launch activity in the android manifest file.
         // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
 
-        db = new MySecureFirebaseDatabase(this);
+        db = new MyFirebaseDatabase(this);
         String dbKey = "test";
 
         // Get the text view.

@@ -27,7 +27,7 @@ public class DatabaseTest {
 
     @Test
     public void writeDatabaseFailure() {
-        Database db = new MyFirebaseDatabase(context);
+        Database db = new MyFirebaseDatabaseImpl(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -48,7 +48,7 @@ public class DatabaseTest {
 
     @Test
     public void readDatabaseFailure() {
-        Database db = new MyFirebaseDatabase(context);
+        Database db = new MyFirebaseDatabaseImpl(context);
 
         // We need a value that shows that we have not received anything.
         final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
@@ -72,7 +72,7 @@ public class DatabaseTest {
 
     @Test
     public void writeSecureDatabaseSuccess() {
-        Database db = new MySecureFirebaseDatabase(context);
+        Database db = new MyFirebaseDatabase(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -93,7 +93,7 @@ public class DatabaseTest {
 
     @Test
     public void readSecureDatabaseSuccess() {
-        Database db = new MySecureFirebaseDatabase(context);
+        Database db = new MyFirebaseDatabase(context);
 
         // We need a value that shows that we have not received anything.
         final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
@@ -119,7 +119,7 @@ public class DatabaseTest {
 
     @Test
     public void writeReadSecureDatabaseSuccess() {
-        Database db = new MySecureFirebaseDatabase(context);
+        Database db = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -146,7 +146,7 @@ public class DatabaseTest {
 
     @Test
     public void writeSecureAuthorizedDatabaseFailure() {
-        Database db = new MySecureFirebaseDatabase(context);
+        Database db = new MyFirebaseDatabase(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -167,7 +167,7 @@ public class DatabaseTest {
 
     @Test
     public void readSecureAuthorizedDatabaseFailure() {
-        Database db = new MySecureFirebaseDatabase(context);
+        Database db = new MyFirebaseDatabase(context);
 
         // We need a value that shows that we have not received anything.
         final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
