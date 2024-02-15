@@ -13,13 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ChooseRoleActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private String role;
-    Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_choose_role);
-        database = new MyFirebaseDatabase(this);
 
         // Initialize UI elements
         Button chooseEmployerButton = findViewById(R.id.employerButton);
@@ -43,11 +41,9 @@ public class ChooseRoleActivity extends AppCompatActivity implements AdapterView
         confirmRoleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //call method to write to database
                 if (role == null) {
                     Toast.makeText(getApplicationContext(), "Please choose a role!", Toast.LENGTH_LONG).show();
                 } else {
-                    saveInfoToFirebase(role);
                     move2DashboardWindow(role);
                 }
             }
@@ -63,13 +59,6 @@ public class ChooseRoleActivity extends AppCompatActivity implements AdapterView
     public void onNothingSelected(AdapterView<?> adapterView) {
         // No action needed in this case
     }
-
-
-    // put info to database
-    protected void saveInfoToFirebase(String role) {
-        database.write("role", role);
-    }
-
 
     protected void move2DashboardWindow(String role) {
         Intent dbIntent;
