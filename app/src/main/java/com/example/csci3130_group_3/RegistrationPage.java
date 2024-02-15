@@ -3,10 +3,8 @@ package com.example.csci3130_group_3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,12 +14,12 @@ import java.util.Locale;
 public class RegistrationPage extends AppCompatActivity {
 
     private EditText firstName, lastName, address, birthYear, birthMonth, birthDay, userName, emailAddress, password, confirmPassword;
+    TextView statusTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_page);
         init();
-        findViewById(R.id.confirmButton).setOnClickListener(v -> submitForm());
     }
 
     private void init(){
@@ -35,19 +33,20 @@ public class RegistrationPage extends AppCompatActivity {
         emailAddress = findViewById(R.id.emailAddress);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPassword);
+        findViewById(R.id.confirmButton).setOnClickListener(v -> submitForm());
+        statusTextView = findViewById(R.id.status);
     }
 
     private void submitForm(){
-        TextView statusTextView = findViewById(R.id.status);
-        RegistrationForm formValidator = new RegistrationForm();
+        FormValidator formValidator = new FormValidator();
 
-        String firstNameText = firstName.getText().toString();
-        String lastNameText = lastName.getText().toString();
-        String addressText = address.getText().toString();
-        String userNameText = userName.getText().toString();
-        String emailText = emailAddress.getText().toString();
-        String passwordText = password.getText().toString();
-        String confirmPasswordText = confirmPassword.getText().toString();
+        String firstNameText = firstName.getText().toString().trim();
+        String lastNameText = lastName.getText().toString().trim();
+        String addressText = address.getText().toString().trim();
+        String userNameText = userName.getText().toString().trim();
+        String emailText = emailAddress.getText().toString().trim();
+        String passwordText = password.getText().toString().trim();
+        String confirmPasswordText = confirmPassword.getText().toString().trim();
 
         Date birthDate = null;
         try {
@@ -58,24 +57,24 @@ public class RegistrationPage extends AppCompatActivity {
         }
 
         if (!formValidator.isFirstNameValid(firstNameText)) {
-            statusTextView.setText("Invalid first name");
+            statusTextView.setText(R.string.invalid_first_name);
         } else if (!formValidator.isLastNameValid(lastNameText)) {
-            statusTextView.setText("Invalid last name");
+            statusTextView.setText(R.string.invalid_last_name);
         } else if (!formValidator.isAddressValid(addressText)) {
-            statusTextView.setText("Invalid address");
+            statusTextView.setText(R.string.invalid_address);
         } else if (!formValidator.isBirthDateValid(birthDate)) {
-            statusTextView.setText("Invalid birth date");
+            statusTextView.setText(R.string.invalid_birth_date);
         } else if (!formValidator.isUserNameValid(userNameText)) {
-            statusTextView.setText("Invalid user name");
+            statusTextView.setText(R.string.invalid_user_name);
         } else if (!formValidator.isEmailValid(emailText)) {
-            statusTextView.setText("Invalid email address");
+            statusTextView.setText(R.string.invalid_email_address);
         } else if (!formValidator.isPasswordValid(passwordText)) {
-            statusTextView.setText("Invalid password");
+            statusTextView.setText(R.string.invalid_password);
         } else if (!formValidator.doPasswordsMatch(passwordText, confirmPasswordText)) {
-            statusTextView.setText("Passwords do not match");
+            statusTextView.setText(R.string.passwords_do_not_match);
         } else {
             // all inputs is valid
-            statusTextView.setText("Registration successful!");
+            statusTextView.setText(R.string.registration_successful);
         }
     }
 }
