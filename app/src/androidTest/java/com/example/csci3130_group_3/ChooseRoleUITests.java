@@ -44,20 +44,12 @@ public class ChooseRoleUITests {
     }
 
     @Test
-    public void checkIfEmployeeBoxVisible(){
+    public void checkIfUiVisible() {
         UiObject employeeBox = device.findObject(new UiSelector().text("Employee"));
         assertTrue(employeeBox.exists());
-    }
-
-    @Test
-    public void checkIfEmployerBoxVisible(){
         UiObject employerBox = device.findObject(new UiSelector().textContains("Employer"));
         assertTrue(employerBox.exists());
-    }
-
-    @Test
-    public void checkIfConfirmBoxVisible(){
-        UiObject employerBox = device.findObject(new UiSelector().textContains("Confirm"));
-        assertTrue(employerBox.exists());
+        UiObject confirmBox = device.findObject(new UiSelector().textContains("Confirm"));
+        assertTrue(confirmBox.exists());
     }
 }
