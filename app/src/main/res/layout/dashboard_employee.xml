@@ -11,20 +11,17 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/employeeBottomNavView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="649dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/dash_employee_nav_menu" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/HeaderToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="568dp"
         android:background="@color/ic_map_background"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -37,17 +34,12 @@
 
     <TextView
         android:id="@+id/job_employee_title"
-        android:layout_width="158dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="131dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="131dp"
-        android:layout_marginBottom="658dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Jobs"
         android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
