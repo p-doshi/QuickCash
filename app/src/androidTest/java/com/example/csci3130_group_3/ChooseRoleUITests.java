@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -18,6 +19,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
@@ -60,5 +62,25 @@ public class ChooseRoleUITests {
     public void checkIfConfirmBoxVisable(){
         UiObject employerBox = device.findObject(new UiSelector().textContains("Confirm"));
         assertTrue(employerBox.exists());
+    }
+    @Test
+    @Ignore("only after pages connected")
+    public void checkIfMovedToEmployerDashboard() throws UiObjectNotFoundException {
+        UiObject employerButton = device.findObject(new UiSelector().textContains("Employer"));
+        employerButton.click();
+        UiObject confirmButton = device.findObject(new UiSelector().textContains("Confirm"));
+        confirmButton.clickAndWaitForNewWindow();
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
+        assertTrue(welcomeLabel.exists());
+    }
+    @Test
+    @Ignore("only after pages connected")
+    public void checkIfMovedToEmployeeDashboard() throws UiObjectNotFoundException {
+        UiObject employeeButton = device.findObject(new UiSelector().textContains("Employee"));
+        employeeButton.click();
+        UiObject confirmButton = device.findObject(new UiSelector().textContains("Confirm"));
+        confirmButton.clickAndWaitForNewWindow();
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
+        assertTrue(welcomeLabel.exists());
     }
 }
