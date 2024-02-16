@@ -24,7 +24,7 @@ public class EmployerDashEspresso {
 
     @Test
     public void testEmployerNavBarExist(){
-        onView(withId(R.id.bottomNavigationView)).perform(click());
+        onView(withId(R.id.employerBottomNavView)).perform(click());
     }
 
     @Test

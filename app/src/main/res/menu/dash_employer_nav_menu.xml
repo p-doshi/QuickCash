@@ -3,11 +3,10 @@
 
     <item android:id="@+id/employer_add_job"
         android:title="Add"
-        android:icon="@drawable/ic_add_listing_foreground" />
+        android:icon="@drawable/ic_add_foreground" />
     <item android:id="@+id/employer_reciepts"
         android:title="Reciepts"
         android:icon="@drawable/ic_reciept_foreground" />
-
     <item android:id="@+id/employer_profile"
         android:title="Profile"
         android:icon="@drawable/ic_profile_box_foreground" />
