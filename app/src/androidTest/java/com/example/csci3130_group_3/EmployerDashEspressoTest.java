@@ -11,7 +11,7 @@ import androidx.test.core.app.ActivityScenario;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EmployerDashEspresso {
+public class EmployerDashEspressoTest {
     public ActivityScenario<EmployerDashboard> scenario;
 
     @Before
