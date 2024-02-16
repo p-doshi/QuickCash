@@ -1,17 +1,14 @@
 package com.example.csci3130_group_3;
 
-import android.content.Intent;
+//import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ChooseRoleActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ChooseRoleActivity extends AppCompatActivity {
     private String role;
 
     @Override
@@ -24,54 +21,35 @@ public class ChooseRoleActivity extends AppCompatActivity implements AdapterView
         Button chooseEmployeeButton = findViewById(R.id.employeeButton);
         Button confirmRoleButton = findViewById(R.id.chooseRoleConfirm);
 
-        chooseEmployerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Employer";
-            }
-        });
+        chooseEmployerButton.setOnClickListener(view -> role = getResources().getString(R.string.employer));
 
-        chooseEmployeeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                role = "Employee";
-            }
-        });
+        chooseEmployeeButton.setOnClickListener(view -> role = getResources().getString(R.string.employee));
 
-        confirmRoleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (role == null) {
-                    Toast.makeText(getApplicationContext(), "Please choose a role!", Toast.LENGTH_LONG).show();
-                } else {
-                    move2DashboardWindow(role);
-                }
+        confirmRoleButton.setOnClickListener(view -> {
+            if (role == null) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.choose_role_reminder), Toast.LENGTH_LONG).show();
+            } else {
+                moveToDashboardWindow(role);
             }
         });
 
     }
 
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        // No action needed in this case
-    }
+    protected void moveToDashboardWindow(String role) {
+        //commented code are for when all the activities are connected
+        //Intent dashboardIntent;
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        // No action needed in this case
-    }
-
-    protected void move2DashboardWindow(String role) {
-        Intent dbIntent;
-
-        if (role.equals("Employer")) {
-            //dbIntent = new Intent(getBaseContext(), EmployerDashboard.class);
+        if (role.equals(getResources().getString(R.string.employer))) {
+            //dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
             Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
-        } else {
-            //dbIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
+        } else if (role.equals(getResources().getString(R.string.employee))) {
+            //dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
             Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
-
+        } else {
+            Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
+            System.exit(1);
         }
 
-        //startActivity(dbIntent);
+        //startActivity(dashboardIntent);
     }
 }

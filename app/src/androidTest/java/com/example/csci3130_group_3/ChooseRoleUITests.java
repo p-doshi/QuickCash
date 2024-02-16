@@ -8,7 +8,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
@@ -47,21 +46,13 @@ public class ChooseRoleUITests {
     }
 
     @Test
-    public void checkIfEmployeeBoxVisible(){
+    public void checkIfUiVisible() {
         UiObject employeeBox = device.findObject(new UiSelector().text("Employee"));
         assertTrue(employeeBox.exists());
-    }
-
-    @Test
-    public void checkIfEmployerBoxVisable(){
         UiObject employerBox = device.findObject(new UiSelector().textContains("Employer"));
         assertTrue(employerBox.exists());
-    }
-
-    @Test
-    public void checkIfConfirmBoxVisable(){
-        UiObject employerBox = device.findObject(new UiSelector().textContains("Confirm"));
-        assertTrue(employerBox.exists());
+        UiObject confirmBox = device.findObject(new UiSelector().textContains("Confirm"));
+        assertTrue(confirmBox.exists());
     }
     @Test
     @Ignore("only after pages connected")
