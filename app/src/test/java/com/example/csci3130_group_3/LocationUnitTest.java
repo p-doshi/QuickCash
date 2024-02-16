@@ -6,37 +6,55 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 
 // Unit tests can debug the logic
-// So maybe they're the best choice for checking if location is enabled
+// So they're the best choice for checking if location is enabled
 public class LocationUnitTest {
 
-    // Mock the Location Manager (Essentially spoofing it)
+    // Mock all the functions for context, activity & locationProviderClient
     @Mock
-    private LocationManager locationManager;
+    private Context mockContext;
+    @Mock
+    private Activity mockActivity;
+    @Mock
+    private FusedLocationProviderClient mockLocationProviderClient;
+    @Mock
+    private AndroidLocationProvider locationProvider;
 
-    @Test
-    public void testLocationPermissionEnabled() {
-        when(locationManager.isLocationEnabled()).thenReturn(false);
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        locationProvider = new AndroidLocationProvider(mockContext, mockActivity);
     }
 
     @Test
-    public void testLocationPermissionDisabled() {
+    public void testPermsGranted() {
+        // Assumes location permission is granted
+        when(mockContext.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION))
+                .thenReturn(PackageManager.PERMISSION_GRANTED);
+        when(mockContext.checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION))
+                .thenReturn(PackageManager.PERMISSION_GRANTED);
 
+        assertTrue(locationProvider.checkLocationPermissionsEnabled());
     }
 
-    // Try to get the location
+    /*@Test
+    public void testLocationPermissionEnabled();
     @Test
-    public void getLocation() {
-        // locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-    }
+    public void testLocationPermissionDisabled();
+    @Test
+    public void getLocation() {}*/
 
 
 

@@ -27,6 +27,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    // Known bug in android studio, this fixes bugs with Mocking Location data
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     buildToolsVersion '34.0.0'
 }
 
@@ -43,7 +49,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
-    // Trying to add mockito, it's not going well
+    // Adding Mockito for JUnit testing
     testImplementation "org.mockito:mockito-core:5.10.0"
     testImplementation "io.mockk:mockk:1.13.9"
+
+    // Adding Google Play Services for FusedLocation
+    implementation 'com.google.android.gms:play-services-location:21.1.0'
 }

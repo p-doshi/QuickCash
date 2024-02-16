@@ -38,6 +38,4 @@ public class LocationUITests {
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
     }
-
-    public void
 }
