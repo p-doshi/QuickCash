@@ -14,6 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -58,6 +59,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -77,6 +79,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -96,6 +99,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -115,6 +119,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -134,6 +139,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -151,6 +157,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -168,6 +175,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -185,6 +193,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -204,6 +213,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doeexample.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
@@ -223,6 +233,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("xxx\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("xxx\n"),closeSoftKeyboard());
@@ -242,6 +253,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.birthDay)).perform(typeText("01\n"),closeSoftKeyboard());
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"),closeSoftKeyboard());
+        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"),closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("Password123\n"),closeSoftKeyboard());
         onView(withId(R.id.confirmPassword)).perform(typeText("xxx\n"),closeSoftKeyboard());
