@@ -25,7 +25,7 @@ public interface LocationProvider {
      * @param perms List of permissions requested
      * @param grantResults If the permission was granted
      */
-    void onRequestPermissionsResult(int requestCode, String[] perms, int[] grantResults);
+    //void onRequestPermissionsResult(int requestCode, String[] perms, int[] grantResults);
 
     /**
      * Requests a location ping and updates currentLocation.

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 
-// TODO: Do not commit this file with the changes
 public class LocationExampleActivity extends AppCompatActivity {
 
     // Creating an AndroidLocationProvider object immediately, in final build we'd create on map screen
@@ -57,12 +56,11 @@ public class LocationExampleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (locationProvider.checkLocationPermissionsEnabled()) {
-                    // Location Permissions are enabled, ping the location
                     locationProvider.locationPing();
                     updateStatus();
                     updateLongLat();
                 } else {
-                    locationProvider.requestLocationPermissions();
+                    locationProvider.setupLocationPermsSettings();
                 }
             }
         });
@@ -85,8 +83,6 @@ public class LocationExampleActivity extends AppCompatActivity {
         if (requestCode == 87) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationProvider.locationPing();
-                updateStatus();
-                updateLongLat();
             }
         }
     }
