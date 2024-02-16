@@ -33,7 +33,7 @@
         android:id="@+id/listing_employer_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Current Listings"
+        android:text="@string/employerDashTitleText"
         android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold"
