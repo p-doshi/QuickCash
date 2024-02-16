@@ -32,6 +32,11 @@ public class EmployeeDashEspresso {
     }
 
     @Test
+    public void testEmployeeNavBarExist(){
+        onView(withId(R.id.employeeBottomNavView)).perform(click());
+    }
+
+    @Test
     public void testEmployeeSearchButtonExist(){
         onView(withId(R.id.employeeSearchPage)).check(matches(isDisplayed()));
     }

@@ -1,6 +1,7 @@
 package com.example.csci3130_group_3;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -19,6 +20,11 @@ public class EmployerDashEspresso {
         scenario.onActivity(activity -> {
 
         });
+    }
+
+    @Test
+    public void testEmployerNavBarExist(){
+        onView(withId(R.id.bottomNavigationView)).perform(click());
     }
 
     @Test
