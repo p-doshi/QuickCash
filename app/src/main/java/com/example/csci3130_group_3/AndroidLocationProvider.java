@@ -58,23 +58,19 @@ public class AndroidLocationProvider implements LocationProvider {
     }
 
     public boolean checkLocationPermissionsEnabled() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-
-        return false;
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     // Send out async request for permissions.
-    public void requestLocationPermissions() {
+    private void requestLocationPermissions() {
         if (!checkLocationPermissionsEnabled()) {
             String[] requiredPerms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
             ActivityCompat.requestPermissions(activity, requiredPerms, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
-    protected void createLocationRequest() {
+    private void createLocationRequest() {
         locationRequest = new LocationRequest.Builder(1000)
                 .setIntervalMillis(10000)
                 .setMinUpdateIntervalMillis(5000)
@@ -85,9 +81,9 @@ public class AndroidLocationProvider implements LocationProvider {
     /**
      * Checks if location setting is enabled
      * If it isn't, create a popup requesting that they enable it.
-     * @param booting If booting is true, proceed with also requesting location permissions
+     * @param continueToPerms If true, proceed with also requesting location permissions
      */
-    protected void requestLocationSettingsEnable(boolean booting) {
+    protected void requestLocationSettingsEnable(boolean continueToPerms) {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         SettingsClient client = LocationServices.getSettingsClient(context);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
@@ -95,12 +91,11 @@ public class AndroidLocationProvider implements LocationProvider {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                 // Location setting was already enabled
-                if (booting) {
+                if (continueToPerms) {
                     requestLocationPermissions();
                 }
             }
         });
-
         task.addOnFailureListener(activity, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -112,7 +107,7 @@ public class AndroidLocationProvider implements LocationProvider {
                         resolvable.startResolutionForResult(activity,
                                 REQUEST_CHECK_SETTINGS);
                         // Once location setting enabled, if we're booting system then requestLocationPermissions
-                        if (booting) {
+                        if (continueToPerms) {
                             requestLocationPermissions();
                         }
                     } catch (IntentSender.SendIntentException sendEx) {
@@ -122,21 +117,6 @@ public class AndroidLocationProvider implements LocationProvider {
             }
         });
     }
-
-    /* This isn't being called for some reason. Why?
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] perms, int[] grantResults) {
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission was granted
-                locationPing();
-            } else {
-                // Permission was not granted, alert user and degrade app.
-                // This doesn't display for some reason
-                Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }*/
 
     // Android can't handle functions checking permissions, so had to ignore the warning
     @SuppressLint("MissingPermission")
@@ -150,7 +130,8 @@ public class AndroidLocationProvider implements LocationProvider {
                     if (location != null) {
                         currentLocation = location;
                     } else {
-                        // Couldn't get current location for some reason.
+                        // If we couldn't get the location, alert the user!
+                        Toast.makeText(context, "Couldn't Access Location", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -159,33 +140,4 @@ public class AndroidLocationProvider implements LocationProvider {
             requestLocationPermissions();
         }
     }
-
-    /*
-    @SuppressLint("MissingPermission")
-    public Location getLocation() {
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-        if (checkLocationPermissionsEnabled() == 0) {
-            // No location provider is enabled, so return NULL
-            return null;
-        } else {
-            // This starts a ping system that constantly checks for location updates
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGES_FOR_UPDATES,
-                    new LocationListener() {
-                        @Override
-                        public void onLocationChanged(@NonNull Location location) {
-                            // When location is changed, update location
-                            currentLocation = location;
-                        }
-                    }
-            );
-
-            // Grabs the current location as a quick reference
-            currentLocation = getLocationPing();
-            return currentLocation;
-        }
-    }*/
 }
