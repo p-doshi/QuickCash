@@ -29,13 +29,13 @@ public class ChooseRoleActivity extends AppCompatActivity {
             if (role == null) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.choose_role_reminder), Toast.LENGTH_LONG).show();
             } else {
-                move2DashboardWindow(role);
+                moveToDashboardWindow(role);
             }
         });
 
     }
 
-    protected void move2DashboardWindow(String role) {
+    protected void moveToDashboardWindow(String role) {
         //commented code are for when all the activities are connected
         //Intent dashboardIntent;
 
