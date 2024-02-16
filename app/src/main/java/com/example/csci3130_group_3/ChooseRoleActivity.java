@@ -2,6 +2,7 @@ package com.example.csci3130_group_3;
 
 //import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -45,7 +46,8 @@ public class ChooseRoleActivity extends AppCompatActivity {
             //dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
             Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_choose_role), Toast.LENGTH_LONG).show();
+            Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
+            System.exit(1);
         }
 
         //startActivity(dashboardIntent);

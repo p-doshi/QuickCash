@@ -3,5 +3,6 @@
     <string name="confirm">Confirm</string>
     <string name="choose_your_role">Choose Your Role</string>
     <string name="choose_role_reminder">Please choose a role!</string>
-    <string name="error_choose_role">Please Choose Your Role Again!</string>
+    <string name="error_choose_role">A deadly error has occur when user is choosing role</string>
+    <string name="choose_role">ChooseRolePage</string>
 </resources>
