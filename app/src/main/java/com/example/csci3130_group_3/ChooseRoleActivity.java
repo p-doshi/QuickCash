@@ -26,7 +26,7 @@ public class ChooseRoleActivity extends AppCompatActivity {
 
         confirmRoleButton.setOnClickListener(view -> {
             if (role == null) {
-                Toast.makeText(getApplicationContext(), "Please choose a role!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.choose_role_reminder), Toast.LENGTH_LONG).show();
             } else {
                 move2DashboardWindow(role);
             }
@@ -38,14 +38,14 @@ public class ChooseRoleActivity extends AppCompatActivity {
         //commented code are for when all the activities are connected
         //Intent dashboardIntent;
 
-        if (role.equals("Employer")) {
+        if (role.equals(getResources().getString(R.string.employer))) {
             //dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
             Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
-        } else if (role.equals("Employee")) {
+        } else if (role.equals(getResources().getString(R.string.employee))) {
             //dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
             Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(), "An error has occurred", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_choose_role), Toast.LENGTH_LONG).show();
         }
 
         //startActivity(dashboardIntent);
