@@ -189,7 +189,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.userName)).perform(typeText("\n"));
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"));
         onView(withId(R.id.password)).perform(typeText("Password123\n"));
-        onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"));
+        onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
 
