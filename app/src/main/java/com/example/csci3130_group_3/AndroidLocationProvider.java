@@ -83,7 +83,7 @@ public class AndroidLocationProvider implements LocationProvider {
      * If it isn't, create a popup requesting that they enable it.
      * @param continueToPerms If true, proceed with also requesting location permissions
      */
-    protected void requestLocationSettingsEnable(boolean continueToPerms) {
+    private void requestLocationSettingsEnable(boolean continueToPerms) {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         SettingsClient client = LocationServices.getSettingsClient(context);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());

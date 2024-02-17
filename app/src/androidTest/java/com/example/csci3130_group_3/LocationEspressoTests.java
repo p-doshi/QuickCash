@@ -22,7 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Espressotests (Questionable if I even need this)
+ * Espressotests
+ * (These won't work as Espresso has no way to confirm permissions)
  */
 public class LocationEspressoTests {
 }

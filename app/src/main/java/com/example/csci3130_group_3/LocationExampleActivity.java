@@ -21,7 +21,7 @@ public class LocationExampleActivity extends AppCompatActivity {
 
         setupLocation();
         setupDetectLocationButton();
-        setupTrackingButton();
+        //setupTrackingButton();
         updateStatus();
     }
 
@@ -70,6 +70,7 @@ public class LocationExampleActivity extends AppCompatActivity {
         });
     }
 
+    /* Tracking button not yet implemented
     protected void setupTrackingButton() {
         Button trackingButton = findViewById(R.id.trackingButton);
         trackingButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +79,7 @@ public class LocationExampleActivity extends AppCompatActivity {
                 // Don't do anything yet
             }
         });
-    }
+    } */
 
     // This is an ugly way to update the status bar, but having trouble implementing in location provider
     @Override

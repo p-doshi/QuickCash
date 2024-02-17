@@ -10,15 +10,22 @@ public interface LocationProvider {
     boolean checkLocationPermissionsEnabled();
 
     /**
-     * Requests a location ping and updates currentLocation.
+     * Starts Async requests to initialize
+     * location settings and permissions in the app
      */
-    void locationPing();
+    public void setupLocationPermsSettings();
 
     /**
      * Getter for currentLocation tracked in locationProvider
      * @return Location object
      */
     Location getCurrentLocation();
+
+    /**
+     * Asynchronously requests a location ping
+     * and updates currentLocation.
+     */
+    void locationPing();
 
     /*
      * Catches the permission request's results
