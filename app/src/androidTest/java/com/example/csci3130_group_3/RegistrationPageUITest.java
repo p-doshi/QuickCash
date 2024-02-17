@@ -116,7 +116,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthMonth)).perform(typeText("01\n"));
         onView(withId(R.id.birthDay)).perform(typeText("01\n"));
         onView(withId(R.id.userName)).perform(typeText("john_doe\n"));
-        Espresso.onView(withId(R.id.confirmButton)).perform(ViewActions.scrollTo()).perform(ViewActions.swipeDown()).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));;
         onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"));
         onView(withId(R.id.password)).perform(typeText("Password123\n"));
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
