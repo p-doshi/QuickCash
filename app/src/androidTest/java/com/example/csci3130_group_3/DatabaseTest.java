@@ -4,8 +4,11 @@ import android.content.Context;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +26,9 @@ public class DatabaseTest {
     @Before
     public void setup() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        // Make sure we are starting in a signed out state.
+        FirebaseAuth.getInstance().signOut();
     }
 
     @Test
@@ -32,10 +38,19 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(() -> passed.get() || error.get() != null);
+        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
         registry.register(resource);
+        resource.increment();
 
-        db.write("test", "Hello", () -> passed.set(true), error::set);
+        db.write("test", "Hello",
+            () -> {
+                passed.set(true);
+                resource.decrement();
+            },
+            newValue -> {
+                error.set(newValue);
+                resource.decrement();
+            });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
@@ -56,10 +71,19 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(() -> !randomValue.equals(value.get()) || error.get() != null);
+        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
         registry.register(resource);
+        resource.increment();
 
-        db.read("test", String.class, value::set, error::set);
+        db.read("test", String.class,
+            newValue -> {
+                value.set(newValue);
+                resource.decrement();
+            },
+            newValue -> {
+                error.set(newValue);
+                resource.decrement();
+            });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
@@ -77,10 +101,19 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(() -> passed.get() || error.get() != null);
+        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
         registry.register(resource);
+        resource.increment();
 
-        db.write("test", "Hello", () -> passed.set(true), error::set);
+        db.write("test", "Hello",
+            () -> {
+                passed.set(true);
+                resource.decrement();
+            },
+            newValue -> {
+                error.set(newValue);
+                resource.decrement();
+            });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
@@ -101,10 +134,19 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(() -> !randomValue.equals(value.get()) || error.get() != null);
+        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
         registry.register(resource);
+        resource.increment();
 
-        db.read("test", String.class, value::set, error::set);
+        db.read("test", String.class,
+            newValue -> {
+                value.set(newValue);
+                resource.decrement();
+            },
+            newValue -> {
+                error.set(newValue);
+                resource.decrement();
+            });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
@@ -124,16 +166,28 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(() -> value.get() != null || error.get() != null);
+        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
         registry.register(resource);
+        resource.increment();
 
         final String dir = "test";
         final String val = "Hello";
         db.write(
             dir,
             val,
-            () -> db.read(dir, String.class, value::set, error::set),
-            error::set);
+            () -> db.read(dir, String.class,
+                newValue -> {
+                    value.set(newValue);
+                    resource.decrement();
+                },
+                newValue -> {
+                    error.set(newValue);
+                    resource.decrement();
+                }),
+            newValue -> {
+                error.set(newValue);
+                resource.decrement();
+            });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
@@ -151,10 +205,19 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(() -> passed.get() || error.get() != null);
+        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
         registry.register(resource);
+        resource.increment();
 
-        db.write("public/test", "Hello", () -> passed.set(true), error::set);
+        db.write("public/test", "Hello",
+            () -> {
+                passed.set(true);
+                resource.decrement();
+            },
+            newValue -> {
+                error.set(newValue);
+                resource.decrement();
+            });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
@@ -175,10 +238,19 @@ public class DatabaseTest {
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        GenericResource resource = new GenericResource(() -> !randomValue.equals(value.get()) || error.get() != null);
+        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
         registry.register(resource);
+        resource.increment();
 
-        db.read("public/test", String.class, value::set, error::set);
+        db.read("public/test", String.class,
+            newValue -> {
+                value.set(newValue);
+                resource.decrement();
+            },
+            newValue -> {
+                error.set(newValue);
+                resource.decrement();
+            });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
