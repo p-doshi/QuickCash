@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_text">Log In</string>
-    <string name="email_address">email address</string>
     <string name="signup_google">Sign Up With Google</string>
     <string name="signup_manually">Sign Up Manually</string>
     <string name="continue_login">Continue </string>
-    <string name="password">password</string>
     <string name="remember_me">Remember Me</string>
     <string name="log_in">Log In</string>
     <string name="or">Or</string>
