@@ -48,6 +48,7 @@ public class LoginUIAutomatorTest {
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
     }
+
     @Test
     public void checkIfLandingPageIsVisible() {
         UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
