@@ -22,7 +22,7 @@ Build:
   stage: build
   script:
     # Build the application.
-    - ./gradlew assembleDebug
+    - ./gradlew build -x test
 
   artifacts:
     paths:
