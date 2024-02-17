@@ -56,12 +56,14 @@ ConnectedTests:
   tags:
     - dalfcs_docker_kvm
   stage: test
+  before_script:
+    - chmod +x ./scripts/runConnectedTests.sh
   script:
     # Launch the android emulator.
     - $EMU_HEADLESS
 
     # Run the connected tests.
-    - ./gradlew :app:connectedDebugAndroidTest
+    - ./scripts/runConnectedTests.sh
 
   after_script:
     # Reposition test results.
