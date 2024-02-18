@@ -1,14 +1,6 @@
 package com.example.csci3130_group_3;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
@@ -21,8 +13,6 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
-
-// Disable animations programmatically
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -44,6 +34,7 @@ public class LoginUIAutomatorTest {
 
     public void launchApp(){
         final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
+        assert appIntent != null;
         appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);

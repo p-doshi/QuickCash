@@ -1,7 +1,6 @@
 package com.example.csci3130_group_3;
 
 
-import static android.app.PendingIntent.getActivity;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -10,12 +9,12 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-
-import static java.time.temporal.TemporalQueries.precision;
-
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,9 +28,7 @@ public class LoginEspressoTest {
     @Before
     public void setup() {
         scenario = ActivityScenario.launch(LoginActivity.class);
-        scenario.onActivity(activity -> {
-           activity.setUpLoginButton();
-        });
+        scenario.onActivity(LoginActivity::setUpLoginButton);
     }
 
     @Test
@@ -40,6 +37,7 @@ public class LoginEspressoTest {
         onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));
+        Assert.assertNull(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     @Test
@@ -48,6 +46,7 @@ public class LoginEspressoTest {
         onView(withId(R.id.etPassword)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_PASSWORD_TOAST)));
+        Assert.assertNull(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     @Test
@@ -56,6 +55,16 @@ public class LoginEspressoTest {
         onView(withId(R.id.etPassword)).perform(typeText("hahapranked")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.INVALID_EMAIL_TOAST)));
+        Assert.assertNull(FirebaseAuth.getInstance().getCurrentUser());
     }
 
+    @Test
+    public void testInvalidCredentials(){
+        onView(withId(R.id.emailaddress)).perform(typeText("pdoshi@gmail.com"),closeSoftKeyboard());
+        onView(withId(R.id.etPassword)).perform(typeText("hahaPranked"),closeSoftKeyboard());
+        onView(withId(R.id.continueButton)).perform(click());
+        onView(withId(R.id.statusLabel)).check(matches(withText(R.string.INVALID_CREDENTIALS)));
+
+
+    }
 }

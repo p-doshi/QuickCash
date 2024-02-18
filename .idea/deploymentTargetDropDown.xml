@@ -8,14 +8,27 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="checkIfLandingPageIsVisible()">
-        <State />
-      </entry>
       <entry key="checkIfMovedToDashboard()">
         <State />
       </entry>
-      <entry key="testEmptyPassword()">
+      <entry key="testIncorrectCredentials()">
         <State />
+      </entry>
+      <entry key="testInvalidCredentials()">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Parth\.android\avd\Small_Phone_API_30.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-02-17T17:52:45.152742100Z" />
+        </State>
       </entry>
       <entry key="testInvalidEmail()">
         <State />
