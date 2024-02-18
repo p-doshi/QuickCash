@@ -8,13 +8,7 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="checkIfLandingPageIsVisible()">
-        <State />
-      </entry>
-      <entry key="checkIfMovedToDashboard()">
-        <State />
-      </entry>
-      <entry key="testEmptyPassword()">
+      <entry key="testInvalidCredentials()">
         <State />
       </entry>
       <entry key="testInvalidEmail()">

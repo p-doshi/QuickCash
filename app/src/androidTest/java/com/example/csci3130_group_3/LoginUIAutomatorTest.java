@@ -22,8 +22,6 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
-// Disable animations programmatically
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

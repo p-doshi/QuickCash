@@ -20,8 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
-@RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {
     public ActivityScenario<LoginActivity> scenario;
 
@@ -58,4 +56,12 @@ public class LoginEspressoTest {
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.INVALID_EMAIL_TOAST)));
     }
 
+    @Test
+    public void testInvalidCredentials() throws InterruptedException {
+        onView(withId(R.id.emailaddress)).perform(typeText("parthdoshi135@gmail.com")).perform(closeSoftKeyboard());
+        onView(withId(R.id.etPassword)).perform(typeText("hahapranked")).perform(closeSoftKeyboard());
+        onView(withId(R.id.continueButton)).perform(click());
+        Thread.sleep(2000);
+        onView(withId(R.id.statusLabel)).check(matches(withText("Wrong email or password")));
+    }
 }

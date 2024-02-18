@@ -1,11 +1,6 @@
 package com.example.csci3130_group_3;
 
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +11,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     private FirebaseAuth mAuth;
-    private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences.Editor editor;
 
@@ -92,6 +91,7 @@ public class LoginActivity extends AppCompatActivity  {
                         Log.w("Login_Tag", "signInWithCustomToken:failure", task.getCause());
                         setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
                 });
+
     }
 
 
@@ -143,6 +143,7 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     protected void moveToDashboard(){
+        setStatusMessage("");
         Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
     }
 
@@ -152,27 +153,25 @@ public class LoginActivity extends AppCompatActivity  {
 
     protected void setStatusMessage(String message){
         TextView statusLabel = findViewById(R.id.statusLabel);
-        statusLabel.setText(message.trim());
+        statusLabel.setText(message);
     }
-
-
-
 
     public void handleLoginButtonClick(){
         String emailAddress = getEmailAddress();
         String password = getPassword();
-        String errorMessage = null;
+        String errorMessage;
 
         if (LoginValidator.isEmptyEmail(emailAddress)) {
             errorMessage = getResources().getString(R.string.EMPTY_EMAIL_TOAST);
+            setStatusMessage(errorMessage);
         }else if (LoginValidator.isEmptyPassword(password)) {
             errorMessage = getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
+            setStatusMessage(errorMessage);
         }else if (!(LoginValidator.isValidEmail(emailAddress))) {
             errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
+            setStatusMessage(errorMessage);
         }else {
             checkUserinDatabase(emailAddress,password);
-            return;
         }
-        setStatusMessage(errorMessage);
     }
 }
