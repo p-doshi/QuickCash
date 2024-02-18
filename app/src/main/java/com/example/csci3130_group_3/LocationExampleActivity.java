@@ -70,20 +70,8 @@ public class LocationExampleActivity extends AppCompatActivity {
         });
     }
 
-    /* Tracking button not yet implemented
-    protected void setupTrackingButton() {
-        Button trackingButton = findViewById(R.id.trackingButton);
-        trackingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Don't do anything yet
-            }
-        });
-    } */
-
-    // This is an ugly way to update the status bar, but having trouble implementing in location provider
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 87) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

@@ -35,8 +35,6 @@ public class AndroidLocationProvider implements LocationProvider {
     private Location currentLocation = null;
 
 
-    /*private static final long MIN_TIME_BW_UPDATES = 1;
-    private static final float MIN_DISTANCE_CHANGES_FOR_UPDATES = 1;*/
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;
     private static final int REQUEST_CHECK_SETTINGS = 117;
 
