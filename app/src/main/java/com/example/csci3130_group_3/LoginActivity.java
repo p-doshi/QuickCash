@@ -1,36 +1,37 @@
 package com.example.csci3130_group_3;
 
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity  {
 
 
-    private final GoogleSignInClient mGoogleSignInClient;
-    private GoogleSignInHelper googleSignInHelper;
-
-    public LoginActivity(GoogleSignInClient mGoogleSignInClient) {
-        this.mGoogleSignInClient = mGoogleSignInClient;
-    }
+    private FirebaseAuth mAuth;
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +39,8 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        SharedPreferences.Editor editor = preferences.edit();
+        mAuth = FirebaseAuth.getInstance();
+        this.editor = preferences.edit();
 
         if(mAuth.getCurrentUser()!=null && preferences.getBoolean("remember",false)){
            moveToDashboard();
@@ -52,24 +53,72 @@ public class LoginActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_login);
 
         this.setUpLoginButton();
-        this.setUpSignUpButton();
+        this.setUpSignUpButtonManual();
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.WebClient))
+                .requestEmail()
+                .build();
         ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     // Handle the sign-in success
                     Intent data = result.getData();
                     Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                    googleSignInHelper.handleSignInResult(task, this);
+                    handleSignInResult(task);
                 });
-
-        googleSignInHelper = new GoogleSignInHelper(this, signInLauncher);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         SignInButton signInButton = findViewById(R.id.signupGoogle);
         signInButton.setOnClickListener(view -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             signInLauncher.launch(signInIntent);
         });
     }
+
+
+    protected void checkUserinDatabase(String email, String password){
+
+        CheckBox rememberMe = findViewById(R.id.checkBox);
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(this, task -> {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("Login_Tag", "signInWithCustomToken:success");
+                        editor.putBoolean("remember", rememberMe.isChecked());
+                        editor.apply();
+                        moveToDashboard();
+                })
+                .addOnFailureListener(this, task -> {
+                        // If sign in fails, display a message to the user.
+                        Log.w("Login_Tag", "signInWithCustomToken:failure", task.getCause());
+                        setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
+                });
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+    }
+
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            // Signed in successfully, show authenticated UI.
+            if (account != null) {
+                moveToDashboard();
+            }
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("Login_Tag", "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     protected String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);
@@ -86,25 +135,33 @@ public class LoginActivity extends AppCompatActivity  {
         loginButton.setOnClickListener(view -> handleLoginButtonClick());
     }
 
-    protected void setUpSignUpButton(){
-        Button signupButton = findViewById(R.id.signUp);
+    protected void setUpSignUpButtonManual(){
+        Button signupButton = findViewById(R.id.signupManually);
         signupButton.setOnClickListener(view -> moveToRegistration());
     }
 
-    public void moveToDashboard(){ Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();}
 
-    protected void moveToRegistration(){Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();}
+
+    protected void moveToDashboard(){
+        Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
+    }
+
+    protected void moveToRegistration(){
+        Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
+    }
 
     protected void setStatusMessage(String message){
         TextView statusLabel = findViewById(R.id.statusLabel);
         statusLabel.setText(message.trim());
     }
 
+
+
+
     public void handleLoginButtonClick(){
         String emailAddress = getEmailAddress();
         String password = getPassword();
-        String errorMessage;
-        CheckBox rememberMe = findViewById(R.id.checkBox);
+        String errorMessage = null;
 
         if (LoginValidator.isEmptyEmail(emailAddress)) {
             errorMessage = getResources().getString(R.string.EMPTY_EMAIL_TOAST);
@@ -113,7 +170,7 @@ public class LoginActivity extends AppCompatActivity  {
         }else if (!(LoginValidator.isValidEmail(emailAddress))) {
             errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
         }else {
-            googleSignInHelper.checkUserInDatabase(emailAddress,password,rememberMe,this);
+            checkUserinDatabase(emailAddress,password);
             return;
         }
         setStatusMessage(errorMessage);
