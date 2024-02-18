@@ -50,6 +50,7 @@ UnitTests:
     paths:
       - testDebugUnitTest/
 
+# Commented these database connection tests out because they were causing issues during testing
 #ConnectedTests:
 #  image: ethrozee/android-emulator
 #  interruptible: true
@@ -62,6 +63,10 @@ UnitTests:
 #
 #    # Run the connected tests.
 #    - ./gradlew :app:connectedDebugAndroidTest
+#    # Run the connected tests with logcat output.
+#    - adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
+#    - ./gradlew :app:connectedDebugAndroidTest
+#    - if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
 #
 #  after_script:
 #    # Reposition test results.

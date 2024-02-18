@@ -24,6 +24,9 @@ import androidx.test.uiautomator.Until;
 
 // Disable animations programmatically
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,11 +38,18 @@ public class LoginUIAutomatorTest {
     final String launcherPackage = "com.example.csci3130_group_3";
     private UiDevice device;
     public Context context;
+
     @Before
     public void setup() {
         device = UiDevice.getInstance(getInstrumentation());
         this.context = ApplicationProvider.getApplicationContext();
         launchApp();
+    }
+
+    @After
+    public void teardown() {
+        // Just to be sure.
+        FirebaseAuth.getInstance().signOut();
     }
 
     public void launchApp(){
@@ -48,6 +58,7 @@ public class LoginUIAutomatorTest {
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
     }
+
     @Test
     public void checkIfLandingPageIsVisible() {
         UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));

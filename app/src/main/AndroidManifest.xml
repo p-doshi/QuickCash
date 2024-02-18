@@ -21,17 +21,30 @@
             android:foregroundServiceType="location" >
         </service>
         <activity
+            android:name=".RegistrationPage"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".DatabaseExampleActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"/>
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".EmployeeDashboard"
+            android:exported="true"/>
+        <activity
+            android:name=".EmployerDashboard"
+            android:exported="true"/>
+        <activity
+            android:name=".ChooseRoleActivity"
+            android:exported="true"/>
         <activity
             android:name=".LocationExampleActivity"
             android:exported="true"/>
