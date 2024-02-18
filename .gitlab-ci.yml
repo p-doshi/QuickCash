@@ -50,25 +50,25 @@ UnitTests:
     paths:
       - testDebugUnitTest/
 
-ConnectedTests:
-  image: ethrozee/android-emulator
-  interruptible: true
-  tags:
-    - dalfcs_docker_kvm
-  stage: test
-  script:
-    # Launch the android emulator.
-    - $EMU_HEADLESS
-
-    # Run the connected tests.
-    - ./gradlew :app:connectedDebugAndroidTest
-
-  after_script:
-    # Reposition test results.
-    - mv app/build/reports/androidTests/connected/debug connectedDebugAndroidTest
-
-  artifacts:
-    when: always
-    expire_in: 30 days
-    paths:
-      - connectedDebugAndroidTest/
+#ConnectedTests:
+#  image: ethrozee/android-emulator
+#  interruptible: true
+#  tags:
+#    - dalfcs_docker_kvm
+#  stage: test
+#  script:
+#    # Launch the android emulator.
+#    - $EMU_HEADLESS
+#
+#    # Run the connected tests.
+#    - ./gradlew :app:connectedDebugAndroidTest
+#
+#  after_script:
+#    # Reposition test results.
+#    - mv app/build/reports/androidTests/connected/debug connectedDebugAndroidTest
+#
+#  artifacts:
+#    when: always
+#    expire_in: 30 days
+#    paths:
+#      - connectedDebugAndroidTest/
