@@ -2,9 +2,6 @@ package com.example.csci3130_group_3;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -20,41 +17,47 @@ import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
 import org.junit.Before;
-import org.junit.FixMethodOrder;
-
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
 /**
  * UI Automator is required because we need to detect permission popups
+ * UI Tests for User Story 7: Location
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(AndroidJUnit4.class)
 public class LocationUITests {
     private static final int LAUNCH_TIMEOUT = 5000;
     final String launcherPackage = "com.example.csci3130_group_3";
     private UiDevice device;
-    private Context context;
     private int sdkVersion;
 
     @Before
     public void setup() {
         device = UiDevice.getInstance(getInstrumentation());
-        context = ApplicationProvider.getApplicationContext();
-        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
-        appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Context context = ApplicationProvider.getApplicationContext();
+        Intent appIntent = new Intent(context, LocationExampleActivity.class);
+        appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
 
         sdkVersion = Build.VERSION.SDK_INT;
     }
 
-    // Helper method, checks if there's a permissions popup if not throws assertion error
+    // Basic preliminary test to check if UI elements spawned correctly
+    @Test
+    public void checkIfElementsVisible() {
+        assertViewWithTextVisible(device, "Location Permission");
+        assertViewWithTextVisible(device, "Detect Location");
+        assertViewWithTextVisible(device, "Longitude");
+        assertViewWithTextVisible(device, "Latitude");
+    }
+
+
+    // Helper method, checks if there's a View containing the text, if not throws assertion error
     public static void assertViewWithTextVisible(UiDevice device, String text) {
-        UiObject allowButton = device.findObject(new UiSelector().text(text));
+        UiObject allowButton = device.findObject(new UiSelector().textContains(text));
         if (!allowButton.exists()) {
-            throw new AssertionError("View with text: <"+text+"> not found!");
+            throw new AssertionError("View with text: \""+text+"\" not found!");
         }
     }
 
@@ -78,9 +81,9 @@ public class LocationUITests {
         // So this checks which version they're running before asserting what it should see
         Log.d("LocationTests", "SDK: "+sdkVersion+" Location Permissions Test Running");
         if (sdkVersion >= Build.VERSION_CODES.R) {
-            assertViewWithTextVisible(device, "ALLOW");
-        } else {
             assertViewWithTextVisible(device, "While using the app");
+        } else {
+            assertViewWithTextVisible(device, "ALLOW");
         }
 
         // Clean up for next test
