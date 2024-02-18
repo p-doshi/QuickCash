@@ -34,8 +34,7 @@
         </activity>
         <activity
             android:name=".LocationExampleActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"/>
     </application>
 
 </manifest>

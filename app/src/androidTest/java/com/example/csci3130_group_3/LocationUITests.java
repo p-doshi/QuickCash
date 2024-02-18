@@ -7,26 +7,25 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.util.Log;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
-import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
 
 /**
  * UI Automator is required because we need to detect permission popups
@@ -37,6 +36,7 @@ public class LocationUITests {
     final String launcherPackage = "com.example.csci3130_group_3";
     private UiDevice device;
     private Context context;
+    private int sdkVersion;
 
     @Before
     public void setup() {
@@ -46,6 +46,8 @@ public class LocationUITests {
         appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(appIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
+
+        sdkVersion = Build.VERSION.SDK_INT;
     }
 
     // Helper method, checks if there's a permissions popup if not throws assertion error
@@ -72,8 +74,14 @@ public class LocationUITests {
     public void a_testDisplayedLocationPermissionRequest() throws Exception {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location"));
         requestLocationButton.click();
-        assertViewWithTextVisible(device, "ALLOW");
-        assertViewWithTextVisible(device, "DENY");
+        // In android version 11 and beyond the request location permissions popup was changed
+        // So this checks which version they're running before asserting what it should see
+        Log.d("LocationTests", "SDK: "+sdkVersion+" Location Permissions Test Running");
+        if (sdkVersion >= Build.VERSION_CODES.R) {
+            assertViewWithTextVisible(device, "ALLOW");
+        } else {
+            assertViewWithTextVisible(device, "While using the app");
+        }
 
         // Clean up for next test
         denyCurrentPermission(device);
