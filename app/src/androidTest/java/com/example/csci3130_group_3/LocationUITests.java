@@ -70,7 +70,7 @@ public class LocationUITests {
 
     // Helper method, clicks any buttons (Usually permission popups) given their text
     public static void clickVisibleButton(UiDevice device, String text) throws UiObjectNotFoundException {
-        UiObject acceptButton = device.findObject(new UiSelector().text(text));
+        UiObject acceptButton = device.findObject(new UiSelector().textContains(text));
         acceptButton.click();
     }
 
@@ -78,7 +78,7 @@ public class LocationUITests {
     private void denyCurrentPermission(UiDevice device) throws UiObjectNotFoundException {
         UiObject denyButton;
         if (sdkVersion >= Build.VERSION_CODES.R) {
-            denyButton = device.findObject(new UiSelector().text("Don't allow"));
+            denyButton = device.findObject(new UiSelector().textContains("Don"));
         } else {
             denyButton = device.findObject(new UiSelector().text("Deny"));
         }
@@ -99,8 +99,7 @@ public class LocationUITests {
 
     // Helper method, checks if Location Setting is enabled or disabled on device
     private boolean checkLocationSettingEnabled() {
-        int locationEnabled = 0;
-        String locationProviders;
+        int locationEnabled;
         try {
             locationEnabled = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
         } catch (Settings.SettingNotFoundException e) {
@@ -112,7 +111,7 @@ public class LocationUITests {
     }
 
     @Test
-    public void b_testDisplayedLocationPermissionRequest() throws Exception {
+    public void d_testDisplayedLocationPermissionRequest() throws Exception {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location"));
         requestLocationButton.click();
         // In android version 11 and beyond the request location permissions popup was changed
@@ -121,7 +120,8 @@ public class LocationUITests {
         // First checks if location permissions are already granted, if so then just check if granted works
         if (!checkLocationPermissionsEnabled()) {
             if (sdkVersion >= Build.VERSION_CODES.R) {
-                assertViewWithTextVisible(device, "While using the app");
+                assertViewWithTextVisible(device, "access this device");
+                assertViewWithTextVisible(device,"Don");
             } else {
                 assertViewWithTextVisible(device, "ALLOW");
                 assertViewWithTextVisible(device, "DENY");
@@ -131,14 +131,16 @@ public class LocationUITests {
         }
 
         // Clean up for next test
-        denyCurrentPermission(device);
+        if (!checkLocationPermissionsEnabled()) {
+            denyCurrentPermission(device);
+        }
         if (checkLocationSettingEnabled()) {
             denyCurrentLocationSettingRequest(device);
         }
     }
 
     @Test
-    public void c_denyLocationSettingsAndPermissions() throws Exception {
+    public void b_denyLocationSettingsAndPermissions() throws Exception {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location"));
         requestLocationButton.click();
         Log.d("LocationTests", "SDK: "+sdkVersion+" Denying Location Setting/Permission Test Running");
@@ -150,7 +152,7 @@ public class LocationUITests {
     }
 
     @Test
-    public void d_acceptLocationPermissions() throws Exception {
+    public void c_acceptLocationPermissions() throws Exception {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location"));
         requestLocationButton.click();
         Log.d("LocationTests", "SDK: "+sdkVersion+" Accepting Location Setting/Permission Test Running");
