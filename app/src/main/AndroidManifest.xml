@@ -25,6 +25,10 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
         <activity
+            android:name=".RegistrationPage"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".DatabaseExampleActivity"
             android:exported="true"/>
         <activity
