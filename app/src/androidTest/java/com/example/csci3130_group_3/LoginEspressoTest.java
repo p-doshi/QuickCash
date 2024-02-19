@@ -16,6 +16,9 @@ import static java.time.temporal.TemporalQueries.precision;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +49,7 @@ public class LoginEspressoTest {
         onView(withId(R.id.etPassword)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_PASSWORD_TOAST)));
+        Assert.assertNull(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     @Test

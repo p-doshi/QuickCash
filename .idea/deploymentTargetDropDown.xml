@@ -5,13 +5,16 @@
       <entry key="LoginEspressoTest">
         <State />
       </entry>
+      <entry key="LoginUIAutomatorTest">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="testInvalidCredentials()">
+      <entry key="testEmptyPassword()">
         <State />
       </entry>
-      <entry key="testInvalidEmail()">
+      <entry key="testInvalidCredentials()">
         <State />
       </entry>
     </value>
