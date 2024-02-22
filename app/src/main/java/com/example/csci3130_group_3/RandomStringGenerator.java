@@ -1,5 +1,7 @@
 package com.example.csci3130_group_3;
 
+import androidx.annotation.NonNull;
+
 import java.util.Random;
 
 public class RandomStringGenerator {
@@ -12,7 +14,7 @@ public class RandomStringGenerator {
 
     // A method that takes an integer as the length of the desired string
     // and returns a random string of that length
-    public static String generate(int length) {
+    public static @NonNull String generate(int length) {
         // A string builder to store the generated string
         StringBuilder sb = new StringBuilder();
 

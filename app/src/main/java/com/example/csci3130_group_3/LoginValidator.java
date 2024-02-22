@@ -14,13 +14,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginValidator {
 
-    public static boolean isValidEmail(String email){
+    public static boolean isValidEmail(@NonNull String email){
         return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
-    public static boolean isEmptyEmail (String email){
+    public static boolean isEmptyEmail (@NonNull String email){
         return email.isEmpty();
     }
-    public static boolean isEmptyPassword (String password){
+    public static boolean isEmptyPassword (@NonNull String password){
         return password.isEmpty();
     }
 

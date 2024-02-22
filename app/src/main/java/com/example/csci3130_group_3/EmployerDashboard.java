@@ -2,18 +2,14 @@ package com.example.csci3130_group_3;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.annotation.Nullable;
 
 public class EmployerDashboard extends Activity {
 
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dashboard_employer);
-
-        BottomNavigationView employerNavView = findViewById(R.id.employerBottomNavView);
-
     }
 
 

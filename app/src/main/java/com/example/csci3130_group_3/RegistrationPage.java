@@ -1,5 +1,6 @@
 package com.example.csci3130_group_3;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -16,7 +17,7 @@ public class RegistrationPage extends AppCompatActivity {
     private EditText firstName, lastName, address, birthYear, birthMonth, birthDay, userName, emailAddress, password, confirmPassword;
     TextView statusTextView;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_page);
         init();

@@ -3,6 +3,8 @@ package com.example.csci3130_group_3;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -33,7 +35,7 @@ public class LoginActivity extends AppCompatActivity  {
     private SharedPreferences.Editor editor;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
@@ -75,7 +77,7 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
-    protected void checkUserinDatabase(String email, String password){
+    protected void checkUserinDatabase(@NonNull String email, @NonNull String password){
 
         CheckBox rememberMe = findViewById(R.id.checkBox);
         mAuth.signInWithEmailAndPassword(email, password)
@@ -119,12 +121,12 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
-    protected String getEmailAddress(){
+    protected @NonNull String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);
         return emailInput.getText().toString().trim();
     }
 
-    protected String getPassword(){
+    protected @NonNull String getPassword(){
         EditText passwordInput = findViewById(R.id.etPassword);
         return passwordInput.getText().toString().trim();
     }
@@ -149,7 +151,7 @@ public class LoginActivity extends AppCompatActivity  {
         Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
     }
 
-    protected void setStatusMessage(String message){
+    protected void setStatusMessage(@NonNull String message){
         TextView statusLabel = findViewById(R.id.statusLabel);
         statusLabel.setText(message.trim());
     }

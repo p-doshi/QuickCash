@@ -1,7 +1,10 @@
 package com.example.csci3130_group_3;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -15,9 +18,9 @@ public class LocationExampleActivity extends AppCompatActivity {
     AndroidLocationProvider locationProvider;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location_test);
+        setContentView(R.layout.activity_location_example);
 
         setupLocation();
         setupDetectLocationButton();
@@ -26,12 +29,13 @@ public class LocationExampleActivity extends AppCompatActivity {
     }
 
     protected void setupLocation() {
-        locationProvider = new AndroidLocationProvider(this, this);
+        locationProvider = new AndroidLocationProvider(this);
     }
 
     // Order of execution:
     // createLocationRequest() > requestLocationSettingsEnable() > requestLocationPermissions() > locationPing()
 
+    @SuppressLint("SetTextI18n")
     protected void updateStatus() {
         TextView status = findViewById(R.id.status);
         if (locationProvider.checkLocationPermissionsEnabled()) {
@@ -71,7 +75,7 @@ public class LocationExampleActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 87) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

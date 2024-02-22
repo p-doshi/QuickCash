@@ -1,5 +1,7 @@
 package com.example.csci3130_group_3;
 
+import androidx.annotation.NonNull;
+
 import java.util.function.Consumer;
 
 public interface Database {
@@ -11,7 +13,7 @@ public interface Database {
      * @param errorFunction The function that will be called in case of an error.
      * @param <T> Can write any type of data to firebase.
      */
-    <T> void write(String location, T value, Consumer<String> errorFunction);
+    <T> void write(@NonNull String location, T value, @NonNull Consumer<String> errorFunction);
 
     /**
      * Asynchronously writes the value to the database.
@@ -23,7 +25,7 @@ public interface Database {
      *                        completes successfully.
      * @param <T> Can write any type of data to firebase.
      */
-    <T> void write(String location, T value, Runnable successFunction, Consumer<String> errorFunction);
+    <T> void write(@NonNull String location, T value, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction);
 
     /**
      * Asynchronously reads the value to the database.
@@ -37,5 +39,5 @@ public interface Database {
      * @param errorFunction The function that will be called in case of an error.
      * @param <T> Can read any type of data from firebase.
      */
-    <T> void read(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction);
+    <T> void read(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction);
 }
