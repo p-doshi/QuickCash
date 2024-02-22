@@ -35,21 +35,21 @@ Lint:
   interruptible: true
   tags:
     - dalfcs_docker_kvm
-  stage: test
+  stage: build
   script:
     # Run the linter.
-    - ./gradlew lint
+    - ./gradlew :app:lintDebug
 
   after_script:
     # Reposition lint results.
-    - mv app/build/intermediates/lint_intermediate_text_report/debug/lint-results-debug.txt lintResults.txt
+    - mv app/build/reports/lint-results-debug.html lintResults.html
 
   artifacts:
     when: always
     expire_in: 30 days
     paths:
       # Give the results of linting
-      - lintResults.txt
+      - lintResults.html
 
 UnitTests:
   image: ethrozee/android
@@ -57,6 +57,8 @@ UnitTests:
   tags:
     - dalfcs_docker_kvm
   stage: test
+  needs:
+    - Build
   script:
     # Run the unit tests.
     - ./gradlew :app:testDebugUnitTest
@@ -78,6 +80,8 @@ UnitTests:
 #  tags:
 #    - dalfcs_docker_kvm
 #  stage: test
+#  needs:
+#    - Build
 #  script:
 #    # Launch the android emulator.
 #    - $EMU_HEADLESS
