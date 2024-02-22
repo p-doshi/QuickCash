@@ -2,4 +2,7 @@
 <lint>
     <!-- Add ignored linting issues here -->
     <issue id="BooleanMethodIsAlwaysInverted" severity="ignore" />
+
+    <!-- Make all warnings errors. -->
+    <issue id="all" severity="error" />
 </lint>
