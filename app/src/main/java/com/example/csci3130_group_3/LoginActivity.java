@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
-    protected void checkUserinDatabase(String email, String password){
+    protected void checkUserInDatabase(String email, String password){
 
         CheckBox rememberMe = findViewById(R.id.checkBox);
         mAuth.signInWithEmailAndPassword(email, password)
@@ -171,7 +171,7 @@ public class LoginActivity extends AppCompatActivity  {
             errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
             setStatusMessage(errorMessage);
         }else {
-            checkUserinDatabase(emailAddress,password);
+            checkUserInDatabase(emailAddress,password);
         }
     }
 }
