@@ -59,6 +59,9 @@ UnitTests:
   stage: test
   needs:
     - Build
+  dependencies:
+    - Build
+    - Lint
   script:
     # Run the unit tests.
     - ./gradlew :app:testDebugUnitTest
@@ -82,6 +85,9 @@ UnitTests:
 #  stage: test
 #  needs:
 #    - Build
+#  dependencies:
+#    - Build
+#    - Lint
 #  script:
 #    # Launch the android emulator.
 #    - $EMU_HEADLESS
