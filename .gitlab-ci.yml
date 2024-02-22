@@ -30,6 +30,27 @@ Build:
       - app/build/
       - .gradle/
 
+Lint:
+  image: ethrozee/android
+  interruptible: true
+  tags:
+    - dalfcs_docker_kvm
+  stage: test
+  script:
+    # Run the linter.
+    - ./gradlew lint
+
+  after_script:
+    # Reposition lint results.
+    - mv app/build/intermediates/lint_intermediate_text_report/debug/lint-results-debug.txt lintResults.txt
+
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      # Give the results of linting
+      - lintResults.txt
+
 UnitTests:
   image: ethrozee/android
   interruptible: true
