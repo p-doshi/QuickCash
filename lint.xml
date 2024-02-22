@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Add ignored linting issues here -->
+    <issue id="BooleanMethodIsAlwaysInverted" severity="ignore" />
+</lint>
