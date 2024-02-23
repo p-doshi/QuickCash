@@ -1,5 +1,6 @@
 stages:
   - build
+  - lint
   - test
 
 variables:
@@ -30,12 +31,14 @@ Build:
       - app/build/
       - .gradle/
 
-Lint:
+GradleLint:
   image: ethrozee/android
   interruptible: true
   tags:
     - dalfcs_docker_kvm
-  stage: build
+  stage: lint
+  needs:
+    - Build
   script:
     # Run the linter.
     - ./gradlew :app:lintDebug
@@ -51,12 +54,12 @@ Lint:
       # Give the results of linting
       - lintResults.html
 
-Pmd:
+PmdLint:
   image: ethrozee/android
   interruptible: true
   tags:
     - dalfcs_docker_kvm
-  stage: build
+  stage: lint
   script:
     - pmd check -d app/src -R pmdRuleset.xml -f textcolor
 
