@@ -11,6 +11,9 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="checkIfLandingPageIsVisible()">
+        <State />
+      </entry>
       <entry key="testEmptyPassword()">
         <State>
           <targetSelectedWithDropDown>

@@ -1,12 +1,12 @@
 package com.example.csci3130_group_3;
 
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
@@ -26,8 +26,9 @@ public class LoginUIAutomatorTest {
     private UiDevice device;
     public Context context;
     @Before
-    public void setup() {
-        device = UiDevice.getInstance(getInstrumentation());
+    public void setup() throws IOException {
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        device.executeShellCommand("settings put secure show_ime_with_hard_keyboard 0");
         this.context = ApplicationProvider.getApplicationContext();
         launchApp();
     }
@@ -43,8 +44,8 @@ public class LoginUIAutomatorTest {
     public void checkIfLandingPageIsVisible() {
         UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
         assertTrue(emailIDBox.exists());
-        UiObject roleSpinner = device.findObject(new UiSelector().textContains("Password"));
-        assertTrue(roleSpinner.exists());
+        UiObject passwordBox= device.findObject(new UiSelector().textContains("Password"));
+        assertTrue(passwordBox.exists());
         UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
         assertTrue(registerButton.exists());
     }

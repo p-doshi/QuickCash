@@ -29,7 +29,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testEmptyEmail() {
-        onView(withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));
@@ -37,7 +37,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testEmptyPassword() {
-        onView(withId(R.id.emailaddress)).perform(typeText("pdoshi@gmail.com")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("pdoshi@gmail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_PASSWORD_TOAST)));
@@ -46,7 +46,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testInvalidEmail() {
-        onView(withId(R.id.emailaddress)).perform(typeText("pdoshigmail.com")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("pdoshigmail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("hahapranked")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.INVALID_EMAIL_TOAST)));
@@ -54,7 +54,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testInvalidCredentials() throws InterruptedException {
-        onView(withId(R.id.emailaddress)).perform(typeText("parthdoshi135@gmail.com")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailAddress)).perform(typeText("parthdoshi135@gmail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("hahapranked")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         Thread.sleep(2000);

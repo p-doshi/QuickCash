@@ -19,7 +19,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailaddressLayout"
+        app:layout_constraintTop_toBottomOf="@+id/emailAddressLayout"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/statusLabel" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailaddressLayout"
+        android:id="@+id/emailAddressLayout"
         android:layout_width="340dp"
         android:layout_height="67dp"
         android:layout_marginTop="30dp"
@@ -69,16 +69,16 @@
         app:layout_constraintStart_toStartOf="parent"
         >
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailaddress"
+            android:id="@+id/emailAddress"
             android:layout_width="340dp"
             android:layout_height="60dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/email_address"
             android:inputType="textNoSuggestions"
-            app:layout_constraintBottom_toBottomOf="@+id/emailaddressLayout"
-            app:layout_constraintEnd_toEndOf="@+id/emailaddressLayout"
-            app:layout_constraintStart_toStartOf="@+id/emailaddressLayout"
-            app:layout_constraintTop_toTopOf="@+id/emailaddressLayout" />
+            app:layout_constraintBottom_toBottomOf="@+id/emailAddressLayout"
+            app:layout_constraintEnd_toEndOf="@+id/emailAddressLayout"
+            app:layout_constraintStart_toStartOf="@+id/emailAddressLayout"
+            app:layout_constraintTop_toTopOf="@+id/emailAddressLayout" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
