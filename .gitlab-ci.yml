@@ -51,6 +51,15 @@ Lint:
       # Give the results of linting
       - lintResults.html
 
+Pmd:
+  image: ethrozee/android
+  interruptible: true
+  tags:
+    - dalfcs_docker_kvm
+  stage: build
+  script:
+    - pmd check -d app/src -R pmdRuleset.xml -f textcolor
+
 UnitTests:
   image: ethrozee/android
   interruptible: true
