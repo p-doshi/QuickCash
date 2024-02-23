@@ -35,7 +35,7 @@ import java.io.IOException;
 
 public class LoginUIAutomatorTest {
     private static final int LAUNCH_TIMEOUT = 10000;
-    private static final String launcherPackage = "com.example.csci3130_group_3";
+    private static final String LAUNCHER_PACKAGE = "com.example.csci3130_group_3";
     public static final String EMAIL = "Email";
     public static final String PASSWORD = "Password";
     public static final String CONTINUE = "Continue";
@@ -56,10 +56,10 @@ public class LoginUIAutomatorTest {
     }
 
     public void launchApp(){
-        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
+        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(LAUNCHER_PACKAGE);
         appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(appIntent);
-        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
+        device.wait(Until.hasObject(By.pkg(LAUNCHER_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
     }
 
     @Test

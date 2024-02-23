@@ -14,12 +14,10 @@ public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     }
 
     protected @NonNull String relocate(@NonNull String location) {
-        StringBuilder newLocation = new StringBuilder();
-        newLocation.append("/");
-        newLocation.append(DB_KEY);
+        StringBuilder newLocation = new StringBuilder("/" + DB_KEY);
 
         if (!location.startsWith("/")) {
-            newLocation.append("/");
+            newLocation.append('/');
         }
         newLocation.append(location);
 

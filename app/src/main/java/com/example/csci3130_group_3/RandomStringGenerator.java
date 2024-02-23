@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Random;
 
-public class RandomStringGenerator {
+public final class RandomStringGenerator {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final Random RANDOM = new Random();
 

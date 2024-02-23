@@ -10,12 +10,16 @@ import java.util.regex.Pattern;
 
 public class FormValidator {
     private static boolean checkTrimEmpty(@NonNull String str) {
+        boolean isEmpty = true;
+
         for(int i = 0; i < str.length(); i++) {
             if(!Character.isWhitespace(str.charAt(i))) {
-                return false;
+                isEmpty = false;
+                break;
             }
         }
-        return true;
+
+        return isEmpty;
     }
 
     // Validation methods

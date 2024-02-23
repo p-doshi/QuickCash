@@ -12,7 +12,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginValidator {
+public final class LoginValidator {
     // Utility class cannot be instantiated.
     private LoginValidator() {}
 
