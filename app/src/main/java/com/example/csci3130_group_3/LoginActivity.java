@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity  {
 
-
     private FirebaseAuth mAuth;
     private GoogleSignInHelper mGoogleSignInHelper;
     private SharedPreferences.Editor editor;
@@ -32,13 +31,11 @@ public class LoginActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         this.editor = preferences.edit();
-
         if(mAuth.getCurrentUser()!=null && preferences.getBoolean("remember",false)){
            moveToDashboard();
         }else{
@@ -90,7 +87,6 @@ public class LoginActivity extends AppCompatActivity  {
 
     }
 
-
     protected String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailAddress);
         return emailInput.getText().toString().trim();
@@ -110,8 +106,6 @@ public class LoginActivity extends AppCompatActivity  {
         Button signupButton = findViewById(R.id.signupManually);
         signupButton.setOnClickListener(view -> moveToRegistration());
     }
-
-
 
     protected void moveToDashboard(){
         setStatusMessage("");
