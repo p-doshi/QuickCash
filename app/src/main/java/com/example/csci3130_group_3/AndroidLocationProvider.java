@@ -6,6 +6,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.app.Activity;
 import android.location.Location;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -25,12 +26,14 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.Objects;
+
 
 public class AndroidLocationProvider implements LocationProvider {
     private final FusedLocationProviderClient locationProviderClient;
     private LocationRequest locationRequest;
     private final Activity activity;
-    private Location currentLocation = null;
+    private Location currentLocation;
 
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;
@@ -101,7 +104,7 @@ public class AndroidLocationProvider implements LocationProvider {
                         requestLocationPermissions();
                     }
                 } catch (IntentSender.SendIntentException sendEx) {
-                    // Do nothing with the error
+                    Log.e("AndroidLocationProvider", Objects.requireNonNull(sendEx.getMessage()));
                 }
             }
         });

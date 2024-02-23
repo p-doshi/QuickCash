@@ -7,19 +7,23 @@ import androidx.annotation.NonNull;
 import java.util.function.Consumer;
 
 public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
-    private static final String dbKey = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
+    private static final String DB_KEY = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
 
     MyFirebaseDatabase(@NonNull Context context) {
         super(context);
     }
 
     protected @NonNull String relocate(@NonNull String location) {
-        String newLocation = "/" + dbKey;
+        StringBuilder newLocation = new StringBuilder();
+        newLocation.append("/");
+        newLocation.append(DB_KEY);
+
         if (!location.startsWith("/")) {
-            newLocation += "/";
+            newLocation.append("/");
         }
-        newLocation += location;
-        return newLocation;
+        newLocation.append(location);
+
+        return newLocation.toString();
     }
 
     @Override

@@ -35,7 +35,10 @@ import java.io.IOException;
 
 public class LoginUIAutomatorTest {
     private static final int LAUNCH_TIMEOUT = 10000;
-    final String launcherPackage = "com.example.csci3130_group_3";
+    private static final String launcherPackage = "com.example.csci3130_group_3";
+    public static final String EMAIL = "Email";
+    public static final String PASSWORD = "Password";
+    public static final String CONTINUE = "Continue";
     private UiDevice device;
     public Context context;
 
@@ -61,11 +64,11 @@ public class LoginUIAutomatorTest {
 
     @Test
     public void checkIfLandingPageIsVisible() {
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         assertTrue(emailIDBox.exists());
-        UiObject roleSpinner = device.findObject(new UiSelector().textContains("Password"));
+        UiObject roleSpinner = device.findObject(new UiSelector().textContains(PASSWORD));
         assertTrue(roleSpinner.exists());
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         assertTrue(registerButton.exists());
     }
 
@@ -75,11 +78,11 @@ public class LoginUIAutomatorTest {
     @Ignore("only after pages connected")
     public void checkIfMovedToDashboard() throws UiObjectNotFoundException {
 
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
+        passwordBox.setText(PASSWORD);
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.clickAndWaitForNewWindow();
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
         assertTrue(welcomeLabel.exists());
@@ -88,13 +91,13 @@ public class LoginUIAutomatorTest {
     @Test
     @Ignore("only after pages connected")
     public void checkIfRememberMeWorks() throws UiObjectNotFoundException, IOException {
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
+        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
+        passwordBox.setText(PASSWORD);
         UiObject checkbox = device.findObject(new UiSelector().textContains("Remember"));
         checkbox.click();
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.click();
         Runtime.getRuntime().exec(new String[] {"am", "force-stop", "com.example.csci3130_group_3"});
         launchApp();
@@ -103,11 +106,11 @@ public class LoginUIAutomatorTest {
     @Ignore("only after pages connected")
     public void checkIfMovedToSignUpPage() throws UiObjectNotFoundException {
 
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
+        passwordBox.setText(PASSWORD);
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.clickAndWaitForNewWindow();
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
         assertTrue(welcomeLabel.exists());

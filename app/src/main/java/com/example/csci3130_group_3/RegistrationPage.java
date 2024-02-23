@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -11,10 +12,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class RegistrationPage extends AppCompatActivity {
 
-    private EditText firstName, lastName, address, birthYear, birthMonth, birthDay, userName, emailAddress, password, confirmPassword;
+    private EditText firstName;
+    private EditText lastName;
+    private EditText address;
+    private EditText birthYear;
+    private EditText birthMonth;
+    private EditText birthDay;
+    private EditText userName;
+    private EditText emailAddress;
+    private EditText password;
+    private EditText confirmPassword;
     TextView statusTextView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +49,7 @@ public class RegistrationPage extends AppCompatActivity {
         statusTextView = findViewById(R.id.status);
     }
 
+    @SuppressWarnings("PMD.CyclomaticComplexity")
     private void submitForm(){
         FormValidator formValidator = new FormValidator();
 
@@ -54,7 +66,7 @@ public class RegistrationPage extends AppCompatActivity {
             String birthDateString = birthYear.getText().toString() + "-" + birthMonth.getText().toString() + "-" + birthDay.getText().toString();
             birthDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(birthDateString);
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.w("RegistrationPage", Objects.requireNonNull(e.getMessage()));
         }
 
         if (!formValidator.isFirstNameValid(firstNameText)) {

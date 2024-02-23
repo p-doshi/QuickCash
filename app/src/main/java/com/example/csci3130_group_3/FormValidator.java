@@ -9,17 +9,26 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class FormValidator {
+    private static boolean checkTrimEmpty(@NonNull String str) {
+        for(int i = 0; i < str.length(); i++) {
+            if(!Character.isWhitespace(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Validation methods
     public boolean isFirstNameValid(@NonNull String firstName) {
-        return !firstName.trim().isEmpty();
+        return !checkTrimEmpty(firstName);
     }
 
     public boolean isLastNameValid(@NonNull String lastName) {
-        return !lastName.trim().isEmpty();
+        return !checkTrimEmpty(lastName);
     }
 
     public boolean isAddressValid(@NonNull String address) {
-        return !address.trim().isEmpty();
+        return !checkTrimEmpty(address);
     }
 
     public boolean isBirthDateValid(@Nullable Date birthDate) {
@@ -27,7 +36,7 @@ public class FormValidator {
     }
 
     public boolean isUserNameValid(@NonNull String userName) {
-        return !userName.trim().isEmpty();
+        return !checkTrimEmpty(userName);
     }
 
     public boolean isEmailValid(@NonNull String email) {

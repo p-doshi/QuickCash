@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     private FirebaseAuth mAuth;
-    private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences.Editor editor;
 
@@ -162,13 +161,13 @@ public class LoginActivity extends AppCompatActivity  {
     public void handleLoginButtonClick(){
         String emailAddress = getEmailAddress();
         String password = getPassword();
-        String errorMessage = null;
+        String errorMessage;
 
         if (LoginValidator.isEmptyEmail(emailAddress)) {
             errorMessage = getResources().getString(R.string.EMPTY_EMAIL_TOAST);
         }else if (LoginValidator.isEmptyPassword(password)) {
             errorMessage = getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
-        }else if (!(LoginValidator.isValidEmail(emailAddress))) {
+        }else if (!LoginValidator.isValidEmail(emailAddress)) {
             errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
         }else {
             checkUserinDatabase(emailAddress,password);

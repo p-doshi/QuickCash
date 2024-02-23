@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class LocationExampleActivity extends AppCompatActivity {
-
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;
     // Creating an AndroidLocationProvider object immediately, in final build we'd create on map screen
     AndroidLocationProvider locationProvider;
 
@@ -77,7 +77,7 @@ public class LocationExampleActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 87) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationProvider.locationPing();
             } else {

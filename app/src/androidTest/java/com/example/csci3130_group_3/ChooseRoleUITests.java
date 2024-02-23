@@ -32,7 +32,7 @@ import org.junit.Before;
 public class ChooseRoleUITests {
 
     private static final int LAUNCH_TIMEOUT = 5000;
-    final String launcherPackage = "com.example.csci3130_group_3";
+    private static final String LAUNCHER_PACKAGE = "com.example.csci3130_group_3";
     private UiDevice device;
 
     @Before
@@ -42,7 +42,7 @@ public class ChooseRoleUITests {
         final Intent appIntent = new Intent(context, ChooseRoleActivity.class);
         appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(appIntent);
-        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
+        device.wait(Until.hasObject(By.pkg(LAUNCHER_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
     }
 
     @Test
