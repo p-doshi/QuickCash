@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,13 +23,20 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class MockDatabasePageTest {
     private Context context;
+    private Database db;
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, DatabaseExampleActivity.class);
         intent.addCategory(context.getString(R.string.TEST_CATEGORY));
-        ActivityScenario.launch(intent);
+        ActivityScenario.launch(intent)
+            .onActivity(activity -> {
+                DatabaseExampleActivity dbActivity = (DatabaseExampleActivity)activity;
+                db = dbActivity.getDatabase();
+            });
+
+        assertTrue(db instanceof MockDatabase);
     }
 
     @Test

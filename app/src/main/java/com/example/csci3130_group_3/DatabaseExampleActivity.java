@@ -42,4 +42,8 @@ public class DatabaseExampleActivity extends AppCompatActivity {
                 error -> output.setText(String.format("%s: %s", getString(R.string.db_error_reading), error))
             ));
     }
+    
+    public Database getDatabase() {
+        return db;
+    }
 }
