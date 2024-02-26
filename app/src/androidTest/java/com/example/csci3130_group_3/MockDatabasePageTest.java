@@ -29,7 +29,7 @@ public class MockDatabasePageTest {
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, DatabaseExampleActivity.class);
-        intent.addCategory(context.getString(R.string.TEST_CATEGORY));
+        intent.addCategory(context.getString(R.string.MOCK_DATABASE));
         scenario = ActivityScenario.launch(intent);
     }
 
