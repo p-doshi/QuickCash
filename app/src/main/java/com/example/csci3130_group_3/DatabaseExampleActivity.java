@@ -7,36 +7,42 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
-
-    Database db;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_example);
 
-        // The easiest way to run this example is to change the launch activity in the android manifest file.
-        // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
+        if (db == null) {
+            db = new MyFirebaseDatabase(this);
+        }
 
-        db = new MyFirebaseDatabase(this);
-        String dbKey = "test";
+        final String dbKey = "test";
 
         // Get the text view.
         TextView output = findViewById(R.id.dbOutput);
 
-        Button sendBtn = findViewById(R.id.sendButton);
+        Button sendBtn = findViewById(R.id.writeButton);
         sendBtn.setOnClickListener(v -> {
             String temp = RandomStringGenerator.generate(10);
             db.write(dbKey, temp,
-                () -> output.setText("Sent: " + temp),
-                error -> output.setText("Error sending: " + error));
+                () -> output.setText(String.format("%s: %s", getString(R.string.db_read), temp)),
+                error -> output.setText(String.format("%s: %s", getString(R.string.db_error_writing), error)));
         });
 
-        Button recvBtn = findViewById(R.id.recvButton);
+        Button recvBtn = findViewById(R.id.readButton);
         recvBtn.setOnClickListener(
             v -> db.read(dbKey, String.class,
-                temp -> output.setText("Received: " + temp),
-                error -> output.setText("Error: " + error)
-        ));
+                temp -> output.setText(String.format("%s: %s", getString(R.string.db_write), temp)),
+                error -> output.setText(String.format("%s: %s", getString(R.string.db_error_reading), error))
+            ));
+    }
+
+    public void setDatabase(Database db) {
+        if (this.db != null) {
+            throw new IllegalStateException("Failed to set Database: Database Activity is already initialized");
+        }
+        this.db = db;
     }
 }
