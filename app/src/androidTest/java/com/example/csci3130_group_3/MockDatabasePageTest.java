@@ -23,20 +23,19 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class MockDatabasePageTest {
     private Context context;
-    private Database db;
+    ActivityScenario<DatabaseExampleActivity> scenario;
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, DatabaseExampleActivity.class);
         intent.addCategory(context.getString(R.string.TEST_CATEGORY));
-        ActivityScenario.launch(intent)
-            .onActivity(activity -> {
-                DatabaseExampleActivity dbActivity = (DatabaseExampleActivity)activity;
-                db = dbActivity.getDatabase();
-            });
+        scenario = ActivityScenario.launch(intent);
+    }
 
-        assertTrue(db instanceof MockDatabase);
+    @Test
+    public void checkImplementation() {
+        scenario.onActivity(activity -> assertTrue(activity.getDatabase() instanceof MockDatabase));
     }
 
     @Test
