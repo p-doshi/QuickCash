@@ -15,7 +15,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_example);
 
-        if (getIntent().hasCategory("test")) {
+        if (getIntent().hasCategory(getString(R.string.TEST_CATEGORY))) {
             db = new MockDatabase();
         }
         else {

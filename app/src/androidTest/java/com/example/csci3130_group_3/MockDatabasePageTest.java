@@ -26,9 +26,8 @@ public class MockDatabasePageTest {
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-
         Intent intent = new Intent(context, DatabaseExampleActivity.class);
-        intent.addCategory("test");
+        intent.addCategory(context.getString(R.string.TEST_CATEGORY));
         ActivityScenario.launch(intent);
     }
 
