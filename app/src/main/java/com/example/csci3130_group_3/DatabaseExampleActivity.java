@@ -42,7 +42,11 @@ public class DatabaseExampleActivity extends AppCompatActivity {
 
     private void getImplementations() {
         for (String category : getIntent().getCategories()) {
-            if (category.equals(getString(R.string.MOCK_DATABASE))) {
+            if (category.startsWith("android.intent.category")) {
+                //noinspection UnnecessaryContinue
+                continue;
+            }
+            else if (category.equals(getString(R.string.MOCK_DATABASE))) {
                 db = new MockDatabase();
                 Log.d(logTag, "Using Mock Database");
             }
