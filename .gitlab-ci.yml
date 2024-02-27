@@ -2,11 +2,6 @@ stages:
   - build
   - test
 
-variables:
-  GRADLE_WRAPPER: "$CI_PROJECT_DIR/gradlew"
-  UNIT_TEST: "testDebugUnitTest"
-  CONNECTED_TEST: "connectedDebugAndroidTest"
-
 cache:
   key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
 
@@ -50,29 +45,29 @@ UnitTests:
     paths:
       - testDebugUnitTest/
 
-ConnectedTests:
-  image: ethrozee/android-emulator
-  interruptible: true
-  tags:
-    - dalfcs_docker_kvm
-  stage: test
-  script:
-    # Launch the android emulator.
-    - $EMU_HEADLESS
+# ConnectedTests:
+#   image: ethrozee/android-emulator
+#   interruptible: true
+#   tags:
+#     - dalfcs_docker_kvm
+#   stage: test
+#   script:
+#     # Launch the android emulator.
+#     - $EMU_HEADLESS
 
-    # Run the connected tests with logcat output.
-    - adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
-    - ./gradlew :app:connectedDebugAndroidTest
+#     # Run the connected tests with logcat output.
+#     - adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
+#     - ./gradlew :app:connectedDebugAndroidTest
  
-  after_script:
-    # Stop logcat if it is still running.
-    - if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
+#   after_script:
+#     # Stop logcat if it is still running.
+#     - if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
 
-    # Reposition test results.
-    - mv app/build/reports/androidTests/connected/debug connectedDebugAndroidTest
+#     # Reposition test results.
+#     - mv app/build/reports/androidTests/connected/debug connectedDebugAndroidTest
 
-  artifacts:
-    when: always
-    expire_in: 30 days
-    paths:
-      - connectedDebugAndroidTest/
+#   artifacts:
+#     when: always
+#     expire_in: 30 days
+#     paths:
+#       - connectedDebugAndroidTest/

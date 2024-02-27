@@ -1,0 +1,27 @@
+name: Android CI
+
+on: push
+
+jobs:
+  connected-tests:
+    needs: build
+    runs-on: ubuntu-latest
+    container: ethrozee/android-emulator
+    steps:
+      - uses: actions/checkout@v2
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+      - name: Launch the android emulator
+        run: $EMU_HEADLESS
+      - name: Run the connected tests with logcat output
+        run: |
+          adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
+          ./gradlew :app:connectedDebugAndroidTest
+      - name: Stop logcat if it is still running
+        run: if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: connected-test-results
+          path: app/build/reports/androidTests/connected/debug
