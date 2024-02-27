@@ -3,7 +3,9 @@
          xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description>The PMD configuration for Group 3 of CSCI 3130, Winter 2024.</description>
 
+    <!-- BEST PRACTICES -->
     <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" />
     <rule ref="category/java/bestpractices.xml/AccessorClassGeneration" />
     <rule ref="category/java/bestpractices.xml/AccessorMethodGeneration" />
@@ -103,7 +105,7 @@
     <rule ref="category/java/codestyle.xml/UnnecessaryCast" />
     <rule ref="category/java/codestyle.xml/UnnecessaryConstructor"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryFullyQualifiedName"/>
-    <rule ref="category/java/codestyle.xml/UnnecessaryImport"/>
+    <!-- <rule ref="category/java/codestyle.xml/UnnecessaryImport"/> -->
     <rule ref="category/java/codestyle.xml/UnnecessaryLocalBeforeReturn"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryModifier"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryReturn"/>
