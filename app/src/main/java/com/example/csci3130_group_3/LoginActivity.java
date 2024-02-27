@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity  {
                 .addOnFailureListener(this, task -> {
                         // If sign in fails, display a message to the user.
                         Log.w("Login_Tag", "signInWithCustomToken:failure", task.getCause());
-                        setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
+                        setStatusMessage(getString(R.string.INVALID_CREDENTIALS));
                 });
     }
 
@@ -143,11 +143,11 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     protected void moveToDashboard(){
-        Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
     }
 
     protected void moveToRegistration(){
-        Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
     }
 
     protected void setStatusMessage(@NonNull String message){
@@ -164,11 +164,11 @@ public class LoginActivity extends AppCompatActivity  {
         String errorMessage;
 
         if (LoginValidator.isEmptyEmail(emailAddress)) {
-            errorMessage = getResources().getString(R.string.EMPTY_EMAIL_TOAST);
+            errorMessage = getString(R.string.EMPTY_EMAIL_TOAST);
         }else if (LoginValidator.isEmptyPassword(password)) {
-            errorMessage = getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
+            errorMessage = getString(R.string.EMPTY_PASSWORD_TOAST);
         }else if (!LoginValidator.isValidEmail(emailAddress)) {
-            errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
+            errorMessage = getString(R.string.INVALID_EMAIL_TOAST);
         }else {
             checkUserinDatabase(emailAddress,password);
             return;

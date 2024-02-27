@@ -21,13 +21,13 @@ public class ChooseRoleActivity extends AppCompatActivity {
         Button chooseEmployeeButton = findViewById(R.id.employeeButton);
         Button confirmRoleButton = findViewById(R.id.chooseRoleConfirm);
 
-        chooseEmployerButton.setOnClickListener(view -> role = getResources().getString(R.string.employer));
+        chooseEmployerButton.setOnClickListener(view -> role = getString(R.string.employer));
 
-        chooseEmployeeButton.setOnClickListener(view -> role = getResources().getString(R.string.employee));
+        chooseEmployeeButton.setOnClickListener(view -> role = getString(R.string.employee));
 
         confirmRoleButton.setOnClickListener(view -> {
             if (role == null) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.choose_role_reminder), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.choose_role_reminder), Toast.LENGTH_LONG).show();
             } else {
                 moveToDashboardWindow(role);
             }
@@ -36,9 +36,9 @@ public class ChooseRoleActivity extends AppCompatActivity {
     }
 
     protected void moveToDashboardWindow(@NonNull String role) {
-        if (role.equals(getResources().getString(R.string.employer))) {
+        if (role.equals(getString(R.string.employer))) {
             Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
-        } else if (role.equals(getResources().getString(R.string.employee))) {
+        } else if (role.equals(getString(R.string.employee))) {
             Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
         } else {
             throw new IllegalArgumentException("A deadly error has occur when user is choosing role");

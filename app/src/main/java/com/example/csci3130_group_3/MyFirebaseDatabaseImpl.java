@@ -16,7 +16,7 @@ public class MyFirebaseDatabaseImpl implements Database {
 
     MyFirebaseDatabaseImpl(@NonNull Context context) {
         // Get a reference to the database.
-        database = FirebaseDatabase.getInstance(context.getResources().getString(R.string.FIREBASE_DB_URL));
+        database = FirebaseDatabase.getInstance(context.getString(R.string.FIREBASE_DB_URL));
     }
 
     @Override

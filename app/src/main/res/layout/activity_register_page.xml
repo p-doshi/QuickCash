@@ -11,8 +11,6 @@
         android:layout_height="wrap_content"
         tools:context=".RegistrationPage">
 
-
-
         <EditText
             android:id="@+id/firstName"
             android:layout_width="0dp"
