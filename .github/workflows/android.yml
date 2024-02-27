@@ -3,7 +3,7 @@ name: Android Emulator CI
 on: push
 
 jobs:
-  connected-tests:
+  ConnectedTests:
     runs-on: ubuntu-latest
     container: ethrozee/android-emulator
     steps:
