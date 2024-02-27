@@ -4,7 +4,6 @@ on: push
 
 jobs:
   connected-tests:
-    needs: build
     runs-on: ubuntu-latest
     container: ethrozee/android-emulator
     steps:
