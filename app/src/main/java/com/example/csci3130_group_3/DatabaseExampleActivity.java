@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
 
-    Database database;
+    private Database database;
 
     @SuppressLint("SetTextI18n")
     @Override

@@ -1,7 +1,5 @@
 package com.example.csci3130_group_3;
 
-import android.annotation.SuppressLint;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 

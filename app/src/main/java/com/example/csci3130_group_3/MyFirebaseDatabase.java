@@ -16,8 +16,9 @@ public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     protected @NonNull String relocate(@NonNull String location) {
         StringBuilder newLocation = new StringBuilder("/" + DB_KEY);
 
-        if (!location.startsWith("/")) {
-            newLocation.append('/');
+        final char slash = '/';
+        if (location.charAt(0) != slash) {
+            newLocation.append(slash);
         }
         newLocation.append(location);
 

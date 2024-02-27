@@ -1,14 +1,7 @@
 package com.example.csci3130_group_3;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
@@ -21,8 +14,6 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
-
-// Disable animations programmatically
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -42,6 +33,14 @@ public class LoginUIAutomatorTest {
     private UiDevice device;
     public Context context;
 
+    private void launchApp(){
+        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(LAUNCHER_PACKAGE);
+        assert appIntent != null;
+        appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(appIntent);
+        device.wait(Until.hasObject(By.pkg(LAUNCHER_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
+    }
+
     @Before
     public void setup() {
         device = UiDevice.getInstance(getInstrumentation());
@@ -53,13 +52,6 @@ public class LoginUIAutomatorTest {
     public void teardown() {
         // Just to be sure.
         FirebaseAuth.getInstance().signOut();
-    }
-
-    public void launchApp(){
-        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(LAUNCHER_PACKAGE);
-        appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(appIntent);
-        device.wait(Until.hasObject(By.pkg(LAUNCHER_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
     }
 
     @Test

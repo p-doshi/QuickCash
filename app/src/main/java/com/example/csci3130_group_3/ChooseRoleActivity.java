@@ -1,7 +1,6 @@
 package com.example.csci3130_group_3;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -42,8 +41,7 @@ public class ChooseRoleActivity extends AppCompatActivity {
         } else if (role.equals(getResources().getString(R.string.employee))) {
             Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
         } else {
-            Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
-            System.exit(1);
+            throw new IllegalArgumentException("A deadly error has occur when user is choosing role");
         }
     }
 }

@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class LocationExampleActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;
     // Creating an AndroidLocationProvider object immediately, in final build we'd create on map screen
-    AndroidLocationProvider locationProvider;
+    private AndroidLocationProvider locationProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

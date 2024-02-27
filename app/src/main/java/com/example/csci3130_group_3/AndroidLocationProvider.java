@@ -17,8 +17,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import androidx.annotation.NonNull;
@@ -46,15 +44,18 @@ public class AndroidLocationProvider implements LocationProvider {
         locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
     }
 
+    @Override
     public void setupLocationPermsSettings() {
         createLocationRequest();
         requestLocationSettingsEnable(true);
     }
 
+    @Override
     public @Nullable Location getCurrentLocation() {
         return currentLocation;
     }
 
+    @Override
     public boolean checkLocationPermissionsEnabled() {
         return ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;

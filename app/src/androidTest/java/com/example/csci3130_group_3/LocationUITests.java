@@ -99,17 +99,9 @@ public class LocationUITests {
     }
 
     // Helper method, checks if Location Setting is enabled or disabled on device
-    private boolean checkLocationSettingEnabled() {
-        boolean locationEnabled = false;
-
-        try {
-            int locationSetting = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-            locationEnabled = locationSetting == Settings.Secure.LOCATION_MODE_OFF;
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return locationEnabled;
+    private boolean checkLocationSettingEnabled() throws Settings.SettingNotFoundException {
+        int locationSetting = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+        return locationSetting == Settings.Secure.LOCATION_MODE_OFF;
     }
 
     @Test
@@ -142,7 +134,7 @@ public class LocationUITests {
     }
 
     @Test
-    public void denyLocationSettingsAndPermissions() throws Exception {
+    public void denyLocationSettingsAndPermissions() throws UiObjectNotFoundException, Settings.SettingNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location"));
         requestLocationButton.click();
         Log.d("LocationTests", "SDK: "+sdkVersion+" Denying Location Setting/Permission Test Running");
@@ -154,7 +146,7 @@ public class LocationUITests {
     }
 
     @Test
-    public void acceptLocationPermissions() throws Exception {
+    public void acceptLocationPermissions() throws UiObjectNotFoundException, Settings.SettingNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location"));
         requestLocationButton.click();
         Log.d("LocationTests", "SDK: "+sdkVersion+" Accepting Location Setting/Permission Test Running");

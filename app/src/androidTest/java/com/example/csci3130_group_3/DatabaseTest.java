@@ -23,8 +23,8 @@ public class DatabaseTest {
     private static final String RESOURCE_NAME = "databaseResource";
     private static final String TEST_DIR = "test";
     private static final String TEST_TEXT = "Hello";
-    IdlingRegistry registry = IdlingRegistry.getInstance();
-    Context context;
+    private final IdlingRegistry registry = IdlingRegistry.getInstance();
+    private Context context;
 
     @Before
     public void setup() {

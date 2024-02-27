@@ -26,7 +26,7 @@ public class RegistrationPage extends AppCompatActivity {
     private EditText emailAddress;
     private EditText password;
     private EditText confirmPassword;
-    TextView statusTextView;
+    private TextView statusTextView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

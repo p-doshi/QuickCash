@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 public class EmployeeDashboard extends Activity {
 
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dashboard_employee);
