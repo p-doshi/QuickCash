@@ -24,16 +24,16 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         // Get the text view.
         TextView output = findViewById(R.id.dbOutput);
 
-        Button sendBtn = findViewById(R.id.writeButton);
-        sendBtn.setOnClickListener(v -> {
+        Button writeButton = findViewById(R.id.writeButton);
+        writeButton.setOnClickListener(v -> {
             String temp = RandomStringGenerator.generate(10);
             db.write(dbKey, temp,
                 () -> output.setText(String.format("%s: %s", getString(R.string.db_write), temp)),
                 error -> output.setText(String.format("%s: %s", getString(R.string.db_error_writing), error)));
         });
 
-        Button recvBtn = findViewById(R.id.readButton);
-        recvBtn.setOnClickListener(
+        Button readButton = findViewById(R.id.readButton);
+        readButton.setOnClickListener(
             v -> db.read(dbKey, String.class,
                 temp -> output.setText(String.format("%s: %s", getString(R.string.db_read), temp)),
                 error -> output.setText(String.format("%s: %s", getString(R.string.db_error_reading), error))
