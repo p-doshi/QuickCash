@@ -61,15 +61,12 @@ public class LocationExampleActivity extends AppCompatActivity {
 
     protected void setupDetectLocationButton() {
         Button detectButton = findViewById(R.id.detectButton);
-        detectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                locationProvider.setupLocationPermsSettings();
-                if (locationProvider.checkLocationPermissionsEnabled()) {
-                    locationProvider.locationPing();
-                    updateStatus();
-                    updateLongLat();
-                }
+        detectButton.setOnClickListener(view -> {
+            locationProvider.setupLocationPermsSettings();
+            if (locationProvider.checkLocationPermissionsEnabled()) {
+                locationProvider.locationPing();
+                updateStatus();
+                updateLongLat();
             }
         });
     }
