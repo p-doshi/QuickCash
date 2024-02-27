@@ -7,7 +7,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.security.InvalidParameterException;
+import java.util.Set;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
     private static final String logTag = "DatabaseExample";
@@ -41,22 +41,22 @@ public class DatabaseExampleActivity extends AppCompatActivity {
     }
 
     private void getImplementations() {
-        for (String category : getIntent().getCategories()) {
-            if (category.startsWith("android.intent.category")) {
-                //noinspection UnnecessaryContinue
-                continue;
-            }
-            else if (category.equals(getString(R.string.MOCK_DATABASE))) {
-                db = new MockDatabase();
-                Log.d(logTag, "Using Mock Database");
-            }
-            else {
-                throw new InvalidParameterException("Unrecognized category: " + category);
+        Set<String> categories = getIntent().getCategories();
+        if (categories != null) {
+            for (String category : categories) {
+                if (category.equals(getString(R.string.MOCK_DATABASE))) {
+                    db = new MockDatabase();
+                    Log.d(logTag, "Using Mock Database");
+                }
             }
         }
 
         if (db == null) {
             db = new MyFirebaseDatabase(this);
         }
+    }
+
+    public Database getDatabase() {
+        return db;
     }
 }

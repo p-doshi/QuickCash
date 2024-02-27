@@ -29,7 +29,12 @@ public class MockDatabasePageTest {
         context = ApplicationProvider.getApplicationContext();
         Intent intent = new Intent(context, DatabaseExampleActivity.class);
         intent.addCategory(context.getString(R.string.MOCK_DATABASE));
-        ActivityScenario.launch(intent);
+        ActivityScenario<DatabaseExampleActivity> scenario = ActivityScenario.launch(intent);
+        scenario.onActivity(activity ->
+            // Do not run the test if we are not using the mock database.
+            assertTrue("Not using Mock Database",
+                activity.getDatabase() instanceof MockDatabase)
+        );
     }
 
     @Test
