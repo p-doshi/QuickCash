@@ -39,7 +39,7 @@ public class LocationEspressoTests {
     public void getLocation() {
         // Press the button twice to get the location.
         Espresso.onView(withId(R.id.detectButton)).perform(click(), click());
-        Espresso.onView(withId(R.id.longText)).check(matches(withPattern("Longitude: [-\\d.]+")));
-        Espresso.onView(withId(R.id.latText)).check(matches(withPattern("Latitude: [-\\d.]+")));
+        Espresso.onView(withId(R.id.longText)).check(matches(withPattern("Longitude: -?\\d+\\.?\\d+")));
+        Espresso.onView(withId(R.id.latText)).check(matches(withPattern("Latitude: -?\\d+\\.?\\d+")));
     }
 }
