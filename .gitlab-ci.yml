@@ -60,6 +60,7 @@ PmdLint:
   tags:
     - dalfcs_docker_kvm
   stage: lint
+  needs: []
   script:
     - pmd check -d app/src -R pmdRuleset.xml -f textcolor
 
