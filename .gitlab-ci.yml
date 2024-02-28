@@ -31,6 +31,16 @@ Build:
       - app/build/
       - .gradle/
 
+PmdLint:
+  image: ethrozee/android
+  interruptible: true
+  tags:
+    - dalfcs_docker_kvm
+  stage: lint
+  needs: []
+  script:
+    - pmd check -d app/src -R pmdRuleset.xml -f textcolor
+
 GradleLint:
   image: ethrozee/android
   interruptible: true
@@ -53,16 +63,6 @@ GradleLint:
     paths:
       # Give the results of linting
       - lintResults.html
-
-PmdLint:
-  image: ethrozee/android
-  interruptible: true
-  tags:
-    - dalfcs_docker_kvm
-  stage: lint
-  needs: []
-  script:
-    - pmd check -d app/src -R pmdRuleset.xml -f textcolor
 
 UnitTests:
   image: ethrozee/android
