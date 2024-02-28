@@ -1,7 +1,5 @@
 package com.example.csci3130_group_3;
 
-import static android.os.Build.VERSION_CODES;
-import static android.provider.Settings.Secure;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import android.Manifest;
@@ -80,7 +78,7 @@ public class LocationUITests {
     // Helper method, denies the current permission popup if it shows
     private void denyCurrentPermission(UiDevice device) throws UiObjectNotFoundException {
         UiObject denyButton;
-        if (sdkVersion >= VERSION_CODES.R) {
+        if (sdkVersion >= Build.VERSION_CODES.R) { // NOPMD LawOfDemeter is excessive here.
             denyButton = device.findObject(new UiSelector().textContains("Don"));
         } else {
             denyButton = device.findObject(new UiSelector().text("Deny"));
@@ -103,7 +101,7 @@ public class LocationUITests {
     // Helper method, checks if Location Setting is enabled or disabled on device
     private boolean checkLocationSettingEnabled() throws Settings.SettingNotFoundException {
         int locationSetting = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-        return locationSetting == Secure.LOCATION_MODE_OFF;
+        return locationSetting == Settings.Secure.LOCATION_MODE_OFF; // NOPMD LawOfDemeter is excessive here.
     }
 
     @Test
@@ -115,7 +113,7 @@ public class LocationUITests {
         Log.d("LocationTests", "SDK: "+sdkVersion+" Location Permissions Test Running");
         // First checks if location permissions are already granted, if so then just check if granted works
         if (!checkLocationPermissionsEnabled()) {
-            if (sdkVersion >= VERSION_CODES.R) {
+            if (sdkVersion >= Build.VERSION_CODES.R) { // NOPMD LawOfDemeter is excessive here.
                 assertViewWithTextVisible(device, "access this device");
                 assertViewWithTextVisible(device,"Don");
             } else {
@@ -153,7 +151,7 @@ public class LocationUITests {
         requestLocationButton.click();
         Log.d("LocationTests", "SDK: "+sdkVersion+" Accepting Location Setting/Permission Test Running");
         if (!checkLocationPermissionsEnabled()) {
-            if (sdkVersion >= VERSION_CODES.R) {
+            if (sdkVersion >= Build.VERSION_CODES.R) { // NOPMD LawOfDemeter is excessive here.
                 assertViewWithTextVisible(device, "Only this time");
                 clickVisibleButton(device, "Only this time");
             } else {
