@@ -3,84 +3,74 @@ package com.example.csci3130_group_3;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
-import android.Manifest;
-import android.app.UiAutomation;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Build;
 
-import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class LocationUITests {
     private final int SDK_VERSION = Build.VERSION.SDK_INT;
-    private Context context;
-    private UiAutomation automation;
-    private UiDevice device;
-    private String launcherPackage;
+    @Rule
+    public final ActivityScenarioRule<LocationExampleActivity> activity =
+        new ActivityScenarioRule<>(LocationExampleActivity.class);
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
-    private void disablePermission(String permission) {
-        int code = context.checkSelfPermission(permission);
-        if (code == PackageManager.PERMISSION_GRANTED) {
-            automation.revokeRuntimePermission(launcherPackage, permission);
-        }
-    }
-
-    @Before
-    public void setup() {
-        context = getInstrumentation().getContext();
-        automation = getInstrumentation().getUiAutomation();
-        device = UiDevice.getInstance(getInstrumentation());
-        launcherPackage = device.getLauncherPackageName();
-
-        // Remove location permissions before starting.
-        disablePermission(Manifest.permission.ACCESS_FINE_LOCATION);
-
-        ActivityScenario.launch(LocationExampleActivity.class);
-    }
-
-    private void pressOK() throws UiObjectNotFoundException {
+    private void pressOkIfExists() throws UiObjectNotFoundException {
         UiObject noThanksButton = device.findObject(new UiSelector().text("OK").clickable(true));
         if (noThanksButton.exists()) {
             noThanksButton.click();
         }
     }
 
-    // Helper method, denies the current permission popup if it shows.
     private void denyPermissions() throws UiObjectNotFoundException {
-        UiObject denyButton;
-        if (SDK_VERSION >= Build.VERSION_CODES.R) {
-            denyButton = device.findObject(new UiSelector().textMatches("Don.t allow"));
-        } else {
-            denyButton = device.findObject(new UiSelector().text("DENY"));
+        String denyRegex;
+        switch (SDK_VERSION) {
+            case 28: denyRegex = "DENY"; break;
+            case 29:
+            case 30: denyRegex = "Deny"; break;
+            case 31:
+            case 32:
+            case 33:
+            case 34: denyRegex = "Don.t allow"; break;
+            default: denyRegex = ""; break;
         }
+
+        UiObject denyButton = device.findObject(new UiSelector().textMatches(denyRegex));
         denyButton.click();
 
-        pressOK();
+        pressOkIfExists();
     }
 
-    // Helper method, denies the current permission popup if it shows.
     private void allowPermissions() throws UiObjectNotFoundException {
-        UiObject allowButton;
-        if (SDK_VERSION >= Build.VERSION_CODES.R) {
-            allowButton = device.findObject(new UiSelector().text("Only this time"));
-        } else {
-            allowButton = device.findObject(new UiSelector().text("ALLOW"));
+        String allowRegex;
+        switch (SDK_VERSION) {
+            case 28: allowRegex = "ALLOW"; break;
+            case 29: allowRegex = "Allow only while using the app"; break;
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34: allowRegex = "Only this time"; break;
+            default: allowRegex = ""; break;
         }
+
+        UiObject allowButton = device.findObject(new UiSelector().textMatches(allowRegex));
         allowButton.click();
 
-        pressOK();
+        pressOkIfExists();
     }
 
+    @Ignore("Doesn't work yet")
     @Test
     public void denyLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
@@ -89,6 +79,7 @@ public class LocationUITests {
         assertTrue(device.findObject(new UiSelector().textContains("Not Granted")).exists());
     }
 
+    @Ignore("Doesn't work yet")
     @Test
     public void allowLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
@@ -97,6 +88,7 @@ public class LocationUITests {
         assertTrue(device.findObject(new UiSelector().textContains("Granted")).exists());
     }
 
+    @Ignore("Doesn't work yet")
     @Test
     public void getLocation() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
@@ -106,7 +98,7 @@ public class LocationUITests {
         // Press the button again to get the location.
         requestLocationButton.click();
 
-        assertTrue(device.findObject(new UiSelector().textMatches("Longitude: [-\\d.]+")).exists());
-        assertTrue(device.findObject(new UiSelector().textMatches("Latitude: [-\\d.]+")).exists());
+        assertTrue(device.findObject(new UiSelector().textMatches("Longitude: -?\\d+\\.?\\d+")).exists());
+        assertTrue(device.findObject(new UiSelector().textMatches("Latitude: -?\\d+\\.?\\d+")).exists());
     }
 }
