@@ -3,7 +3,6 @@ package com.example.csci3130_group_3;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -14,8 +13,11 @@ import com.google.android.gms.tasks.Task;
 
 public class GoogleSignInHelper {
     private final GoogleSignInClient mGoogleSignInClient;
+    private final SignInInterface mSignInInterface;
 
-    public GoogleSignInHelper(Context context) {
+    public GoogleSignInHelper(Context context, SignInInterface signInInterface) {
+        mSignInInterface = signInInterface;
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.WebClient))
                 .requestEmail()
@@ -31,17 +33,17 @@ public class GoogleSignInHelper {
         return GoogleSignIn.getSignedInAccountFromIntent(data);
     }
 
-    public void handleSignInResult(Task<GoogleSignInAccount> completedTask, LoginActivity activity) {
+    public void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // Signed in successfully, show authenticated UI.
             if (account != null) {
-                activity.moveToDashboard();
+                mSignInInterface.moveToDashboard();
             }
         } catch (ApiException e) {
             // Handle sign-in failure (e.g., display Toast)
             Log.w("GoogleSignInHelper", "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(activity, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
+            mSignInInterface.setStatusMessage("Google Sign-In failed");
         }
     }
 }

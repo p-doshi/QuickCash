@@ -1,6 +1,5 @@
 package com.example.csci3130_group_3;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +21,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity  {
+public class LoginActivity extends AppCompatActivity implements SignInInterface {
 
     private FirebaseAuth mAuth;
     private GoogleSignInHelper mGoogleSignInHelper;
@@ -49,14 +48,14 @@ public class LoginActivity extends AppCompatActivity  {
         this.setUpLoginButton();
         this.setUpSignUpButtonManual();
 
-        mGoogleSignInHelper = new GoogleSignInHelper(this);
+        mGoogleSignInHelper = new GoogleSignInHelper(this,  new SignInImplementation(this));
         SignInButton signInButton = findViewById(R.id.signupGoogle);
         signInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         Task<GoogleSignInAccount> task = mGoogleSignInHelper.getSignedInAccountFromIntent(data);
-                        mGoogleSignInHelper.handleSignInResult(task, this);
+                        mGoogleSignInHelper.handleSignInResult(task);
                     } else {
                         Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
                     }
@@ -107,7 +106,8 @@ public class LoginActivity extends AppCompatActivity  {
         signupButton.setOnClickListener(view -> moveToRegistration());
     }
 
-    protected void moveToDashboard(){
+    @Override
+    public void moveToDashboard(){
         setStatusMessage("");
         Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
     }
@@ -115,8 +115,8 @@ public class LoginActivity extends AppCompatActivity  {
     protected void moveToRegistration(){
         Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
     }
-
-    protected void setStatusMessage(String message){
+    @Override
+    public void setStatusMessage(String message){
         TextView statusLabel = findViewById(R.id.statusLabel);
         statusLabel.setText(message);
     }
