@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="receiptsTitle">Receipts</string>
+    <string name="addTitle">Add</string>
+    <string name="profileTitle">Profile</string>
+    <string name="mapTitle">Map</string>
+    <string name="searchTitle">search</string>
+</resources>
