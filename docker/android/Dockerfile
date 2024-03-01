@@ -25,12 +25,16 @@ ENV DOCKER="true"
 # Install Dependenices and required Android CMD-line tools
 #=============================
 ARG ANDROID_CMD="commandlinetools-linux-11076708_latest.zip"
-RUN apt update -y && apt install -y --no-install-recommends wget unzip  && \
+RUN apt update && apt install -y --no-install-recommends wget unzip \
+    # Packages to install.
+    curl && \
+    # Install android cli tools.
     wget https://dl.google.com/android/repository/${ANDROID_CMD} -P /tmp && \
     unzip -d $ANDROID_SDK_ROOT /tmp/$ANDROID_CMD && \
     mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/tools && \
     cd $ANDROID_SDK_ROOT/cmdline-tools &&  mv NOTICE.txt source.properties bin lib tools/  && \
     cd / && rm -rf /tmp/* && \
+    # Cleanup.
     apt remove -y wget unzip && \
     rm -rf /var/lib/apt/lists/* && \
     yes | sdkmanager --licenses
@@ -38,12 +42,9 @@ RUN apt update -y && apt install -y --no-install-recommends wget unzip  && \
 #==============================
 # Android SDK ARGS
 #==============================
-ARG ARCH="x86_64"
-ARG TARGET="google_apis"
 ARG API_LEVEL="34"
 ARG BUILD_TOOLS="34.0.0"
 ARG ANDROID_API_LEVEL="android-${API_LEVEL}"
-ARG ANDROID_APIS="${TARGET};${ARCH}"
 ARG PLATFORM_VERSION="platforms;${ANDROID_API_LEVEL}"
 ARG BUILD_TOOL="build-tools;${BUILD_TOOLS}"
 ARG ANDROID_SDK_PACKAGES="${PLATFORM_VERSION} ${BUILD_TOOL} platform-tools"
