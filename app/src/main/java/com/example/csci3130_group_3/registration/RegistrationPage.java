@@ -1,10 +1,12 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.registration;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.csci3130_group_3.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

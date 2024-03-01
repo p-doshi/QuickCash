@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.login;
 
 import android.os.Bundle;
 import android.util.Log;

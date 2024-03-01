@@ -20,6 +20,8 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
+import com.example.csci3130_group_3.location.LocationExampleActivity;
+
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

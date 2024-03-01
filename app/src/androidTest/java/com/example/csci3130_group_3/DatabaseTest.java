@@ -8,6 +8,9 @@ import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.csci3130_group_3.database.Database;
+import com.example.csci3130_group_3.database.MyFirebaseDatabase;
+import com.example.csci3130_group_3.database.MyFirebaseDatabaseImpl;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Assert;

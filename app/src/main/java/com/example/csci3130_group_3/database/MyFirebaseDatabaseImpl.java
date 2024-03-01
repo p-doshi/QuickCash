@@ -1,6 +1,9 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.database;
 
 import android.content.Context;
+
+import com.example.csci3130_group_3.R;
+import com.example.csci3130_group_3.database.Database;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.function.Consumer;
 

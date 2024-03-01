@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.example.csci3130_group_3.login.LoginValidator;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

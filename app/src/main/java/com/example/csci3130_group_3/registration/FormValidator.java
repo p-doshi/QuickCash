@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.registration;
 import java.util.Date;
 import java.util.regex.Pattern;
 public class FormValidator {

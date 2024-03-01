@@ -9,7 +9,7 @@ public class User {
     /**
      * Required by Firebase.
      */
-    User() {
+    public User() {
         name = "";
     }
 

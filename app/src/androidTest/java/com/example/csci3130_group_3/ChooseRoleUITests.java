@@ -22,6 +22,8 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
+import com.example.csci3130_group_3.registration.ChooseRoleActivity;
+
 import org.junit.Before;
 
 /**

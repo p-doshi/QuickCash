@@ -11,11 +11,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
-import static java.time.temporal.TemporalQueries.precision;
-
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.csci3130_group_3.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;

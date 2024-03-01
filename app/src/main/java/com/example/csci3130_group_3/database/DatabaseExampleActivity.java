@@ -1,10 +1,12 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.database;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.csci3130_group_3.R;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
 

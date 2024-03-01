@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.location;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.csci3130_group_3.R;
+import com.example.csci3130_group_3.location.AndroidLocationProvider;
 
 public class LocationExampleActivity extends AppCompatActivity {
 

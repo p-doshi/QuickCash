@@ -3,6 +3,8 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import com.example.csci3130_group_3.registration.FormValidator;
+
 import java.util.Date;
 
 public class FormValidatorUnitTest {
