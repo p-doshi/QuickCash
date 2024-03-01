@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity  {
         return passwordInput.getText().toString().trim();
     }
 
-    protected void setUpLoginButton(){
+    public void setUpLoginButton(){
         Button loginButton = findViewById(R.id.continueButton);
         loginButton.setOnClickListener(view -> handleLoginButtonClick());
     }

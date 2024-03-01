@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.locationAndroidTests;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 

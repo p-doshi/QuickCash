@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class MyFirebaseDatabaseImpl implements Database {
     private final FirebaseDatabase db;
 
-    MyFirebaseDatabaseImpl(Context context) {
+    public MyFirebaseDatabaseImpl(Context context) {
         // Get a reference to the database.
         db = FirebaseDatabase.getInstance(context.getResources().getString(R.string.FIREBASE_DB_URL));
     }

@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.loginAndroidTests;
 
 
 import static android.app.PendingIntent.getActivity;
@@ -12,8 +12,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.csci3130_group_3.R;
 import com.example.csci3130_group_3.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,7 +45,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testEmptyEmail() {
-        onView(withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));

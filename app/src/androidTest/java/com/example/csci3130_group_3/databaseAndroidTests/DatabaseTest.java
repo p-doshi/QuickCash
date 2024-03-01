@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.databaseAndroidTests;
 
 import android.content.Context;
 

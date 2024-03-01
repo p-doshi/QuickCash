@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.registrationAndroidTests;
 
 import androidx.test.core.app.ActivityScenario;
 
@@ -21,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 
 import android.content.Context;
 
+import com.example.csci3130_group_3.R;
 import com.example.csci3130_group_3.registration.RegistrationPage;
 
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class RegistrationPageUITest {
     @Test
     public void fillRegistrationForm() {
 
-        onView(withId(R.id.firstName)).perform(typeText("John\n"));
+        onView(ViewMatchers.withId(R.id.firstName)).perform(typeText("John\n"));
         onView(withId(R.id.lastName)).perform(typeText("Doe\n"));
         onView(withId(R.id.address)).perform(typeText("123 Main Street\n"));
         onView(withId(R.id.birthYear)).perform(typeText("1985\n"));

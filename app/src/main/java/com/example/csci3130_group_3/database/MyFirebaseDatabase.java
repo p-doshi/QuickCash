@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     private static final String dbKey = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
 
-    MyFirebaseDatabase(Context context) {
+    public MyFirebaseDatabase(Context context) {
         super(context);
     }
 

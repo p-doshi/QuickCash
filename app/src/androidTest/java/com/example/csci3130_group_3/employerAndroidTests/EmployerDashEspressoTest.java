@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package com.example.csci3130_group_3.employerAndroidTests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -7,7 +7,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
 
+import com.example.csci3130_group_3.R;
 import com.example.csci3130_group_3.employer.EmployerDashboard;
 
 import org.junit.Before;
@@ -26,7 +28,7 @@ public class EmployerDashEspressoTest {
 
     @Test
     public void testEmployerNavBarExist(){
-        onView(withId(R.id.employerBottomNavView)).perform(click());
+        onView(ViewMatchers.withId(R.id.employerBottomNavView)).perform(click());
     }
 
     @Test
