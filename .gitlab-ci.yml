@@ -61,21 +61,22 @@ ConnectedTests:
     - ./gradlew assembleDebugAndroidTest
 
     # Start a github action to run the connected tests.
-    - 'curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
-    -H "Accept: application/vnd.github.v3+json" \
-    https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches \
-    -d "{\
-      "event_type": "trigger-test",\
-      "client_payload": {\
-        "project_id": "$CI_PROJECT_NAME",\
-        "job_id": "$CI_JOB_ID",\
-        "branch": "$CI_COMMIT_BRANCH"\
-      }\
-    }"'
+    - >
+      'curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+      -H "Accept: application/vnd.github.v3+json" \
+      https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches \
+      -d "{ \
+        "event_type": "trigger-test", \
+        "client_payload": { \
+          "project_id": "$CI_PROJECT_NAME", \
+          "job_id": "$CI_JOB_ID", \
+          "branch": "$CI_COMMIT_BRANCH" \
+        } \
+      }"'
 
   after_script:
     # Move the apks to the root folder.
-    - find app/build/outputs --name "*.apk" -exec mv {} apks +
+    - find app/build/outputs -name "*.apk" -exec mv {} apks +
 
   artifacts:
     when: always
