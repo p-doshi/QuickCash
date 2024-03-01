@@ -7,26 +7,31 @@ on:
 jobs:
   ConnectedTests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [28, 30, 32, 34]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.client_payload.branch }}
       - name: Download APKs from Gitlab
         env:
-          GITLAB_PROJECT_ID: ${{ github.event.client_payload.project_id }}
+          GITLAB_JOB_URL: ${{ github.event.client_payload.job_url }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          curl -H "Authorization: Bearer $GITLAB_TOKEN" -L -o app-debug.apk "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/jobs/${{ github.event.client_payload.job_id }}/artifacts/apks/app-debug.apk"
-          curl -H "Authorization: Bearer $GITLAB_TOKEN" -L -o app-debug-androidTest.apk "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/jobs/${{ github.event.client_payload.job_id }}/artifacts/apks/app-debug-androidTest.apk"
+          curl -o artifacts.zip -L -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_JOB_URL"
+          unzip artifacts.zip && mv apks/* .
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: Run connected tests
         uses: ReactiveCircus/android-emulator-runner@v2
         env:
           PACKAGE: com.example.csci3130_group_3
         with:
-          api-level: 28
+          api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86
+          profile: small
           script: |
             adb install app-debug.apk
             adb install app-debug-androidTest.apk

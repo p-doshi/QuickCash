@@ -17,7 +17,7 @@ Build:
   stage: build
   script:
     # Build the application.
-    - ./gradlew assembleDebug
+    - ./gradlew :app:assembleDebug
 
   artifacts:
     paths:
@@ -54,29 +54,26 @@ ConnectedTests:
   variables:
     GITHUB_REPO: csci3130_group_3
     GITHUB_USER: ethroz
-    # This token only works for accessing the public repo.
+    # This token can only access the specific repo it was made for.
     GITHUB_TOKEN: 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
+    GITLAB_JOB_URL: $CI_PROJECT_URL/api/v4/projects/1/jobs/$CI_JOB_ID/artifacts
   script:
     # Build the android connected test apk.
-    - ./gradlew assembleDebugAndroidTest
+    - ./gradlew :app:assembleDebugAndroidTest
 
     # Start a github action to run the connected tests.
     - >
-      'curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
-      -H "Accept: application/vnd.github.v3+json" \
+      curl -L \
+      -X POST \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: Bearer $GITHUB_TOKEN" \
+      -H "X-Github-Api-Version: 2022-11-28" \
       https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches \
-      -d "{ \
-        "event_type": "trigger-test", \
-        "client_payload": { \
-          "project_id": "$CI_PROJECT_NAME", \
-          "job_id": "$CI_JOB_ID", \
-          "branch": "$CI_COMMIT_BRANCH" \
-        } \
-      }"'
+      -d '{"event_type":"trigger-test","client_payload":{"job_url":"$GITLAB_JOB_URL"}}'
 
   after_script:
-    # Move the apks to the root folder.
-    - find app/build/outputs -name "*.apk" -exec mv {} apks +
+    # Move the apks to a new apk folder.
+    - mkdir -p apks && find app/build/outputs -name "*.apk" -exec cp {} apks/. \;
 
   artifacts:
     when: always
