@@ -1,6 +1,6 @@
 package com.example.csci3130_group_3;
 
-//import android.content.Intent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -36,20 +36,17 @@ public class ChooseRoleActivity extends AppCompatActivity {
     }
 
     protected void moveToDashboardWindow(String role) {
-        //commented code are for when all the activities are connected
-        //Intent dashboardIntent;
+        Intent dashboardIntent = null;
 
         if (role.equals(getResources().getString(R.string.employer))) {
-            //dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
-            Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
+            dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
         } else if (role.equals(getResources().getString(R.string.employee))) {
-            //dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
-            Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
+            dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
         } else {
             Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
             System.exit(1);
         }
 
-        //startActivity(dashboardIntent);
+        startActivity(dashboardIntent);
     }
 }

@@ -142,7 +142,22 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     protected void moveToDashboard(){
-        Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
+        // have to connect to database to get user role
+        String role = null;
+
+        Intent dashboardIntent = null;
+
+        if (role.equals(getResources().getString(R.string.employer))) {
+            dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
+        } else if (role.equals(getResources().getString(R.string.employee))) {
+            dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
+        } else {
+            Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
+            System.exit(1);
+        }
+
+        startActivity(dashboardIntent);
     }
 
     protected void moveToRegistration(){
