@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3.employerAndroidTests;
+package dal.cs.quickCash3.employerAndroidTests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -9,8 +9,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
-import com.example.csci3130_group_3.R;
-import com.example.csci3130_group_3.employer.EmployerDashboard;
+import dal.cs.quickCash3.R;
+import dal.cs.quickCash3.employer.EmployerDashboard;
 
 import org.junit.Before;
 import org.junit.Test;

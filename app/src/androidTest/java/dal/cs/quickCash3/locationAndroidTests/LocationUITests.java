@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3.locationAndroidTests;
+package dal.cs.quickCash3.locationAndroidTests;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
@@ -20,7 +20,7 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
-import com.example.csci3130_group_3.location.LocationExampleActivity;
+import dal.cs.quickCash3.location.LocationExampleActivity;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -36,7 +36,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LocationUITests {
     private static final int LAUNCH_TIMEOUT = 5000;
-    final String launcherPackage = "com.example.csci3130_group_3";
+    final String launcherPackage = "dal.cs.quickCash3";
     private UiDevice device;
     private Context context;
     private int sdkVersion;
