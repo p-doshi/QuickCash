@@ -1,0 +1,52 @@
+package dal.cs.quickCash3.workerAndroidTests;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
+
+import dal.cs.quickCash3.R;
+import dal.cs.quickCash3.worker.EmployeeDashboard;
+
+import org.junit.Before;
+import org.junit.Test;
+public class EmployeeDashEspressoTest {
+    public ActivityScenario<EmployeeDashboard> scenario;
+
+    @Before
+    public void setup(){
+        scenario = ActivityScenario.launch(EmployeeDashboard.class);
+        scenario.onActivity(activity -> {
+
+        });
+    }
+
+    @Test
+    public void testEmployeeNavBarExist(){
+        onView(ViewMatchers.withId(R.id.employeeBottomNavView)).perform(click());
+    }
+
+    @Test
+    public void testEmployeeSearchButtonExist(){
+        onView(withId(R.id.employeeSearchPage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEmployeeMapButtonExist(){
+        onView(withId(R.id.employeeMapPage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEmployeeReceiptButtonExist(){
+        onView(withId(R.id.employeeReceiptPage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEmployeeProfileButtonExist(){
+        onView(withId(R.id.employeeProfilePage)).check(matches(isDisplayed()));
+    }
+}
