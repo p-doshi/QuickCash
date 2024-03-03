@@ -6,20 +6,15 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
 public class WorkerDashEspressoTest {
-    public ActivityScenario<WorkerDashboard> scenario;
-
-    @Before
-    public void setup(){
-        scenario = ActivityScenario.launch(WorkerDashboard.class);
-        scenario.onActivity(activity -> {
-
-        });
-    }
+    @Rule
+    public final ActivityScenarioRule<WorkerDashboard> activityRule =
+        new ActivityScenarioRule<>(WorkerDashboard.class);
 
     @Test
     public void testWorkerNavBarExist(){

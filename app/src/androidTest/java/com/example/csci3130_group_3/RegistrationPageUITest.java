@@ -1,7 +1,5 @@
 package com.example.csci3130_group_3;
 
-import androidx.test.core.app.ActivityScenario;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -10,37 +8,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import android.content.Context;
-
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing\n">Testing documentation</a>
- */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // I don't think it would increase code clarity here.
 @RunWith(AndroidJUnit4.class)
-
 public class RegistrationPageUITest {
-    public ActivityScenario<RegistrationPage> scenario;
-    public Context context;
-
-    @Before
-    public void setup() {
-        scenario = ActivityScenario.launch(RegistrationPage.class);
-        scenario.onActivity(activity -> {
-            context = activity;
-        });
-    }
+    @Rule
+    public final ActivityScenarioRule<RegistrationPage> activityRule =
+        new ActivityScenarioRule<>(RegistrationPage.class);
 
     @Test
     public void fillRegistrationForm() {
-
         onView(withId(R.id.firstName)).perform(typeText("John\n"));
         onView(withId(R.id.lastName)).perform(typeText("Doe\n"));
         onView(withId(R.id.address)).perform(typeText("123 Main Street\n"));

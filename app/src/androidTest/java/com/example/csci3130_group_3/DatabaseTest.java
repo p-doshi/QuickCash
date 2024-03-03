@@ -24,12 +24,10 @@ public class DatabaseTest {
     private static final String TEST_DIR = "test";
     private static final String TEST_TEXT = "Hello";
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
-    private Context context;
+    private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
     @Before
     public void setup() {
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
         // Make sure we are starting in a signed out state.
         FirebaseAuth.getInstance().signOut();
     }

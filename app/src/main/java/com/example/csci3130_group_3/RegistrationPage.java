@@ -1,12 +1,12 @@
 package com.example.csci3130_group_3;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class RegistrationPage extends AppCompatActivity {
-
     private EditText firstName;
     private EditText lastName;
     private EditText address;
@@ -27,6 +26,7 @@ public class RegistrationPage extends AppCompatActivity {
     private EditText password;
     private EditText confirmPassword;
     private TextView statusTextView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +45,8 @@ public class RegistrationPage extends AppCompatActivity {
         emailAddress = findViewById(R.id.emailAddress);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPassword);
-        findViewById(R.id.confirmButton).setOnClickListener(v -> submitForm());
         statusTextView = findViewById(R.id.status);
+        findViewById(R.id.confirmButton).setOnClickListener(v -> submitForm());
     }
 
     @SuppressWarnings("PMD.CyclomaticComplexity")

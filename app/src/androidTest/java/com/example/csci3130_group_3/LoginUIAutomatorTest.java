@@ -1,51 +1,36 @@
 package com.example.csci3130_group_3;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-
 import static org.junit.Assert.assertTrue;
 
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.uiautomator.By;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
-import androidx.test.uiautomator.Until;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 
 public class LoginUIAutomatorTest {
-    private static final int LAUNCH_TIMEOUT = 10000;
-    private static final String LAUNCHER_PACKAGE = "com.example.csci3130_group_3";
-    public static final String EMAIL = "Email";
-    public static final String PASSWORD = "Password";
-    public static final String CONTINUE = "Continue";
-    private UiDevice device;
-    public Context context;
+    @Rule
+    public final ActivityScenarioRule<LoginActivity> activityRule =
+        new ActivityScenarioRule<>(LoginActivity.class);
+    private static final String EMAIL = "Email";
+    private static final String PASSWORD = "Password";
+    private static final String CONTINUE = "Continue";
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());;
 
-    private void launchApp(){
-        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(LAUNCHER_PACKAGE);
-        assert appIntent != null;
-        appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(appIntent);
-        device.wait(Until.hasObject(By.pkg(LAUNCHER_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
-    }
-
-    @Before
-    public void setup() {
-        device = UiDevice.getInstance(getInstrumentation());
-        this.context = ApplicationProvider.getApplicationContext();
-        launchApp();
+    private void relaunchActivity() {
+        ActivityScenario<LoginActivity> scenario = activityRule.getScenario();
+        scenario.recreate();
     }
 
     @After
@@ -69,7 +54,6 @@ public class LoginUIAutomatorTest {
     @Test
     @Ignore("only after pages connected")
     public void checkIfMovedToDashboard() throws UiObjectNotFoundException {
-
         UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
         UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
@@ -92,12 +76,12 @@ public class LoginUIAutomatorTest {
         UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.click();
         Runtime.getRuntime().exec(new String[] {"am", "force-stop", "com.example.csci3130_group_3"});
-        launchApp();
+        relaunchActivity();
     }
+
     @Test
     @Ignore("only after pages connected")
     public void checkIfMovedToSignUpPage() throws UiObjectNotFoundException {
-
         UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
         UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
@@ -107,5 +91,4 @@ public class LoginUIAutomatorTest {
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
         assertTrue(welcomeLabel.exists());
     }
-
 }
