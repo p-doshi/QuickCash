@@ -20,6 +20,9 @@
             android:name=".DatabaseExampleActivity"
             android:exported="true"/>
         <activity
+            android:name=".RegistrationPage"
+            android:exported="true"/>
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
