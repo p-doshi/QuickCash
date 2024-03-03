@@ -107,7 +107,6 @@ ConnectedTests:
     GITHUB_TOKEN: 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
   script:
     # Get the job ID from the build task.
-    - cat $JOB_FILE
     - export GITLAB_JOB_URL=$CI_PROJECT_URL/-/jobs/$(cat $JOB_FILE)/artifacts/download
     - echo $GITLAB_JOB_URL
 
@@ -118,4 +117,4 @@ ConnectedTests:
       -H "Authorization: Bearer $GITHUB_TOKEN"
       -H "X-Github-Api-Version: 2022-11-28"
       -L https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches
-      -d '{"event_type":"trigger-test","client_payload":{"job_url":"${GITLAB_JOB_URL}"}}'
+      -d "{"event_type":"trigger-test","client_payload":{"job_url":"'$GITLAB_JOB_URL'"}}"
