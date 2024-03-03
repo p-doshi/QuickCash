@@ -26,7 +26,7 @@ public class LoginUIAutomatorTest {
     private static final String EMAIL = "Email";
     private static final String PASSWORD = "Password";
     private static final String CONTINUE = "Continue";
-    private final UiDevice device = UiDevice.getInstance(getInstrumentation());;
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
     private void relaunchActivity() {
         ActivityScenario<LoginActivity> scenario = activityRule.getScenario();
