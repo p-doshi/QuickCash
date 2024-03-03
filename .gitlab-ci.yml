@@ -8,7 +8,7 @@ variables:
 
 cache:
   key: $CI_COMMIT_REF_SLUG
-  path: .gradle/
+  paths: .gradle/
 
 before_script:
   # Make the gradle wrapper executable.
@@ -117,4 +117,4 @@ ConnectedTests:
       -H "Authorization: Bearer $GITHUB_TOKEN"
       -H "X-Github-Api-Version: 2022-11-28"
       -L https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches
-      -d '{"event_type":"trigger-test","client_payload":{"job_url":"${GITLAB_JOB_URL"}}}'
+      -d '{"event_type":"trigger-test","client_payload":{"job_url":"${GITLAB_JOB_URL}"}}'
