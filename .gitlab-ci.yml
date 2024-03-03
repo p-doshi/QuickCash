@@ -7,7 +7,8 @@ variables:
   JOB_FILE: jobId
 
 cache:
-  key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+  key: $CI_COMMIT_REF_SLUG
+  path: .gradle/
 
 before_script:
   # Make the gradle wrapper executable.
@@ -105,7 +106,8 @@ ConnectedTests:
     GITHUB_TOKEN: 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
   script:
     # Get the job ID from the build task.
-    - export GITLAB_JOB_URL=$CI_PROJECT_URL/api/v4/projects/1/jobs/$(cat $JOB_FILE)/artifacts
+    - cat $JOB_FILE
+    - export GITLAB_JOB_URL=$CI_PROJECT_URL/-/jobs/$(cat $JOB_FILE)/artifacts/download
     - echo $GITLAB_JOB_URL
 
     # Start a github action to run the connected tests.
@@ -115,4 +117,4 @@ ConnectedTests:
       -H "Authorization: Bearer $GITHUB_TOKEN"
       -H "X-Github-Api-Version: 2022-11-28"
       -L https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches
-      -d '{"event_type":"trigger-test","client_payload":{"job_url":"$GITLAB_JOB_URL"}}'
+      -d '{"event_type":"trigger-test","client_payload":{"job_url":"${GITLAB_JOB_URL"}}}'
