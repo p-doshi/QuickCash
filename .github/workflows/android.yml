@@ -12,13 +12,15 @@ jobs:
         api-level: [28, 30, 32, 34]
     steps:
       - name: Download APKs from Gitlab
-        run: |
-          echo $GITLAB_JOB_URL
-          curl -o artifacts.zip -L -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_JOB_URL"
-          unzip artifacts.zip && mv apks/* .
         env:
           GITLAB_JOB_URL: ${{ github.event.client_payload.job_url }}
+          PACKAGE: ${{ github.event.client_payload.package }}
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          echo $GITLAB_JOB_URL
+          echo $PACKAGE
+          curl -o artifacts.zip -L -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_JOB_URL"
+          unzip artifacts.zip apks/* && mv apks/* .
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -27,7 +29,7 @@ jobs:
       - name: Run connected tests
         uses: ReactiveCircus/android-emulator-runner@v2
         env:
-          PACKAGE: com.example.csci3130_group_3
+          PACKAGE: ${{ github.event.client_payload.package }}
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis

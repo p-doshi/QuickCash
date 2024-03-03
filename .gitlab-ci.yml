@@ -6,11 +6,6 @@ stages:
 variables:
   JOB_FILE: jobId
 
-cache:
-  key: $CI_COMMIT_REF_SLUG
-  paths:
-    - .gradle/
-
 before_script:
   # Make the gradle wrapper executable.
   - chmod +x ./gradlew
@@ -110,6 +105,9 @@ ConnectedTests:
     - export GITLAB_JOB_URL=$CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$(cat $JOB_FILE)/artifacts
     - echo $GITLAB_JOB_URL
 
+    # Get the package name of our app.
+    - export PACKAGE=$(grep -r -o -P '(?<=applicationId ")[^"]*' app/build.gradle)
+
     # Start a github action to run the connected tests.
     - >
       curl -X POST
@@ -117,4 +115,4 @@ ConnectedTests:
       -H "Authorization: Bearer $GITHUB_TOKEN"
       -H "X-Github-Api-Version: 2022-11-28"
       -L https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches
-      -d '{"event_type":"trigger-test","client_payload":{"job_url":"'$GITLAB_JOB_URL'"}}'
+      -d '{"event_type":"trigger-test","client_payload":{"job_url":"'$GITLAB_JOB_URL'","package":"'$PACKAGE'"}}'
