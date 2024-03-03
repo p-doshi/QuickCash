@@ -2,11 +2,11 @@ package com.example.csci3130_group_3;
 
 import android.annotation.SuppressLint;
 import android.Manifest;
-import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.app.Activity;
 import android.location.Location;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -17,22 +17,21 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.Objects;
+
 
 public class AndroidLocationProvider implements LocationProvider {
-
-    private Context context;
-    private FusedLocationProviderClient locationProviderClient;
+    private final FusedLocationProviderClient locationProviderClient;
     private LocationRequest locationRequest;
-    private Activity activity;
-    private Location currentLocation = null;
+    private final Activity activity;
+    private Location currentLocation;
 
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;
@@ -40,24 +39,26 @@ public class AndroidLocationProvider implements LocationProvider {
 
 
     // Constructor for the AndroidLocationProvider class
-    public AndroidLocationProvider(Context context, Activity activity) {
-        this.context = context;
+    public AndroidLocationProvider(@NonNull Activity activity) {
         this.activity = activity;
-        locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
     }
 
+    @Override
     public void setupLocationPermsSettings() {
         createLocationRequest();
         requestLocationSettingsEnable(true);
     }
 
-    public Location getCurrentLocation() {
+    @Override
+    public @Nullable Location getCurrentLocation() {
         return currentLocation;
     }
 
+    @Override
     public boolean checkLocationPermissionsEnabled() {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     // Send out async request for permissions.
@@ -83,34 +84,28 @@ public class AndroidLocationProvider implements LocationProvider {
      */
     private void requestLocationSettingsEnable(boolean continueToPerms) {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
-        SettingsClient client = LocationServices.getSettingsClient(context);
+        SettingsClient client = LocationServices.getSettingsClient(activity);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-        task.addOnSuccessListener(activity, new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                // Location setting was already enabled
-                if (continueToPerms) {
-                    requestLocationPermissions();
-                }
+        task.addOnSuccessListener(activity, locationSettingsResponse -> {
+            // Location setting was already enabled
+            if (continueToPerms) {
+                requestLocationPermissions();
             }
         });
-        task.addOnFailureListener(activity, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof ResolvableApiException) {
-                    // Location Settings are not enabled, show a popup requesting them
-                    try {
-                        // Show dialogue box requesting enable location settings
-                        ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(activity,
-                                REQUEST_CHECK_SETTINGS);
-                        // Once location setting enabled, if we're booting system then requestLocationPermissions
-                        if (continueToPerms) {
-                            requestLocationPermissions();
-                        }
-                    } catch (IntentSender.SendIntentException sendEx) {
-                        // Do nothing with the error
+        task.addOnFailureListener(activity, e -> {
+            if (e instanceof ResolvableApiException) {
+                // Location Settings are not enabled, show a popup requesting them
+                try {
+                    // Show dialogue box requesting enable location settings
+                    ResolvableApiException resolvable = (ResolvableApiException) e;
+                    resolvable.startResolutionForResult(activity,
+                            REQUEST_CHECK_SETTINGS);
+                    // Once location setting enabled, if we're booting system then requestLocationPermissions
+                    if (continueToPerms) {
+                        requestLocationPermissions();
                     }
+                } catch (IntentSender.SendIntentException sendEx) {
+                    Log.e("AndroidLocationProvider", Objects.requireNonNull(sendEx.getMessage()));
                 }
             }
         });
@@ -122,17 +117,14 @@ public class AndroidLocationProvider implements LocationProvider {
     public void locationPing() {
         if (checkLocationPermissionsEnabled()) {
             locationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
-                    .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
+                .addOnSuccessListener(activity, location -> {
                     if (location != null) {
                         currentLocation = location;
                     } else {
                         // If we couldn't get the location, alert the user!
-                        Toast.makeText(context, "Couldn't Access Location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Couldn't Access Location", Toast.LENGTH_SHORT).show();
                     }
-                }
-            });
+                });
         } else {
             // If we don't have access to location we can't ping it, so request location perms.
             requestLocationPermissions();

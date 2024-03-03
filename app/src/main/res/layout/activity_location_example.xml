@@ -15,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.165" />
+        app:layout_constraintVertical_bias="0.165"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/latText"
@@ -25,7 +26,8 @@
         android:text="Latitude: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/detectButton" />
+        app:layout_constraintTop_toTopOf="@+id/detectButton"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/longText"
@@ -35,7 +37,8 @@
         android:text="Longitude: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/latText" />
+        app:layout_constraintTop_toTopOf="@+id/latText"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/detectButton"
@@ -45,17 +48,7 @@
         android:text="Detect Location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
-    <!-- Button not yet implemented
-    <Button
-        android:id="@+id/trackingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Start Location Tracking"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detectButton" />
-    -->
 </androidx.constraintlayout.widget.ConstraintLayout>

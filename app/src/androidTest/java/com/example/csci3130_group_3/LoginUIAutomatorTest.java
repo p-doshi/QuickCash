@@ -1,49 +1,36 @@
 package com.example.csci3130_group_3;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.uiautomator.By;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
-import androidx.test.uiautomator.Until;
-
-// Disable animations programmatically
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 
 public class LoginUIAutomatorTest {
-    private static final int LAUNCH_TIMEOUT = 10000;
-    final String launcherPackage = "com.example.csci3130_group_3";
-    private UiDevice device;
-    public Context context;
+    @Rule
+    public final ActivityScenarioRule<LoginActivity> activityRule =
+        new ActivityScenarioRule<>(LoginActivity.class);
+    private static final String EMAIL = "Email";
+    private static final String PASSWORD = "Password";
+    private static final String CONTINUE = "Continue";
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
-    @Before
-    public void setup() {
-        device = UiDevice.getInstance(getInstrumentation());
-        this.context = ApplicationProvider.getApplicationContext();
-        launchApp();
+    private void relaunchActivity() {
+        ActivityScenario<LoginActivity> scenario = activityRule.getScenario();
+        scenario.recreate();
     }
 
     @After
@@ -52,20 +39,13 @@ public class LoginUIAutomatorTest {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public void launchApp(){
-        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
-        appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(appIntent);
-        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
-    }
-
     @Test
     public void checkIfLandingPageIsVisible() {
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         assertTrue(emailIDBox.exists());
-        UiObject roleSpinner = device.findObject(new UiSelector().textContains("Password"));
+        UiObject roleSpinner = device.findObject(new UiSelector().textContains(PASSWORD));
         assertTrue(roleSpinner.exists());
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         assertTrue(registerButton.exists());
     }
 
@@ -74,12 +54,11 @@ public class LoginUIAutomatorTest {
     @Test
     @Ignore("only after pages connected")
     public void checkIfMovedToDashboard() throws UiObjectNotFoundException {
-
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
+        passwordBox.setText(PASSWORD);
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.clickAndWaitForNewWindow();
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
         assertTrue(welcomeLabel.exists());
@@ -88,29 +67,28 @@ public class LoginUIAutomatorTest {
     @Test
     @Ignore("only after pages connected")
     public void checkIfRememberMeWorks() throws UiObjectNotFoundException, IOException {
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
+        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
+        passwordBox.setText(PASSWORD);
         UiObject checkbox = device.findObject(new UiSelector().textContains("Remember"));
         checkbox.click();
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.click();
         Runtime.getRuntime().exec(new String[] {"am", "force-stop", "com.example.csci3130_group_3"});
-        launchApp();
+        relaunchActivity();
     }
+
     @Test
     @Ignore("only after pages connected")
     public void checkIfMovedToSignUpPage() throws UiObjectNotFoundException {
-
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         emailIDBox.setText("parthdoshi135@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
+        passwordBox.setText(PASSWORD);
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.clickAndWaitForNewWindow();
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
         assertTrue(welcomeLabel.exists());
     }
-
 }

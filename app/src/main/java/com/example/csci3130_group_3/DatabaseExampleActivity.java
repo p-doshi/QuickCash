@@ -1,24 +1,27 @@
 package com.example.csci3130_group_3;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
 
-    Database db;
+    private Database database;
 
+    @SuppressLint("SetTextI18n")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_example);
 
         // The easiest way to run this example is to change the launch activity in the android manifest file.
         // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
 
-        db = new MyFirebaseDatabase(this);
+        database = new MyFirebaseDatabase(this);
         String dbKey = "test";
 
         // Get the text view.
@@ -27,14 +30,14 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         Button sendBtn = findViewById(R.id.sendButton);
         sendBtn.setOnClickListener(v -> {
             String temp = RandomStringGenerator.generate(10);
-            db.write(dbKey, temp,
+            database.write(dbKey, temp,
                 () -> output.setText("Sent: " + temp),
                 error -> output.setText("Error sending: " + error));
         });
 
         Button recvBtn = findViewById(R.id.recvButton);
         recvBtn.setOnClickListener(
-            v -> db.read(dbKey, String.class,
+            v -> database.read(dbKey, String.class,
                 temp -> output.setText("Received: " + temp),
                 error -> output.setText("Error: " + error)
         ));

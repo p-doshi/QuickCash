@@ -1,10 +1,5 @@
 package com.example.csci3130_group_3;
 
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +10,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,15 +27,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity  {
-
-
     private FirebaseAuth mAuth;
-    private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences.Editor editor;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
@@ -75,7 +74,7 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
-    protected void checkUserinDatabase(String email, String password){
+    protected void checkUserinDatabase(@NonNull String email, @NonNull String password){
 
         CheckBox rememberMe = findViewById(R.id.checkBox);
         mAuth.signInWithEmailAndPassword(email, password)
@@ -89,7 +88,7 @@ public class LoginActivity extends AppCompatActivity  {
                 .addOnFailureListener(this, task -> {
                         // If sign in fails, display a message to the user.
                         Log.w("Login_Tag", "signInWithCustomToken:failure", task.getCause());
-                        setStatusMessage(getResources().getString(R.string.INVALID_CREDENTIALS));
+                        setStatusMessage(getString(R.string.INVALID_CREDENTIALS));
                 });
     }
 
@@ -119,12 +118,12 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
-    protected String getEmailAddress(){
+    protected @NonNull String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);
         return emailInput.getText().toString().trim();
     }
 
-    protected String getPassword(){
+    protected @NonNull String getPassword(){
         EditText passwordInput = findViewById(R.id.etPassword);
         return passwordInput.getText().toString().trim();
     }
@@ -142,14 +141,14 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     protected void moveToDashboard(){
-        Toast.makeText(this, getResources().getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.VALID_TOAST), Toast.LENGTH_SHORT).show();
     }
 
     protected void moveToRegistration(){
-        Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
     }
 
-    protected void setStatusMessage(String message){
+    protected void setStatusMessage(@NonNull String message){
         TextView statusLabel = findViewById(R.id.statusLabel);
         statusLabel.setText(message.trim());
     }
@@ -160,14 +159,14 @@ public class LoginActivity extends AppCompatActivity  {
     public void handleLoginButtonClick(){
         String emailAddress = getEmailAddress();
         String password = getPassword();
-        String errorMessage = null;
+        String errorMessage;
 
         if (LoginValidator.isEmptyEmail(emailAddress)) {
-            errorMessage = getResources().getString(R.string.EMPTY_EMAIL_TOAST);
+            errorMessage = getString(R.string.EMPTY_EMAIL_TOAST);
         }else if (LoginValidator.isEmptyPassword(password)) {
-            errorMessage = getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
-        }else if (!(LoginValidator.isValidEmail(emailAddress))) {
-            errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
+            errorMessage = getString(R.string.EMPTY_PASSWORD_TOAST);
+        }else if (!LoginValidator.isValidEmail(emailAddress)) {
+            errorMessage = getString(R.string.INVALID_EMAIL_TOAST);
         }else {
             checkUserinDatabase(emailAddress,password);
             return;

@@ -1,28 +1,19 @@
 package com.example.csci3130_group_3;
 
-import android.content.Context;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
-import android.content.Intent;
-
-
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.uiautomator.By;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
-import androidx.test.uiautomator.Until;
 
-import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Tests for user story 3 - Choose Roles
@@ -30,25 +21,15 @@ import org.junit.Before;
 
 @RunWith(AndroidJUnit4.class)
 public class ChooseRoleUITests {
-
-    private static final int LAUNCH_TIMEOUT = 5000;
-    final String launcherPackage = "com.example.csci3130_group_3";
-    private UiDevice device;
-
-    @Before
-    public void setup() {
-        device = UiDevice.getInstance(getInstrumentation());
-        Context context = ApplicationProvider.getApplicationContext();
-        final Intent appIntent = new Intent(context, ChooseRoleActivity.class);
-        appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(appIntent);
-        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
-    }
+    @Rule
+    public final ActivityScenarioRule<ChooseRoleActivity> activityRule =
+        new ActivityScenarioRule<>(ChooseRoleActivity.class);
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
     @Test
     public void checkIfUiVisible() {
-        UiObject employeeBox = device.findObject(new UiSelector().text("Employee"));
-        assertTrue(employeeBox.exists());
+        UiObject workerBox = device.findObject(new UiSelector().text("Worker"));
+        assertTrue(workerBox.exists());
         UiObject employerBox = device.findObject(new UiSelector().textContains("Employer"));
         assertTrue(employerBox.exists());
         UiObject confirmBox = device.findObject(new UiSelector().textContains("Confirm"));
@@ -66,9 +47,9 @@ public class ChooseRoleUITests {
     }
     @Test
     @Ignore("only after pages connected")
-    public void checkIfMovedToEmployeeDashboard() throws UiObjectNotFoundException {
-        UiObject employeeButton = device.findObject(new UiSelector().textContains("Employee"));
-        employeeButton.click();
+    public void checkIfMovedToWorkerDashboard() throws UiObjectNotFoundException {
+        UiObject workerButton = device.findObject(new UiSelector().textContains("Worker"));
+        workerButton.click();
         UiObject confirmButton = device.findObject(new UiSelector().textContains("Confirm"));
         confirmButton.clickAndWaitForNewWindow();
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));

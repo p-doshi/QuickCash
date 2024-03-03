@@ -14,13 +14,19 @@ public class LoginValidatorTest {
     public void checkValidEmail() {
         assertTrue(LoginValidator.isValidEmail("ethroz@dal.ca"));
     }
+
     @Test
-    public void checkEmptyEmail(){assertTrue(LoginValidator.isEmptyEmail(""));}
+    public void checkEmptyEmail() {
+        assertTrue(LoginValidator.isEmptyEmail(""));
+    }
+
     @Test
-    public void checkEmptyPassword(){assertTrue(LoginValidator.isEmptyPassword(""));};
+    public void checkEmptyPassword() {
+        assertTrue(LoginValidator.isEmptyPassword(""));
+    }
+
     @Test
     public void checkInvalidEmail() {
         assertFalse(LoginValidator.isValidEmail("ksdksdfn"));
     }
-
 }
