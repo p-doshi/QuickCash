@@ -18,12 +18,12 @@ public class ChooseRoleActivity extends AppCompatActivity {
 
         // Initialize UI elements
         Button chooseEmployerButton = findViewById(R.id.employerButton);
-        Button chooseEmployeeButton = findViewById(R.id.employeeButton);
+        Button chooseWorkerButton = findViewById(R.id.workerButton);
         Button confirmRoleButton = findViewById(R.id.chooseRoleConfirm);
 
         chooseEmployerButton.setOnClickListener(view -> role = getResources().getString(R.string.employer));
 
-        chooseEmployeeButton.setOnClickListener(view -> role = getResources().getString(R.string.employee));
+        chooseWorkerButton.setOnClickListener(view -> role = getResources().getString(R.string.worker));
 
         confirmRoleButton.setOnClickListener(view -> {
             if (role == null) {
@@ -42,9 +42,9 @@ public class ChooseRoleActivity extends AppCompatActivity {
         if (role.equals(getResources().getString(R.string.employer))) {
             //dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
             Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
-        } else if (role.equals(getResources().getString(R.string.employee))) {
-            //dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
-            Toast.makeText(getApplicationContext(), "Switch to Employee Dashboard", Toast.LENGTH_LONG).show();
+        } else if (role.equals(getResources().getString(R.string.worker))) {
+            //dashboardIntent = new Intent(getBaseContext(), WorkerDashboard.class);
+            Toast.makeText(getApplicationContext(), "Switch to Worker Dashboard", Toast.LENGTH_LONG).show();
         } else {
             Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
             System.exit(1);
