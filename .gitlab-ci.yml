@@ -21,15 +21,13 @@ Build:
     - ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
 
   after_script:
-    # Move the apks to a new apk folder.
-    - mkdir -p apks && find app/build/outputs -name "*.apk" -exec cp {} apks/. \;
+    # Save the job ID for the connected tests.
     - echo $CI_JOB_ID > $JOB_FILE
 
   artifacts:
     paths:
       # Give the results of compilation to the next stage.
       - app/build/outputs/
-      - apks/
       - $JOB_FILE
 
 PmdLint:
@@ -98,21 +96,32 @@ ConnectedTests:
   variables:
     GITHUB_REPO: csci3130_group_3
     GITHUB_USER: ethroz
-    # This token can only access the specific repo it was made for.
-    GITHUB_TOKEN: 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
   script:
-    # Get the job ID from the build task.
-    - export GITLAB_JOB_URL=$CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$(cat $JOB_FILE)/artifacts
-    - echo $GITLAB_JOB_URL
+    # Create a unique name for a new Github action job.
+    #- export NAME=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13)
+    - export NAME=$CI_COMMIT_SHA
 
-    # Get the package name of our app.
-    - export PACKAGE=$(grep -r -o -P '(?<=applicationId ")[^"]*' app/build.gradle)
+    # Login to Github.
+    - cat github_token | gh auth login --with-token
 
-    # Start a github action to run the connected tests.
+    # Start a new Github action job.
+    - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f name=$NAME -f branch=$CI_COMMIT_BRANCH -f proj_id=$CI_PROJECT_ID -f job_id=$(cat $JOB_FILE)
+
+    # Get the Github action job ID from the job name.
     - >
-      curl -s -X POST
-      -H "Accept: application/vnd.github+json"
-      -H "Authorization: Bearer $GITHUB_TOKEN"
-      -H "X-Github-Api-Version: 2022-11-28"
-      -L https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/dispatches
-      -d '{"event_type":"trigger-test","client_payload":{"job_url":"'$GITLAB_JOB_URL'","package":"'$PACKAGE'"}}'
+      export JOB_ID=$(
+      gh run list -R $GITHUB_USER/$GITHUB_REPO --json "name,databaseId" --jq '.[] | select(.name == "'$NAME'")'
+      | grep -o -P '(?<="databaseId":)\d+')
+      && echo "GitHub Job ID: $JOB_ID"
+
+    # Watch the Github action job.
+    #- gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --exit-status
+    - until gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --log; do sleep 5; done;
+
+    # Download the artifacts from the finished job.
+    - gh run download $JOB_ID -R $GITHUB_USER/$GITHUB_REPO
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - testResults*/
