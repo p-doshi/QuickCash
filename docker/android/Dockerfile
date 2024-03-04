@@ -27,9 +27,7 @@ ENV DOCKER="true"
 ARG ANDROID_CMD="commandlinetools-linux-11076708_latest.zip"
 ARG PMD_VERSION="7.0.0-rc4"
 ARG PMD_FILE="pmd-dist-$PMD_VERSION-bin.zip"
-RUN apt update && apt install -y --no-install-recommends wget unzip \
-    # Packages to install.
-    curl && \
+RUN apt update && apt install -y --no-install-recommends wget unzip && \
     # Install android cli tools.
     wget https://dl.google.com/android/repository/${ANDROID_CMD} -P /tmp && \
     unzip -d $ANDROID_SDK_ROOT /tmp/$ANDROID_CMD && \
@@ -39,6 +37,14 @@ RUN apt update && apt install -y --no-install-recommends wget unzip \
     wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F${PMD_VERSION}/${PMD_FILE} -P /tmp && \
     unzip -d /pmd /tmp/$PMD_FILE && \
     ln -s /pmd/pmd-bin-${PMD_VERSION}/bin/pmd /bin/pmd && \
+    # Install GitHub CLI.
+    mkdir -p -m 755 /etc/apt/keyrings && \
+    wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+    tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
+    chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+    tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+    apt update && apt install gh -y && \
     # Cleanup.
     rm -rf /tmp/* && \
     apt remove -y wget unzip && \
