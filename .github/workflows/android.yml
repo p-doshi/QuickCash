@@ -16,11 +16,8 @@ on:
 run-name: ${{ github.event.inputs.commit }}
 
 jobs:
-  ConnectedTests:
+  Setup:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        api-level: [28, 30, 32, 34]
     steps:
       - name: Setup
         env:
@@ -39,11 +36,24 @@ jobs:
           chmod +x ./gradlew
           curl -s -o artifacts.zip -L -H "PRIVATE-TOKEN: $TOKEN" "https://$DOMAIN/api/v4/projects/$PROJECT_ID/jobs/$JOB_ID/artifacts"
           unzip artifacts.zip
+
+  EnableKVM:
+    needs: Setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+
+  ConnectedTests:
+    needs: EnableKVM
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        api-level: [28, 30, 32, 34]
+    steps:
       - name: Run connected tests
         uses: ReactiveCircus/android-emulator-runner@v2
         with:

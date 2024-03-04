@@ -108,8 +108,11 @@ ConnectedTests:
     - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f commit=$NAME -f proj_id=$CI_PROJECT_ID -f job_id=$(cat $JOB_FILE)
 
     # Get the Github action job ID from the job name.
-    - export JOB_ID=$(gh run list -R $GITHUB_USER/$GITHUB_REPO --json "name,databaseId" --jq '.[] | select(.name == "'$NAME'")' | grep -o -P '(?<="databaseId":)\d+')
-    - echo $JOB_ID
+    - >
+      export JOB_ID=$(
+      gh run list -R $GITHUB_USER/$GITHUB_REPO --json "name,databaseId" --jq ".[] | select(.name == \"$NAME\")" |
+      grep -o -P '(?<="databaseId":)\d+') $$
+      echo $JOB_ID
 
     # Watch the Github action job.
     #- gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --exit-status
