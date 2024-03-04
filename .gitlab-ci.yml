@@ -107,6 +107,9 @@ ConnectedTests:
     # Start a new Github action job.
     - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f commit=$NAME -f proj_id=$CI_PROJECT_ID -f job_id=$(cat $JOB_FILE)
 
+    # Wait a bit before trying to get job ID.
+    - sleep 5
+
     # Get the Github action job ID from the job name.
     - >
       export JOB_ID=$(
