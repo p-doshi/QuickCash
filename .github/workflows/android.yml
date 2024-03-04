@@ -3,11 +3,8 @@ name: Run connected tests
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'The unique name of the run'
-        required: true
-      branch:
-        description: 'The Branch to checkout'
+      commit:
+        description: 'The unique hash of the commit'
         required: true
       proj_id:
         description: 'The ID of the project'
@@ -16,7 +13,7 @@ on:
         description: 'The ID of the job'
         required: true
 
-run-name: ${{ github.event.inputs.name }}
+run-name: ${{ github.event.inputs.commit }}
 
 jobs:
   ConnectedTests:
@@ -27,7 +24,7 @@ jobs:
     steps:
       - name: Setup
         env:
-          BRANCH: ${{ github.event.inputs.branch }}
+          COMMIT: ${{ github.event.inputs.commit }}
           PROJECT_ID: ${{ github.event.inputs.proj_id }}
           JOB_ID: ${{ github.event.inputs.job_id }}
           DOMAIN: ${{ secrets.DOMAIN }}
@@ -36,8 +33,9 @@ jobs:
           USER: ${{ secrets.USER }}
           TOKEN: ${{ secrets.TOKEN }}
         run: |
-          git clone -b "$BRANCH" "https://$USER:$TOKEN@$DOMAIN/$OWNER/$PROJECT.git"
+          git clone "https://$USER:$TOKEN@$DOMAIN/$OWNER/$PROJECT.git"
           cd $PROJECT
+          git checkout $COMMIT
           chmod +x ./gradlew
           curl -s -o artifacts.zip -L -H "PRIVATE-TOKEN: $TOKEN" "https://$DOMAIN/api/v4/projects/$PROJECT_ID/jobs/$JOB_ID/artifacts"
           unzip artifacts.zip
