@@ -252,4 +252,22 @@ public class RegistrationPageUITest {
         // Add more validation checks here after the button click if needed
         onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.passwords_do_not_match)));
     }
+
+    @Test
+    public void checkIfMovedToChooseRoleDashboard() {
+        onView(withId(R.id.firstName)).perform(typeText("John\n"));
+        onView(withId(R.id.lastName)).perform(typeText("Doe\n"));
+        onView(withId(R.id.address)).perform(typeText("123 Main Street\n"));
+        onView(withId(R.id.birthYear)).perform(typeText("1985\n"));
+        onView(withId(R.id.birthMonth)).perform(typeText("01\n"));
+        onView(withId(R.id.birthDay)).perform(typeText("01\n"));
+        onView(withId(R.id.userName)).perform(typeText("john_doe\n"));
+        onView(withId(R.id.emailAddress)).perform(typeText("john.doe@example.com\n"));
+        onView(withId(R.id.password)).perform(typeText("Password123\n"));
+        onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
+
+        onView(withId(R.id.confirmButton)).perform(click());
+
+        onView(withId(R.id.chooseRoleText)).check(ViewAssertions.matches(ViewMatchers.withText("Choose Your Role")));
+    }
 }
