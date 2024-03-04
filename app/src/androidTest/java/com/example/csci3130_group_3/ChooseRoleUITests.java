@@ -55,23 +55,21 @@ public class ChooseRoleUITests {
         assertTrue(confirmBox.exists());
     }
     @Test
-    @Ignore("only after pages connected")
     public void checkIfMovedToEmployerDashboard() throws UiObjectNotFoundException {
         UiObject employerButton = device.findObject(new UiSelector().textContains("Employer"));
         employerButton.click();
         UiObject confirmButton = device.findObject(new UiSelector().textContains("Confirm"));
         confirmButton.clickAndWaitForNewWindow();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Current Listings"));
         assertTrue(welcomeLabel.exists());
     }
     @Test
-    @Ignore("only after pages connected")
     public void checkIfMovedToEmployeeDashboard() throws UiObjectNotFoundException {
         UiObject employeeButton = device.findObject(new UiSelector().textContains("Employee"));
         employeeButton.click();
         UiObject confirmButton = device.findObject(new UiSelector().textContains("Confirm"));
         confirmButton.clickAndWaitForNewWindow();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Jobs"));
         assertTrue(welcomeLabel.exists());
     }
 }
