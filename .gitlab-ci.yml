@@ -111,7 +111,7 @@ ConnectedTests:
     - >
       export JOB_ID=$(
       gh run list -R $GITHUB_USER/$GITHUB_REPO --json "name,databaseId" --jq ".[] | select(.name == \"$NAME\")" |
-      grep -o -P '(?<="databaseId":)\d+') $$
+      grep -o -P '(?<="databaseId":)\d+') &&
       echo $JOB_ID
 
     # Watch the Github action job.
