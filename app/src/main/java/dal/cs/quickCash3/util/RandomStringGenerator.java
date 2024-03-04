@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.database;
+package dal.cs.quickCash3.util;
 
 import java.util.Random;
 

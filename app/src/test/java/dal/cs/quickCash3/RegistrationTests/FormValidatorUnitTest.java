@@ -1,4 +1,4 @@
-package dal.cs.quickCash3;
+package dal.cs.quickCash3.RegistrationTests;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package dal.cs.quickCash3;
+package dal.cs.quickCash3.LoginTests;
 
 import org.junit.Test;
 

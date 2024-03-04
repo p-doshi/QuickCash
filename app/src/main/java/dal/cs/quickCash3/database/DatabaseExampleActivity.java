@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import dal.cs.quickCash3.R;
+import dal.cs.quickCash3.util.RandomStringGenerator;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
 
