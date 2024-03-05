@@ -3,6 +3,9 @@ name: Create Emulator Cache
 on:
   workflow_dispatch:
 
+env:
+  API_LEVEL: 28
+
 jobs:
   Check:
     runs-on: ubuntu-latest
@@ -14,12 +17,31 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Set Arch
+        id: set_arch
+        run: |
+          if [ "$API_LEVEL" -gt 30 ]; then
+            echo "arch=x86_64" >> "$GITHUB_OUTPUT"
+          else
+            echo "arch=x86" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: AVD cache
+        uses: actions/cache/restore@v4
+        id: avd-cache
+        with:
+          fail-on-cache-miss: true
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-$API_LEVEL
+
       - name: Create AVD
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 28
+          api-level: $API_LEVEL
           target: google_apis
-          arch: x86
+          arch: ${{ steps.set_arch.outputs.arch }}
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
