@@ -117,13 +117,13 @@ ConnectedTests:
       echo $JOB_ID
 
     # Watch the Github action job.
-    - gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO -i 30
-
-    # Get the logs.
-    - gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --log
+    - gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO -i 60
 
     # Download the artifacts from the finished job.
     - gh run download $JOB_ID -R $GITHUB_USER/$GITHUB_REPO
+
+    # Fail the pipeline if the Github action fails.
+    - gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --exit-status
 
   artifacts:
     when: always
