@@ -98,7 +98,6 @@ ConnectedTests:
     GITHUB_USER: ethroz
   script:
     # Create a unique name for a new Github action job.
-    #- export NAME=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13)
     - export NAME=$CI_COMMIT_SHA
 
     # Login to Github.
@@ -118,8 +117,10 @@ ConnectedTests:
       echo $JOB_ID
 
     # Watch the Github action job.
-    - gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --exit-status
-    #- until gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --log; do sleep 5; done;
+    - gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO -i 30
+
+    # Get the logs.
+    - gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --log
 
     # Download the artifacts from the finished job.
     - gh run download $JOB_ID -R $GITHUB_USER/$GITHUB_REPO
