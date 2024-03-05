@@ -21,6 +21,7 @@ env:
 jobs:
   ConnectedTests:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       matrix:
         api-level: [28, 29, 30, 31, 32, 33, 34]
