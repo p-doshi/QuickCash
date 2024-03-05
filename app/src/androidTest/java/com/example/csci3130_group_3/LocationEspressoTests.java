@@ -4,6 +4,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.csci3130_group_3.RegexMatcher.withPattern;
 
 import android.Manifest;
@@ -20,11 +21,11 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class LocationEspressoTests {
     @Rule
-    public GrantPermissionRule permissionRule =
-        GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
-    @Rule
     public ActivityScenarioRule<LocationExampleActivity> activityRule =
         new ActivityScenarioRule<>(LocationExampleActivity.class);
+    @Rule
+    public GrantPermissionRule permissionRule =
+        GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void checkIfElementsVisible() {
@@ -36,8 +37,11 @@ public class LocationEspressoTests {
 
     @Test
     public void canGetLocation() {
-        // Press the button twice to get the location.
-        Espresso.onView(withId(R.id.detectButton)).perform(click(), click());
+        Espresso.onView(withId(R.id.detectButton)).perform(click());
+        Espresso.onView(withId(R.id.longText)).check(matches(withText("Longitude: PENDING...")));
+        Espresso.onView(withId(R.id.latText)).check(matches(withText("Latitude: PENDING...")));
+
+        Espresso.onView(withId(R.id.detectButton)).perform(click());
         Espresso.onView(withId(R.id.longText)).check(matches(withPattern("Longitude: [-\\d.]+")));
         Espresso.onView(withId(R.id.latText)).check(matches(withPattern("Latitude: [-\\d.]+")));
     }
