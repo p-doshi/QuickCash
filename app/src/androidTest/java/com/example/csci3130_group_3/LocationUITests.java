@@ -98,7 +98,7 @@ public class LocationUITests {
         // Press the button again to get the location.
         requestLocationButton.click();
 
-        assertTrue(device.findObject(new UiSelector().textMatches("Longitude: -?\\d+\\.?\\d+")).exists());
-        assertTrue(device.findObject(new UiSelector().textMatches("Latitude: -?\\d+\\.?\\d+")).exists());
+        assertTrue(device.findObject(new UiSelector().textMatches("Longitude: [-\\d.]+")).exists());
+        assertTrue(device.findObject(new UiSelector().textMatches("Latitude: [-\\d.]+")).exists());
     }
 }
