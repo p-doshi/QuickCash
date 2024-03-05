@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class LocationUITests {
-    private final int SDK_VERSION = Build.VERSION.SDK_INT;
+    private static final int SDK_VERSION = Build.VERSION.SDK_INT;
     @Rule
     public final ActivityScenarioRule<LocationExampleActivity> activity =
         new ActivityScenarioRule<>(LocationExampleActivity.class);
@@ -90,7 +90,7 @@ public class LocationUITests {
 
     @Ignore("Doesn't work yet")
     @Test
-    public void getLocation() throws UiObjectNotFoundException {
+    public void canGetLocation() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
         allowPermissions();

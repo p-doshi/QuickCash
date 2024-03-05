@@ -35,7 +35,7 @@ public class LocationEspressoTests {
     }
 
     @Test
-    public void getLocation() {
+    public void canGetLocation() {
         // Press the button twice to get the location.
         Espresso.onView(withId(R.id.detectButton)).perform(click(), click());
         Espresso.onView(withId(R.id.longText)).check(matches(withPattern("Longitude: -?\\d+\\.?\\d+")));
