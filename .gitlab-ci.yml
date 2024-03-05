@@ -118,8 +118,8 @@ ConnectedTests:
       echo $JOB_ID
 
     # Watch the Github action job.
-    #- gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --exit-status
-    - until gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --log; do sleep 5; done;
+    - gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --exit-status
+    #- until gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --log; do sleep 5; done;
 
     # Download the artifacts from the finished job.
     - gh run download $JOB_ID -R $GITHUB_USER/$GITHUB_REPO
