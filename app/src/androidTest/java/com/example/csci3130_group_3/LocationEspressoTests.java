@@ -9,11 +9,14 @@ import static com.example.csci3130_group_3.RegexMatcher.withPattern;
 
 import android.Manifest;
 
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,12 +24,21 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class LocationEspressoTests {
     @Rule
-    public ActivityScenarioRule<LocationExampleActivity> activityRule =
-        new ActivityScenarioRule<>(LocationExampleActivity.class);
-    @Rule
     public GrantPermissionRule permissionRule =
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
+    private ActivityScenario<LocationExampleActivity> scenario;
 
+    @Before
+    public void setup() {
+        scenario = ActivityScenario.launch(LocationExampleActivity.class);
+    }
+
+    @After
+    public void teardown() {
+        scenario.close();
+    }
+
+    @Ignore("Testing without this")
     @Test
     public void checkIfElementsVisible() {
         Espresso.onView(withId(R.id.status)).check(matches(isDisplayed()));

@@ -96,10 +96,23 @@ ConnectedTests:
    - Build
   variables:
     GITHUB_REPO: csci3130_group_3
-    GITHUB_USER: ethroz
+    GITHUB_USER: ethroz # Everyone can hide behind my account.
+    GITHUB_EMAIL: 48915432+ethroz@users.noreply.github.com # Github has commit emails to hide real emails from commits.
   script:
     # Create a unique name for a new Github action job.
     - export NAME=$CI_COMMIT_SHA
+    
+    # Update the github actions files.
+    - git clone https://$GITHUB_USER:$(cat github_token)@github.com/$GITHUB_USER/$GITHUB_REPO
+    - cp -r .github $GITHUB_REPO/.
+    - cd $GITHUB_REPO
+    - git add .
+    - git config user.name $GITHUB_USER
+    - git config user.email $GITHUB_EMAIL
+    - git commit -m $NAME
+    - git push
+    - cd ..
+    - rm -rf $GITHUB_REPO
 
     # Login to Github.
     - cat github_token | gh auth login --with-token
@@ -110,7 +123,7 @@ ConnectedTests:
     # Wait a bit before trying to get job ID.
     - sleep 5
 
-    # Get the Github action job ID from the job name.
+    # Get the Github action job ID from the unique job name.
     - >
       export JOB_ID=$(
       gh run list -R $GITHUB_USER/$GITHUB_REPO --json "name,databaseId" --jq ".[] | select(.name == \"$NAME\")" |
