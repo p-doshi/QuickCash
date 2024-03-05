@@ -25,6 +25,7 @@ Build:
     - echo $CI_JOB_ID > $JOB_FILE
 
   artifacts:
+    expire_in: 1 day
     paths:
       # Give the results of compilation to the next stage.
       - app/build/outputs/
@@ -58,7 +59,7 @@ GradleLint:
 
   artifacts:
     when: always
-    expire_in: 30 days
+    expire_in: 7 days
     paths:
       # Give the results of linting
       - lintResults.html
