@@ -149,7 +149,8 @@ public class LoginActivity extends AppCompatActivity  {
     }
     protected void moveToDashboard() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users");
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
+                .child("nP5exoTNYnlqpPD1B3BHeuNDcWaPxI").child("test").child("users");;
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
