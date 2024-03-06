@@ -9,8 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 
@@ -36,7 +41,7 @@ public class AndroidLocationProvider implements LocationProvider {
             return;
         }
 
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)   != PackageManager.PERMISSION_GRANTED &&
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Store the callbacks for the permission result.
             pendingLocationFunction = locationFunction;
@@ -53,13 +58,51 @@ public class AndroidLocationProvider implements LocationProvider {
             .addOnCompleteListener(task -> {
                 Location location = task.getResult();
                 if (location == null) {
-                    errorFunction.accept(activity.getString(R.string.error_null_location));
-                }
-                else {
+                    fetchNewLocation(locationFunction, errorFunction);
+                } else {
                     locationFunction.accept(location);
                 }
             })
-            .addOnFailureListener(exception -> pendingErrorFunction.accept(exception.getMessage()));
+            .addOnFailureListener(exception -> errorFunction.accept(exception.getMessage()));
+    }
+
+    private void fetchNewLocation(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction) {
+        LocationRequest locationRequest =
+            new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10)
+                .build();
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                List<Location> locations = locationResult.getLocations();
+                if (locations.isEmpty()) {
+                    return;
+                }
+
+                Location location = locations.get(locations.size() - 1);
+                if (location == null) {
+                    return;
+                }
+
+                locationFunction.accept(location);
+                locationProviderClient.removeLocationUpdates(this);
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Store the callbacks for the permission request result.
+            pendingLocationFunction = locationFunction;
+            pendingErrorFunction = errorFunction;
+            pendingPermissionRequest = true;
+
+            // Send out an asynchronous request for location access.
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+
+            return;
+        }
+
+        locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, activity.getMainLooper());
     }
 
     @Override

@@ -1,17 +1,20 @@
 package com.example.csci3130_group_3;
 
-import java.util.regex.Pattern;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.test.espresso.matcher.BoundedMatcher;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+
+import java.util.regex.Pattern;
 
 class RegexMatcher extends BoundedMatcher<View, TextView> {
     private final String regex;
     private final Pattern pattern;
 
-    public RegexMatcher(String regex) {
+    private RegexMatcher(String regex) {
         super(TextView.class);
         this.regex = regex;
         this.pattern = Pattern.compile(regex);
