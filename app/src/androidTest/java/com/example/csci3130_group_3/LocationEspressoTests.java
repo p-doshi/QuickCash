@@ -4,18 +4,17 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.csci3130_group_3.RegexMatcher.withPattern;
 
 import android.Manifest;
+import android.content.Context;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,21 +24,14 @@ public class LocationEspressoTests {
     @Rule
     public GrantPermissionRule permissionRule =
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
-    private ActivityScenario<LocationExampleActivity> scenario;
-
-    @Before
-    public void setup() {
-        scenario = ActivityScenario.launch(LocationExampleActivity.class);
-    }
-
-    @After
-    public void teardown() {
-        scenario.close();
-    }
+    @Rule
+    public ActivityScenarioRule<LocationExampleActivity> activityRule =
+        new ActivityScenarioRule<>(LocationExampleActivity.class);
+    private final Context context = getInstrumentation().getContext();
 
     @Test
     public void checkIfElementsVisible() {
-        Espresso.onView(withId(R.id.status)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.locationStatus)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.detectButton)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.latText)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.longText)).check(matches(isDisplayed()));
@@ -48,10 +40,7 @@ public class LocationEspressoTests {
     @Test
     public void canGetLocation() {
         Espresso.onView(withId(R.id.detectButton)).perform(click());
-        Espresso.onView(withId(R.id.longText)).check(matches(withText("Longitude: PENDING...")));
-        Espresso.onView(withId(R.id.latText)).check(matches(withText("Latitude: PENDING...")));
-
-        Espresso.onView(withId(R.id.detectButton)).perform(click());
+        Espresso.onView(withId(R.id.locationStatus)).check(matches(withPattern(".*Granted")));
         Espresso.onView(withId(R.id.longText)).check(matches(withPattern("Longitude: [-\\d.]+")));
         Espresso.onView(withId(R.id.latText)).check(matches(withPattern("Latitude: [-\\d.]+")));
     }

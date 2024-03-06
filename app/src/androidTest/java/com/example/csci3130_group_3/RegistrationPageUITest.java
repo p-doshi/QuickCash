@@ -38,7 +38,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.registration_successful)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.registration_successful)));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_first_name)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_first_name)));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_last_name)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_last_name)));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_address)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_address)));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_birth_date)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_birth_date)));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_birth_date)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_birth_date)));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmPassword)).perform(typeText("Password123\n"),closeSoftKeyboard());
 
         onView(withId(R.id.confirmButton)).perform(click());
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_birth_date)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_birth_date)));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_user_name)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_user_name)));
     }
 
     @Test
@@ -184,7 +184,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_email_address)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_email_address)));
     }
 
     @Test
@@ -203,7 +203,7 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_password)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.invalid_password)));
     }
 
     @Test
@@ -222,6 +222,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.confirmButton)).perform(click());
 
         // Add more validation checks here after the button click if needed
-        onView(withId(R.id.status)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.passwords_do_not_match)));
+        onView(withId(R.id.registrationStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.passwords_do_not_match)));
     }
 }

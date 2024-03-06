@@ -45,7 +45,7 @@ public class RegistrationPage extends AppCompatActivity {
         emailAddress = findViewById(R.id.emailAddress);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPassword);
-        statusTextView = findViewById(R.id.status);
+        statusTextView = findViewById(R.id.registrationStatus);
         findViewById(R.id.confirmButton).setOnClickListener(v -> submitForm());
     }
 
