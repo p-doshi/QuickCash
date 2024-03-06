@@ -161,7 +161,9 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     protected void moveToRegistration(){
-        Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
+        Intent registrationIntent = new Intent(getBaseContext(), RegistrationPage.class);
+        startActivity(registrationIntent);
     }
 
     protected void setStatusMessage(String message){

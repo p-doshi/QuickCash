@@ -100,17 +100,11 @@ public class LoginUIAutomatorTest {
         launchApp();
     }
     @Test
-    @Ignore("only after pages connected")
     public void checkIfMovedToSignUpPage() throws UiObjectNotFoundException {
-
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
-        emailIDBox.setText("parthdoshi135@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
-        registerButton.clickAndWaitForNewWindow();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Welcome"));
-        assertTrue(welcomeLabel.exists());
+        UiObject signUpButton = device.findObject(new UiSelector().text("Sign Up Manually"));
+        signUpButton.clickAndWaitForNewWindow();
+        UiObject confirmPasswordLabel = device.findObject(new UiSelector().textContains("Confirm Password"));
+        assertTrue(confirmPasswordLabel.exists());
     }
 
 }
