@@ -4,7 +4,6 @@
     <string name="longitude">Longitude</string>
     <string name="detect_location">Detect Location</string>
     <string name="location_permission">Location Permission</string>
-    <string name="error_null_location">Location was null</string>
     <string name="error_location_permission">User declined location permissions</string>
     <string name="error_location_spam">Cannot fetch location before previous fetch completes</string>
 </resources>

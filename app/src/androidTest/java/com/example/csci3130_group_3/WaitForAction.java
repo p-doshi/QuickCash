@@ -1,5 +1,7 @@
 package com.example.csci3130_group_3;
 
+import static org.hamcrest.CoreMatchers.any;
+
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -12,7 +14,7 @@ import org.hamcrest.Matcher;
 
 import java.util.concurrent.TimeoutException;
 
-public class WaitForAction implements ViewAction {
+public final class WaitForAction implements ViewAction {
     private final Matcher<View> matcher;
     private final long timeout;
 
@@ -23,12 +25,12 @@ public class WaitForAction implements ViewAction {
 
     @Override
     public Matcher<View> getConstraints() {
-        return matcher;
+        return any(View.class);
     }
 
     @Override
     public String getDescription() {
-        return "Wait up to " + timeout + " milliseconds for the view to " + matcher;
+        return "Wait up to " + timeout + " milliseconds for " + matcher;
     }
 
     @Override
