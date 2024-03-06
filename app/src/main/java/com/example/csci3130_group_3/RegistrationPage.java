@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -77,7 +77,7 @@ public class RegistrationPage extends AppCompatActivity {
         } else {
             // all inputs is valid
             statusTextView.setText(R.string.registration_successful);
-            moveToChooseRoleWindow();
+            new Handler().postDelayed(this::moveToChooseRoleWindow, 1000);
         }
     }
 
