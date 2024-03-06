@@ -109,8 +109,7 @@ ConnectedTests:
     - git add .
     - git config user.name $GITHUB_USER
     - git config user.email $GITHUB_EMAIL
-    - git commit -m $NAME
-    - git push
+    - git diff --quiet && git diff --staged --quiet || (git commit -m $NAME && git push)
     - cd ..
     - rm -rf $GITHUB_REPO
 
