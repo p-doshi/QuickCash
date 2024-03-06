@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class LocationEspressoTests {
-    private static final long MAX_LOCATION_TIMEOUT_MS = 20000;
+    private static final long MAX_LOCATION_TIMEOUT_MS = 30000;
     @Rule
     public GrantPermissionRule permissionRule =
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
