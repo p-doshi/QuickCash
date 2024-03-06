@@ -1,5 +1,6 @@
 package com.example.csci3130_group_3;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LocationExampleActivity extends AppCompatActivity {
     private LocationProvider locationProvider;
 
+    @SuppressLint("StringFormatTrivial") // There are two conflicting errors here so I chose to ignore one.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

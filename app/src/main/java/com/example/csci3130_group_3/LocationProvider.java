@@ -21,5 +21,6 @@ public interface LocationProvider {
      * @param permissions The permissions we requested.
      * @param grantResults The permissions we were granted.
      */
+    @SuppressWarnings("PMD.UseVarargs") // This is supposed to match the signature of the respective method for activities.
     void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
 }
