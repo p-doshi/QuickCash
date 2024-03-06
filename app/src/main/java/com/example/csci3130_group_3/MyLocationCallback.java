@@ -19,6 +19,7 @@ public class MyLocationCallback extends LocationCallback {
         @NonNull FusedLocationProviderClient locationProviderClient,
         @NonNull Consumer<Location> locationFunction)
     {
+        super();
         this.locationProviderClient = locationProviderClient;
         this.locationFunction = locationFunction;
     }

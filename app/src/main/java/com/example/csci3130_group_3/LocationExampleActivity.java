@@ -18,7 +18,7 @@ public class LocationExampleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_example);
 
-        locationProvider = new AndroidLocationProvider(this);
+        locationProvider = new AndroidLocationProvider(this, 5000); // Update location every 5 seconds.
 
         TextView status = findViewById(R.id.locationStatus);
         TextView latTextbox = findViewById(R.id.latText);

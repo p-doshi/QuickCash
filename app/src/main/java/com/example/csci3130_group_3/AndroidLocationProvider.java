@@ -22,6 +22,7 @@ public class AndroidLocationProvider implements LocationProvider {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;
     private final FusedLocationProviderClient locationProviderClient;
     private final Activity activity;
+    private final long updateFrequencyMillis;
     private final AtomicReference<Location> lastLocation = new AtomicReference<>();
     private final AtomicBoolean hasPendingLocation = new AtomicBoolean(false);
     private Consumer<Location> pendingLocationFunction;
@@ -29,8 +30,9 @@ public class AndroidLocationProvider implements LocationProvider {
 
 
     // Constructor for the AndroidLocationProvider class
-    public AndroidLocationProvider(@NonNull Activity activity) {
+    public AndroidLocationProvider(@NonNull Activity activity, long updateFrequencyMillis) {
         this.activity = activity;
+        this.updateFrequencyMillis = updateFrequencyMillis;
         locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
     }
 
@@ -65,7 +67,7 @@ public class AndroidLocationProvider implements LocationProvider {
         }
 
         LocationRequest locationRequest =
-            new LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 1000) // Every second
+            new LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, updateFrequencyMillis)
                 .build();
 
         LocationCallback locationCallback = new MyLocationCallback(
