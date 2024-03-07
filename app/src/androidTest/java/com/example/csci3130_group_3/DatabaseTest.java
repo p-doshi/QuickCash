@@ -449,4 +449,45 @@ public class DatabaseTest {
 
         registry.unregister(resource);
     }
+
+    @Test
+    public void writeDeleteRead() {
+        Database database = new MyFirebaseDatabase(context);
+        AtomicReference<String> value = new AtomicReference<>(null);
+        AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
+
+        // Create and register the Idle Resource.
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
+        registry.register(resource);
+        resource.increment();
+
+        database.write(testDir, TEST_TEXT,
+            () -> database.delete(testDir,
+                () -> database.read(testDir, String.class,
+                    newValue -> {
+                        value.set(newValue);
+                        resource.decrement();
+                    },
+                    newError -> {
+                        error.set(newError);
+                        resource.decrement();
+                    }),
+                newError -> {
+                    error.set(newError);
+                    resource.decrement();
+                }),
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertNull(value.get());
+        Assert.assertNull(error.get());
+
+        registry.unregister(resource);
+    }
 }
