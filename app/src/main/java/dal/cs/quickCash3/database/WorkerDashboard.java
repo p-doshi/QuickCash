@@ -1,10 +1,8 @@
-package dal.cs.quickCash3.worker;
+package com.example.csci3130_group_3;
 
 import android.app.Activity;
 import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import dal.cs.quickCash3.R;
 
 public class WorkerDashboard extends Activity {
 

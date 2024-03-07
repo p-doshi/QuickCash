@@ -10,9 +10,12 @@ import androidx.test.core.app.ActivityScenario;
 
 import org.junit.Before;
 import org.junit.Test;
+<<<<<<< HEAD
 
 import dal.cs.quickCash3.worker.WorkerDashboard;
 
+=======
+>>>>>>> ec85138d9f064506ef7d80bd2d2dd9935df4e5ca
 public class WorkerDashEspressoTest {
     public ActivityScenario<WorkerDashboard> scenario;
 
