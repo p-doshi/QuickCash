@@ -86,11 +86,14 @@ public class MyFirebaseDatabaseImpl implements Database {
 
     @Override
     public void delete(String location, Consumer<String> errorFunction) {
-        // TODO: Implement this.
+        db.getReference(location).removeValue()
+            .addOnFailureListener(error -> errorFunction.accept(error.getMessage()));
     }
 
     @Override
     public void delete(String location, Runnable successFunction, Consumer<String> errorFunction) {
-        // TODO: Implement this.
+        db.getReference(location).removeValue()
+            .addOnSuccessListener(unused -> successFunction.run())
+            .addOnFailureListener(error -> errorFunction.accept(error.getMessage()));
     }
 }
