@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
     private static final String RESOURCE_NAME = "databaseResource";
-    private static final String TEST_DIR = "test/test";
-    private static final String PUBLIC_DIR = "public/test";
+    private static final String TEST_DIR = "test/DatabaseTest";
+    private static final String PUBLIC_DIR = "public/DatabaseTest";
     private static final String TEST_TEXT = "Hello";
     private static final String RANDOM_STRING = "aksdjdkjahsdiou123oiu124kjnoih1";
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
@@ -270,14 +270,12 @@ public class DatabaseTest {
         registry.register(resource);
         resource.increment();
 
-        String dir1 = "test/test1";
-        String dir2 = "test/test2";
-        String val1 = "Hello";
-        String val2 = "Bye";
+        String dir1 = TEST_DIR + "/test1";
+        String dir2 = TEST_DIR + "/test2";
 
         database.write(
             dir1,
-            val1,
+            TEST_TEXT,
             newError -> {
                 error.set(newError);
                 resource.decrement();
@@ -286,7 +284,7 @@ public class DatabaseTest {
         // This write should not overwrite the first one.
         database.write(
             dir2,
-            val2,
+            "Something else",
             () -> database.read(dir1, String.class,
                 newValue -> {
                     value.set(newValue);
@@ -304,7 +302,7 @@ public class DatabaseTest {
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
-        Assert.assertEquals(val1, value.get());
+        Assert.assertEquals(TEST_TEXT, value.get());
         Assert.assertNull(error.get());
 
         registry.unregister(resource);
