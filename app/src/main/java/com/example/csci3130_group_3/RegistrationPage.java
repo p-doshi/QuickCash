@@ -77,7 +77,7 @@ public class RegistrationPage extends AppCompatActivity {
         } else {
             // all inputs is valid
             statusTextView.setText(R.string.registration_successful);
-            new Handler().postDelayed(this::moveToChooseRoleWindow, 1000);
+            moveToChooseRoleWindow();
         }
     }
 
