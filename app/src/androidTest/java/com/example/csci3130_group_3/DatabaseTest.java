@@ -5,8 +5,8 @@ import android.content.Context;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -24,6 +24,7 @@ public class DatabaseTest {
     private static final String TEST_DIR = "test/DatabaseTest";
     private static final String PUBLIC_DIR = "public/DatabaseTest";
     private static final String TEST_TEXT = "Hello";
+    private static final String ALTERNATIVE_TEST_TEXT = "Bye";
     private static final String RANDOM_STRING = "aksdjdkjahsdiou123oiu124kjnoih1";
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
     private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -260,7 +261,7 @@ public class DatabaseTest {
     }
 
     @Test
-    public void doubleWriteReadSecureDatabaseSuccess() {
+    public void doubleWriteRead() {
         Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
         AtomicReference<String> error = new AtomicReference<>(null);
@@ -284,7 +285,7 @@ public class DatabaseTest {
         // This write should not overwrite the first one.
         database.write(
             dir2,
-            "Something else",
+            ALTERNATIVE_TEST_TEXT,
             () -> database.read(dir1, String.class,
                 newValue -> {
                     value.set(newValue);
@@ -301,6 +302,100 @@ public class DatabaseTest {
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
+
+        Assert.assertEquals(TEST_TEXT, value.get());
+        Assert.assertNull(error.get());
+
+        registry.unregister(resource);
+    }
+
+    @Test
+    public void writeReadWrite() {
+        Database database = new MyFirebaseDatabase(context);
+        AtomicReference<String> value = new AtomicReference<>(null);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
+        registry.register(resource);
+        resource.increment();
+
+        database.write(
+            TEST_DIR,
+            TEST_TEXT,
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        database.read(TEST_DIR, String.class,
+            newValue -> {
+                value.set(newValue);
+                resource.decrement();
+            },
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        database.write(
+            TEST_DIR,
+            ALTERNATIVE_TEST_TEXT,
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertEquals(TEST_TEXT, value.get());
+        Assert.assertNull(error.get());
+
+        registry.unregister(resource);
+    }
+
+    @Test
+    public void doubleWriteListen() {
+        Database database = new MyFirebaseDatabase(context);
+        AtomicReference<String> value = new AtomicReference<>(null);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
+        registry.register(resource);
+        resource.increment();
+
+        database.write(
+            TEST_DIR,
+            ALTERNATIVE_TEST_TEXT,
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        int id = database.addListener(TEST_DIR, String.class,
+            newValue -> {
+                value.set(newValue);
+                resource.decrement();
+            },
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        database.write(
+            TEST_DIR,
+            TEST_TEXT,
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        database.removeListener(id);
 
         Assert.assertEquals(TEST_TEXT, value.get());
         Assert.assertNull(error.get());

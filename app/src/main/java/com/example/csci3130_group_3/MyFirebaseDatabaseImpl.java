@@ -1,7 +1,9 @@
 package com.example.csci3130_group_3;
 
 import android.content.Context;
+
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.function.Consumer;
 
 /**
@@ -38,5 +40,16 @@ public class MyFirebaseDatabaseImpl implements Database {
                 readFunction.accept(value);
             })
             .addOnFailureListener(e -> errorFunction.accept(e.getMessage()));
+    }
+
+    @Override
+    public <T> int addListener(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction) {
+        // TODO: implement here.
+        return -1;
+    }
+
+    @Override
+    public void removeListener(int listenerId) {
+        // TODO: implement here.
     }
 }
