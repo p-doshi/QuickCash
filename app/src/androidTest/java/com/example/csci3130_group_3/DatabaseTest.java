@@ -21,11 +21,12 @@ import java.util.concurrent.atomic.AtomicReference;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
     private static final String RESOURCE_NAME = "databaseResource";
-    private static final String TEST_DIR = "test/DatabaseTest";
+    private static final String BASE_TEST_DIR = "test/DatabaseTest/";
     private static final String PUBLIC_DIR = "public/DatabaseTest";
     private static final String TEST_TEXT = "Hello";
     private static final String ALTERNATIVE_TEST_TEXT = "Bye";
     private static final String RANDOM_STRING = "aksdjdkjahsdiou123oiu124kjnoih1";
+    private static final int RANDOM_LENGTH = 10;
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
     private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
@@ -40,13 +41,14 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabaseImpl(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         // Create and register the Idle Resource.
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        database.write(TEST_DIR, TEST_TEXT,
+        database.write(testDir, TEST_TEXT,
             () -> {
                 passed.set(true);
                 resource.decrement();
@@ -72,13 +74,14 @@ public class DatabaseTest {
         // We need a value that shows that we have not received anything.
         AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
         AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         // Create and register the Idle Resource.
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        database.read(TEST_DIR, String.class,
+        database.read(testDir, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
@@ -102,13 +105,14 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabase(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         // Create and register the Idle Resource.
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        database.write(TEST_DIR, TEST_TEXT,
+        database.write(testDir, TEST_TEXT,
             () -> {
                 passed.set(true);
                 resource.decrement();
@@ -134,13 +138,14 @@ public class DatabaseTest {
         // We need a value that shows that we have not received anything.
         AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
         AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         // Create and register the Idle Resource.
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        database.read(TEST_DIR, String.class,
+        database.read(testDir, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
@@ -166,6 +171,7 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
         AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         // Create and register the Idle Resource.
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
@@ -173,9 +179,9 @@ public class DatabaseTest {
         resource.increment();
 
         database.write(
-            TEST_DIR,
+            testDir,
             TEST_TEXT,
-            () -> database.read(TEST_DIR, String.class,
+            () -> database.read(testDir, String.class,
                 newValue -> {
                     value.set(newValue);
                     resource.decrement();
@@ -271,8 +277,8 @@ public class DatabaseTest {
         registry.register(resource);
         resource.increment();
 
-        String dir1 = TEST_DIR + "/test1";
-        String dir2 = TEST_DIR + "/test2";
+        String dir1 = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
+        String dir2 = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         database.write(
             dir1,
@@ -314,6 +320,7 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
         AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         // Create and register the Idle Resource.
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
@@ -321,14 +328,14 @@ public class DatabaseTest {
         resource.increment();
 
         database.write(
-            TEST_DIR,
+            testDir,
             TEST_TEXT,
             newError -> {
                 error.set(newError);
                 resource.decrement();
             });
 
-        database.read(TEST_DIR, String.class,
+        database.read(testDir, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
@@ -339,7 +346,7 @@ public class DatabaseTest {
             });
 
         database.write(
-            TEST_DIR,
+            testDir,
             ALTERNATIVE_TEST_TEXT,
             newError -> {
                 error.set(newError);
@@ -360,6 +367,7 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
         AtomicReference<String> error = new AtomicReference<>(null);
+        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
         // Create and register the Idle Resource.
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
@@ -368,14 +376,14 @@ public class DatabaseTest {
         resource.increment();
 
         database.write(
-            TEST_DIR,
+            testDir,
             ALTERNATIVE_TEST_TEXT,
             newError -> {
                 error.set(newError);
                 resource.decrement();
             });
 
-        int id = database.addListener(TEST_DIR, String.class,
+        int id = database.addListener(testDir, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
@@ -386,7 +394,7 @@ public class DatabaseTest {
             });
 
         database.write(
-            TEST_DIR,
+            testDir,
             TEST_TEXT,
             newError -> {
                 error.set(newError);
