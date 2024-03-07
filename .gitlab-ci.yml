@@ -4,7 +4,7 @@ stages:
   - test
 
 variables:
-  JOB_FILE: jobId
+  BUILD_JOB_FILE: buildJobId.txt
 
 before_script:
   # Make the gradle wrapper executable.
@@ -22,14 +22,14 @@ Build:
 
   after_script:
     # Save the job ID for the connected tests.
-    - echo $CI_JOB_ID > $JOB_FILE
+    - echo $CI_JOB_ID > $BUILD_JOB_FILE
 
   artifacts:
     expire_in: 1 day
     paths:
       # Give the results of compilation to the next stage.
       - app/build/outputs/
-      - $JOB_FILE
+      - $BUILD_JOB_FILE
 
 PmdLint:
   image: ethrozee/android
@@ -99,8 +99,11 @@ ConnectedTests:
     GITHUB_USER: ethroz # Everyone can hide behind my account.
     GITHUB_EMAIL: 48915432+ethroz@users.noreply.github.com # Github has commit emails to hide real emails from commits.
   script:
+    # Get the build job ID.
+    - export BUILD_JOB_ID=$(cat $BUILD_JOB_FILE)
+
     # Create a unique name for a new Github action job.
-    - export NAME=$CI_COMMIT_SHA
+    - export NAME=$CI_COMMIT_SHA-$BUILD_JOB_ID
     
     # Update the github actions files.
     - git clone https://$GITHUB_USER:$(cat github_token)@github.com/$GITHUB_USER/$GITHUB_REPO
@@ -117,7 +120,7 @@ ConnectedTests:
     - cat github_token | gh auth login --with-token
 
     # Start a new Github action job.
-    - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f commit=$NAME -f proj_id=$CI_PROJECT_ID -f job_id=$(cat $JOB_FILE)
+    - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f commit=$NAME -f proj_id=$CI_PROJECT_ID -f job_id=$BUILD_JOB_ID
 
     # Wait a bit before trying to get job ID.
     - sleep 5
