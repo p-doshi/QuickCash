@@ -21,8 +21,10 @@ import java.util.concurrent.atomic.AtomicReference;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
     private static final String RESOURCE_NAME = "databaseResource";
-    private static final String TEST_DIR = "test";
+    private static final String TEST_DIR = "test/test";
+    private static final String PUBLIC_DIR = "public/test";
     private static final String TEST_TEXT = "Hello";
+    private static final String RANDOM_VALUE = "aksdjdkjahsdiou123oiu124kjnoih1";
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
     private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
@@ -67,7 +69,7 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabaseImpl(context);
 
         // We need a value that shows that we have not received anything.
-        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
+        final String randomValue = RANDOM_VALUE;
         AtomicReference<String> value = new AtomicReference<>(randomValue);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -130,7 +132,7 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabase(context);
 
         // We need a value that shows that we have not received anything.
-        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
+        final String randomValue = RANDOM_VALUE;
         AtomicReference<String> value = new AtomicReference<>(randomValue);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -210,7 +212,7 @@ public class DatabaseTest {
         registry.register(resource);
         resource.increment();
 
-        database.write("public/test", TEST_TEXT,
+        database.write(PUBLIC_DIR, TEST_TEXT,
             () -> {
                 passed.set(true);
                 resource.decrement();
@@ -234,7 +236,7 @@ public class DatabaseTest {
         Database database = new MyFirebaseDatabase(context);
 
         // We need a value that shows that we have not received anything.
-        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
+        final String randomValue = RANDOM_VALUE;
         AtomicReference<String> value = new AtomicReference<>(randomValue);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -243,7 +245,7 @@ public class DatabaseTest {
         registry.register(resource);
         resource.increment();
 
-        database.read("public/test", String.class,
+        database.read(PUBLIC_DIR, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();

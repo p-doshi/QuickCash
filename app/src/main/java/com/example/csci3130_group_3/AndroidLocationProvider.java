@@ -67,7 +67,7 @@ public class AndroidLocationProvider implements LocationProvider {
         }
 
         LocationRequest locationRequest =
-            new LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, updateFrequencyMillis)
+            new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, updateFrequencyMillis)
                 .build();
 
         LocationCallback locationCallback = new MyLocationCallback(
