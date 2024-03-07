@@ -2,8 +2,16 @@ package com.example.csci3130_group_3;
 
 import android.content.Context;
 
-import com.google.firebase.database.FirebaseDatabase;
+import androidx.annotation.NonNull;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 /**
@@ -12,6 +20,8 @@ import java.util.function.Consumer;
  */
 public class MyFirebaseDatabaseImpl implements Database {
     private final FirebaseDatabase db;
+    private final Map<Integer, ReferenceListenerPair> listenerMap = new TreeMap<>();
+    private int nextId = 0;
 
     MyFirebaseDatabaseImpl(Context context) {
         // Get a reference to the database.
@@ -44,12 +54,33 @@ public class MyFirebaseDatabaseImpl implements Database {
 
     @Override
     public <T> int addListener(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction) {
-        // TODO: implement here.
-        return -1;
+        DatabaseReference reference = db.getReference(location);
+        ValueEventListener listener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                T value = snapshot.getValue(type);
+                readFunction.accept(value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                errorFunction.accept(error.getMessage());
+            }
+        });
+
+        int id = nextId++;
+        ReferenceListenerPair pair = new ReferenceListenerPair(reference, listener);
+        listenerMap.put(id, pair);
+        return id;
     }
 
     @Override
     public void removeListener(int listenerId) {
-        // TODO: implement here.
+        ReferenceListenerPair pair = listenerMap.get(listenerId);
+        if (pair == null) {
+            throw new IllegalArgumentException("Could not find listener callback with ID: " + listenerId);
+        }
+
+        pair.getReference().removeEventListener(pair.getListener());
     }
 }

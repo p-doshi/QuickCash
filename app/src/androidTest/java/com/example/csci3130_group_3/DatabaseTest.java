@@ -365,6 +365,7 @@ public class DatabaseTest {
         CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
+        resource.increment();
 
         database.write(
             TEST_DIR,
