@@ -31,9 +31,7 @@ public class LoginEspressoTest {
     @Before
     public void setup() {
         scenario = ActivityScenario.launch(LoginActivity.class);
-        scenario.onActivity(activity -> {
-           activity.setUpLoginButton();
-        });
+        scenario.onActivity(LoginActivity::setUpLoginButton);
     }
 
     @After
