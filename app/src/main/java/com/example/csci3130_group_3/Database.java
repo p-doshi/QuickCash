@@ -72,5 +72,22 @@ public interface Database {
      */
     void removeListener(int listenerId) throws IllegalArgumentException;
 
-    
+    /**
+     * Delete the item in the database at the given location. Iff an error occurs, the error
+     * function will be called and the read function will never be called again.
+     *
+     * @param location The location of the item to delete.
+     * @param errorFunction The function that will be called in case of an error.
+     */
+    void delete(String location, Consumer<String> errorFunction);
+
+    /**
+     * Delete the item in the database at the given location. Iff an error occurs, the error
+     * function will be called and the read function will never be called again.
+     *
+     * @param location The location of the item to delete.
+     * @param successFunction The function that will be called on successful deletion.
+     * @param errorFunction The function that will be called in case of an error.
+     */
+    void delete(String location, Runnable successFunction, Consumer<String> errorFunction);
 }

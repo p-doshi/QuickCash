@@ -83,4 +83,14 @@ public class MyFirebaseDatabaseImpl implements Database {
 
         pair.getReference().removeEventListener(pair.getListener());
     }
+
+    @Override
+    public void delete(String location, Consumer<String> errorFunction) {
+        // TODO: Implement this.
+    }
+
+    @Override
+    public void delete(String location, Runnable successFunction, Consumer<String> errorFunction) {
+        // TODO: Implement this.
+    }
 }
