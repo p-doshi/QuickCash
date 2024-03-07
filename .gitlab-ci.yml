@@ -102,8 +102,11 @@ ConnectedTests:
     # Get the build job ID.
     - export BUILD_JOB_ID=$(cat $BUILD_JOB_FILE)
 
+    # The commit ID of this run.
+    - export COMMIT=$CI_COMMIT_SHA
+
     # Create a unique name for a new Github action job.
-    - export NAME=$CI_COMMIT_SHA-$BUILD_JOB_ID
+    - export NAME=$COMMIT-$BUILD_JOB_ID
     
     # Update the github actions files.
     - git clone https://$GITHUB_USER:$(cat github_token)@github.com/$GITHUB_USER/$GITHUB_REPO
@@ -112,7 +115,7 @@ ConnectedTests:
     - git add .
     - git config user.name $GITHUB_USER
     - git config user.email $GITHUB_EMAIL
-    - git diff --quiet && git diff --staged --quiet || (git commit -m $NAME && git push)
+    - git diff --quiet && git diff --staged --quiet || (git commit -m $COMMIT && git push)
     - cd ..
     - rm -rf $GITHUB_REPO
 
@@ -120,7 +123,7 @@ ConnectedTests:
     - cat github_token | gh auth login --with-token
 
     # Start a new Github action job.
-    - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f commit=$NAME -f proj_id=$CI_PROJECT_ID -f job_id=$BUILD_JOB_ID
+    - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f name=$NAME -f commit=$COMMIT -f proj_id=$CI_PROJECT_ID -f job_id=$BUILD_JOB_ID
 
     # Wait a bit before trying to get job ID.
     - sleep 5

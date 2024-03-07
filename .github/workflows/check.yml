@@ -1,4 +1,4 @@
-name: Create Emulator Cache
+name: Run Emulator Commands
 
 on:
   workflow_dispatch:

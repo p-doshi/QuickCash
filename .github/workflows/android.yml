@@ -3,6 +3,9 @@ name: Run connected tests
 on:
   workflow_dispatch:
     inputs:
+      name:
+        description: 'The name of the workflow'
+        required: true
       commit:
         description: 'The unique hash of the commit'
         required: true
@@ -13,7 +16,7 @@ on:
         description: 'The ID of the job'
         required: true
 
-run-name: ${{ github.event.inputs.commit }}
+run-name: ${{ github.event.inputs.name }}
 
 env:
   JAVA_VERSION: 17
