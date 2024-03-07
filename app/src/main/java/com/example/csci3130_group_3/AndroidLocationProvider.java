@@ -83,6 +83,19 @@ public class AndroidLocationProvider implements LocationProvider {
         hasPendingLocation.set(true);
 
         locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, activity.getMainLooper());
+
+        // Try to use the last known location for now.
+        locationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location == null) {
+                return;
+            }
+
+            if (hasPendingLocation.get()) {
+                lastLocation.set(location);
+                pendingLocationFunction.accept(location);
+                hasPendingLocation.set(false);
+            }
+        });
     }
 
     @Override
