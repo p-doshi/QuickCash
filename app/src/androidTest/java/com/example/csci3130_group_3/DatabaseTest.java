@@ -20,35 +20,38 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
-    IdlingRegistry registry = IdlingRegistry.getInstance();
-    Context context;
+    private static final String RESOURCE_NAME = "databaseResource";
+    private static final String TEST_DIR = "test/test";
+    private static final String PUBLIC_DIR = "public/test";
+    private static final String TEST_TEXT = "Hello";
+    private static final String RANDOM_STRING = "aksdjdkjahsdiou123oiu124kjnoih1";
+    private final IdlingRegistry registry = IdlingRegistry.getInstance();
+    private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
     @Before
     public void setup() {
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
         // Make sure we are starting in a signed out state.
         FirebaseAuth.getInstance().signOut();
     }
 
     @Test
     public void writeDatabaseFailure() {
-        Database db = new MyFirebaseDatabaseImpl(context);
+        Database database = new MyFirebaseDatabaseImpl(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        db.write("test", "Hello",
+        database.write(TEST_DIR, TEST_TEXT,
             () -> {
                 passed.set(true);
                 resource.decrement();
             },
-            newValue -> {
-                error.set(newValue);
+            newError -> {
+                error.set(newError);
                 resource.decrement();
             });
 
@@ -63,32 +66,31 @@ public class DatabaseTest {
 
     @Test
     public void readDatabaseFailure() {
-        Database db = new MyFirebaseDatabaseImpl(context);
+        Database database = new MyFirebaseDatabaseImpl(context);
 
         // We need a value that shows that we have not received anything.
-        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
-        AtomicReference<String> value = new AtomicReference<>(randomValue);
+        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        db.read("test", String.class,
+        database.read(TEST_DIR, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
             },
-            newValue -> {
-                error.set(newValue);
+            newError -> {
+                error.set(newError);
                 resource.decrement();
             });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
-        Assert.assertEquals(randomValue, value.get());
+        Assert.assertEquals(RANDOM_STRING, value.get());
         Assert.assertEquals("Permission denied", error.get());
 
         registry.unregister(resource);
@@ -96,22 +98,22 @@ public class DatabaseTest {
 
     @Test
     public void writeSecureDatabaseSuccess() {
-        Database db = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        db.write("test", "Hello",
+        database.write(TEST_DIR, TEST_TEXT,
             () -> {
                 passed.set(true);
                 resource.decrement();
             },
-            newValue -> {
-                error.set(newValue);
+            newError -> {
+                error.set(newError);
                 resource.decrement();
             });
 
@@ -126,25 +128,24 @@ public class DatabaseTest {
 
     @Test
     public void readSecureDatabaseSuccess() {
-        Database db = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase(context);
 
         // We need a value that shows that we have not received anything.
-        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
-        AtomicReference<String> value = new AtomicReference<>(randomValue);
+        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        db.read("test", String.class,
+        database.read(TEST_DIR, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
             },
-            newValue -> {
-                error.set(newValue);
+            newError -> {
+                error.set(newError);
                 resource.decrement();
             });
 
@@ -153,7 +154,7 @@ public class DatabaseTest {
 
         // We cannot guarantee what will be read from the database.
         // We just know we will receive _something_ or null.
-        Assert.assertNotEquals(randomValue, value.get());
+        Assert.assertNotEquals(RANDOM_STRING, value.get());
         Assert.assertNull(error.get());
 
         registry.unregister(resource);
@@ -161,38 +162,36 @@ public class DatabaseTest {
 
     @Test
     public void writeReadSecureDatabaseSuccess() {
-        Database db = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        final String dir = "test";
-        final String val = "Hello";
-        db.write(
-            dir,
-            val,
-            () -> db.read(dir, String.class,
+        database.write(
+            TEST_DIR,
+            TEST_TEXT,
+            () -> database.read(TEST_DIR, String.class,
                 newValue -> {
                     value.set(newValue);
                     resource.decrement();
                 },
-                newValue -> {
-                    error.set(newValue);
+                newError -> {
+                    error.set(newError);
                     resource.decrement();
                 }),
-            newValue -> {
-                error.set(newValue);
+            newError -> {
+                error.set(newError);
                 resource.decrement();
             });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
-        Assert.assertEquals(val, value.get());
+        Assert.assertEquals(TEST_TEXT, value.get());
         Assert.assertNull(error.get());
 
         registry.unregister(resource);
@@ -200,22 +199,22 @@ public class DatabaseTest {
 
     @Test
     public void writeSecureAuthorizedDatabaseFailure() {
-        Database db = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase(context);
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        db.write("public/test", "Hello",
+        database.write(PUBLIC_DIR, TEST_TEXT,
             () -> {
                 passed.set(true);
                 resource.decrement();
             },
-            newValue -> {
-                error.set(newValue);
+            newError -> {
+                error.set(newError);
                 resource.decrement();
             });
 
@@ -230,33 +229,83 @@ public class DatabaseTest {
 
     @Test
     public void readSecureAuthorizedDatabaseFailure() {
-        Database db = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase(context);
 
         // We need a value that shows that we have not received anything.
-        final String randomValue = "aksdjdkjahsdiou123oiu124kjnoih1";
-        AtomicReference<String> value = new AtomicReference<>(randomValue);
+        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
         AtomicReference<String> error = new AtomicReference<>(null);
 
         // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource("databaseResource");
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
         registry.register(resource);
         resource.increment();
 
-        db.read("public/test", String.class,
+        database.read(PUBLIC_DIR, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
             },
-            newValue -> {
-                error.set(newValue);
+            newError -> {
+                error.set(newError);
                 resource.decrement();
             });
 
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
-        Assert.assertEquals(randomValue, value.get());
+        Assert.assertEquals(RANDOM_STRING, value.get());
         Assert.assertEquals("Permission denied", error.get());
+
+        registry.unregister(resource);
+    }
+
+    @Test
+    public void doubleWriteReadSecureDatabaseSuccess() {
+        Database database = new MyFirebaseDatabase(context);
+        AtomicReference<String> value = new AtomicReference<>(null);
+        AtomicReference<String> error = new AtomicReference<>(null);
+
+        // Create and register the Idle Resource.
+        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
+        registry.register(resource);
+        resource.increment();
+
+        String dir1 = "test/test1";
+        String dir2 = "test/test2";
+        String val1 = "Hello";
+        String val2 = "Bye";
+
+        database.write(
+            dir1,
+            val1,
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        // This write should not overwrite the first one.
+        database.write(
+            dir2,
+            val2,
+            () -> database.read(dir1, String.class,
+                newValue -> {
+                    value.set(newValue);
+                    resource.decrement();
+                },
+                newError -> {
+                    error.set(newError);
+                    resource.decrement();
+                }),
+            newError -> {
+                error.set(newError);
+                resource.decrement();
+            });
+
+        // Espresso will wait until our idle criterion is met.
+        Espresso.onIdle();
+
+        Assert.assertEquals(val1, value.get());
+        Assert.assertNull(error.get());
 
         registry.unregister(resource);
     }
