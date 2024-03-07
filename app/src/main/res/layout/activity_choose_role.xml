@@ -38,19 +38,19 @@
             android:textColor="#273F31"
             android:textSize="24sp"
             app:cornerRadius="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/employeeButton"
+            app:layout_constraintEnd_toStartOf="@+id/workerButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chooseRoleText"
             app:strokeColor="#273F31"
             app:strokeWidth="1dp" />
 
         <Button
-            android:id="@+id/employeeButton"
+            android:id="@+id/workerButton"
             android:layout_width="158dp"
             android:layout_height="237dp"
             android:layout_marginTop="1dp"
             android:backgroundTint="#AAEEC6"
-            android:text="@string/employee"
+            android:text="@string/worker"
             android:textAlignment="center"
             android:textColor="#273F31"
             android:textSize="24sp"
