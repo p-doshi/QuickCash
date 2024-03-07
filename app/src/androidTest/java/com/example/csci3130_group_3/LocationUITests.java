@@ -12,11 +12,13 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import org.junit.Ignore;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class LocationUITests {
     private static final int SDK_VERSION = Build.VERSION.SDK_INT;
@@ -35,7 +37,8 @@ public class LocationUITests {
     private void denyPermissions() throws UiObjectNotFoundException {
         String denyRegex;
         switch (SDK_VERSION) {
-            case 28: denyRegex = "DENY"; break;
+            case 27: denyRegex = "DENY"; break;
+            case 28:
             case 29:
             case 30: denyRegex = "Deny"; break;
             case 31:
@@ -54,7 +57,7 @@ public class LocationUITests {
     private void allowPermissions() throws UiObjectNotFoundException {
         String allowRegex;
         switch (SDK_VERSION) {
-            case 28: allowRegex = "ALLOW"; break;
+            case 28: allowRegex = "Allow"; break;
             case 29: allowRegex = "Allow only while using the app"; break;
             case 30:
             case 31:
@@ -70,32 +73,31 @@ public class LocationUITests {
         pressOkIfExists();
     }
 
-    @Ignore("Doesn't work yet")
     @Test
-    public void denyLocationPermissions() throws UiObjectNotFoundException {
+    public void a_denyLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
         denyPermissions();
         assertTrue(device.findObject(new UiSelector().textContains("Not Granted")).exists());
     }
 
-    @Ignore("Doesn't work yet")
     @Test
-    public void allowLocationPermissions() throws UiObjectNotFoundException {
+    public void b_allowLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
         allowPermissions();
         assertTrue(device.findObject(new UiSelector().textContains("Granted")).exists());
     }
 
-    @Ignore("Doesn't work yet")
     @Test
-    public void canGetLocation() throws UiObjectNotFoundException {
+    public void c_getLocation() throws UiObjectNotFoundException, InterruptedException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
-        allowPermissions();
 
-        // Press the button again to get the location.
+        // New Code inserted by Mathew
+        // Sets the test to wait for location to update, this is unavoidable as android is slow
+        final int waitLocationDelay = 5000;
+        Thread.sleep(waitLocationDelay);
         requestLocationButton.click();
 
         assertTrue(device.findObject(new UiSelector().textMatches("Longitude: [-\\d.]+")).exists());
