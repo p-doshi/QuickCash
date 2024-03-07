@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class EmployeeDashboard extends Activity {
+public class WorkerDashboard extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.dashboard_employee);
+        this.setContentView(R.layout.dashboard_worker);
 
 
-        BottomNavigationView employeeNavView = findViewById(R.id.employeeBottomNavView);
+        BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
     }
 

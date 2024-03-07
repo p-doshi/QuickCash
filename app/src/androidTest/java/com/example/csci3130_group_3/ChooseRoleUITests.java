@@ -46,8 +46,8 @@ public class ChooseRoleUITests {
 
     @Test
     public void checkIfUiVisible() {
-        UiObject employeeBox = device.findObject(new UiSelector().text("Employee"));
-        assertTrue(employeeBox.exists());
+        UiObject workerBox = device.findObject(new UiSelector().text("Worker"));
+        assertTrue(workerBox.exists());
         UiObject employerBox = device.findObject(new UiSelector().textContains("Employer"));
         assertTrue(employerBox.exists());
         UiObject confirmBox = device.findObject(new UiSelector().textContains("Confirm"));
@@ -63,9 +63,9 @@ public class ChooseRoleUITests {
         assertTrue(welcomeLabel.exists());
     }
     @Test
-    public void checkIfMovedToEmployeeDashboard() throws UiObjectNotFoundException {
-        UiObject employeeButton = device.findObject(new UiSelector().textContains("Employee"));
-        employeeButton.click();
+    public void checkIfMovedToWorkerDashboard() throws UiObjectNotFoundException {
+        UiObject workerButton = device.findObject(new UiSelector().textContains("Worker"));
+        workerButton.click();
         UiObject confirmButton = device.findObject(new UiSelector().textContains("Confirm"));
         confirmButton.clickAndWaitForNewWindow();
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Jobs"));

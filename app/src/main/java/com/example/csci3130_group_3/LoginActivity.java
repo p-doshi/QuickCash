@@ -168,8 +168,8 @@ public class LoginActivity extends AppCompatActivity  {
                                 if (role != null) {
                                     if (role.equals(getResources().getString(R.string.employer))) {
                                         dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
-                                    } else if (role.equals(getResources().getString(R.string.employee))) {
-                                        dashboardIntent = new Intent(getBaseContext(), EmployeeDashboard.class);
+                                    } else if (role.equals(getResources().getString(R.string.worker))) {
+                                        dashboardIntent = new Intent(getBaseContext(), WorkerDashboard.class);
                                     } else {
                                         Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
                                         System.exit(1);
