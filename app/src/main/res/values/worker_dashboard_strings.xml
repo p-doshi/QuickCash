@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="employeeDashTitleText">Jobs</string>
+    <string name="workerDashTitleText">Jobs</string>
 </resources>
