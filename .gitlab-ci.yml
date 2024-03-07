@@ -106,7 +106,7 @@ ConnectedTests:
     - export COMMIT=$CI_COMMIT_SHA
 
     # Create a unique name for a new Github action job.
-    - export NAME=$COMMIT-$BUILD_JOB_ID
+    - export NAME=$COMMIT-$CI_JOB_ID
     
     # Update the github actions files.
     - git clone https://$GITHUB_USER:$(cat github_token)@github.com/$GITHUB_USER/$GITHUB_REPO
