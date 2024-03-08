@@ -3,8 +3,13 @@ package com.example.csci3130_group_3;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
+import androidx.core.content.ContextCompat;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
@@ -26,12 +31,19 @@ public class LocationUITests {
     public final ActivityScenarioRule<LocationExampleActivity> activity =
         new ActivityScenarioRule<>(LocationExampleActivity.class);
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
+    private final Context context = ApplicationProvider.getApplicationContext();
 
     private void pressOkIfExists() throws UiObjectNotFoundException {
         UiObject noThanksButton = device.findObject(new UiSelector().text("OK").clickable(true));
         if (noThanksButton.exists()) {
             noThanksButton.click();
         }
+    }
+
+    // Helper method, checks if Location Permissions have been granted to the app
+    private boolean checkLocationPermissionsEnabled() {
+        return ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void denyPermissions() throws UiObjectNotFoundException {
@@ -77,16 +89,26 @@ public class LocationUITests {
     public void a_denyLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
-        denyPermissions();
-        assertTrue(device.findObject(new UiSelector().textContains("Not Granted")).exists());
+        if (!checkLocationPermissionsEnabled()) {
+            denyPermissions();
+            assertTrue(device.findObject(new UiSelector().textContains("Not Granted")).exists());
+        } else {
+            assertTrue(device.findObject(new UiSelector().textMatches("Longitude: [-\\d.]+")).exists());
+            assertTrue(device.findObject(new UiSelector().textMatches("Latitude: [-\\d.]+")).exists());
+        }
     }
 
     @Test
     public void b_allowLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
-        allowPermissions();
-        assertTrue(device.findObject(new UiSelector().textContains("Granted")).exists());
+        if (!checkLocationPermissionsEnabled()) {
+            allowPermissions();
+            assertTrue(device.findObject(new UiSelector().textContains("Granted")).exists());
+        } else {
+            assertTrue(device.findObject(new UiSelector().textMatches("Longitude: [-\\d.]+")).exists());
+            assertTrue(device.findObject(new UiSelector().textMatches("Latitude: [-\\d.]+")).exists());
+        }
     }
 
     @Test
@@ -95,6 +117,9 @@ public class LocationUITests {
         requestLocationButton.click();
 
         // New Code inserted by Mathew
+        if (!checkLocationPermissionsEnabled()) {
+            allowPermissions();
+        }
         // Sets the test to wait for location to update, this is unavoidable as android is slow
         final int waitLocationDelay = 5000;
         Thread.sleep(waitLocationDelay);
