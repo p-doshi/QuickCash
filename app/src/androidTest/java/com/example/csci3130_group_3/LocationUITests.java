@@ -1,6 +1,9 @@
 package com.example.csci3130_group_3;
 
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.example.csci3130_group_3.RegexMatcher.withPattern;
+import static com.example.csci3130_group_3.WaitForAction.waitFor;
 import static org.junit.Assert.assertTrue;
 
 import android.Manifest;
@@ -10,6 +13,7 @@ import android.os.Build;
 
 import androidx.core.content.ContextCompat;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
@@ -86,7 +90,7 @@ public class LocationUITests {
     }
 
     @Test
-    public void a_denyLocationPermissions() throws UiObjectNotFoundException {
+    public void aDenyLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
         if (!checkLocationPermissionsEnabled()) {
@@ -99,7 +103,7 @@ public class LocationUITests {
     }
 
     @Test
-    public void b_allowLocationPermissions() throws UiObjectNotFoundException {
+    public void bAllowLocationPermissions() throws UiObjectNotFoundException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
         if (!checkLocationPermissionsEnabled()) {
@@ -112,7 +116,7 @@ public class LocationUITests {
     }
 
     @Test
-    public void c_getLocation() throws UiObjectNotFoundException, InterruptedException {
+    public void cGetLocation() throws UiObjectNotFoundException, InterruptedException {
         UiObject requestLocationButton = device.findObject(new UiSelector().textContains("Detect Location").clickable(true));
         requestLocationButton.click();
 
@@ -122,7 +126,7 @@ public class LocationUITests {
         }
         // Sets the test to wait for location to update, this is unavoidable as android is slow
         final int waitLocationDelay = 5000;
-        Thread.sleep(waitLocationDelay);
+        Espresso.onView(withId(R.id.latText)).perform(waitFor(withPattern("Latitude: [-\\d.]+"), waitLocationDelay));
         requestLocationButton.click();
 
         assertTrue(device.findObject(new UiSelector().textMatches("Longitude: [-\\d.]+")).exists());
