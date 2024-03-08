@@ -1,4 +1,4 @@
-package dal.cs.quickCash3;
+package dal.cs.quickCash3.workerAndroidTests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -7,9 +7,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import dal.cs.quickCash3.R;
+import dal.cs.quickCash3.worker.WorkerDashboard;
+
 public class WorkerDashEspressoTest {
     public ActivityScenario<WorkerDashboard> scenario;
 
@@ -23,7 +28,7 @@ public class WorkerDashEspressoTest {
 
     @Test
     public void testWorkerNavBarExist(){
-        onView(withId(R.id.workerBottomNavView)).perform(click());
+        onView(ViewMatchers.withId(R.id.workerBottomNavView)).perform(click());
     }
 
     @Test
