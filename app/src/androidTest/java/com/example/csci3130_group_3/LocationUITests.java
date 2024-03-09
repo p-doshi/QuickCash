@@ -37,8 +37,8 @@ public class LocationUITests {
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
     private final Context context = ApplicationProvider.getApplicationContext();
 
-    private final String longRegex = "Longitude: [-\\d.]+";
-    private final String latRegex = "Latitude: [-\\d.]+";
+    private final static String longRegex = "Longitude: [-\\d.]+";
+    private final static String latRegex = "Latitude: [-\\d.]+";
 
     private void pressOkIfExists() throws UiObjectNotFoundException {
         UiObject noThanksButton = device.findObject(new UiSelector().text("OK").clickable(true));
