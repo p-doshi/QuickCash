@@ -21,7 +21,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         // Refer to this source for help: https://stackoverflow.com/questions/3631982/change-applications-starting-activity
 
         db = new MyFirebaseDatabase(this);
-        String dbKey = "test";
+        String dbKey = "test/DatabaseExampleActivity";
 
         // Get the text view.
         TextView output = findViewById(R.id.dbOutput);
