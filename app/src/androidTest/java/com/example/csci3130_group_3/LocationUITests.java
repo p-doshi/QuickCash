@@ -37,8 +37,8 @@ public class LocationUITests {
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
     private final Context context = ApplicationProvider.getApplicationContext();
 
-    private final static String longRegex = "Longitude: [-\\d.]+";
-    private final static String latRegex = "Latitude: [-\\d.]+";
+    private final static String LONG_REGEX = "Longitude: [-\\d.]+";
+    private final static String LAT_REGEX = "Latitude: [-\\d.]+";
 
     private void pressOkIfExists() throws UiObjectNotFoundException {
         UiObject noThanksButton = device.findObject(new UiSelector().text("OK").clickable(true));
@@ -100,8 +100,8 @@ public class LocationUITests {
             denyPermissions();
             assertTrue(device.findObject(new UiSelector().textContains("Not Granted")).exists());
         } else {
-            assertTrue(device.findObject(new UiSelector().textMatches(longRegex)).exists());
-            assertTrue(device.findObject(new UiSelector().textMatches(latRegex)).exists());
+            assertTrue(device.findObject(new UiSelector().textMatches(LONG_REGEX)).exists());
+            assertTrue(device.findObject(new UiSelector().textMatches(LAT_REGEX)).exists());
         }
     }
 
@@ -113,8 +113,8 @@ public class LocationUITests {
             allowPermissions();
             assertTrue(device.findObject(new UiSelector().textContains("Granted")).exists());
         } else {
-            assertTrue(device.findObject(new UiSelector().textMatches(longRegex)).exists());
-            assertTrue(device.findObject(new UiSelector().textMatches(latRegex)).exists());
+            assertTrue(device.findObject(new UiSelector().textMatches(LONG_REGEX)).exists());
+            assertTrue(device.findObject(new UiSelector().textMatches(LAT_REGEX)).exists());
         }
     }
 
@@ -129,10 +129,10 @@ public class LocationUITests {
         }
         // Sets the test to wait for location to update, this is unavoidable as android is slow
         final int waitLocationDelay = 5000;
-        Espresso.onView(withId(R.id.latText)).perform(waitFor(withPattern(latRegex), waitLocationDelay));
+        Espresso.onView(withId(R.id.latText)).perform(waitFor(withPattern(LAT_REGEX), waitLocationDelay));
         requestLocationButton.click();
 
-        assertTrue(device.findObject(new UiSelector().textMatches(longRegex)).exists());
-        assertTrue(device.findObject(new UiSelector().textMatches(latRegex)).exists());
+        assertTrue(device.findObject(new UiSelector().textMatches(LONG_REGEX)).exists());
+        assertTrue(device.findObject(new UiSelector().textMatches(LAT_REGEX)).exists());
     }
 }
