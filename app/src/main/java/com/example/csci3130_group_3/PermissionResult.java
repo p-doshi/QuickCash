@@ -27,7 +27,7 @@ public class PermissionResult {
         }
     }
 
-    public boolean isMatchingCode(PermissionRequestCode requestCode) {
+    public boolean isMatchingCode(@NonNull PermissionRequestCode requestCode) {
          return this.requestCode.equals(requestCode);
     }
 
