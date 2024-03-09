@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.csci3130_group_3'
+    namespace 'dal.cs.quickCash3'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.csci3130_group_3"
+        applicationId "dal.cs.quickCash3"
         minSdk 28
         targetSdk 34
         versionCode 1
