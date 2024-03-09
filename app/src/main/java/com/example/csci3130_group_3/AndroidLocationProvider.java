@@ -28,11 +28,10 @@ public class AndroidLocationProvider implements LocationProvider {
     private Consumer<Location> pendingLocationFunction;
     private Consumer<String> pendingErrorFunction;
 
-
-    // Constructor for the AndroidLocationProvider class
-    public AndroidLocationProvider(@NonNull Activity activity, long updateFrequencyMillis) {
+    public AndroidLocationProvider(@NonNull AppCompatPermissionActivity activity, long updateFrequencyMillis) {
         this.activity = activity;
         this.updateFrequencyMillis = updateFrequencyMillis;
+        activity.registerPermissionHandler(this::onRequestPermissionsResult);
         locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
     }
 
@@ -98,11 +97,10 @@ public class AndroidLocationProvider implements LocationProvider {
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE &&
-            grantResults.length > 0 &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    private void onRequestPermissionsResult(PermissionResult result) {
+        if (result.getRequestCode() == LOCATION_PERMISSION_REQUEST_CODE &&
+            result.getGrantResults().length > 0 &&
+            result.getGrantResults()[0] == PackageManager.PERMISSION_GRANTED) {
 
             fetchLocation(pendingLocationFunction, pendingErrorFunction);
         }

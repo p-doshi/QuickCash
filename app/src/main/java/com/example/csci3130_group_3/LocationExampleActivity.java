@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class LocationExampleActivity extends AppCompatActivity {
+public class LocationExampleActivity extends AppCompatPermissionActivity {
     private LocationProvider locationProvider;
 
     @SuppressLint("StringFormatTrivial") // There are two conflicting errors here so I chose to ignore one.
@@ -36,11 +34,5 @@ public class LocationExampleActivity extends AppCompatActivity {
                 latTextbox.setText(String.format("%s: ERROR", getString(R.string.latitude)));
                 longTextbox.setText(String.format("%s: ERROR", getString(R.string.longitude)));
             }));
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        locationProvider.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

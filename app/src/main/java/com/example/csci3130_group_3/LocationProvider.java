@@ -14,13 +14,4 @@ public interface LocationProvider {
      * @param errorFunction The function that receives errors iff they occur.
      */
     void fetchLocation(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction);
-
-    /**
-     * This MUST be called from the activity that uses this or this interface may not work!
-     * @param requestCode The request code we used.
-     * @param permissions The permissions we requested.
-     * @param grantResults The permissions we were granted.
-     */
-    @SuppressWarnings("PMD.UseVarargs") // This is supposed to match the signature of the respective method for activities.
-    void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
 }
