@@ -1,15 +1,16 @@
 {
   "project_info": {
     "project_number": "317384859215",
+    "firebase_url": "https://csci3130-group-3-default-rtdb.firebaseio.com",
     "project_id": "csci3130-group-3",
     "storage_bucket": "csci3130-group-3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:317384859215:android:f7e5d9049e2fe8b051943a",
+        "mobilesdk_app_id": "1:317384859215:android:c7156677c5c91b4151943a",
         "android_client_info": {
-          "package_name": "com.example.csci3130_group_3"
+          "package_name": "dal.cs.quickCash3"
         }
       },
       "oauth_client": [],
