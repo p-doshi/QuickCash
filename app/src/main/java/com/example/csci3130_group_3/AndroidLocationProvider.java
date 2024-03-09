@@ -17,9 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-
 public class AndroidLocationProvider implements LocationProvider {
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;
     private final FusedLocationProviderClient locationProviderClient;
     private final Activity activity;
     private final long updateFrequencyMillis;
@@ -60,7 +58,7 @@ public class AndroidLocationProvider implements LocationProvider {
             hasPendingLocation.set(false);
 
             // Send an asynchronous request for location access.
-            activity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            activity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PermissionRequestCode.LOCATION.getValue());
 
             return;
         }
@@ -97,10 +95,11 @@ public class AndroidLocationProvider implements LocationProvider {
         });
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
     private void onRequestPermissionsResult(PermissionResult result) {
-        if (result.getRequestCode() == LOCATION_PERMISSION_REQUEST_CODE &&
-            result.getGrantResults().length > 0 &&
-            result.getGrantResults()[0] == PackageManager.PERMISSION_GRANTED) {
+        if (result.isMatchingCode(PermissionRequestCode.LOCATION) &&
+            result.containsPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            result.isPermissionSuccessful(Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             fetchLocation(pendingLocationFunction, pendingErrorFunction);
         }

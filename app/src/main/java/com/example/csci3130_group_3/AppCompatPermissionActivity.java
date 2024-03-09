@@ -15,7 +15,7 @@ public abstract class AppCompatPermissionActivity extends AppCompatActivity {
      *
      * @param permissionHandler The permission handler to register.
      */
-    public void registerPermissionHandler(Consumer<PermissionResult> permissionHandler) {
+    public void registerPermissionHandler(@NonNull Consumer<PermissionResult> permissionHandler) {
         permissionHandlers.add(permissionHandler);
     }
 
