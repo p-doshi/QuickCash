@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.RegistrationTests;
+package dal.cs.quickcash3.registrationtests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import dal.cs.quickCash3.registration.FormValidator;
+import dal.cs.quickcash3.registration.FormValidator;
 
 public class FormValidatorUnitTest {
     private FormValidator form;

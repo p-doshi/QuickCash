@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.database;
+package dal.cs.quickcash3.database;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import dal.cs.quickCash3.R;
-import dal.cs.quickCash3.util.RandomStringGenerator;
+import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
 

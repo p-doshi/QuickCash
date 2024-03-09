@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.loginAndroidTests;
+package dal.cs.quickcash3.login;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
@@ -19,7 +19,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import dal.cs.quickCash3.login.LoginActivity;
+import dal.cs.quickcash3.login.LoginActivity;
 
 public class LoginUIAutomatorTest {
     @Rule

@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.location;
+package dal.cs.quickcash3.location;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class LocationExampleActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 87;

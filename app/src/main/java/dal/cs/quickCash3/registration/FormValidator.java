@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.registration;
+package dal.cs.quickcash3.registration;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

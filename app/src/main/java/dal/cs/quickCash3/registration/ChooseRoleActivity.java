@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.registration;
+package dal.cs.quickcash3.registration;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class ChooseRoleActivity extends AppCompatActivity {
     private String role;

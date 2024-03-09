@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.database;
+package dal.cs.quickcash3.database;
 
 import android.content.Context;
 
@@ -8,7 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.function.Consumer;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 /**
  * DO NOT use this class to interact with the database!

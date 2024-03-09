@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.loginAndroidTests;
+package dal.cs.quickcash3.login;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -18,8 +18,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import dal.cs.quickCash3.R;
-import dal.cs.quickCash3.login.LoginActivity;
+import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.login.LoginActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {

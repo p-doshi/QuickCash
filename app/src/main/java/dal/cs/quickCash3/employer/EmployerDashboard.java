@@ -1,11 +1,11 @@
-package dal.cs.quickCash3.employer;
+package dal.cs.quickcash3.employer;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class EmployerDashboard extends Activity {
 

@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.workerAndroidTests;
+package dal.cs.quickcash3.worker;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -11,8 +11,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import dal.cs.quickCash3.R;
-import dal.cs.quickCash3.worker.WorkerDashboard;
+import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class WorkerDashEspressoTest {
     @Rule

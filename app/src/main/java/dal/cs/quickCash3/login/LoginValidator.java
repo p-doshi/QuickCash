@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.login;
+package dal.cs.quickcash3.login;
 
 import androidx.annotation.NonNull;
 

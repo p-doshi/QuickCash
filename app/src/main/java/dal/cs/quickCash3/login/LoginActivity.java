@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.login;
+package dal.cs.quickcash3.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +26,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class LoginActivity extends AppCompatActivity  {
     private FirebaseAuth mAuth;

@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.location;
+package dal.cs.quickcash3.location;
 
 import android.location.Location;
 

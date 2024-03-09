@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.locationAndroidTests;
+package dal.cs.quickcash3.location;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import dal.cs.quickCash3.location.LocationExampleActivity;
+import dal.cs.quickcash3.location.LocationExampleActivity;
 
 /**
  * UI Automator is required because we need to detect permission popups
@@ -37,7 +37,7 @@ import dal.cs.quickCash3.location.LocationExampleActivity;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LocationUITests {
     private static final int LAUNCH_TIMEOUT = 5000;
-    private static final String LAUNCHER_PACKAGE = "dal.cs.quickCash33";
+    private static final String LAUNCHER_PACKAGE = "dal.cs.quickcash33";
     private UiDevice device;
     private Context context;
     private int sdkVersion;

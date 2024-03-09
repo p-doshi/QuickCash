@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.registrationAndroidTests;
+package dal.cs.quickcash3.registration;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -15,8 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import dal.cs.quickCash3.R;
-import dal.cs.quickCash3.registration.RegistrationPage;
+import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.registration.RegistrationPage;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // I don't think it would increase code clarity here.
 @RunWith(AndroidJUnit4.class)

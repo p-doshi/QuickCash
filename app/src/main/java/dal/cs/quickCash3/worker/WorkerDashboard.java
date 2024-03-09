@@ -1,11 +1,11 @@
-package dal.cs.quickCash3.worker;
+package dal.cs.quickcash3.worker;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class WorkerDashboard extends Activity {
 

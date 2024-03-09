@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.util;
+package dal.cs.quickcash3.util;
 
 import androidx.annotation.NonNull;
 

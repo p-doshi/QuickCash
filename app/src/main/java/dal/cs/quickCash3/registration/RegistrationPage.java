@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.registration;
+package dal.cs.quickcash3.registration;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class RegistrationPage extends AppCompatActivity {
     private EditText firstName;

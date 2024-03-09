@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.registrationAndroidTests;
+package dal.cs.quickcash3.registration;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import dal.cs.quickCash3.registration.ChooseRoleActivity;
+import dal.cs.quickcash3.registration.ChooseRoleActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class ChooseRoleUITests {
