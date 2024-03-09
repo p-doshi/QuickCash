@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "csci3130_group_3"
+rootProject.name = "quickCash3"
 include ':app'
