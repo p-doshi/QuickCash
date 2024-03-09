@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.databaseAndroidTests;
+package dal.cs.quickCash3.database;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,9 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
-import dal.cs.quickCash3.database.Database;
-import dal.cs.quickCash3.database.MockDatabase;
 
 public class MockDatabaseTest {
     @Test
