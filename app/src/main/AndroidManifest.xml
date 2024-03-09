@@ -16,34 +16,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s">
-        <!-- Please sort these alphabetically. -->
         <activity
-            android:name=".ChooseRoleActivity"
+            android:name=".database.DatabaseExampleActivity"
             android:exported="true"/>
         <activity
-            android:name=".DatabaseExampleActivity"
+            android:name=".employer.EmployerDashboard"
             android:exported="true"/>
         <activity
-            android:name=".EmployerDashboard"
+            android:name=".location.LocationExampleActivity"
             android:exported="true"/>
         <activity
-            android:name=".LocationExampleActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustNothing">
+            android:name=".login.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrationPage"
+            android:name=".registration.ChooseRoleActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".registration.RegistrationPage"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".WorkerDashboard"
+            android:name=".worker.WorkerDashboard"
             android:exported="true"/>
     </application>
 
