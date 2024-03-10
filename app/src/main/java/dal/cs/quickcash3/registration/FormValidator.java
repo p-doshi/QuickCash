@@ -8,25 +8,26 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class FormValidator {
-    private static boolean onlyContainsWhitespace(@NonNull String str) {
+    private static boolean containsCharacter(@NonNull String str) {
+        boolean foundCharacter = false;
         for (int i = 0; i < str.length(); i++) {
             if (!Character.isWhitespace(str.charAt(i))) {
-                return false;
+                foundCharacter = true;
             }
         }
-        return true;
+        return foundCharacter;
     }
 
     public boolean isFirstNameValid(@NonNull String firstName) {
-        return onlyContainsWhitespace(firstName);
+        return containsCharacter(firstName);
     }
 
     public boolean isLastNameValid(@NonNull String lastName) {
-        return onlyContainsWhitespace(lastName);
+        return containsCharacter(lastName);
     }
 
     public boolean isAddressValid(@NonNull String address) {
-        return onlyContainsWhitespace(address);
+        return containsCharacter(address);
     }
 
     public boolean isBirthDateValid(@Nullable Date birthDate) {
@@ -34,7 +35,7 @@ public class FormValidator {
     }
 
     public boolean isUserNameValid(@NonNull String userName) {
-        return onlyContainsWhitespace(userName);
+        return containsCharacter(userName);
     }
 
     public boolean isEmailValid(@NonNull String email) {
@@ -46,7 +47,7 @@ public class FormValidator {
         return Pattern.matches(passwordPattern, password);
     }
 
-    public boolean doPasswordsMatch(@NonNull String password,String confirmPassword) {
+    public boolean doPasswordsMatch(@NonNull String password, @NonNull String confirmPassword) {
         return password.equals(confirmPassword);
     }
 }
