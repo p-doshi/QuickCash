@@ -20,6 +20,8 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
+import dal.cs.quickcash3.location.LocationExampleActivity;
+
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

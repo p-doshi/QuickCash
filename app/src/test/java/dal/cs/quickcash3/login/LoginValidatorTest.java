@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import dal.cs.quickcash3.login.LoginValidator;
 
+import dal.cs.quickcash3.login.LoginValidator;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

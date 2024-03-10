@@ -1,18 +1,26 @@
 package dal.cs.quickcash3.login;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 
-public final class LoginValidator {
-    // Utility class cannot be instantiated.
-    private LoginValidator() {}
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-    public static boolean isValidEmail(@NonNull String email){
-        return email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+public class LoginValidator {
+
+    public static boolean isValidEmail(String email){
+        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
-    public static boolean isEmptyEmail (@NonNull String email){
+    public static boolean isEmptyEmail (String email){
         return email.isEmpty();
     }
-    public static boolean isEmptyPassword (@NonNull String password){
+    public static boolean isEmptyPassword (String password){
         return password.isEmpty();
     }
 

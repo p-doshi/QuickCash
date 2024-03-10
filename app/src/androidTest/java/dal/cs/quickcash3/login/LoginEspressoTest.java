@@ -11,6 +11,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
@@ -35,7 +37,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testEmptyEmail() {
-        onView(withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));
