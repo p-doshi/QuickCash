@@ -1,36 +1,30 @@
 package dal.cs.quickcash3.util;
 
+import androidx.annotation.NonNull;
+
 import java.util.Random;
 
-public class RandomStringGenerator {
+public final class RandomStringGenerator {
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final Random RANDOM = new Random();
+
     // Utility class constructor.
     private RandomStringGenerator() {}
 
-    // A constant string that contains all the possible characters
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    /**
+     * Generate a random string of characters with the given length.
+     * @param length The length of characters to generate.
+     * @return The string of random characters.
+     */
+    public static @NonNull String generate(int length) {
+        StringBuilder randomString = new StringBuilder();
 
-    // A random number generator
-    private static final Random RANDOM = new Random();
-
-    // A method that takes an integer as the length of the desired string
-    // and returns a random string of that length
-    public static String generate(int length) {
-        // A string builder to store the generated string
-        StringBuilder sb = new StringBuilder();
-
-        // A loop that iterates for the given length
         for (int i = 0; i < length; i++) {
-            // A random index between 0 and the length of the characters string
             int index = RANDOM.nextInt(CHARACTERS.length());
-
-            // A random character from the characters string
-            char c = CHARACTERS.charAt(index);
-
-            // Append the character to the string builder
-            sb.append(c);
+            char nextCharacter = CHARACTERS.charAt(index);
+            randomString.append(nextCharacter);
         }
 
-        // Return the string builder as a string
-        return sb.toString();
+        return randomString.toString();
     }
 }

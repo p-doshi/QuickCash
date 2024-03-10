@@ -9,17 +9,18 @@ import java.util.function.Consumer;
 public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     private static final String DB_KEY = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
 
-    public MyFirebaseDatabase(Context context) {
+    public MyFirebaseDatabase(@NonNull Context context) {
         super(context);
     }
 
-    protected String relocate(String location) {
-        String newLocation = "/" + DB_KEY;
+    protected String relocate(@NonNull String location) {
+        StringBuilder newLocation = new StringBuilder("/");
+        newLocation.append(DB_KEY);
         if (!location.startsWith("/")) {
-            newLocation += "/";
+            newLocation.append("/");
         }
-        newLocation += location;
-        return newLocation;
+        newLocation.append(location);
+        return newLocation.toString();
     }
 
     @Override
