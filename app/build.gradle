@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'dal.cs.quickCash3'
+    namespace 'dal.cs.temp'
     compileSdk 34
 
     defaultConfig {
-        applicationId "dal.cs.quickCash3"
+        applicationId "dal.cs.temp"
         minSdk 28
         targetSdk 34
         versionCode 1
