@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "temp"
+rootProject.name = "quickcash3"
 include ':app'
