@@ -37,7 +37,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testEmptyEmail() {
-        onView(ViewMatchers.withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));

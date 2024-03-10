@@ -21,7 +21,7 @@ public class WorkerDashEspressoTest {
 
     @Test
     public void testWorkerNavBarExist(){
-        onView(ViewMatchers.withId(R.id.workerBottomNavView)).perform(click());
+        onView(withId(R.id.workerBottomNavView)).perform(click());
     }
 
     @Test
