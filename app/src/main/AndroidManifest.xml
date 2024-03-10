@@ -18,14 +18,14 @@
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s">
         <activity
-            android:name=".RegistrationPage"
+            android:name=".registration.RegistrationPage"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".DatabaseExampleActivity"
+            android:name=".database.DatabaseExampleActivity"
             android:exported="true"/>
         <activity
-            android:name=".LoginActivity"
+            android:name=".login.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
@@ -34,16 +34,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WorkerDashboard"
+            android:name=".worker.WorkerDashboard"
             android:exported="true"/>
         <activity
-            android:name=".EmployerDashboard"
+            android:name=".employer.EmployerDashboard"
             android:exported="true"/>
         <activity
-            android:name=".ChooseRoleActivity"
+            android:name=".registration.ChooseRoleActivity"
             android:exported="true"/>
         <activity
-            android:name=".LocationExampleActivity"
+            android:name=".location.LocationExampleActivity"
             android:exported="true"/>
     </application>
 
