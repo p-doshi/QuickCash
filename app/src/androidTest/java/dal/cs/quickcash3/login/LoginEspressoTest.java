@@ -11,8 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
@@ -21,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.login.LoginActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginEspressoTest {

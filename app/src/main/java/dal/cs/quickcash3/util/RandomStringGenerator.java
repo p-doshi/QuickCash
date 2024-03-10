@@ -3,6 +3,8 @@ package dal.cs.quickcash3.util;
 import java.util.Random;
 
 public class RandomStringGenerator {
+    // Utility class constructor.
+    private RandomStringGenerator() {}
 
     // A constant string that contains all the possible characters
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

@@ -19,8 +19,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import dal.cs.quickcash3.login.LoginActivity;
-
 public class LoginUIAutomatorTest {
     @Rule
     public final ActivityScenarioRule<LoginActivity> activityRule =

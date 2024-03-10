@@ -15,8 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import dal.cs.quickcash3.registration.ChooseRoleActivity;
-
 @RunWith(AndroidJUnit4.class)
 public class ChooseRoleUITests {
     @Rule

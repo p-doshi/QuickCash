@@ -1,10 +1,9 @@
 package dal.cs.quickcash3.registration;
+
 import java.util.Date;
 import java.util.regex.Pattern;
+
 public class FormValidator {
-
-
-    // Validation methods
     public boolean isFirstNameValid(String firstName) {
         return firstName != null && !firstName.trim().isEmpty();
     }
@@ -37,5 +36,4 @@ public class FormValidator {
     public boolean doPasswordsMatch(String password,String confirmPassword) {
         return password != null && password.equals(confirmPassword);
     }
-
 }

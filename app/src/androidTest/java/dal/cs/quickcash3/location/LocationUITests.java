@@ -20,15 +20,11 @@ import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
-import dal.cs.quickcash3.location.LocationExampleActivity;
-
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-
-import dal.cs.quickcash3.location.LocationExampleActivity;
 
 /**
  * UI Automator is required because we need to detect permission popups

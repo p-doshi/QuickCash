@@ -41,7 +41,6 @@ public class ChooseRoleActivity extends AppCompatActivity {
         if (role.equals(getString(R.string.employer))) {
             Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
         } else if (role.equals(getString(R.string.worker))) {
-            //dashboardIntent = new Intent(getBaseContext(), WorkerDashboard.class);
             Toast.makeText(getApplicationContext(), "Switch to Worker Dashboard", Toast.LENGTH_LONG).show();
         } else {
             throw new IllegalArgumentException("A deadly error has occur when user is choosing role");

@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.registration.RegistrationPage;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // I don't think it would increase code clarity here.
 @RunWith(AndroidJUnit4.class)

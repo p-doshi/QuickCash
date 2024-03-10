@@ -12,7 +12,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class WorkerDashEspressoTest {
     @Rule
