@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SearchFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/searchTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/job_search"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jobTitleSearchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:ems="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchTitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/jobTitleSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints=""
+                android:hint="@string/job_title"
+                android:inputType="textAutoComplete"
+                app:layout_constraintBottom_toBottomOf="@+id/jobTitleSearchLayout"
+                app:layout_constraintEnd_toEndOf="@+id/jobTitleSearchLayout"
+                app:layout_constraintStart_toStartOf="@+id/jobTitleSearchLayout"
+                app:layout_constraintTop_toTopOf="@+id/jobTitleSearchLayout" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/payRangeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/pay_range"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintTop_toBottomOf="@+id/jobTitleSearchLayout" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/payRangeSlider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:valueFrom="@integer/pay_range_minimum"
+            android:valueTo="@integer/pay_range_maximum"
+            android:stepSize="1"
+            app:values="@array/pay_range_default_values"
+            app:labelBehavior="withinBounds"
+            app:tickVisible="false"
+            app:layout_constraintEnd_toEndOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintStart_toStartOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintTop_toBottomOf="@+id/payRangeText" />
+
+        <TextView
+            android:id="@+id/jobDurationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/job_duration"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintTop_toBottomOf="@+id/payRangeSlider" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/jobDurationSlider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:valueFrom="@integer/job_duration_minimum"
+            android:valueTo="@integer/job_duration_maximum"
+            android:stepSize="1"
+            app:values="@array/job_duration_default_values"
+            app:labelBehavior="withinBounds"
+            app:tickVisible="false"
+            app:layout_constraintEnd_toEndOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintStart_toStartOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintTop_toBottomOf="@+id/jobDurationText" />
+
+        <TextView
+            android:id="@+id/maxDistanceText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/max_distance"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintTop_toBottomOf="@+id/jobDurationSlider" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/maxDistanceSlider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:valueFrom="@integer/max_distance_minimum"
+            android:valueTo="@integer/max_distance_maximum"
+            android:stepSize="1"
+            app:values="@array/max_distance_default_value"
+            app:labelBehavior="withinBounds"
+            app:tickVisible="false"
+            app:layout_constraintEnd_toEndOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintStart_toStartOf="@+id/jobTitleSearchLayout"
+            app:layout_constraintTop_toBottomOf="@+id/maxDistanceText" />
+
+        <Button
+            android:id="@+id/buttonSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/search"
+            android:elevation="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/maxDistanceSlider"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
