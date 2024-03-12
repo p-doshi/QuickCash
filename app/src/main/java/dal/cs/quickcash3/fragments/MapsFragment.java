@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.fragments;
+package dal.cs.quickcash3.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class MapsFragment extends Fragment {
 

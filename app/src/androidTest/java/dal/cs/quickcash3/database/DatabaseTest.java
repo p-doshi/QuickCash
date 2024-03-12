@@ -18,9 +18,9 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import dal.cs.quickCash3.database.Database;
-import dal.cs.quickCash3.database.MyFirebaseDatabase;
-import dal.cs.quickCash3.database.MyFirebaseDatabaseImpl;
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.MyFirebaseDatabaseImpl;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
