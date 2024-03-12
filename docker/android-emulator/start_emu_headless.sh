@@ -6,8 +6,6 @@ RED='\033[0;31m'
 YE='\033[1;33m'
 NC='\033[0m' # No Color
 
-emulator_name=${EMULATOR_NAME}
-
 function check_hardware_acceleration() {
     if [[ "$HW_ACCEL_OVERRIDE" != "" ]]; then
         hw_accel_flag="$HW_ACCEL_OVERRIDE"
@@ -30,7 +28,7 @@ hw_accel_flag=$(check_hardware_acceleration)
 
 function launch_emulator () {
   adb devices | grep emulator | cut -f1 | xargs -I {} adb -s "{}" emu kill
-  options="@${emulator_name} -no-window -no-snapshot -noaudio -no-boot-anim -memory 2048 ${hw_accel_flag} -camera-back none -gpu off"
+  options="@${NICKNAME} -no-window -no-snapshot -noaudio -no-boot-anim -memory 2048 ${hw_accel_flag} -camera-back none -gpu off"
   echo "${OSTYPE}: emulator ${options}"
   nohup emulator $options &
 }
