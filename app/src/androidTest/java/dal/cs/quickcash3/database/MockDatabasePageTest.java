@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.databaseAndroidTests;
+package dal.cs.quickcash3.database;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.database.DatabaseExampleActivity;
-import dal.cs.quickcash3.database.MockDatabase;
 
 @RunWith(AndroidJUnit4.class)
 public class MockDatabasePageTest {

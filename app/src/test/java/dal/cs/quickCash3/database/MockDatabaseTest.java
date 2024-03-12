@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals") // I think the duplication gives more clarity.
 public class MockDatabaseTest {
     @Test
     public void locationToKeysWithSlash() {

@@ -8,11 +8,11 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public class MockDatabase implements Database {
-    public static class MapType extends TreeMap<String, Object> {}
-    private MapType data;
+    private Map<String, Object> data;
+    public static class MapType extends TreeMap<String, Object> {} // NOPMD: This will never be serialized.
 
     public static List<String> splitLocationIntoKeys(String location) {
-        ArrayList<String> strings = new ArrayList<>();
+        List<String> strings = new ArrayList<>();
 
         String currentLocation = location;
         for (int slashPosition = currentLocation.indexOf('/');
@@ -49,7 +49,7 @@ public class MockDatabase implements Database {
         if (!(obj instanceof MapType)) {
             throw new IllegalArgumentException("Key not found: " + key);
         }
-        MapType map = (MapType)obj;
+        Map<String, Object> map = (MapType)obj;
 
         if (!map.containsKey(key)) {
             throw new IllegalArgumentException("Key not found: " + key);
@@ -83,7 +83,7 @@ public class MockDatabase implements Database {
             return;
         }
 
-        MapType nestedMap;
+        Map<String, Object> nestedMap;
         Object nestedData = map.get(key);
         if (nestedData instanceof MapType) {
             nestedMap = (MapType)nestedData;
@@ -107,7 +107,7 @@ public class MockDatabase implements Database {
             setData(location, value);
             successFunction.run();
         }
-        catch (Exception exception) {
+        catch (IllegalArgumentException exception) {
             errorFunction.accept(exception.getMessage());
         }
     }
@@ -119,7 +119,10 @@ public class MockDatabase implements Database {
             T value = type.cast(obj);
             readFunction.accept(value);
         }
-        catch (Exception exception) {
+        catch (IllegalArgumentException exception) {
+            errorFunction.accept(exception.getMessage());
+        }
+        catch (ClassCastException exception) {
             errorFunction.accept(exception.getMessage());
         }
     }
