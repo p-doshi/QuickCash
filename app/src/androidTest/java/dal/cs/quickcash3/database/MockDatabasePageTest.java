@@ -13,9 +13,11 @@ import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,14 +25,16 @@ import dal.cs.quickcash3.R;
 
 @RunWith(AndroidJUnit4.class)
 public class MockDatabasePageTest {
-    private Context context;
+    private final Context context = ApplicationProvider.getApplicationContext();
+    @Rule
+    public final ActivityScenarioRule<DatabaseExampleActivity> activityRule =
+        new ActivityScenarioRule<>(
+            new Intent(context, DatabaseExampleActivity.class)
+            .addCategory(context.getString(R.string.MOCK_DATABASE)));
 
     @Before
     public void setup() {
-        context = ApplicationProvider.getApplicationContext();
-        Intent intent = new Intent(context, DatabaseExampleActivity.class);
-        intent.addCategory(context.getString(R.string.MOCK_DATABASE));
-        ActivityScenario<DatabaseExampleActivity> scenario = ActivityScenario.launch(intent);
+        ActivityScenario<DatabaseExampleActivity> scenario = activityRule.getScenario();
         scenario.onActivity(activity ->
             // Do not run the test if we are not using the mock database.
             assertTrue("Not using Mock Database",

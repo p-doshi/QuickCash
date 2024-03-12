@@ -1,11 +1,15 @@
 package dal.cs.quickcash3.database;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.annotations.Nullable;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,13 +21,14 @@ public class DatabaseExampleActivity extends AppCompatActivity {
     private static final String LOG_TAG = "DatabaseExample";
     private Database database;
 
+    @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_example);
         initInterfaces();
 
-        final String dbKey = "test";
+        final String dbKey = "test/DatabaseExampleActivity";
 
         // Get the text view.
         TextView output = findViewById(R.id.dbOutput);
@@ -59,7 +64,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         }
     }
 
-    public Database getDatabase() {
+    public @NonNull Database getDatabase() {
         return database;
     }
 }

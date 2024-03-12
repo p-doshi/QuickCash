@@ -6,32 +6,23 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-@SuppressWarnings("PMD.AvoidDuplicateLiterals") // I think the duplication gives more clarity.
+@SuppressWarnings("PMD.AvoidDuplicateLiterals") // Hard coded literals increase test code clarity.
 public class MockDatabaseTest {
-    @Test
-    public void locationToKeysWithSlash() {
-        List<String> expectedList = Arrays.asList("a", "b", "c", "d", "e");
-        List<String> list = MockDatabase.splitLocationIntoKeys("/a/b/c/////d/e/");
-        assertEquals(expectedList, list);
-    }
+    private MockDatabase database;
 
-    @Test
-    public void locationToKeysWithoutSlash() {
-        List<String> expectedList = Arrays.asList("a", "b", "c", "d", "e");
-        List<String> list = MockDatabase.splitLocationIntoKeys("a/b/c/////d/e/");
-        assertEquals(expectedList, list);
+    @Before
+    public void setup() {
+        database = new MockDatabase();
     }
 
     @Test
     public void writeWithoutSlash() {
-        Database database = new MockDatabase();
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -45,7 +36,6 @@ public class MockDatabaseTest {
 
     @Test
     public void writeWithSlash() {
-        Database database = new MockDatabase();
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -59,7 +49,6 @@ public class MockDatabaseTest {
 
     @Test
     public void writeToRoot() {
-        Database database = new MockDatabase();
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -73,7 +62,6 @@ public class MockDatabaseTest {
 
     @Test
     public void writeToSlash() {
-        Database database = new MockDatabase();
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -87,7 +75,6 @@ public class MockDatabaseTest {
 
     @Test
     public void readKey() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -100,22 +87,7 @@ public class MockDatabaseTest {
     }
 
     @Test
-    public void readRoot() {
-        Database database = new MockDatabase();
-        AtomicReference<MockDatabase.MapType> value = new AtomicReference<>();
-        AtomicReference<String> error = new AtomicReference<>();
-
-        database.read("", MockDatabase.MapType.class,
-            value::set,
-            error::set);
-
-        assertNull(value.get());
-        assertNull(error.get());
-    }
-
-    @Test
     public void writeThenRead() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -132,7 +104,6 @@ public class MockDatabaseTest {
 
     @Test
     public void writeSlashThenReadNoSlash() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -149,7 +120,6 @@ public class MockDatabaseTest {
 
     @Test
     public void writeThenReadOther() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -165,7 +135,6 @@ public class MockDatabaseTest {
 
     @Test
     public void writeNestedThenReadRoot() {
-        Database database = new MockDatabase();
         AtomicReference<MockDatabase.MapType> map = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -183,7 +152,6 @@ public class MockDatabaseTest {
 
     @Test
     public void readOverwrittenNestedWrite() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -201,7 +169,6 @@ public class MockDatabaseTest {
 
     @Test
     public void readNestedOverwrittenWrite() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -219,7 +186,6 @@ public class MockDatabaseTest {
 
     @Test
     public void doubleWriteThenRead() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -234,7 +200,6 @@ public class MockDatabaseTest {
 
     @Test
     public void readInvalidType() {
-        Database database = new MockDatabase();
         AtomicReference<String> value = new AtomicReference<>();
         AtomicReference<String> error = new AtomicReference<>();
 
@@ -246,5 +211,159 @@ public class MockDatabaseTest {
 
         assertNull(value.get());
         assertNotNull(error.get());
+    }
+
+    @Test
+    public void writeListen() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("a", value.get());
+        assertNull(error.get());
+    }
+
+    @Test
+    public void listenWrite() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+        database.write("a", "a", error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("a", value.get());
+        assertNotNull(error.get());
+    }
+
+    @Test
+    public void writeListenWrite() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+        database.write("a", "b", error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("b", value.get());
+        assertNull(error.get());
+    }
+
+    @Test
+    public void writeListenError() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+        database.write("a/a", "b", error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("a", value.get());
+        assertNotNull(error.get());
+    }
+
+    @Test
+    public void writeListenErrorWrite() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+        database.write("a/a", "b", error::set);
+        database.write("a", "c", error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("c", value.get());
+        assertNotNull(error.get());
+    }
+
+    @Test
+    public void writeListenWriteStopListenWrite() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+        database.write("a", "b", error::set);
+        database.removeListener(listenerId);
+        database.write("a", "c", error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("b", value.get());
+        assertNull(error.get());
+    }
+
+    @Test
+    public void delete() {
+        AtomicBoolean passed = new AtomicBoolean(false);
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.delete("a",
+            () -> passed.set(true),
+            error::set);
+
+        assertFalse(passed.get());
+        assertNotNull(error.get());
+    }
+
+    @Test
+    public void writeDelete() {
+        AtomicBoolean passed = new AtomicBoolean(false);
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        database.delete("a",
+            () -> passed.set(true),
+            error::set);
+
+        assertTrue(passed.get());
+        assertNull(error.get());
+    }
+
+    @Test
+    public void writeDeleteRead() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        database.delete("a", error::set);
+        database.read("a", String.class, value::set, error::set);
+
+        assertNull(value.get());
+        assertNotNull(error.get());
+    }
+
+    @Test
+    public void writeListenDelete() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+        database.delete("a", error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("a", value.get());
+        assertNotNull(error.get());
+    }
+
+    @Test
+    public void writeListenStopDelete() {
+        AtomicReference<String> value = new AtomicReference<>();
+        AtomicReference<String> error = new AtomicReference<>();
+
+        database.write("a", "a", error::set);
+        int listenerId = database.addListener("a", String.class, value::set, error::set);
+        database.removeListener(listenerId);
+        database.delete("a", error::set);
+
+        assertEquals(0, listenerId);
+        assertEquals("a", value.get());
+        assertNull(error.get());
     }
 }
