@@ -10,8 +10,19 @@ import java.util.function.Consumer;
 
 public class MockDatabase implements Database {
     private Map<String, Object> data;
-    public static class MapType extends TreeMap<String, Object> {} // NOPMD: This will never be serialized.
 
+    // Extend the type we want to use to avoid type cast warnings.
+    public static class MapType extends TreeMap<String, Object> {
+        private static final long serialVersionUID = 1L;
+    }
+
+    /**
+     * Split the location that is separated by slashes (/) into its respective
+     * parts.
+     * 
+     * @param location The location to split.
+     * @return Each string that is separated by a /.
+     */
     public static List<String> splitLocationIntoKeys(String location) {
         List<String> strings = new ArrayList<>();
 
@@ -71,7 +82,7 @@ public class MockDatabase implements Database {
         recursiveSet(data, keys, value);
     }
 
-    private <T> void recursiveSet(MapType map, @NonNull List<String> keys, T value) {
+    private <T> void recursiveSet(Map<String, Object> map, @NonNull List<String> keys, T value) {
         assert !keys.isEmpty();
 
         // Get the next key we are looking for.
