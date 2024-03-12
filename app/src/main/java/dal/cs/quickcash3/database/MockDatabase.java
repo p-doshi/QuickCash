@@ -6,51 +6,49 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public class MockDatabase implements Database {
+    private static final String KEY_NOT_FOUND = "Key not found: ";
     private final Map<Integer, DatabaseListener<?>> listenerMap = new TreeMap<>();
-    private int lastCallbackId = 0;
     private final Map<String, Object> data = new MapType();
+    private int nextListenerId;
 
     // Let's create a class to avoid generic type cast warnings.
     public static class MapType extends TreeMap<String, Object> {
         private static final long serialVersionUID = 1L;
     }
 
-    public MockDatabase() {}
-
-    private Object recursiveGet(Object obj, @NonNull List<String> keys) {
-        if (keys.isEmpty()) {
+    private Object recursiveGet(Object obj, @NonNull List<String> keys, int index) {
+        if (index >= keys.size()) {
             return obj;
         }
 
-        String key = keys.remove(0);
+        String key = keys.get(index++);
 
         if (!(obj instanceof MapType)) {
-            throw new IllegalArgumentException("Key not found: " + key);
+            throw new IllegalArgumentException(KEY_NOT_FOUND + key);
         }
         Map<String, Object> map = (MapType)obj;
 
         if (!map.containsKey(key)) {
-            throw new IllegalArgumentException("Key not found: " + key);
+            throw new IllegalArgumentException(KEY_NOT_FOUND + key);
         }
 
         Object nestedData = map.get(key);
-        return recursiveGet(nestedData, keys);
+        return recursiveGet(nestedData, keys, index);
     }
 
-    private <T> void recursiveSet(Map<String, Object> map, @NonNull List<String> keys, T value) {
-        assert !keys.isEmpty();
+    private <T> void recursiveSet(Map<String, Object> map, @NonNull List<String> keys, int index, T value) {
+        assert index < keys.size();
 
         // Get the next key we are looking for.
-        String key = keys.remove(0);
+        String key = keys.get(index++);
 
         // Is this the last key?
-        if (keys.isEmpty()) {
+        if (index == keys.size()) {
             // TODO: serialize the type into a JSON object.
             map.put(key, value);
             return;
@@ -66,17 +64,18 @@ public class MockDatabase implements Database {
             map.put(key, nestedMap);
         }
 
-        recursiveSet(nestedMap, keys, value);
+        recursiveSet(nestedMap, keys, index, value);
     }
 
-    private void recursiveFindAndTrack(@NonNull List<Map<String, Object>> directories, @NonNull List<String> keys) {
-        String key = keys.remove(0);
+    private void recursiveFindAndTrack(@NonNull List<Map<String, Object>> directories, @NonNull List<String> keys, int index) {
+        String key = keys.get(index++);
         Map<String, Object> lastDirectory = directories.get(directories.size() - 1);
         if (!lastDirectory.containsKey(key)) {
-            throw new IllegalArgumentException("Key not found: " + key);
+            throw new IllegalArgumentException(KEY_NOT_FOUND + key);
         }
 
-        if (keys.isEmpty()) {
+        // Is this the last key?
+        if (index == keys.size()) {
             lastDirectory.remove(key);
             recursiveDelete(directories);
             return;
@@ -84,12 +83,12 @@ public class MockDatabase implements Database {
 
         Object nestedData = lastDirectory.get(key);
         if (!(nestedData instanceof MapType)) {
-            throw new IllegalArgumentException("Key not found: " + key);
+            throw new IllegalArgumentException(KEY_NOT_FOUND + key);
         }
 
         Map<String, Object> nextDirectory = (MapType)nestedData;
         directories.add(nextDirectory);
-        recursiveFindAndTrack(directories, keys);
+        recursiveFindAndTrack(directories, keys, index);
     }
 
     private void recursiveDelete(@NonNull List<Map<String, Object>> directories) {
@@ -111,35 +110,32 @@ public class MockDatabase implements Database {
             DatabaseListener<?> listener = entry.getValue();
             if (listener.isLocation(keys)) {
                 try {
-                    // Make a copy since the list will be modified.
-                    Object callbackValue = recursiveGet(data, new ArrayList<>(listener.getKeys()));
-                    listener.read(callbackValue);
+                    Object callbackValue = recursiveGet(data, listener.getKeys(), 0);
+                    listener.sendValue(callbackValue);
                 }
                 catch (ClassCastException | IllegalArgumentException exception) {
-                    listener.error(exception.getMessage());
+                    listener.sendError(exception.getMessage());
                 }
             }
         }
     }
 
     @Override
-    public <T> void write(String location, T value, Consumer<String> errorFunction) {
+    public <T> void write(@NonNull String location, T value, @NonNull Consumer<String> errorFunction) {
         write(location, value, () -> {}, errorFunction);
     }
 
     @Override
-    public <T> void write(String location, T value, Runnable successFunction, Consumer<String> errorFunction) {
+    public <T> void write(@NonNull String location, T value, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
+        List<String> keys = splitLocationIntoKeys(location);
+        if (keys.isEmpty()) {
+            errorFunction.accept("Must provide a location to write data");
+            return;
+        }
+
         try {
-            List<String> keys = splitLocationIntoKeys(location);
-            if (keys.isEmpty()) {
-                throw new IllegalArgumentException("Must provide a location to write data");
-            }
-
-            // Make a copy since the list will be modified.
-            recursiveSet(data, new ArrayList<>(keys), value);
-
+            recursiveSet(data, keys, 0, value);
             runListeners(keys);
-
             successFunction.run();
         }
         catch (IllegalArgumentException exception) {
@@ -148,10 +144,10 @@ public class MockDatabase implements Database {
     }
 
     @Override
-    public <T> void read(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction) {
+    public <T> void read(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
         try {
             List<String> keys = splitLocationIntoKeys(location);
-            Object obj = recursiveGet(data, keys);
+            Object obj = recursiveGet(data, keys, 0);
             T value = type.cast(obj);
             readFunction.accept(value);
         }
@@ -162,7 +158,7 @@ public class MockDatabase implements Database {
 
     @Override
     public <T> int addListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
-        int callbackId = lastCallbackId++;
+        int callbackId = nextListenerId++;
         DatabaseListener<T> callbacks = new DatabaseListener<>(location, type, readFunction, errorFunction);
         listenerMap.put(callbackId, callbacks);
 
@@ -181,23 +177,22 @@ public class MockDatabase implements Database {
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) {
+    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) throws IllegalArgumentException {
         delete(location, () -> {}, errorFunction);
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
-        try {
-            List<String> keys = splitLocationIntoKeys(location);
-            if (keys.isEmpty()) {
-                throw new IllegalArgumentException("Must provide a location to delete data");
-            }
+    public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) throws IllegalArgumentException {
+        List<String> keys = splitLocationIntoKeys(location);
+        if (keys.isEmpty()) {
+            errorFunction.accept("Must provide a location to delete data");
+            return;
+        }
 
+        try {
             List<Map<String, Object>> directories = new ArrayList<>();
             directories.add(data);
-
-            // Make a copy since the list will be modified.
-            recursiveFindAndTrack(directories, new ArrayList<>(keys));
+            recursiveFindAndTrack(directories, keys, 0);
 
             runListeners(keys);
 

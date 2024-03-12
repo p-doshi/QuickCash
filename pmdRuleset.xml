@@ -178,7 +178,12 @@
     <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingMethodName" />
     <rule ref="category/java/errorprone.xml/AvoidFieldNameMatchingTypeName" />
     <rule ref="category/java/errorprone.xml/AvoidInstanceofChecksInCatchClause"/>
-    <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition" />
+    <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition">
+        <properties>
+            <property name="ignoreMagicNumbers" value="-1,0,1" />
+            <property name="ignoreExpressions" value="true" />
+        </properties>
+    </rule>
     <rule ref="category/java/errorprone.xml/AvoidLosingExceptionInformation" />
     <rule ref="category/java/errorprone.xml/AvoidMultipleUnaryOperators"/>
     <rule ref="category/java/errorprone.xml/AvoidUsingOctalValues"/>
@@ -262,7 +267,7 @@
     <rule ref="category/java/multithreading.xml/DoubleCheckedLocking"/>
     <rule ref="category/java/multithreading.xml/NonThreadSafeSingleton"/>
     <rule ref="category/java/multithreading.xml/UnsynchronizedStaticFormatter"/>
-    <rule ref="category/java/multithreading.xml/UseConcurrentHashMap" />
+    <!-- <rule ref="category/java/multithreading.xml/UseConcurrentHashMap" /> -->
     <rule ref="category/java/multithreading.xml/UseNotifyAllInsteadOfNotify"/>
 
     <!-- TRIVIAL PERFORMANCE IMPROVEMENTS -->

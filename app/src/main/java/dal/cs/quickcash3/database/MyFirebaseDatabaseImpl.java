@@ -23,7 +23,7 @@ import dal.cs.quickcash3.R;
 public class MyFirebaseDatabaseImpl implements Database {
     private final FirebaseDatabase database;
     private final Map<Integer, ReferenceListenerPair> listenerMap = new TreeMap<>();
-    private int nextId = 0;
+    private int nextListenerId;
 
     public MyFirebaseDatabaseImpl(@NonNull Context context) {
         // Get a reference to the database.
@@ -55,7 +55,7 @@ public class MyFirebaseDatabaseImpl implements Database {
     }
 
     @Override
-    public <T> int addListener(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction) {
+    public <T> int addListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
         DatabaseReference reference = database.getReference(location);
         ValueEventListener listener = reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -70,14 +70,20 @@ public class MyFirebaseDatabaseImpl implements Database {
             }
         });
 
-        int id = nextId++;
+        int listenerId = nextListenerId++;
         ReferenceListenerPair pair = new ReferenceListenerPair(reference, listener);
-        listenerMap.put(id, pair);
-        return id;
+        listenerMap.put(listenerId, pair);
+        return listenerId;
     }
 
+    /**
+     * Remove the listener with the matching listenerId.
+     *
+     * @param listenerId The ID of the listener callback to remove.
+     * @throws IllegalArgumentException If the listenerId is could not be found.
+     */
     @Override
-    public void removeListener(int listenerId) {
+    public void removeListener(int listenerId) throws IllegalArgumentException {
         ReferenceListenerPair pair = listenerMap.get(listenerId);
         if (pair == null) {
             throw new IllegalArgumentException("Could not find listener callback with ID: " + listenerId);
@@ -87,13 +93,13 @@ public class MyFirebaseDatabaseImpl implements Database {
     }
 
     @Override
-    public void delete(String location, Consumer<String> errorFunction) {
+    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) {
         database.getReference(location).removeValue()
             .addOnFailureListener(error -> errorFunction.accept(error.getMessage()));
     }
 
     @Override
-    public void delete(String location, Runnable successFunction, Consumer<String> errorFunction) {
+    public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
         database.getReference(location).removeValue()
             .addOnSuccessListener(unused -> successFunction.run())
             .addOnFailureListener(error -> errorFunction.accept(error.getMessage()));

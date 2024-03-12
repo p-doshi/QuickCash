@@ -39,7 +39,7 @@ class DatabaseListener<T> {
         return keys;
     }
 
-    public void read(Object value) {
+    public void sendValue(Object value) {
         if (!type.equals(value.getClass())) {
             throw new ClassCastException(String.format(Locale.getDefault(), "Cannot cast %s to %s", value.getClass(), type));
         }
@@ -48,7 +48,7 @@ class DatabaseListener<T> {
         readFunction.accept((T)value);
     }
 
-    public void error(String error) {
+    public void sendError(String error) {
         errorFunction.accept(error);
     }
 }

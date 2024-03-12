@@ -388,7 +388,7 @@ public class DatabaseTest {
                 resource.decrement();
             });
 
-        int id = database.addListener(testDir, String.class,
+        int listenerId = database.addListener(testDir, String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
@@ -409,7 +409,7 @@ public class DatabaseTest {
         // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
-        database.removeListener(id);
+        database.removeListener(listenerId);
 
         Assert.assertEquals(TEST_TEXT, value.get());
         Assert.assertNull(error.get());

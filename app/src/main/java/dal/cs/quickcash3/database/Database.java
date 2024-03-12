@@ -64,15 +64,14 @@ public interface Database {
      * @param <T> Can read any type of data from firebase.
      */
     @CheckReturnValue
-    <T> int addListener(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction);
+    <T> int addListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction);
 
     /**
      * Remove the listener with the matching listenerId.
      *
      * @param listenerId The ID of the listener callback to remove.
-     * @throws IllegalArgumentException If the listenerId is could not be found.
      */
-    void removeListener(int listenerId) throws IllegalArgumentException;
+    void removeListener(int listenerId);
 
     /**
      * Delete the item in the database at the given location. Iff an error occurs, the error
@@ -81,7 +80,7 @@ public interface Database {
      * @param location The location of the item to delete.
      * @param errorFunction The function that will be called in case of an error.
      */
-    void delete(String location, Consumer<String> errorFunction);
+    void delete(@NonNull String location, @NonNull Consumer<String> errorFunction);
 
     /**
      * Delete the item in the database at the given location. Iff an error occurs, the error
@@ -91,5 +90,5 @@ public interface Database {
      * @param successFunction The function that will be called on successful deletion.
      * @param errorFunction The function that will be called in case of an error.
      */
-    void delete(String location, Runnable successFunction, Consumer<String> errorFunction);
+    void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction);
 }

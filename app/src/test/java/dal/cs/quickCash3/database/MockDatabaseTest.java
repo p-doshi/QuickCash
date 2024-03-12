@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals") // Hard coded literals increase test clarity.
 public class MockDatabaseTest {
     private MockDatabase database;
 
