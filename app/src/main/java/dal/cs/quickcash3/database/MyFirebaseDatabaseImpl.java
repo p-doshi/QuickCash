@@ -75,13 +75,7 @@ public class MyFirebaseDatabaseImpl implements Database {
         listenerMap.put(listenerId, pair);
         return listenerId;
     }
-
-    /**
-     * Remove the listener with the matching listenerId.
-     *
-     * @param listenerId The ID of the listener callback to remove.
-     * @throws IllegalArgumentException If the listenerId is could not be found.
-     */
+    
     @Override
     public void removeListener(int listenerId) {
         ReferenceListenerPair pair = listenerMap.get(listenerId);
