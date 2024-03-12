@@ -5,12 +5,9 @@ import android.content.Context;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
-import dal.cs.quickCash3.database.Database;
-import dal.cs.quickCash3.database.MyFirebaseDatabase;
-import dal.cs.quickCash3.database.MyFirebaseDatabaseImpl;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Assert;
@@ -20,6 +17,10 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
+import dal.cs.quickCash3.database.Database;
+import dal.cs.quickCash3.database.MyFirebaseDatabase;
+import dal.cs.quickCash3.database.MyFirebaseDatabaseImpl;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
