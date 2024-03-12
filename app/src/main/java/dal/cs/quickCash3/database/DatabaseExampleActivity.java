@@ -22,7 +22,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_database_example);
         getImplementations();
 
-        final String dbKey = "test";
+        final String dbKey = "test/DatabaseExampleActivity";
 
         // Get the text view.
         TextView output = findViewById(R.id.dbOutput);
