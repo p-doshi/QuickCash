@@ -9,6 +9,7 @@ import android.Manifest;
 import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
@@ -38,17 +39,37 @@ import org.junit.Test;
 import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class WorkerDashMapsTest {
-    public String launcherPackage = "dal.cs.quickCash3.worker";
-    public int TIME_OUT = 5000;
     UiDevice device;
 
     @Before
     public void setup() {
         device = UiDevice.getInstance(getInstrumentation());
-        Context context = ApplicationProvider.getApplicationContext();
-        Intent launcherIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
+
+        Context context = InstrumentationRegistry.getInstrumentation().getContext();
+        Intent launcherIntent = new Intent(context, WorkerDashMapsTestActivity.class);
+
         launcherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launcherIntent);
-        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), TIME_OUT);
+    }
+
+    @Test
+    public void testMapMeIsDisplayed() throws UiObjectNotFoundException {
+        UiObject Me=device.findObject(new UiSelector().descriptionContains("Me"));
+        Me.click();
+        assertTrue(Me.exists());
+    }
+
+    @Test
+    public void testMapWorker1IsDisplayed() throws UiObjectNotFoundException{
+        UiObject Worker1=device.findObject(new UiSelector().descriptionContains("Worker1"));
+        Worker1.click();
+        assertTrue(Worker1.exists());
+    }
+
+    @Test
+    public void testMapWorker2IsDisplayed() throws UiObjectNotFoundException{
+        UiObject Worker2=device.findObject(new UiSelector().descriptionContains("Worker2"));
+        Worker2.click();
+        assertTrue(Worker2.exists());
     }
 }
