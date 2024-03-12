@@ -1,18 +1,8 @@
 package dal.cs.quickCash3.workerAndroidTests;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-import android.Manifest;
-
-import androidx.test.espresso.Espresso;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,20 +13,13 @@ import static org.junit.Assert.assertTrue;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
-import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
-import androidx.test.uiautomator.Until;
 
 import org.junit.Before;
-import org.junit.Test;
 
-import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class WorkerDashMapsTest {
     UiDevice device;
@@ -48,7 +31,7 @@ public class WorkerDashMapsTest {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         Intent launcherIntent = new Intent(context, WorkerDashMapsTestActivity.class);
 
-        launcherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        launcherIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(launcherIntent);
     }
 

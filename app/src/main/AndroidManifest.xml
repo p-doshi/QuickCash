@@ -4,6 +4,8 @@
     <!-- Location Permissions for Mat's UserStory7 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Internet Permission for Mat's User Story 35 -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,16 +19,17 @@
         tools:targetApi="s">
         <activity
             android:name=".employer.EmployerDashLocation"
-            android:exported="false" />
-        <activity
-            android:name=".employer.AutomaticallyLocationButton"
-            android:exported="false"
-            android:label="@string/title_activity_automatically_location_button"
-            android:theme="@style/Theme.Csci3130_group_3" />
+            android:exported="true" />
 
         <service
             android:name=".location.AndroidLocationProvider"
             android:foregroundServiceType="location" />
+        <activity
+            android:name=".location.MapsActivity"
+            android:exported="true" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY"></meta-data>
 
         <activity
             android:name=".registration.RegistrationPage"
