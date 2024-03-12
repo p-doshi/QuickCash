@@ -27,7 +27,6 @@ public class MockDatabase implements Database {
         }
 
         String key = keys.get(index);
-        int nextIndex = index + 1;
 
         if (!(obj instanceof MapType)) {
             throw new IllegalArgumentException(KEY_NOT_FOUND + key);
@@ -39,6 +38,7 @@ public class MockDatabase implements Database {
         }
 
         Object nestedData = map.get(key);
+        int nextIndex = index + 1;
         return recursiveGet(nestedData, keys, nextIndex);
     }
 
@@ -47,9 +47,9 @@ public class MockDatabase implements Database {
 
         // Get the next key we are looking for.
         String key = keys.get(index);
-        int nextIndex = index + 1;
 
         // Is this the last key?
+        int nextIndex = index + 1;
         if (nextIndex == keys.size()) {
             // TODO: serialize the type into a JSON object.
             map.put(key, value);
@@ -71,13 +71,13 @@ public class MockDatabase implements Database {
 
     private void recursiveFindAndTrack(@NonNull List<Map<String, Object>> directories, @NonNull List<String> keys, int index) {
         String key = keys.get(index);
-        int nextIndex = index + 1;
         Map<String, Object> lastDirectory = directories.get(directories.size() - 1);
         if (!lastDirectory.containsKey(key)) {
             throw new IllegalArgumentException(KEY_NOT_FOUND + key);
         }
 
         // Is this the last key?
+        int nextIndex = index + 1;
         if (nextIndex == keys.size()) {
             lastDirectory.remove(key);
             recursiveDelete(directories);
