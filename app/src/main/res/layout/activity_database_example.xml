@@ -7,24 +7,24 @@
     tools:context=".database.DatabaseExampleActivity">
 
     <Button
-        android:id="@+id/sendButton"
+        android:id="@+id/writeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="Send"
+        android:text="@string/db_write"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/recvButton"
+        android:id="@+id/readButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Receive"
+        android:text="@string/db_read"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendButton" />
+        app:layout_constraintTop_toBottomOf="@+id/writeButton" />
 
     <TextView
         android:id="@+id/dbOutput"
@@ -34,5 +34,5 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recvButton" />
+        app:layout_constraintTop_toBottomOf="@+id/readButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
