@@ -4,12 +4,16 @@ import static dal.cs.quickCash3.database.DatabaseHelper.splitLocationIntoKeys;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public class MockDatabase implements Database {
+    private final Map<Integer, DatabaseListener<?>> listenerMap = new TreeMap<>();
+    private int lastCallbackId = 0;
     private final Map<String, Object> data = new MapType();
 
     // Let's create a class to avoid generic type cast warnings.
@@ -39,7 +43,7 @@ public class MockDatabase implements Database {
         return recursiveGet(nestedData, keys);
     }
 
-    private <T> void recursiveSet(@NonNull Map<String, Object> map, @NonNull List<String> keys, T value) {
+    private <T> void recursiveSet(Map<String, Object> map, @NonNull List<String> keys, T value) {
         assert !keys.isEmpty();
 
         // Get the next key we are looking for.
@@ -65,6 +69,59 @@ public class MockDatabase implements Database {
         recursiveSet(nestedMap, keys, value);
     }
 
+    private void recursiveFindAndTrack(@NonNull List<Map<String, Object>> directories, @NonNull List<String> keys) {
+        String key = keys.remove(0);
+        Map<String, Object> lastDirectory = directories.get(directories.size() - 1);
+        if (!lastDirectory.containsKey(key)) {
+            throw new IllegalArgumentException("Key not found: " + key);
+        }
+
+        if (keys.isEmpty()) {
+            lastDirectory.remove(key);
+            recursiveDelete(directories);
+            return;
+        }
+
+        Object nestedData = lastDirectory.get(key);
+        if (!(nestedData instanceof MapType)) {
+            throw new IllegalArgumentException("Key not found: " + key);
+        }
+
+        Map<String, Object> nextDirectory = (MapType)nestedData;
+        directories.add(nextDirectory);
+        recursiveFindAndTrack(directories, keys);
+    }
+
+    private void recursiveDelete(@NonNull List<Map<String, Object>> directories) {
+        if (directories.isEmpty()) {
+            return;
+        }
+
+        Map<String, Object> directory = directories.remove(directories.size() - 1);
+
+        if (directory.size() > 1) {
+            return;
+        }
+
+        directory.clear();
+    }
+
+    private void runListeners(@NonNull List<String> keys) {
+        for (Map.Entry<Integer, DatabaseListener<?>> entry : listenerMap.entrySet()) {
+            DatabaseListener<?> listener = entry.getValue();
+            if (listener.isLocation(keys)) {
+                try {
+                    // Make a copy since the list will be modified.
+                    Object callbackValue = recursiveGet(data, new ArrayList<>(listener.getKeys()));
+                    listener.read(callbackValue);
+                }
+                catch (ClassCastException | IllegalArgumentException exception) {
+                    listener.error(exception.getMessage());
+                }
+            }
+        }
+    }
+
     @Override
     public <T> void write(String location, T value, Consumer<String> errorFunction) {
         write(location, value, () -> {}, errorFunction);
@@ -78,7 +135,10 @@ public class MockDatabase implements Database {
                 throw new IllegalArgumentException("Must provide a location to write data");
             }
 
-            recursiveSet(data, keys, value);
+            // Make a copy since the list will be modified.
+            recursiveSet(data, new ArrayList<>(keys), value);
+
+            runListeners(keys);
 
             successFunction.run();
         }
@@ -102,13 +162,22 @@ public class MockDatabase implements Database {
 
     @Override
     public <T> int addListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
-        // TODO
-        return -1;
+        int callbackId = lastCallbackId++;
+        DatabaseListener<T> callbacks = new DatabaseListener<>(location, type, readFunction, errorFunction);
+        listenerMap.put(callbackId, callbacks);
+
+        // Read the current data.
+        read(location, type, readFunction, errorFunction);
+
+        return callbackId;
     }
 
     @Override
     public void removeListener(int listenerId) {
-        // TODO
+        if (!listenerMap.containsKey(listenerId)) {
+            throw new IllegalArgumentException("Could not find listener callback with ID: " + listenerId);
+        }
+        listenerMap.remove(listenerId);
     }
 
     @Override
@@ -118,6 +187,24 @@ public class MockDatabase implements Database {
 
     @Override
     public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
-        // TODO
+        try {
+            List<String> keys = splitLocationIntoKeys(location);
+            if (keys.isEmpty()) {
+                throw new IllegalArgumentException("Must provide a location to delete data");
+            }
+
+            List<Map<String, Object>> directories = new ArrayList<>();
+            directories.add(data);
+
+            // Make a copy since the list will be modified.
+            recursiveFindAndTrack(directories, new ArrayList<>(keys));
+
+            runListeners(keys);
+
+            successFunction.run();
+        }
+        catch (IllegalArgumentException exception) {
+            errorFunction.accept(exception.getMessage());
+        }
     }
 }
