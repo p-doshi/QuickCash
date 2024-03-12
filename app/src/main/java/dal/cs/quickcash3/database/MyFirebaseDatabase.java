@@ -10,11 +10,11 @@ public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     private static final char KEY_SEPARATOR = '/';
     private static final String DB_KEY = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
 
-    public MyFirebaseDatabase(Context context) {
+    public MyFirebaseDatabase(@NonNull Context context) {
         super(context);
     }
 
-    protected String relocate(String location) {
+    protected @NonNull String relocate(@NonNull String location) {
         StringBuilder newLocation = new StringBuilder(DB_KEY);
 
         if (location.charAt(0) != KEY_SEPARATOR) {

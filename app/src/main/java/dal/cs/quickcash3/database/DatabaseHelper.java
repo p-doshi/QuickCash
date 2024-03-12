@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.database;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public final class DatabaseHelper {
     // Utility class.
     private DatabaseHelper() {}
 
-    public static List<String> splitLocationIntoKeys(String location) {
+    public static @NonNull List<String> splitLocationIntoKeys(@NonNull String location) {
         List<String> strings = new ArrayList<>();
 
         String currentLocation = location;

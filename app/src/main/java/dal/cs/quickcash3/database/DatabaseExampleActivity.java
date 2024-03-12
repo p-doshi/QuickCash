@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.database;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -20,6 +21,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
     private static final String LOG_TAG = "DatabaseExample";
     private Database database;
 
+    @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,15 +37,15 @@ public class DatabaseExampleActivity extends AppCompatActivity {
         writeButton.setOnClickListener(v -> {
             String temp = RandomStringGenerator.generate(10);
             database.write(dbKey, temp,
-                () -> output.setText(String.format("%s: %s", getString(R.string.db_write), temp)),
-                error -> output.setText(String.format("%s: %s", getString(R.string.db_error_writing), error)));
+                () -> output.setText(getString(R.string.db_write) + ": " + temp),
+                error -> output.setText(getString(R.string.db_error_writing) + ": " + error));
         });
 
         Button readButton = findViewById(R.id.readButton);
         readButton.setOnClickListener(
             v -> database.read(dbKey, String.class,
-                temp -> output.setText(String.format("%s: %s", getString(R.string.db_read), temp)),
-                error -> output.setText(String.format("%s: %s", getString(R.string.db_error_reading), error))
+                temp -> output.setText(getString(R.string.db_read) + ": " + temp),
+                error -> output.setText(getString(R.string.db_error_reading) + ": " + error)
             ));
     }
 

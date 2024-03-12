@@ -83,7 +83,7 @@ public class MyFirebaseDatabaseImpl implements Database {
      * @throws IllegalArgumentException If the listenerId is could not be found.
      */
     @Override
-    public void removeListener(int listenerId) throws IllegalArgumentException {
+    public void removeListener(int listenerId) {
         ReferenceListenerPair pair = listenerMap.get(listenerId);
         if (pair == null) {
             throw new IllegalArgumentException("Could not find listener callback with ID: " + listenerId);

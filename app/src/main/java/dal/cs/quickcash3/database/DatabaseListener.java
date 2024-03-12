@@ -2,6 +2,10 @@ package dal.cs.quickcash3.database;
 
 import static dal.cs.quickcash3.database.DatabaseHelper.splitLocationIntoKeys;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.annotations.Nullable;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -12,14 +16,14 @@ class DatabaseListener<T> {
     private final Consumer<T> readFunction;
     private final Consumer<String> errorFunction;
 
-    public DatabaseListener(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction) {
+    public DatabaseListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
         this.keys = splitLocationIntoKeys(location);
         this.type = type;
         this.readFunction = readFunction;
         this.errorFunction = errorFunction;
     }
 
-    public boolean isLocation(List<String> keys) {
+    public boolean isLocation(@NonNull List<String> keys) {
         if (this.keys.size() > keys.size()) {
             return false;
         }
@@ -39,16 +43,14 @@ class DatabaseListener<T> {
         return keys;
     }
 
-    public void sendValue(Object value) {
-        if (!type.equals(value.getClass())) {
-            throw new ClassCastException(String.format(Locale.getDefault(), "Cannot cast %s to %s", value.getClass(), type));
+    public void sendValue(@Nullable Object value) {
+        if (!type.isInstance(value)) {
+            throw new ClassCastException("Cannot cast " + value.getClass() + " to " + type);
         }
-        // This is completely safe.
-        //noinspection unchecked
-        readFunction.accept((T)value);
+        readFunction.accept(type.cast(value));
     }
 
-    public void sendError(String error) {
+    public void sendError(@NonNull String error) {
         errorFunction.accept(error);
     }
 }

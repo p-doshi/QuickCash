@@ -26,7 +26,8 @@ public class MockDatabase implements Database {
             return obj;
         }
 
-        String key = keys.get(index++);
+        String key = keys.get(index);
+        int nextIndex = index + 1;
 
         if (!(obj instanceof MapType)) {
             throw new IllegalArgumentException(KEY_NOT_FOUND + key);
@@ -38,17 +39,18 @@ public class MockDatabase implements Database {
         }
 
         Object nestedData = map.get(key);
-        return recursiveGet(nestedData, keys, index);
+        return recursiveGet(nestedData, keys, nextIndex);
     }
 
     private <T> void recursiveSet(Map<String, Object> map, @NonNull List<String> keys, int index, T value) {
         assert index < keys.size();
 
         // Get the next key we are looking for.
-        String key = keys.get(index++);
+        String key = keys.get(index);
+        int nextIndex = index + 1;
 
         // Is this the last key?
-        if (index == keys.size()) {
+        if (nextIndex == keys.size()) {
             // TODO: serialize the type into a JSON object.
             map.put(key, value);
             return;
@@ -64,18 +66,19 @@ public class MockDatabase implements Database {
             map.put(key, nestedMap);
         }
 
-        recursiveSet(nestedMap, keys, index, value);
+        recursiveSet(nestedMap, keys, nextIndex, value);
     }
 
     private void recursiveFindAndTrack(@NonNull List<Map<String, Object>> directories, @NonNull List<String> keys, int index) {
-        String key = keys.get(index++);
+        String key = keys.get(index);
+        int nextIndex = index + 1;
         Map<String, Object> lastDirectory = directories.get(directories.size() - 1);
         if (!lastDirectory.containsKey(key)) {
             throw new IllegalArgumentException(KEY_NOT_FOUND + key);
         }
 
         // Is this the last key?
-        if (index == keys.size()) {
+        if (nextIndex == keys.size()) {
             lastDirectory.remove(key);
             recursiveDelete(directories);
             return;
@@ -88,7 +91,7 @@ public class MockDatabase implements Database {
 
         Map<String, Object> nextDirectory = (MapType)nestedData;
         directories.add(nextDirectory);
-        recursiveFindAndTrack(directories, keys, index);
+        recursiveFindAndTrack(directories, keys, nextIndex);
     }
 
     private void recursiveDelete(@NonNull List<Map<String, Object>> directories) {
@@ -177,12 +180,12 @@ public class MockDatabase implements Database {
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) throws IllegalArgumentException {
+    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) {
         delete(location, () -> {}, errorFunction);
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) throws IllegalArgumentException {
+    public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
         List<String> keys = splitLocationIntoKeys(location);
         if (keys.isEmpty()) {
             errorFunction.accept("Must provide a location to delete data");
