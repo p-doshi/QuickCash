@@ -18,14 +18,14 @@
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s">
         <activity
-            android:name=".registration.RegistrationPage"
+            android:name="dal.cs.quickcash3.registration.RegistrationPage"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".database.DatabaseExampleActivity"
+            android:name="dal.cs.quickcash3.database.DatabaseExampleActivity"
             android:exported="true"/>
         <activity
-            android:name=".login.LoginActivity"
+            android:name="dal.cs.quickcash3.login.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
@@ -34,16 +34,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".worker.WorkerDashboard"
+            android:name="dal.cs.quickcash3.worker.WorkerDashboard"
             android:exported="true"/>
         <activity
-            android:name=".employer.EmployerDashboard"
+            android:name="dal.cs.quickcash3.employer.EmployerDashboard"
             android:exported="true"/>
         <activity
-            android:name=".registration.ChooseRoleActivity"
+            android:name="dal.cs.quickcash3.registration.ChooseRoleActivity"
             android:exported="true"/>
         <activity
-            android:name=".location.LocationExampleActivity"
+            android:name="dal.cs.quickcash3.location.LocationExampleActivity"
             android:exported="true"/>
     </application>
 
