@@ -34,16 +34,15 @@ RUN apt update -y && apt install -y --no-install-recommends \
     cd $ANDROID_SDK_ROOT/cmdline-tools &&  mv NOTICE.txt source.properties bin lib tools/  && \
     cd / && rm -rf /tmp/* && \
     apt remove -y wget unzip && \
-    rm -rf /var/lib/apt/lists/* && \
-    yes | sdkmanager --licenses
+    rm -rf /var/lib/apt/lists/*
 
 #==============================
 # Android SDK ARGS
 #==============================
-ARG ARCH="x86_64"
+ARG ARCH="x86"
 ARG TARGET="google_apis"
 ARG API_LEVEL="34"
-ARG EMU_API_LEVEL="24"
+ARG EMU_API_LEVEL="28"
 ARG BUILD_TOOLS="34.0.0"
 ARG ANDROID_API_LEVEL="android-${API_LEVEL}"
 ARG EMU_ANDROID_API_LEVEL="android-${EMU_API_LEVEL}"
@@ -56,16 +55,8 @@ ARG ANDROID_SDK_PACKAGES="${EMULATOR_PACKAGE} ${PLATFORM_VERSION} ${BUILD_TOOL} 
 #============================================
 # Install required package using SDK manager
 #============================================
-RUN yes | sdkmanager --verbose --no_https ${ANDROID_SDK_PACKAGES}
-
-#============================================
-# Create required emulator
-#============================================
-ARG EMULATOR_NAME="Pixel"
-ARG EMULATOR_DEVICE="pixel_7"
-ENV EMULATOR_NAME=$EMULATOR_NAME
-ENV DEVICE_NAME=$EMULATOR_DEVICE
-RUN echo "no" | avdmanager --verbose create avd --force --name "${EMULATOR_NAME}" --device "${EMULATOR_DEVICE}" --package "${EMULATOR_PACKAGE}"
+RUN yes | sdkmanager --licenses && \
+    yes | sdkmanager --verbose --no_https ${ANDROID_SDK_PACKAGES}
 
 #===================
 # Alias
@@ -73,10 +64,19 @@ RUN echo "no" | avdmanager --verbose create avd --force --name "${EMULATOR_NAME}
 ENV EMU_HEADLESS=/start_emu_headless.sh
 
 #==================================
-# Copying Emulator Script to root
+# Copying Files to root.
 #==================================
 COPY . /
 RUN chmod a+x $EMU_HEADLESS
+
+#============================================
+# Create required emulator
+#============================================
+ARG NICKNAME="Small"
+ARG DEVICE_NAME="small_phone"
+ENV NICKNAME=$NICKNAME
+ENV DEVICE_NAME=$DEVICE_NAME
+RUN echo "no" | avdmanager --verbose create avd --force --name "${NICKNAME}" --device "${DEVICE_NAME}" --package "${EMULATOR_PACKAGE}"
 
 #=======================
 # framework entry point

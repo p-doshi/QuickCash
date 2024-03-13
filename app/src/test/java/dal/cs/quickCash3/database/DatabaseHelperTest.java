@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.database;
+package dal.cs.quickcash3.database;
 
 import static org.junit.Assert.assertEquals;
 
