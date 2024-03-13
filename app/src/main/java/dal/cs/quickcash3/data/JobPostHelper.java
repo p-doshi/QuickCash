@@ -8,15 +8,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.Random;
 
-import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public final class JobPostHelper {
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
+    
     // Utility class.
     private JobPostHelper() {}
 
@@ -36,8 +34,8 @@ public final class JobPostHelper {
      */
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     public static @NonNull LatLng randomLocation(@NonNull LatLngBounds area) {
-        double lat = scaleNormalized(random.nextDouble(), area.southwest.latitude, area.northeast.latitude);
-        double lng = scaleNormalized(random.nextDouble(), area.southwest.longitude, area.northeast.longitude);
+        double lat = scaleNormalized(RANDOM.nextDouble(), area.southwest.latitude, area.northeast.latitude);
+        double lng = scaleNormalized(RANDOM.nextDouble(), area.southwest.longitude, area.northeast.longitude);
         return new LatLng(lat, lng);
     }
 
@@ -61,7 +59,7 @@ public final class JobPostHelper {
             job.setApplicants(new ArrayList<>());
             job.setBlackList(new ArrayList<>());
 
-            float pay = roundToNearestCent(random.nextFloat() * 1000.0f);
+            float pay = roundToNearestCent(RANDOM.nextFloat() * 1000.0f);
             job.setPay(String.valueOf(pay));
 
             job.setLocation(randomLocation(area));
