@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="db_write">Write</string>
+    <string name="db_read">Read</string>
+    <string name="db_error_writing">"Error writing"</string>
+    <string name="db_error_reading">"Error reading"</string>
+</resources>

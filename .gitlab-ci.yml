@@ -1,14 +1,10 @@
 stages:
   - build
+  - lint
   - test
 
 variables:
-  GRADLE_WRAPPER: "$CI_PROJECT_DIR/gradlew"
-  UNIT_TEST: "testDebugUnitTest"
-  CONNECTED_TEST: "connectedDebugAndroidTest"
-
-cache:
-  key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+  BUILD_JOB_FILE: buildJobId.txt
 
 before_script:
   # Make the gradle wrapper executable.
@@ -22,13 +18,51 @@ Build:
   stage: build
   script:
     # Build the application.
-    - ./gradlew assembleDebug
+    - ./gradlew :app:assembleDebug :app:assembleDebugUnitTest :app:assembleDebugAndroidTest
+
+  after_script:
+    # Save the job ID for the connected tests.
+    - echo $CI_JOB_ID > $BUILD_JOB_FILE
 
   artifacts:
+    expire_in: 1 day
     paths:
       # Give the results of compilation to the next stage.
-      - app/build/
-      - .gradle/
+      - app/build/outputs/
+      - $BUILD_JOB_FILE
+
+PmdLint:
+  image: ethrozee/android
+  interruptible: true
+  tags:
+    - dalfcs_docker_kvm
+  stage: lint
+  needs: []
+  script:
+    - pmd check -d app/src -R pmdRuleset.xml -f textcolor
+
+GradleLint:
+  image: ethrozee/android
+  interruptible: true
+  tags:
+    - dalfcs_docker_kvm
+  stage: lint
+  needs:
+    - Build
+  script:
+    # Run the linter.
+    - ./gradlew :app:lintDebug
+
+  after_script:
+    # Reposition lint results.
+    - mv app/build/reports/lint-results-debug.html lintResults.html
+
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      # Give the results of linting
+      - lintResults.html
 
 UnitTests:
   image: ethrozee/android
@@ -36,6 +70,8 @@ UnitTests:
   tags:
     - dalfcs_docker_kvm
   stage: test
+  needs:
+    - Build
   script:
     # Run the unit tests.
     - ./gradlew :app:testDebugUnitTest
@@ -50,30 +86,66 @@ UnitTests:
     paths:
       - testDebugUnitTest/
 
-# Commented these database connection tests out because they were causing issues during testing
-#ConnectedTests:
-#  image: ethrozee/android-emulator
-#  interruptible: true
-#  tags:
-#    - dalfcs_docker_kvm
-#  stage: test
-#  script:
-#    # Launch the android emulator.
-#    - $EMU_HEADLESS
-#
-#    # Run the connected tests.
-#    - ./gradlew :app:connectedDebugAndroidTest
-#    # Run the connected tests with logcat output.
-#    - adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
-#    - ./gradlew :app:connectedDebugAndroidTest
-#    - if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
-#
-#  after_script:
-#    # Reposition test results.
-#    - mv app/build/reports/androidTests/connected/debug connectedDebugAndroidTest
-#
-#  artifacts:
-#    when: always
-#    expire_in: 30 days
-#    paths:
-#      - connectedDebugAndroidTest/
+ConnectedTests:
+  image: ethrozee/android
+  interruptible: true
+  tags:
+    - dalfcs_docker_kvm
+  stage: test
+  needs:
+   - Build
+  variables:
+    GITHUB_REPO: csci3130_group_3
+    GITHUB_USER: ethroz # Everyone can hide behind my account.
+    GITHUB_EMAIL: 48915432+ethroz@users.noreply.github.com # Github has commit emails to hide real emails from commits.
+  script:
+    # Get the build job ID.
+    - export BUILD_JOB_ID=$(cat $BUILD_JOB_FILE)
+
+    # The commit ID of this run.
+    - export COMMIT=$CI_COMMIT_SHA
+
+    # Create a unique name for a new Github action job.
+    - export NAME=$COMMIT-$CI_JOB_ID
+    
+    # Update the github actions files.
+    - git clone https://$GITHUB_USER:$(cat github_token)@github.com/$GITHUB_USER/$GITHUB_REPO
+    - cp -r .github $GITHUB_REPO/.
+    - cd $GITHUB_REPO
+    - git add .
+    - git config user.name $GITHUB_USER
+    - git config user.email $GITHUB_EMAIL
+    - git diff --quiet && git diff --staged --quiet || (git commit -m $COMMIT && git push)
+    - cd ..
+    - rm -rf $GITHUB_REPO
+
+    # Login to Github.
+    - cat github_token | gh auth login --with-token
+
+    # Start a new Github action job.
+    - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f name=$NAME -f commit=$COMMIT -f proj_id=$CI_PROJECT_ID -f job_id=$BUILD_JOB_ID
+
+    # Wait a bit before trying to get job ID.
+    - sleep 5
+
+    # Get the Github action job ID from the unique job name.
+    - >
+      export JOB_ID=$(
+      gh run list -R $GITHUB_USER/$GITHUB_REPO --json "name,databaseId" --jq ".[] | select(.name == \"$NAME\")" |
+      grep -o -P '(?<="databaseId":)\d+') &&
+      echo $JOB_ID
+
+    # Watch the Github action job.
+    - gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO -i 60
+
+    # Download the artifacts from the finished job.
+    - gh run download $JOB_ID -R $GITHUB_USER/$GITHUB_REPO
+
+    # Fail the pipeline if the Github action fails.
+    - gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO --exit-status
+
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - "testResults*"
