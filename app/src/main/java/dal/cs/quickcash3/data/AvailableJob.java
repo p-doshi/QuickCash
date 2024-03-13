@@ -1,46 +1,55 @@
 package dal.cs.quickcash3.data;
 
-import android.os.Parcel;
-
 import androidx.annotation.NonNull;
 
-import java.util.List;
+import com.google.firebase.database.annotations.Nullable;
 
-public class AvailableJob extends Job {
+import java.util.List;
+import java.util.function.Consumer;
+
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.DatabaseDirectory;
+
+public class AvailableJob extends JobPost {
     private String timeEstimate;
     private String postTime;
     private List<String> applicants;
     private List<String> blackList;
 
-    public String getTimeEstimate() {
+    @Override
+    public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        database.write(DatabaseDirectory.AVAILABLE_JOBS.getValue(), this, errorFunction);
+    }
+
+    public @Nullable String getTimeEstimate() {
         return timeEstimate;
     }
 
-    public void setTimeEstimate(String timeEstimate) {
+    public void setTimeEstimate(@NonNull String timeEstimate) {
         this.timeEstimate = timeEstimate;
     }
 
-    public String getPostTime() {
+    public @Nullable String getPostTime() {
         return postTime;
     }
 
-    public void setPostTime(String postTime) {
+    public void setPostTime(@NonNull String postTime) {
         this.postTime = postTime;
     }
 
-    public List<String> getApplicants() {
+    public @Nullable List<String> getApplicants() {
         return applicants;
     }
 
-    public void setApplicants(List<String> applicants) {
+    public void setApplicants(@NonNull List<String> applicants) {
         this.applicants = applicants;
     }
 
-    public List<String> getBlackList() {
+    public @Nullable List<String> getBlackList() {
         return blackList;
     }
 
-    public void setBlackList(List<String> blackList) {
+    public void setBlackList(@NonNull List<String> blackList) {
         this.blackList = blackList;
     }
 }

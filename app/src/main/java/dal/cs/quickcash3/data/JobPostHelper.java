@@ -15,9 +15,10 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseDirectory;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
-public final class JobHelper {
+public final class JobPostHelper {
+    private static final Random random = new Random();
     // Utility class.
-    private JobHelper() {}
+    private JobPostHelper() {}
 
     private static float roundToNearestCent(float val) {
         return Math.round(val * 100.0f) / 100.0f;
@@ -27,8 +28,29 @@ public final class JobHelper {
         return normal * (max - min) + min;
     }
 
+    /**
+     * Get a random location from within a given area.
+     *
+     * @param area The area to pick a random location from.
+     * @return A random location.
+     */
+    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
+    public static @NonNull LatLng randomLocation(@NonNull LatLngBounds area) {
+        double lat = scaleNormalized(random.nextDouble(), area.southwest.latitude, area.northeast.latitude);
+        double lng = scaleNormalized(random.nextDouble(), area.southwest.longitude, area.northeast.longitude);
+        return new LatLng(lat, lng);
+    }
+
+    /**
+     * Generate a list of available job posts with a set size. The jobs will be randomly scattered
+     * over the area.
+     *
+     * @param number The number of job posts to generate.
+     * @param area The area to randomly place jobs.
+     * @return A list of job posts in the area.
+     */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops") // That is the point of this method.
     public static @NonNull List<AvailableJob> generateAvailable(int number, @NonNull LatLngBounds area) {
-        Random random = new Random(0); // Consistent randomness.
         List<AvailableJob> jobs = new ArrayList<>(number);
         for (int i = 0; i < number; i++) {
             AvailableJob job = new AvailableJob();
@@ -42,35 +64,10 @@ public final class JobHelper {
             float pay = roundToNearestCent(random.nextFloat() * 1000.0f);
             job.setPay(String.valueOf(pay));
 
-            double lat = scaleNormalized(random.nextDouble(), area.southwest.latitude, area.northeast.latitude);
-            double lng = scaleNormalized(random.nextDouble(), area.southwest.longitude, area.northeast.longitude);
-            LatLng location = new LatLng(lat, lng);
-            job.setLocation(location);
+            job.setLocation(randomLocation(area));
 
             jobs.add(job);
         }
         return jobs;
-    }
-
-    public static <J extends Job> void postJobs(@NonNull Database database, @NonNull List<J> jobs, @NonNull Consumer<String> errorFunction) {
-        if (jobs.isEmpty()) {
-            return;
-        }
-
-        J first = jobs.get(0);
-        String directory;
-        if (first instanceof AvailableJob) {
-            directory = DatabaseDirectory.AVAILABLE_JOBS.getValue();
-        }
-        else if (first instanceof CompletedJob) {
-            directory = DatabaseDirectory.COMPLETED_JOBS.getValue();
-        }
-        else {
-            throw new IllegalArgumentException("Unrecognized job type: " + first.getClass());
-        }
-
-        for (J job : jobs) {
-            database.write(directory, job, errorFunction);
-        }
     }
 }

@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class MockLocationProvider implements LocationProvider {
     private Location location;
 
-    public void setLocation(LatLng latlng) {
+    public void setLocation(@NonNull LatLng latlng) {
         if (location == null) {
             location = new Location("");
         }

@@ -15,6 +15,7 @@ import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.DatabaseOwner;
 import dal.cs.quickcash3.database.MockDatabase;
 import dal.cs.quickcash3.database.MyFirebaseDatabase;
 import dal.cs.quickcash3.fragments.MapsFragment;
@@ -23,11 +24,12 @@ import dal.cs.quickcash3.fragments.ReceiptsFragment;
 import dal.cs.quickcash3.fragments.SearchFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
+import dal.cs.quickcash3.location.LocationProviderOwner;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.permission.FragmentPermissionActivity;
 
-public class WorkerDashboard extends FragmentPermissionActivity {
-    private final String LOG_TAG = "WorkerDashboard";
+public class WorkerDashboard extends FragmentPermissionActivity implements DatabaseOwner, LocationProviderOwner {
+    private static final String LOG_TAG = "WorkerDashboard";
     private Database database;
     private LocationProvider locationProvider;
     private Fragment receiptsFragment;
@@ -35,6 +37,7 @@ public class WorkerDashboard extends FragmentPermissionActivity {
     private Fragment mapFragment;
     private Fragment profileFragment;
 
+    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dashboard_worker);
@@ -43,7 +46,8 @@ public class WorkerDashboard extends FragmentPermissionActivity {
 
         // Initialize the fragments.
         receiptsFragment = new ReceiptsFragment();
-        searchFragment = new SearchFragment(database, locationProvider);
+        //searchFragment = new SearchFragment(this);
+        searchFragment = new SearchFragment();
         mapFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
 
@@ -109,10 +113,12 @@ public class WorkerDashboard extends FragmentPermissionActivity {
         }
     }
 
+    @Override
     public @NonNull Database getDatabase() {
         return database;
     }
 
+    @Override
     public @NonNull LocationProvider getLocationProvider() {
         return locationProvider;
     }

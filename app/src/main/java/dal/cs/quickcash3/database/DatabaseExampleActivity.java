@@ -23,7 +23,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_example);
         initInterfaces();
