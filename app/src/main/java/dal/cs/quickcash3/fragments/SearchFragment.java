@@ -10,8 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.location.LocationProvider;
 
 public class SearchFragment extends Fragment {
+    private final Database database;
+    private final LocationProvider locationProvider;
+
+    public SearchFragment(Database database, LocationProvider locationProvider) {
+        this.database = database;
+        this.locationProvider = locationProvider;
+    }
 
     @Nullable
     @Override

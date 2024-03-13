@@ -3,13 +3,13 @@ package dal.cs.quickcash3.permission;
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class AppCompatPermissionActivity extends AppCompatActivity implements ActivityPermissionHandler {
+public abstract class FragmentPermissionActivity extends FragmentActivity implements ActivityPermissionHandler {
     private final List<Consumer<PermissionResult>> permissionHandlers = new ArrayList<>();
 
     @Override
