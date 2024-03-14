@@ -2,6 +2,7 @@ package dal.cs.quickcash3.employer;
 
 import android.content.Context;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
@@ -11,61 +12,48 @@ public class PostJobFormFields {
     String datePattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
     String salaryPattern = "[0-9]+\\.\\d\\d";
     String empty = "";
+    String errorMessage;
 
-    private String checkIfEmpty(String input){
-        String errorMessage = empty;
+    public String checkFieldsValid(HashMap<String, String> fields){
+        errorMessage = checkIfEmpty(fields);
+        if(errorMessage.equals(empty)){
+            errorMessage = checkJobDate(fields.get("date"));
+            errorMessage = checkJobSalary(fields.get("salary"));
+        }
 
-        if(input.equals(empty)){
-            errorMessage = context.getString(R.string.fillAllFields);
+        return errorMessage;
+    }
+
+    private String checkIfEmpty(HashMap<String, String> fields){
+        errorMessage = empty;
+
+        for (HashMap.Entry<String, String> field : fields.entrySet()) {
+            String input = (String)field.getValue();
+
+            if(input.equals(empty)){
+                errorMessage = context.getString(R.string.fillAllFields);
+                break;
+            }
         }
         return errorMessage;
     }
 
     // How to best return error information???
     // How to best document code???
-    public void checkJobTitle(String title){
-        // is this the best way to do this??
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(title);
-    }
-    public void checkJobDate(String date){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(date);
+    public String checkJobDate(String date){
+        errorMessage = empty;
 
         if(!Pattern.matches(datePattern, date)){
             errorMessage = context.getString(R.string.dateError);
         }
+        return errorMessage;
     }
-    public void checkJobSalary(String salary){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(salary);
+    public String checkJobSalary(String salary){
+        errorMessage = empty;
 
         if(!Pattern.matches(salaryPattern, salary)){
             errorMessage = context.getString(R.string.salaryError);
         }
-    }
-    public void checkJobAddress(String address){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(address);
-    }
-    public void checkJobCity(String city){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(city);
-    }
-    public void checkJobDescription(String description){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(description);
-    }
-    public void checkJobDuration(String duration){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(duration);
-    }
-    public void checkJobUrgency(String urgency){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(urgency);
-    }
-    public void checkJobProvince(String province){
-        String errorMessage = empty;
-        errorMessage = this.checkIfEmpty(province);
+        return errorMessage;
     }
 }
