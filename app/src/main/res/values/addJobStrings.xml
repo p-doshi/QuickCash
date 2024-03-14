@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="addJobHeader">Add Job</string>
+    <string name="addJobTitle">Title</string>
+    <string name="addJobDate">Start Date: dd/mm/yyyy</string>
+    <string name="addJobDuration">Duration:</string>
+    <string name="addJobUrgency">Urgency:</string>
+    <string name="addJobSalary">Salary</string>
+    <string name="addJobLocation">Address</string>
+    <string name="addJobDescription">Description</string>
+    <string name="addJobCity">City</string>
+    <string name="addJobCountry">Country</string>
+
+    <string name="fillAllFields">Please fill in all fields!</string>
+    <string name="dateError">Please enter date in proper format - dd/mm/yyyy</string>
+    <string name="salaryError">Please enter valid salary</string>
+
+    <!-- Other resources -->
+
+    <string-array name="durationSpinnerValues">
+        <item>0–3 Days</item>
+        <item>4–7 Days</item>
+        <item>1–2 Weeks</item>
+        <item>3–4 Weeks</item>
+        <item>4+ Weeks</item>
+    </string-array>
+
+    <string-array name="urgencySpinnerValues">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+
+    <string-array name="provinceSpinnerValues">
+        <item>BC</item>
+        <item>AB</item>
+        <item>SK</item>
+        <item>MB</item>
+        <item>ON</item>
+        <item>QC</item>
+        <item>NB</item>
+        <item>PE</item>
+        <item>NS</item>
+        <item>NL</item>
+        <item>YT</item>
+        <item>NT</item>
+        <item>NU</item>
+    </string-array>
+</resources>
