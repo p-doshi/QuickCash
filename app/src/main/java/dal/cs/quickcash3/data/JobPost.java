@@ -14,7 +14,7 @@ public abstract class JobPost {
     private String employerId;
     private String description;
     private LatLng location;
-    private String pay;
+    private String salary;
 
     /**
      * Write the job post to the database.
@@ -56,11 +56,11 @@ public abstract class JobPost {
         this.location = location;
     }
 
-    public @Nullable String getPay() {
-        return pay;
+    public @Nullable String getSalary() {
+        return salary;
     }
 
-    public void setPay(@NonNull String pay) {
-        this.pay = pay;
+    public void setSalary(@NonNull String salary) {
+        this.salary = salary;
     }
 }

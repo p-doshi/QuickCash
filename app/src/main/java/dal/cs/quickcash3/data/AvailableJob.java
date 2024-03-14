@@ -11,7 +11,9 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseDirectory;
 
 public class AvailableJob extends JobPost {
-    private String timeEstimate;
+    private String startDate;
+    private String duration;
+    private String urgency;
     private String postTime;
     private List<String> applicants;
     private List<String> blackList;
@@ -21,12 +23,28 @@ public class AvailableJob extends JobPost {
         database.write(DatabaseDirectory.AVAILABLE_JOBS.getValue(), this, errorFunction);
     }
 
-    public @Nullable String getTimeEstimate() {
-        return timeEstimate;
+    public @Nullable String getStartDate() {
+        return startDate;
     }
 
-    public void setTimeEstimate(@NonNull String timeEstimate) {
-        this.timeEstimate = timeEstimate;
+    public void setStartDate(@NonNull String startDate) {
+        this.startDate = startDate;
+    }
+
+    public @Nullable String getUrgency() {
+        return urgency;
+    }
+
+    public void setUrgency(@NonNull String urgency) {
+        this.urgency = urgency;
+    }
+
+    public @Nullable String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(@NonNull String duration) {
+        this.duration = duration;
     }
 
     public @Nullable String getPostTime() {

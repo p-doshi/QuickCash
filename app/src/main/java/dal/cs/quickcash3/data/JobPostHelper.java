@@ -60,7 +60,7 @@ public final class JobPostHelper {
             job.setBlackList(new ArrayList<>());
 
             float pay = roundToNearestCent(RANDOM.nextFloat() * 1000.0f);
-            job.setPay(String.valueOf(pay));
+            job.setSalary(String.valueOf(pay));
 
             job.setLocation(randomLocation(area));
 
