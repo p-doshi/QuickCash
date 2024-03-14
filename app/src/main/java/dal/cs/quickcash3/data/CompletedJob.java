@@ -8,22 +8,27 @@ import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseDirectory;
+import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class CompletedJob extends JobPost {
-    private String employeeId;
+    private String worker;
     private String completionDate;
+    private String payId;
 
     @Override
     public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        database.write(DatabaseDirectory.COMPLETED_JOBS.getValue(), this, errorFunction);
+        database.write(
+            DatabaseDirectory.COMPLETED_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
+            this,
+            errorFunction);
     }
 
-    public @Nullable String getEmployeeId() {
-        return employeeId;
+    public @Nullable String getWorker() {
+        return worker;
     }
 
-    public void setEmployeeId(@NonNull String employee) {
-        this.employeeId = employee;
+    public void setWorker(@NonNull String worker) {
+        this.worker = worker;
     }
 
     public @Nullable String getCompletionDate() {
@@ -32,5 +37,13 @@ public class CompletedJob extends JobPost {
 
     public void setCompletionDate(@NonNull String completionDate) {
         this.completionDate = completionDate;
+    }
+
+    public @Nullable String getPayId() {
+        return payId;
+    }
+
+    public void setPayId(@NonNull String payId) {
+        this.payId = payId;
     }
 }

@@ -9,10 +9,11 @@ import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseDirectory;
+import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class AvailableJob extends JobPost {
     private String startDate;
-    private String duration;
+    private double duration;
     private String urgency;
     private String postTime;
     private List<String> applicants;
@@ -20,7 +21,10 @@ public class AvailableJob extends JobPost {
 
     @Override
     public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        database.write(DatabaseDirectory.AVAILABLE_JOBS.getValue(), this, errorFunction);
+        database.write(
+            DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
+            this,
+            errorFunction);
     }
 
     public @Nullable String getStartDate() {
@@ -39,11 +43,11 @@ public class AvailableJob extends JobPost {
         this.urgency = urgency;
     }
 
-    public @Nullable String getDuration() {
+    public double getDuration() {
         return duration;
     }
 
-    public void setDuration(@NonNull String duration) {
+    public void setDuration(double duration) {
         this.duration = duration;
     }
 
