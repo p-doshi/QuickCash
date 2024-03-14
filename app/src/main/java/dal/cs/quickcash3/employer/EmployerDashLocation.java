@@ -53,22 +53,20 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
 
     @SuppressLint("SetTextI18n")
     private void updateAddressDisplay() {
-        new Thread(() -> {
-            try {
-                do{
-                    addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
-                }while (addresses==null);
-                runOnUiThread(() -> {
-                    if (!addresses.isEmpty()) {
-                        String addressLine = addresses.get(0).getAddressLine(0);
-                        addressText.setText("Address: " + addressLine);
-                    } else {
-                        addressText.setText("Address not found");
-                    }
-                });
-            } catch (IOException e) {
-                Log.e("EmployerDashLocation", "Geocoder failed", e);
-            }
-        }).start();
+        try {
+            do{
+                addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
+            }while (addresses==null);
+            runOnUiThread(() -> {
+                if (!addresses.isEmpty()) {
+                    String addressLine = addresses.get(0).getAddressLine(0);
+                    addressText.setText("Address: " + addressLine);
+                } else {
+                    addressText.setText("Address not found");
+                }
+            });
+        } catch (IOException e) {
+            Log.e("EmployerDashLocation", "Geocoder failed", e);
+        }
     }
 }
