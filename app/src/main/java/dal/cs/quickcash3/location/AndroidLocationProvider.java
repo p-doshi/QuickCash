@@ -18,23 +18,23 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
+import dal.cs.quickcash3.permission.ActivityPermissionHandler;
 import dal.cs.quickcash3.permission.PermissionRequestCode;
 import dal.cs.quickcash3.permission.PermissionResult;
 
 public class AndroidLocationProvider implements LocationProvider {
-    private final FusedLocationProviderClient locationProviderClient;
-    private final Activity activity;
+    protected final FusedLocationProviderClient locationProviderClient;
+    protected final Activity activity;
     private final long updateFrequencyMillis;
-    private final AtomicReference<Location> lastLocation = new AtomicReference<>();
+    protected final AtomicReference<Location> lastLocation = new AtomicReference<>();
     private final AtomicBoolean hasPendingLocation = new AtomicBoolean(false);
     private Consumer<Location> pendingLocationFunction;
     private Consumer<String> pendingErrorFunction;
 
-    public AndroidLocationProvider(@NonNull AppCompatPermissionActivity activity, long updateFrequencyMillis) {
-        this.activity = activity;
+    public AndroidLocationProvider(@NonNull ActivityPermissionHandler handler, long updateFrequencyMillis) {
+        this.activity = handler.getActivity();
         this.updateFrequencyMillis = updateFrequencyMillis;
-        activity.registerPermissionHandler(this::onRequestPermissionsResult);
+        handler.registerPermissionHandler(this::onRequestPermissionsResult);
         locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
     }
 

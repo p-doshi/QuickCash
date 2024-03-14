@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Location Permissions for Mat's UserStory7 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +19,7 @@
         <activity
             android:name="dal.cs.quickcash3.registration.RegistrationPage"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="dal.cs.quickcash3.database.DatabaseExampleActivity"
             android:exported="true"/>
@@ -44,6 +43,9 @@
             android:exported="true"/>
         <activity
             android:name="dal.cs.quickcash3.location.LocationExampleActivity"
+            android:exported="true"/>
+        <activity
+            android:name="dal.cs.quickcash3.jobs.SearchJobActivity"
             android:exported="true"/>
     </application>
 
