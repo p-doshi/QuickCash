@@ -8,13 +8,13 @@ import java.util.regex.Pattern;
 import dal.cs.quickcash3.R;
 
 public class PostJobFormFields {
-    Context context;
-    String datePattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
-    String salaryPattern = "[0-9]+\\.\\d\\d";
-    String empty = "";
-    String errorMessage;
+    static Context context; // fix this during refactoring
+    static String datePattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
+    static String salaryPattern = "[0-9]+\\.\\d\\d";
+    static String empty = "";
+    static String errorMessage;
 
-    public String checkFieldsValid(HashMap<String, String> fields){
+    public static String checkFieldsValid(HashMap<String, String> fields){
         errorMessage = checkIfEmpty(fields);
         if(errorMessage.equals(empty)){
             errorMessage = checkJobDate(fields.get("date"));
@@ -24,7 +24,7 @@ public class PostJobFormFields {
         return errorMessage;
     }
 
-    private String checkIfEmpty(HashMap<String, String> fields){
+    private static String checkIfEmpty(HashMap<String, String> fields){
         errorMessage = empty;
 
         for (HashMap.Entry<String, String> field : fields.entrySet()) {
@@ -40,7 +40,7 @@ public class PostJobFormFields {
 
     // How to best return error information???
     // How to best document code???
-    public String checkJobDate(String date){
+    public static String checkJobDate(String date){
         errorMessage = empty;
 
         if(!Pattern.matches(datePattern, date)){
@@ -48,7 +48,7 @@ public class PostJobFormFields {
         }
         return errorMessage;
     }
-    public String checkJobSalary(String salary){
+    public static String checkJobSalary(String salary){
         errorMessage = empty;
 
         if(!Pattern.matches(salaryPattern, salary)){

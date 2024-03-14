@@ -8,12 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import dal.cs.quickcash3.R;
 
 public class PostJobForm extends Activity {
 
-    //How to import/use firebase database
-    //MyFirebaseDatabase db = new MyFirebaseDatabase();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,12 @@ public class PostJobForm extends Activity {
                 // check fields
                 String errorMessage = checkAllFields();
 
+                if(!errorMessage.equals("")){
+                    // handle error message
+                }
+                else{
+                    createJob();
+                }
                 // save information - call to separate db class???
 
             }
@@ -71,9 +78,14 @@ public class PostJobForm extends Activity {
     }
 
     protected String checkAllFields(){
-        String errorMessage = "";
         // check fields and return error message?
+        HashMap<String, String> fields = getFieldsMap();
+        String errorMessage = PostJobFormFields.checkFieldsValid(fields);
         return errorMessage;
+    }
+
+    protected void createJob(){
+        //create a job
     }
 
     // Getters
@@ -112,5 +124,19 @@ public class PostJobForm extends Activity {
     protected String getProvince() {
         Spinner jobProvince = findViewById(R.id.addJobProvince);
         return jobProvince.getSelectedItem().toString();
+    }
+    protected HashMap<String, String> getFieldsMap(){
+        HashMap<String, String> fields = new HashMap<String, String>();
+
+        fields.put("title", getJobTitle());
+        fields.put("date", getJobDate());
+        fields.put("salary", getJobSalary());
+        fields.put("address", getJobAddress());
+        fields.put("city", getJobCity());
+        fields.put("province", getProvince());
+        fields.put("duration", getDuration());
+        fields.put("urgency", getUrgency());
+        fields.put("description", getJobDescription());
+        return fields;
     }
 }
