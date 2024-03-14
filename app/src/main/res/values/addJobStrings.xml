@@ -2,7 +2,8 @@
 <resources>
     <string name="addJobHeader">Add Job</string>
     <string name="addJobTitle">Title</string>
-    <string name="addJobDate">Start Date: dd/mm/yyyy</string>
+    <string name="addJobStartDate">Start Date: dd/mm/yyyy</string>
+    <string name="addJobDate">Date</string>
     <string name="addJobDuration">Duration:</string>
     <string name="addJobUrgency">Urgency:</string>
     <string name="addJobSalary">Salary</string>
