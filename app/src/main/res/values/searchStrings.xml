@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="job_search">Job Search</string>
+    <string name="job_title">Job Title</string>
+    <string name="pay_range">Pay Range</string>
+    <string name="job_duration">Job Duration</string>
+    <string name="max_distance">Max Distance</string>
+</resources>

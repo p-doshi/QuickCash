@@ -5,6 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertTrue;
 
@@ -30,7 +31,8 @@ public class MockDatabasePageTest {
     public final ActivityScenarioRule<DatabaseExampleActivity> activityRule =
         new ActivityScenarioRule<>(
             new Intent(context, DatabaseExampleActivity.class)
-            .addCategory(context.getString(R.string.MOCK_DATABASE)));
+                .addCategory(context.getString(R.string.MOCK_DATABASE))
+        );
 
     @Before
     public void setup() {
