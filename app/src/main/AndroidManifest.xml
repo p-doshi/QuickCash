@@ -45,6 +45,9 @@
         <activity
             android:name=".location.LocationExampleActivity"
             android:exported="true"/>
+        <activity
+            android:name=".employer.PostJobForm"
+            android:exported="true"/>
     </application>
 
 </manifest>
