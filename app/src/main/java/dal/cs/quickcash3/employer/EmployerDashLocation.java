@@ -4,20 +4,18 @@ import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationProvider;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.location.*;
+import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
 public class EmployerDashLocation extends AppCompatPermissionActivity {
@@ -47,14 +45,14 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
     private void detectLocation() {
         locationProvider.fetchLocation(location -> {
             currentLocation = location;
-            getAddress();
+            updateAddressDisplay();
         }, error -> {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
         });
     }
 
     @SuppressLint("SetTextI18n")
-    private void getAddress() {
+    private void updateAddressDisplay() {
         new Thread(() -> {
             try {
                 do{
@@ -68,8 +66,8 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
                         addressText.setText("Address not found");
                     }
                 });
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("EmployerDashLocation", "Geocoder failed", e);
             }
         }).start();
     }

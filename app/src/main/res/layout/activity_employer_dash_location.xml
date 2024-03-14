@@ -15,7 +15,8 @@
         app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintWidth_percent="0.9"
+        android:textIsSelectable="true"/>
 
     <Button
         android:id="@+id/detectLocationButton"
