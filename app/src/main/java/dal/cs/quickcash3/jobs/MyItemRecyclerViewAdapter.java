@@ -1,20 +1,19 @@
 package dal.cs.quickcash3.jobs;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.data.AvailableJob;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link AvailableJob}.
@@ -46,7 +45,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.job = jobs.get(position);
         holder.title.setText(holder.job.getTitle());
-        holder.subheading.setText(holder.job.getStartDate());
+        holder.subheading.setText(holder.job.getDescription());
     }
 
     @Override
