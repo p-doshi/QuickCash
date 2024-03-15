@@ -20,13 +20,13 @@ import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.search.SearchFilter;
 
 public class SearchFragment extends Fragment {
-    private final Consumer<SearchFilter<AvailableJob>> showResultsFunction;
+    private final Runnable showResultsFunction;
     private final SearchFilter<AvailableJob> combinedFilter;
 
     @SuppressWarnings("PMD.UnusedFormalParameter") // This will be used eventually.
     public SearchFragment(
         @NonNull LocationProvider locationProvider,
-        @NonNull Consumer<SearchFilter<AvailableJob>> showResultsFunction)
+        @NonNull Runnable showResultsFunction)
     {
         super();
         this.showResultsFunction = showResultsFunction;
@@ -34,6 +34,10 @@ public class SearchFragment extends Fragment {
         RegexSearchFilter<AvailableJob> uselessFilter = new RegexSearchFilter<>("title");
         uselessFilter.setPattern(Pattern.compile(".*"));
         combinedFilter = uselessFilter;
+    }
+
+    public SearchFilter<AvailableJob> getCombinedFilter() {
+        return combinedFilter;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class SearchFragment extends Fragment {
         View searchView = inflater.inflate(R.layout.fragment_search, container, false);
 
         Button searchButton = searchView.findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(view -> showResultsFunction.accept(combinedFilter));
+        searchButton.setOnClickListener(view -> showResultsFunction.run());
 
         return searchView;
     }

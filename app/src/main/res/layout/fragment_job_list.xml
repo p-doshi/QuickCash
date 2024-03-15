@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:name="dal.cs.quickcash3.fragments.JobListFragment"
+    android:id="@+id/list"
+    android:name="dal.cs.quickcash3.jobs.ItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     tools:context=".fragments.JobListFragment"
-    tools:listitem="@layout/fragment_job_post" />
+    tools:listitem="@layout/job_item" />
