@@ -3,6 +3,7 @@ package dal.cs.quickcash3.jobs;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +11,28 @@ import android.widget.TextView;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.jobs.placeholder.PlaceholderContent.PlaceholderItem;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link AvailableJob}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<AvailableJob> mValues;
-    private AvailableJob job;
-    public MyItemRecyclerViewAdapter(List<AvailableJob> items) {
-        mValues = items;
+    public List<AvailableJob> jobs = new ArrayList<>();
+
+
+    public void addJob (AvailableJob availableJob){
+        jobs.add(availableJob);
+        notifyItemInserted(jobs.size()-1);
+    }
+    @SuppressLint("NotifyDataSetChanged") //will do later
+    public void newList (List<AvailableJob> newJobs){
+        jobs = newJobs;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -35,14 +44,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.job = mValues.get(position);
-        holder.title.setText(this.job.getTitle());
-        holder.subheading.setText(this.job.getStartDate());
+        holder.job = jobs.get(position);
+        holder.title.setText(holder.job.getTitle());
+        holder.subheading.setText(holder.job.getStartDate());
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return jobs.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

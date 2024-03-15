@@ -10,39 +10,6 @@
     android:background="#F0F0F0">
 
 
-<com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/employeeBottomNavView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:menu="@menu/dash_worker_nav_menu" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/workerBottomNavView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/dash_worker_nav_menu" />
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/HeaderToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@+id/workerBottomNavView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
 
     <SearchView
         android:id="@+id/searchBar"
@@ -58,8 +25,8 @@
 
     <ImageView
         android:id="@+id/filterIcon"
-        android:layout_width="51dp"
-        android:layout_height="41dp"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
         android:layout_marginTop="4dp"
         android:clickable="true"
         android:contentDescription="@string/filter"
@@ -69,11 +36,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/searchResultContainer"
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
