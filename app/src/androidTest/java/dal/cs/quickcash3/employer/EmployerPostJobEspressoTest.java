@@ -56,7 +56,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Job submitted successfully")));
     }
@@ -76,7 +76,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Title")));
     }
@@ -94,7 +94,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Job Expected Duration")));
     }
@@ -112,7 +112,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Urgency")));
     }
@@ -132,7 +132,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Salary")));
     }
@@ -152,7 +152,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Address")));
     }
@@ -172,7 +172,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid City")));
     }
@@ -190,7 +190,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.addJobCity)).perform(typeText("Halifax\n"));
         onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old.\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Province")));
     }
@@ -210,7 +210,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Job Description")));
     }
@@ -229,7 +229,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
         onView(withId(R.id.addJobDescription)).perform(typeText("\n"),closeSoftKeyboard());
 
-        onView(withId(R.id.addJobConfimButton)).perform(click());
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText("Invalid Date")));
     }
