@@ -7,6 +7,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import dal.cs.quickCash3.R;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -35,9 +36,14 @@ public class WorkerDashMapsTestActivity extends FragmentActivity {
                 FragmentManager fragmentManger = getSupportFragmentManager();
                 Fragment currentFragment = fragmentManger.findFragmentById(R.id.mapContainer);
 
-                if (item.getItemId() == R.id.workerMapPage) {
+                if (item.getItemId() == R.id.workerMapPage && locationProvider.checkLocationPermissionsEnabled()) {
                     // If they selected map, display the map fragment
                     fragmentManger.beginTransaction().replace(R.id.mapContainer, new MapsActivity()).commit();
+                }
+                else if (item.getItemId() == R.id.workerMapPage && !locationProvider.checkLocationPermissionsEnabled()) {
+                    // If they selected the map WITHOUT location permissions, show them a toast that it won't work
+                    Toast.makeText(WorkerDashMapsTestActivity.this,
+                            "Location Permissions must be enabled to use Map", Toast.LENGTH_LONG).show();
                 }
                 else if (currentFragment != null) {
                     // Detaches current fragment if the user clicks another menu option

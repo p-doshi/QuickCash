@@ -19,21 +19,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import dal.cs.quickCash3.R;
 
-public class MapsActivity extends /*FragmentActivity*/ Fragment implements OnMapReadyCallback {
+public class MapsActivity extends Fragment implements OnMapReadyCallback {
     GoogleMap map;
-    String currentPosition;
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // No need for a setContentView because we're already in dashboard
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }*/
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        // TODO: This R.layout. might need to change!
+        // TODO: This R.layout. will need to change when integrated with WorkerDashboard
         View view = inflater.inflate(R.layout.test_mapdashlayout, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment == null) {
@@ -44,7 +35,6 @@ public class MapsActivity extends /*FragmentActivity*/ Fragment implements OnMap
         return view;
     }
 
-    // TODO: Test method, remove later
     protected LatLng getLatLong() {
         return new LatLng(44.6356, -63.5952);
     }
@@ -55,7 +45,11 @@ public class MapsActivity extends /*FragmentActivity*/ Fragment implements OnMap
 
         // Add current location as a marker
         LatLng userLocation = getLatLong();
-        map.addMarker(new MarkerOptions().position(userLocation).title("Halifax Marker"));
+        map.addMarker(new MarkerOptions().position(userLocation).title("Me"));
+        LatLng job1 = new LatLng(44.641718, -63.584126);
+        map.addMarker(new MarkerOptions().position(job1).title("Job 1"));
+        LatLng job2 = new LatLng(44.6398496, -63.601291);
+        map.addMarker(new MarkerOptions().position(job2).title("Job 2"));
 
         // Navigate camera to current position
         float zoomLevel = 12.0f;

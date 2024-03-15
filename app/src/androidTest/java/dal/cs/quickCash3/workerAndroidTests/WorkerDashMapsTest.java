@@ -46,14 +46,14 @@ public class WorkerDashMapsTest {
 
     @Test
     public void testMapWorker1IsDisplayed() throws UiObjectNotFoundException{
-        UiObject Worker1=device.findObject(new UiSelector().descriptionContains("Worker1"));
+        UiObject Worker1=device.findObject(new UiSelector().descriptionContains("Job 1"));
         Worker1.click();
         assertTrue(Worker1.exists());
     }
 
     @Test
     public void testMapWorker2IsDisplayed() throws UiObjectNotFoundException{
-        UiObject Worker2=device.findObject(new UiSelector().descriptionContains("Worker2"));
+        UiObject Worker2=device.findObject(new UiSelector().descriptionContains("Job 2"));
         Worker2.click();
         assertTrue(Worker2.exists());
     }
