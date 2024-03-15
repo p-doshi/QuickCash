@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +29,7 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
     Geocoder geocoder;
     List<Address> addresses;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employer_dash_location);
         init();
