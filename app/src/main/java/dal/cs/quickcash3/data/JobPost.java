@@ -2,27 +2,18 @@ package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.annotations.Nullable;
 
-import java.util.function.Consumer;
+import dal.cs.quickcash3.database.DatabaseWriter;
 
-import dal.cs.quickcash3.database.Database;
-
-public abstract class JobPost {
+public abstract class JobPost implements DatabaseWriter {
+    protected static final int HASH_SIZE = 20;
     private String title;
-    private String employerId;
+    private String employer;
     private String description;
-    private LatLng location;
-    private String pay;
-
-    /**
-     * Write the job post to the database.
-     *
-     * @param database The database to write to.
-     * @param errorFunction The error function that is called in case of an error.
-     */
-    public abstract void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction);
+    private double latitude;
+    private double longitude;
+    private double salary;
 
     public @Nullable String getTitle() {
         return title;
@@ -32,12 +23,12 @@ public abstract class JobPost {
         this.title = title;
     }
 
-    public @Nullable String getEmployerId() {
-        return employerId;
+    public @Nullable String getEmployer() {
+        return employer;
     }
 
-    public void setEmployerId(@NonNull String employerId) {
-        this.employerId = employerId;
+    public void setEmployer(@NonNull String employer) {
+        this.employer = employer;
     }
 
     public @Nullable String getDescription() {
@@ -48,19 +39,27 @@ public abstract class JobPost {
         this.description = description;
     }
 
-    public @Nullable LatLng getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(@NonNull LatLng location) {
-        this.location = location;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public @Nullable String getPay() {
-        return pay;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setPay(@NonNull String pay) {
-        this.pay = pay;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 }

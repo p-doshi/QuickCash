@@ -18,8 +18,8 @@ public final class JobPostHelper {
     // Utility class.
     private JobPostHelper() {}
 
-    private static float roundToNearestCent(float val) {
-        return Math.round(val * 100.0f) / 100.0f;
+    private static double roundToNearestCent(double val) {
+        return Math.round(val * 100.0) / 100.0;
     }
 
     private static double scaleNormalized(double normal, double min, double max) {
@@ -54,15 +54,15 @@ public final class JobPostHelper {
             AvailableJob job = new AvailableJob();
             job.setTitle(RandomStringGenerator.generate(10));
             job.setDescription(RandomStringGenerator.generate(40));
-            job.setEmployerId(RandomStringGenerator.generate(30));
+            job.setEmployer(RandomStringGenerator.generate(30));
             job.setPostTime(new Date().toString());
             job.setApplicants(new ArrayList<>());
             job.setBlackList(new ArrayList<>());
+            job.setSalary(roundToNearestCent(RANDOM.nextDouble() * 1000.0));
 
-            float pay = roundToNearestCent(RANDOM.nextFloat() * 1000.0f);
-            job.setPay(String.valueOf(pay));
-
-            job.setLocation(randomLocation(area));
+            LatLng location = randomLocation(area);
+            job.setLatitude(location.latitude);
+            job.setLongitude(location.longitude);
 
             jobs.add(job);
         }

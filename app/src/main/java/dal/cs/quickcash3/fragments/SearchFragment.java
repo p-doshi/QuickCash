@@ -1,37 +1,57 @@
 package dal.cs.quickcash3.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseOwner;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.location.LocationProvider;
-import dal.cs.quickcash3.location.LocationProviderOwner;
+import dal.cs.quickcash3.search.LocationSearchFilter;
+import dal.cs.quickcash3.search.NumericRangeSearchFilter;
+import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.search.SearchFilter;
+import dal.cs.quickcash3.slider.MaxDistanceSlider;
+import dal.cs.quickcash3.slider.SalaryRangeSlider;
+import dal.cs.quickcash3.slider.DurationRangeSlider;
 
 public class SearchFragment extends Fragment {
-//    private final Database database;
-//    private final LocationProvider locationProvider;
+    private final Consumer<SearchFilter<AvailableJob>> showResultsFunction;
+    private final SearchFilter<AvailableJob> combinedFilter;
 
-//    public SearchFragment(@NonNull Activity activity) {
-//        DatabaseOwner databaseOwner = (DatabaseOwner)activity;
-//        LocationProviderOwner locationProviderOwner = (LocationProviderOwner)activity;
-//        this.database = databaseOwner.getDatabase();
-//        this.locationProvider = locationProviderOwner.getLocationProvider();
-//    }
+    public SearchFragment(
+        @NonNull LocationProvider locationProvider,
+        @NonNull Consumer<SearchFilter<AvailableJob>> showResultsFunction)
+    {
+        this.showResultsFunction = showResultsFunction;
 
-    @Nullable
+        RegexSearchFilter<AvailableJob> uselessFilter = new RegexSearchFilter<>("title");
+        uselessFilter.setPattern(Pattern.compile(".*"));
+        combinedFilter = uselessFilter;
+    }
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+    public @Nullable View onCreateView(
+        @NonNull LayoutInflater inflater,
+        @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState)
+    {
+        View searchView = inflater.inflate(R.layout.fragment_search, container, false);
+
+        Button searchButton = searchView.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(view -> showResultsFunction.accept(combinedFilter));
+
+        return searchView;
     }
 }

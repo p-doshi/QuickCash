@@ -14,30 +14,33 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseOwner;
-import dal.cs.quickcash3.database.MockDatabase;
-import dal.cs.quickcash3.database.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.fragments.JobListFragment;
+import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
 import dal.cs.quickcash3.fragments.SearchFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
-import dal.cs.quickcash3.location.LocationProviderOwner;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.permission.FragmentPermissionActivity;
 
-public class WorkerDashboard extends FragmentPermissionActivity implements DatabaseOwner, LocationProviderOwner {
-    private static final String LOG_TAG = "WorkerDashboard";
+public class WorkerDashboard extends FragmentPermissionActivity {
+    private static final String LOG_TAG = WorkerDashboard.class.getName();
     private Database database;
     private LocationProvider locationProvider;
     private Fragment receiptsFragment;
+    private JobListFragment jobListFragment;
     private Fragment searchFragment;
     private Fragment mapFragment;
     private Fragment profileFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dashboard_worker);
@@ -46,8 +49,8 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
 
         // Initialize the fragments.
         receiptsFragment = new ReceiptsFragment();
-        //searchFragment = new SearchFragment(this);
-        searchFragment = new SearchFragment();
+        jobListFragment = new JobListFragment(database, this::showSearchPage);
+        searchFragment = new SearchFragment(locationProvider, this::showSearchResults);
         mapFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
 
@@ -61,8 +64,7 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
                 return true;
             }
             else if (itemId == R.id.workerSearchPage) {
-                Log.v(LOG_TAG, "Showing search fragment");
-                replaceFragment(searchFragment);
+                showSearchPage();
                 return true;
             }
             else if (itemId == R.id.workerMapPage) {
@@ -84,10 +86,21 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
         workerNavView.setSelectedItemId(R.id.workerMapPage);
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(@NonNull Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
+    }
+
+    private void showSearchPage() {
+        Log.v(LOG_TAG, "Showing search fragment");
+        replaceFragment(searchFragment);
+    }
+
+    private void showSearchResults(@NonNull SearchFilter<AvailableJob> filter) {
+        Log.v(LOG_TAG, "Showing job list fragment");
+        jobListFragment.setSearchFilter(filter);
+        replaceFragment(jobListFragment);
     }
 
     private void initInterfaces() {
@@ -113,12 +126,10 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
         }
     }
 
-    @Override
     public @NonNull Database getDatabase() {
         return database;
     }
 
-    @Override
     public @NonNull LocationProvider getLocationProvider() {
         return locationProvider;
     }

@@ -1,23 +1,23 @@
-package dal.cs.quickcash3.database;
+package dal.cs.quickcash3.database.mock;
 
-import static dal.cs.quickcash3.database.DatabaseHelper.splitLocationIntoKeys;
+import static dal.cs.quickcash3.util.StringHelper.splitString;
+import static dal.cs.quickcash3.util.StringHelper.SLASH;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
-class DatabaseListener<T> {
+class MockDatabaseListener<T> {
     private final List<String> keys;
     private final Class<T> type;
     private final Consumer<T> readFunction;
     private final Consumer<String> errorFunction;
 
-    public DatabaseListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
-        this.keys = splitLocationIntoKeys(location);
+    public MockDatabaseListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
+        this.keys = splitString(location, SLASH);
         this.type = type;
         this.readFunction = readFunction;
         this.errorFunction = errorFunction;

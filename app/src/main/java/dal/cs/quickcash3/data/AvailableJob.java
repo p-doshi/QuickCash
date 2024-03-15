@@ -9,24 +9,46 @@ import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseDirectory;
+import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class AvailableJob extends JobPost {
-    private String timeEstimate;
+    private String startDate;
+    private double duration;
+    private String urgency;
     private String postTime;
     private List<String> applicants;
     private List<String> blackList;
 
     @Override
     public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        database.write(DatabaseDirectory.AVAILABLE_JOBS.getValue(), this, errorFunction);
+        database.write(
+            DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
+            this,
+            errorFunction);
     }
 
-    public @Nullable String getTimeEstimate() {
-        return timeEstimate;
+    public @Nullable String getStartDate() {
+        return startDate;
     }
 
-    public void setTimeEstimate(@NonNull String timeEstimate) {
-        this.timeEstimate = timeEstimate;
+    public void setStartDate(@NonNull String startDate) {
+        this.startDate = startDate;
+    }
+
+    public @Nullable String getUrgency() {
+        return urgency;
+    }
+
+    public void setUrgency(@NonNull String urgency) {
+        this.urgency = urgency;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 
     public @Nullable String getPostTime() {
