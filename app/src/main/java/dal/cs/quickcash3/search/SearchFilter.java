@@ -17,7 +17,7 @@ public abstract class SearchFilter<T> {
      * @param nextFilter The filter that will be applied after this one.
      * @return The next filter. This allows chaining a set of filters together easily.
      */
-    public @NonNull SearchFilter<T> setNext(@NonNull SearchFilter<T> nextFilter) {
+    public @NonNull SearchFilter<T> addNext(@NonNull SearchFilter<T> nextFilter) {
         if (this.equals(nextFilter)) {
             throw new IllegalArgumentException("Cannot set the next search filter cannot be the current");
         }

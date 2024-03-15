@@ -17,6 +17,7 @@ public class NumericRangeSearchFilter<T> extends SearchFilter<T> {
     private Range<Double> range;
 
     public NumericRangeSearchFilter(@NonNull String key) {
+        super();
         keys = splitString(key, SLASH);
     }
 

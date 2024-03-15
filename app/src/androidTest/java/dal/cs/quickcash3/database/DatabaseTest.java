@@ -240,7 +240,7 @@ public class DatabaseTest {
         filter1.setPattern(Pattern.compile(".*a.*"));
         NumericRangeSearchFilter<Person> filter2 = new NumericRangeSearchFilter<>("age");
         filter2.setRange(new Range<>(1.0, 2.0));
-        filter1.setNext(filter2);
+        filter1.addNext(filter2);
 
         int listenerId = database.addSearchListener(
             testDir,
@@ -277,7 +277,7 @@ public class DatabaseTest {
         filter1.setPattern(Pattern.compile("aaa"));
         RegexSearchFilter<Person> filter2 = new RegexSearchFilter<>("lastName");
         filter2.setPattern(Pattern.compile("aaa"));
-        filter1.setNext(filter2);
+        filter1.addNext(filter2);
 
         int listenerId = database.addSearchListener(
             testDir,

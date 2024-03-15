@@ -1,8 +1,6 @@
 package dal.cs.quickcash3.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,22 +16,19 @@ import java.util.regex.Pattern;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.location.LocationProvider;
-import dal.cs.quickcash3.search.LocationSearchFilter;
-import dal.cs.quickcash3.search.NumericRangeSearchFilter;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.search.SearchFilter;
-import dal.cs.quickcash3.slider.MaxDistanceSlider;
-import dal.cs.quickcash3.slider.SalaryRangeSlider;
-import dal.cs.quickcash3.slider.DurationRangeSlider;
 
 public class SearchFragment extends Fragment {
     private final Consumer<SearchFilter<AvailableJob>> showResultsFunction;
     private final SearchFilter<AvailableJob> combinedFilter;
 
+    @SuppressWarnings("PMD.UnusedFormalParameter") // This will be used eventually.
     public SearchFragment(
         @NonNull LocationProvider locationProvider,
         @NonNull Consumer<SearchFilter<AvailableJob>> showResultsFunction)
     {
+        super();
         this.showResultsFunction = showResultsFunction;
 
         RegexSearchFilter<AvailableJob> uselessFilter = new RegexSearchFilter<>("title");

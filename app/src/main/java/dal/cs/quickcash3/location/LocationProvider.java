@@ -16,7 +16,7 @@ public interface LocationProvider {
      * @param locationFunction The function that receives the location iff accessible. The location will never be null.
      * @param errorFunction The function that receives errors iff they occur.
      */
-    int setLocationCallback(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction);
+    int addLocationCallback(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction);
 
     /**
      * Remove the callback with the given ID from the set of callbacks. Iff a negative number is

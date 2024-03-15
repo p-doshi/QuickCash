@@ -26,6 +26,7 @@ public class JobListFragment extends Fragment {
     private int listenerId;
 
     public JobListFragment(@NonNull Database database, @NonNull Runnable showSearchPageFunction) {
+        super();
         this.database = database;
         this.showSearchPageFunction = showSearchPageFunction;
     }

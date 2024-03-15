@@ -89,7 +89,7 @@ public class AndroidLocationProvider implements LocationProvider {
     }
 
     @Override
-    public int setLocationCallback(
+    public int addLocationCallback(
         @NonNull Consumer<Location> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {

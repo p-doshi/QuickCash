@@ -14,6 +14,7 @@ public class Person {
      * Empty constructor needed for Firebase database.
      * @noinspection unused
      */
+    @SuppressWarnings("PMD.UncommentedEmptyConstructor")
     public Person() {}
 
     public Person(@NonNull String firstName, @NonNull String lastName, int age) {
@@ -24,7 +25,7 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hashCode(firstName) + Objects.hashCode(lastName) + Objects.hashCode(age);
     }
 
     @Override

@@ -97,6 +97,7 @@ public class WorkerDashboard extends FragmentPermissionActivity {
         replaceFragment(searchFragment);
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
     private void showSearchResults(@NonNull SearchFilter<AvailableJob> filter) {
         Log.v(LOG_TAG, "Showing job list fragment");
         jobListFragment.setSearchFilter(filter);

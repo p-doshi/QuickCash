@@ -16,6 +16,7 @@ public class RegexSearchFilter<T> extends SearchFilter<T> {
     private Pattern pattern;
 
     public RegexSearchFilter(@NonNull String key) {
+        super();
         keys = splitString(key, SLASH);
     }
 

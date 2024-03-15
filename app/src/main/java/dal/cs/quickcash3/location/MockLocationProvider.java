@@ -52,7 +52,7 @@ public class MockLocationProvider implements LocationProvider {
     }
 
     @Override
-    public int setLocationCallback(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction) {
+    public int addLocationCallback(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction) {
         LocationReceiver receiver = new LocationReceiver(locationFunction, errorFunction);
         int receiverId = nextReceiverId++;
         locationReceivers.get().put(receiverId, receiver);

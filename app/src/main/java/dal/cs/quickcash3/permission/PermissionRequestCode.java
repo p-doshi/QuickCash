@@ -15,7 +15,7 @@ public enum PermissionRequestCode {
     }
 
     public static @NonNull PermissionRequestCode get(int value) {
-        for (PermissionRequestCode code : PermissionRequestCode.values()) {
+        for (PermissionRequestCode code : values()) {
             if (code.value == value) {
                 return code;
             }
