@@ -20,7 +20,7 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
-    private static final String LOG_TAG = DatabaseExampleActivity.class.getName();
+    private static final String LOG_TAG = DatabaseExampleActivity.class.getSimpleName();
     private Database database;
 
     @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.

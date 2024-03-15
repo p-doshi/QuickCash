@@ -31,7 +31,7 @@ import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.permission.FragmentPermissionActivity;
 
 public class WorkerDashboard extends FragmentPermissionActivity {
-    private static final String LOG_TAG = WorkerDashboard.class.getName();
+    private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
     private Fragment receiptsFragment;
