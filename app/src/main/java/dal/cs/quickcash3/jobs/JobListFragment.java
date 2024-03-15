@@ -27,7 +27,7 @@ import dal.cs.quickcash3.search.SearchFilter;
  * A fragment representing a list of Items.
  */
 public class JobListFragment extends Fragment {
-    private static final String LOG_TAG = JobListFragment.class.getName();
+    private static final String LOG_TAG = JobListFragment.class.getSimpleName();
     private final Database database;
     private final SearchFilter<AvailableJob> searchFilter;
     private final MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter();

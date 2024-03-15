@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class MockLocationProvider implements LocationProvider {
-    private static final String LOG_TAG = MockLocationProvider.class.getName();
+    private static final String LOG_TAG = MockLocationProvider.class.getSimpleName();
     private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
     private final AtomicReference<Location> location = new AtomicReference<>(null);
     private Thread callbackThread;

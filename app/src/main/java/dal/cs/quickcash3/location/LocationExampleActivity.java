@@ -17,7 +17,7 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
 public class LocationExampleActivity extends AppCompatPermissionActivity {
-    private static final String LOG_TAG = LocationExampleActivity.class.getName();
+    private static final String LOG_TAG = LocationExampleActivity.class.getSimpleName();
     private final AtomicReference<Location> location = new AtomicReference<>();
     private final AtomicBoolean buttonWaiting = new AtomicBoolean(false);
     private TextView status;
