@@ -1,18 +1,25 @@
-package dal.cs.quickcash3.database;
+package dal.cs.quickcash3.database.mock;
 
-import static dal.cs.quickcash3.database.DatabaseHelper.splitLocationIntoKeys;
+import static dal.cs.quickcash3.util.StringHelper.splitString;
+import static dal.cs.quickcash3.util.StringHelper.SLASH;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.search.SearchFilter;
 
 public class MockDatabase implements Database {
     private static final String KEY_NOT_FOUND = "Key not found: ";
-    private final Map<Integer, DatabaseListener<?>> listenerMap = new TreeMap<>();
+    private final Map<Integer, MockDatabaseListener<?>> listenerMap = new TreeMap<>();
     private final Map<String, Object> data = new MapType();
     private int nextListenerId;
 
@@ -42,7 +49,7 @@ public class MockDatabase implements Database {
         return recursiveGet(nestedData, keys, nextIndex);
     }
 
-    private <T> void recursiveSet(Map<String, Object> map, @NonNull List<String> keys, int index, T value) {
+    private <T> void recursiveSet(Map<String, Object> map, @NonNull List<String> keys, int index, @Nullable T value) {
         assert index < keys.size();
 
         // Get the next key we are looking for.
@@ -109,28 +116,28 @@ public class MockDatabase implements Database {
     }
 
     private void runListeners(@NonNull List<String> keys) {
-        for (Map.Entry<Integer, DatabaseListener<?>> entry : listenerMap.entrySet()) {
-            DatabaseListener<?> listener = entry.getValue();
+        for (Map.Entry<Integer, MockDatabaseListener<?>> entry : listenerMap.entrySet()) {
+            MockDatabaseListener<?> listener = entry.getValue();
             if (listener.isLocation(keys)) {
                 try {
                     Object callbackValue = recursiveGet(data, listener.getKeys(), 0);
                     listener.sendValue(callbackValue);
                 }
                 catch (ClassCastException | IllegalArgumentException exception) {
-                    listener.sendError(exception.getMessage());
+                    listener.sendError(Objects.requireNonNull(exception.getMessage()));
                 }
             }
         }
     }
 
     @Override
-    public <T> void write(@NonNull String location, T value, @NonNull Consumer<String> errorFunction) {
+    public <T> void write(@NonNull String location, @Nullable T value, @NonNull Consumer<String> errorFunction) {
         write(location, value, () -> {}, errorFunction);
     }
 
     @Override
-    public <T> void write(@NonNull String location, T value, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
-        List<String> keys = splitLocationIntoKeys(location);
+    public <T> void write(@NonNull String location, @Nullable T value, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
+        List<String> keys = splitString(location, SLASH);
         if (keys.isEmpty()) {
             errorFunction.accept("Must provide a location to write data");
             return;
@@ -149,7 +156,7 @@ public class MockDatabase implements Database {
     @Override
     public <T> void read(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
         try {
-            List<String> keys = splitLocationIntoKeys(location);
+            List<String> keys = splitString(location, SLASH);
             Object obj = recursiveGet(data, keys, 0);
             T value = type.cast(obj);
             readFunction.accept(value);
@@ -162,13 +169,19 @@ public class MockDatabase implements Database {
     @Override
     public <T> int addListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
         int callbackId = nextListenerId++;
-        DatabaseListener<T> callbacks = new DatabaseListener<>(location, type, readFunction, errorFunction);
+        MockDatabaseListener<T> callbacks = new MockDatabaseListener<>(location, type, readFunction, errorFunction);
         listenerMap.put(callbackId, callbacks);
 
         // Read the current data.
         read(location, type, readFunction, errorFunction);
 
         return callbackId;
+    }
+
+    @Override
+    public <T> int addSearchListener(@NonNull String location, @NonNull Class<T> type, @NonNull SearchFilter<T> filter, @NonNull BiConsumer<String, T> readFunction, @NonNull Consumer<String> errorFunction) {
+        // TODO: implement this function.
+        return -1;
     }
 
     @Override
@@ -186,7 +199,7 @@ public class MockDatabase implements Database {
 
     @Override
     public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
-        List<String> keys = splitLocationIntoKeys(location);
+        List<String> keys = splitString(location, SLASH);
         if (keys.isEmpty()) {
             errorFunction.accept("Must provide a location to delete data");
             return;

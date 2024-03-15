@@ -1,10 +1,14 @@
 package dal.cs.quickcash3.database;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import dal.cs.quickcash3.search.SearchFilter;
 
 public interface Database {
     /**
@@ -15,9 +19,9 @@ public interface Database {
      * @param location The location in the database to write the value.
      * @param value The value to write to the database at the given location.
      * @param errorFunction The function that will be called in case of an error.
-     * @param <T> Can write any type of data to firebase.
+     * @param <T> Can write any type of data to the database.
      */
-    <T> void write(@NonNull String location, T value, @NonNull Consumer<String> errorFunction);
+    <T> void write(@NonNull String location, @Nullable T value, @NonNull Consumer<String> errorFunction);
 
     /**
      * Asynchronously writes the value to the database.
@@ -30,9 +34,13 @@ public interface Database {
      * @param successFunction The function that will be called after the asynchronous operation
      *                        completes successfully.
      * @param errorFunction The function that will be called in case of an error.
-     * @param <T> Can write any type of data to firebase.
+     * @param <T> Can write any type of data to the database.
      */
-    <T> void write(@NonNull String location, T value, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction);
+    <T> void write(
+        @NonNull String location,
+        @Nullable T value,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction);
 
     /**
      * Asynchronously reads the value to the database.
@@ -44,9 +52,13 @@ public interface Database {
      * @param type The type of the data to read. NOTE: This is necessary due to Java's type erasure.
      * @param readFunction The function to receive the data.
      * @param errorFunction The function that will be called in case of an error.
-     * @param <T> Can read any type of data from firebase.
+     * @param <T> Can read any type of data from the database.
      */
-    <T> void read(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction);
+    <T> void read(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull Consumer<T> readFunction,
+        @NonNull Consumer<String> errorFunction);
 
     /**
      * Set a listener for a value in the database at the given location. The readFunction will
@@ -61,10 +73,37 @@ public interface Database {
      * @param readFunction The function to receive the data.
      * @param errorFunction The function that will be called in case of an error.
      * @return The ID for this listener.
-     * @param <T> Can read any type of data from firebase.
+     * @param <T> Can read any type of data from the database.
      */
     @CheckReturnValue
-    <T> int addListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction);
+    <T> int addListener(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull Consumer<T> readFunction,
+        @NonNull Consumer<String> errorFunction);
+
+    /**
+     * Asynchronously searches for all values at the given location in database that match the
+     * search filter. All of the search results will be passed to the read function individually
+     * alongside their sub location. The sub location is the nested location of the data within the
+     * given location. Iff data is removed, the read function will be called with its sub location
+     * and a null pointer. Iff an error occurs, then the errorFunction will be called with the
+     * specific error.
+     *
+     * @param location The location in the database to search.
+     * @param filter The search filter to use to search inside the location.
+     * @param type The type of the data to read. NOTE: This is necessary due to Java's type erasure.
+     * @param readFunction The function to receive the sub location and data at that sub location.
+     * @param errorFunction The function that will be called in case of an error.
+     * @param <T> Can read any type of data from the database.
+     */
+    @CheckReturnValue
+    <T> int addSearchListener(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull SearchFilter<T> filter,
+        @NonNull BiConsumer<String, T> readFunction,
+        @NonNull Consumer<String> errorFunction);
 
     /**
      * Remove the listener with the matching listenerId.
@@ -90,5 +129,8 @@ public interface Database {
      * @param successFunction The function that will be called on successful deletion.
      * @param errorFunction The function that will be called in case of an error.
      */
-    void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction);
+    void delete(
+        @NonNull String location,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction);
 }

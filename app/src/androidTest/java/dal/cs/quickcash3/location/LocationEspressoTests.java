@@ -4,8 +4,8 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static dal.cs.quickcash3.util.RegexMatcher.withPattern;
-import static dal.cs.quickcash3.util.WaitForAction.waitFor;
+import static dal.cs.quickcash3.test.RegexMatcher.withPattern;
+import static dal.cs.quickcash3.test.WaitForAction.waitFor;
 
 import android.Manifest;
 

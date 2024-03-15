@@ -1,9 +1,11 @@
-package dal.cs.quickcash3.database;
+package dal.cs.quickcash3.database.firebase;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,17 +14,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.search.SearchFilter;
 
 /**
  * DO NOT use this class to interact with the database!
  * Please use MyFirebaseDatabase instead.
  */
-public class MyFirebaseDatabaseImpl implements Database {
+class MyFirebaseDatabaseImpl implements Database {
     private final FirebaseDatabase database;
-    private final Map<Integer, ReferenceListenerPair> listenerMap = new TreeMap<>();
+    private final Map<Integer, FirebaseDatabaseListener> listenerMap = new TreeMap<>();
     private int nextListenerId;
 
     public MyFirebaseDatabaseImpl(@NonNull Context context) {
@@ -30,14 +35,29 @@ public class MyFirebaseDatabaseImpl implements Database {
         database = FirebaseDatabase.getInstance(context.getString(R.string.FIREBASE_DB_URL));
     }
 
+    private int addListener(FirebaseDatabaseListener listener) {
+        int listenerId = nextListenerId++;
+        listenerMap.put(listenerId, listener);
+        return listenerId;
+    }
+
     @Override
-    public <T> void write(@NonNull String location, T value, @NonNull Consumer<String> errorFunction) {
+    public <T> void write(
+        @NonNull String location,
+        @Nullable T value,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.getReference(location).setValue(value)
             .addOnFailureListener(e -> errorFunction.accept(e.getMessage()));
     }
 
     @Override
-    public <T> void write(@NonNull String location, T value, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
+    public <T> void write(
+        @NonNull String location,
+        @Nullable T value,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.getReference(location).setValue(value)
             .addOnSuccessListener(unused -> successFunction.run())
             .addOnFailureListener(e -> errorFunction.accept(e.getMessage()));
@@ -45,7 +65,12 @@ public class MyFirebaseDatabaseImpl implements Database {
 
 
     @Override
-    public <T> void read(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
+    public <T> void read(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull Consumer<T> readFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.getReference(location).get()
             .addOnSuccessListener(dataSnapshot -> {
                 T value = dataSnapshot.getValue(type);
@@ -55,7 +80,12 @@ public class MyFirebaseDatabaseImpl implements Database {
     }
 
     @Override
-    public <T> int addListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
+    public <T> int addListener(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull Consumer<T> readFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         DatabaseReference reference = database.getReference(location);
         ValueEventListener listener = reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -70,20 +100,32 @@ public class MyFirebaseDatabaseImpl implements Database {
             }
         });
 
-        int listenerId = nextListenerId++;
         ReferenceListenerPair pair = new ReferenceListenerPair(reference, listener);
-        listenerMap.put(listenerId, pair);
-        return listenerId;
+        return addListener(pair);
     }
-    
+
+    @Override
+    public <T> int addSearchListener(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull SearchFilter<T> filter,
+        @NonNull BiConsumer<String, T> readFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        DatabaseReference reference = database.getReference(location);
+        ChildEventListener listener = reference.addChildEventListener(
+            new FilteredChildEventListener<>(type, filter, readFunction, errorFunction));
+
+        FirebaseDatabaseListener pair = new ReferenceChildListenerPair(reference, listener);
+        return addListener(pair);
+    }
+
     @Override
     public void removeListener(int listenerId) {
-        ReferenceListenerPair pair = listenerMap.get(listenerId);
-        if (pair == null) {
-            throw new IllegalArgumentException("Could not find listener callback with ID: " + listenerId);
+        FirebaseDatabaseListener listener = listenerMap.remove(listenerId);
+        if (listener != null) {
+            listener.remove();
         }
-
-        pair.getReference().removeEventListener(pair.getListener());
     }
 
     @Override
@@ -93,7 +135,11 @@ public class MyFirebaseDatabaseImpl implements Database {
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
+    public void delete(
+        @NonNull String location,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.getReference(location).removeValue()
             .addOnSuccessListener(unused -> successFunction.run())
             .addOnFailureListener(error -> errorFunction.accept(error.getMessage()));
