@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -83,11 +84,13 @@ public class DatabaseTest {
         Assert.assertEquals("Hello", value.get());
     }
 
+    @Ignore("Manual test")
     @Test
     public void authenticated() {
         Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
     }
 
+    @Ignore("Manual test")
     @Test
     public void createJobs() {
         final int numJobs = 10;
@@ -97,13 +100,13 @@ public class DatabaseTest {
         List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
         Assert.assertEquals(numJobs, jobs.size());
 
-//        resource.increment();
-//
-//        FirebaseAuth.getInstance().signInWithEmailAndPassword("parthdoshi135@gmail.com", "Password")
-//            .addOnSuccessListener(result -> resource.decrement())
-//            .addOnFailureListener(error -> Assert.fail(error.getMessage()));
-//
-//        Espresso.onIdle();
+        resource.increment();
+
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("parthdoshi135@gmail.com", "Password")
+            .addOnSuccessListener(result -> resource.decrement())
+            .addOnFailureListener(error -> Assert.fail(error.getMessage()));
+
+        Espresso.onIdle();
 
         Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
 
