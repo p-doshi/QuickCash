@@ -19,6 +19,7 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.fragments.JobListFragment;
+import dal.cs.quickcash3.jobs.SearchJobActivity;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
@@ -34,8 +35,9 @@ public class WorkerDashboard extends FragmentPermissionActivity {
     private Database database;
     private LocationProvider locationProvider;
     private Fragment receiptsFragment;
-    private JobListFragment jobListFragment;
-    private Fragment searchFragment;
+
+    private Fragment jobSearchFragment;
+
     private Fragment mapFragment;
     private Fragment profileFragment;
 
@@ -49,10 +51,9 @@ public class WorkerDashboard extends FragmentPermissionActivity {
 
         // Initialize the fragments.
         receiptsFragment = new ReceiptsFragment();
-        jobListFragment = new JobListFragment(database, this::showSearchPage);
-        searchFragment = new SearchFragment(locationProvider, this::showSearchResults);
         mapFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
+        jobSearchFragment = new SearchJobActivity(database,locationProvider);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
@@ -64,7 +65,7 @@ public class WorkerDashboard extends FragmentPermissionActivity {
                 return true;
             }
             else if (itemId == R.id.workerSearchPage) {
-                showSearchPage();
+                replaceFragment(jobSearchFragment);
                 return true;
             }
             else if (itemId == R.id.workerMapPage) {
@@ -92,17 +93,6 @@ public class WorkerDashboard extends FragmentPermissionActivity {
         transaction.commit();
     }
 
-    private void showSearchPage() {
-        Log.v(LOG_TAG, "Showing search fragment");
-        replaceFragment(searchFragment);
-    }
-
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
-    private void showSearchResults(@NonNull SearchFilter<AvailableJob> filter) {
-        Log.v(LOG_TAG, "Showing job list fragment");
-        jobListFragment.setSearchFilter(filter);
-        replaceFragment(jobListFragment);
-    }
 
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();

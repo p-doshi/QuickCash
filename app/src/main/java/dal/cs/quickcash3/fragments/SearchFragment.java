@@ -26,7 +26,7 @@ import dal.cs.quickcash3.slider.DurationRangeSlider;
 
 public class SearchFragment extends Fragment {
     private static final String LOG_TAG = SearchFragment.class.getName();
-    private final Consumer<SearchFilter<AvailableJob>> showResultsFunction;
+    private final Runnable showResultsFunction;
     private final SearchFilter<AvailableJob> combinedFilter;
     private final LocationSearchFilter<AvailableJob> locationFilter;
     private final NumericRangeSearchFilter<AvailableJob> salaryRangeFilter;
@@ -34,7 +34,7 @@ public class SearchFragment extends Fragment {
 
     public SearchFragment(
         @NonNull LocationProvider locationProvider,
-        @NonNull Consumer<SearchFilter<AvailableJob>> showResultsFunction)
+        @NonNull Runnable showResultsFunction)
     {
         this.showResultsFunction = showResultsFunction;
 
@@ -44,6 +44,10 @@ public class SearchFragment extends Fragment {
 
         locationFilter.addNext(salaryRangeFilter).addNext(durationFilter);
         combinedFilter = locationFilter;
+    }
+
+    public @NonNull SearchFilter<AvailableJob> getCombinedFilter() {
+        return combinedFilter;
     }
 
     @Override
@@ -75,7 +79,7 @@ public class SearchFragment extends Fragment {
             Log.d(LOG_TAG, "Max Distance: " + newMaxDistance + " m");
             locationFilter.setMaxDistance(newMaxDistance);
 
-            showResultsFunction.accept(combinedFilter);
+            showResultsFunction.run();
         });
 
         return searchView;

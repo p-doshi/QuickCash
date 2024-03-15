@@ -10,9 +10,14 @@ import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,6 +27,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
+import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.JobPostHelper;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.search.NumericRangeSearchFilter;
 import dal.cs.quickcash3.search.RegexSearchFilter;
@@ -75,6 +82,44 @@ public class DatabaseTest {
         Espresso.onIdle();
 
         Assert.assertEquals("Hello", value.get());
+    }
+
+    @Ignore("Manual test")
+    @Test
+    public void authenticated() {
+        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
+    }
+
+    @Ignore("Manual test")
+    @Test
+    public void createJobs() {
+        final int numJobs = 10;
+        LatLng southeast = new LatLng(37.322998, -122.032181);
+        LatLng northwest = new LatLng(37.354107, -121.955238);
+        LatLngBounds area = new LatLngBounds(southeast, northwest);
+        List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
+        Assert.assertEquals(numJobs, jobs.size());
+
+        resource.increment();
+
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("parthdoshi135@gmail.com", "Password")
+            .addOnSuccessListener(result -> resource.decrement())
+            .addOnFailureListener(error -> Assert.fail(error.getMessage()));
+
+        Espresso.onIdle();
+
+        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
+
+        for (AvailableJob job : jobs) {
+            resource.increment();
+            database.write(
+                DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(20),
+                job,
+                resource::decrement,
+                Assert::fail);
+        }
+
+        Espresso.onIdle();
     }
 
     @Test
