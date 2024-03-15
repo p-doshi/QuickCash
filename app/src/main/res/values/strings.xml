@@ -8,4 +8,5 @@
     <string name="password">Password</string>
     <string name="MOCK_DATABASE">MOCK_DATABASE</string>
     <string name="MOCK_LOCATION">MOCK_LOCATION</string>
+    <string name="empty" />
 </resources>
