@@ -6,8 +6,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import dal.cs.quickCash3.R;
-import dal.cs.quickCash3.worker.WorkerDashboard;
-import android.app.Activity;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -34,13 +32,19 @@ public class WorkerDashMapsTestActivity extends FragmentActivity {
         workerNavView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentManager fragmentManger = getSupportFragmentManager();
+                Fragment currentFragment = fragmentManger.findFragmentById(R.id.mapContainer);
+
                 if (item.getItemId() == R.id.workerMapPage) {
                     // If they selected map, display the map fragment
-                    FragmentManager fragmentManger = getSupportFragmentManager();
                     fragmentManger.beginTransaction().replace(R.id.mapContainer, new MapsActivity()).commit();
-                    return true;
                 }
-                return false;
+                else if (currentFragment != null) {
+                    // Detaches current fragment if the user clicks another menu option
+                    // Will be replaced with other tabs eventually
+                    fragmentManger.beginTransaction().detach(currentFragment).commit();
+                }
+                return true;
             }
         });
     }

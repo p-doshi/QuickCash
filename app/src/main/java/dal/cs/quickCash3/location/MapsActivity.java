@@ -44,9 +44,9 @@ public class MapsActivity extends /*FragmentActivity*/ Fragment implements OnMap
         return view;
     }
 
-    // Test method, remove later
+    // TODO: Test method, remove later
     protected LatLng getLatLong() {
-        return new LatLng(43, -73);
+        return new LatLng(44.6356, -63.5952);
     }
 
     @Override
@@ -54,8 +54,11 @@ public class MapsActivity extends /*FragmentActivity*/ Fragment implements OnMap
         map = googleMap;
 
         // Add current location as a marker
-        LatLng hali = getLatLong();
-        map.addMarker(new MarkerOptions().position(hali).title("Halifax Marker"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(hali));
+        LatLng userLocation = getLatLong();
+        map.addMarker(new MarkerOptions().position(userLocation).title("Halifax Marker"));
+
+        // Navigate camera to current position
+        float zoomLevel = 12.0f;
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, zoomLevel));
     }
 }
