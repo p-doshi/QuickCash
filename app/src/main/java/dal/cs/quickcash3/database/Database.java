@@ -86,13 +86,15 @@ public interface Database {
      * Asynchronously searches for all values at the given location in database that match the
      * search filter. All of the search results will be passed to the read function individually
      * alongside their sub location. The sub location is the nested location of the data within the
-     * given location. Iff data is removed, the read function will be called with its sub location
-     * and a null pointer. Iff an error occurs, then the errorFunction will be called with the
+     * given location. If data is removed, the read function will be called with its sub location
+     * and a null pointer. If the search filter is changed while the listener is active, it results
+     * in undefined behaviour. If an error occurs, then the errorFunction will be called with the
      * specific error.
      *
      * @param location The location in the database to search.
-     * @param filter The search filter to use to search inside the location.
      * @param type The type of the data to read. NOTE: This is necessary due to Java's type erasure.
+     * @param filter The search filter to use to search inside the location.
+     *               DO NOT MODIFY THE FILTER WHILE LISTENER IS ACTIVE.
      * @param readFunction The function to receive the sub location and data at that sub location.
      * @param errorFunction The function that will be called in case of an error.
      * @param <T> Can read any type of data from the database.
