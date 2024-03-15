@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.fragments;
+package dal.cs.quickcash3.jobs;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.util.function.Consumer;
-
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.location.LocationProvider;
@@ -24,15 +22,15 @@ import dal.cs.quickcash3.slider.MaxDistanceSlider;
 import dal.cs.quickcash3.slider.SalaryRangeSlider;
 import dal.cs.quickcash3.slider.DurationRangeSlider;
 
-public class SearchFragment extends Fragment {
-    private static final String LOG_TAG = SearchFragment.class.getName();
+public class SearchFilterFragment extends Fragment {
+    private static final String LOG_TAG = SearchFilterFragment.class.getName();
     private final Runnable showResultsFunction;
     private final SearchFilter<AvailableJob> combinedFilter;
     private final LocationSearchFilter<AvailableJob> locationFilter;
     private final NumericRangeSearchFilter<AvailableJob> salaryRangeFilter;
     private final NumericRangeSearchFilter<AvailableJob> durationFilter;
 
-    public SearchFragment(
+    public SearchFilterFragment(
         @NonNull LocationProvider locationProvider,
         @NonNull Runnable showResultsFunction)
     {
@@ -56,7 +54,7 @@ public class SearchFragment extends Fragment {
         @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState)
     {
-        View searchView = inflater.inflate(R.layout.fragment_search, container, false);
+        View searchView = inflater.inflate(R.layout.fragment_search_filter, container, false);
 
         SalaryRangeSlider salarySlider =
             new SalaryRangeSlider(searchView.findViewById(R.id.salaryRangeSlider));

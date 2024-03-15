@@ -14,18 +14,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.fragments.JobListFragment;
-import dal.cs.quickcash3.fragments.SearchFragment;
 import dal.cs.quickcash3.location.LocationProvider;
 
-public class SearchJobActivity extends Fragment {
+public class JobSearchFragment extends Fragment {
     private ImageView filterIcon ;
     private final JobListFragment jobListFragment;
-    private final SearchFragment searchFragment;
+    private final SearchFilterFragment searchFragment;
 
-    public SearchJobActivity(@NonNull Database database, @NonNull LocationProvider locationProvider){
+    public JobSearchFragment(@NonNull Database database, @NonNull LocationProvider locationProvider){
         super();
-        this.searchFragment = new SearchFragment(locationProvider, this::showList);
+        this.searchFragment = new SearchFilterFragment(locationProvider, this::showList);
         this.jobListFragment=new JobListFragment(database,searchFragment.getCombinedFilter());
     }
 

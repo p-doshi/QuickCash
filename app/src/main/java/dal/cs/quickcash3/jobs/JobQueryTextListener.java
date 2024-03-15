@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.fragments.JobListFragment;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 
 class JobQueryTextListener implements SearchView.OnQueryTextListener {
