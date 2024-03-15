@@ -11,6 +11,7 @@
     <string name="addJobDescription">Description</string>
     <string name="addJobCity">City</string>
     <string name="addJobCountry">Country</string>
+    <string name="success">Job submitted successfully</string>
 
     <string name="fillAllFields">Please fill in all fields!</string>
     <string name="dateError">Please enter date in proper format - dd/mm/yyyy</string>

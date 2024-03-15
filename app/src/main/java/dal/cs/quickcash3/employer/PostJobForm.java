@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +35,17 @@ public class PostJobForm extends Activity {
             public void onClick(View view) {
                 // check fields
                 String errorMessage = checkAllFields();
+                TextView status = findViewById(R.id.jobSubmitStatus);
 
                 if(!errorMessage.equals("")){
                     // handle error message
+                    status.setText(errorMessage);
                 }
                 else{
                     createJob();
                     // save to db
                     // write success message
+                    status.setText(R.string.success);
                     // move to next page
                 }
 
