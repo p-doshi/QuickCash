@@ -1,6 +1,5 @@
 package dal.cs.quickcash3.jobs;
 
-import android.app.appsearch.SearchResult;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.regex.Pattern;
@@ -71,7 +69,8 @@ public class SearchJobActivity extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                handleSearch(newText);
+                return true;
             }
             });
     }
@@ -87,7 +86,7 @@ public class SearchJobActivity extends Fragment {
 
     private void handleSearch(String query) {
         RegexSearchFilter<AvailableJob> regexSearchFilter = new RegexSearchFilter<>("title");
-        regexSearchFilter.setPattern(Pattern.compile(".*"+query+".*"));
+        regexSearchFilter.setPattern(Pattern.compile(".*"+query+".*", Pattern.CASE_INSENSITIVE));
         jobListFragment.resetList(regexSearchFilter);
 
     }
