@@ -19,7 +19,11 @@ import java.util.Locale;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
-
+/**
+ * Represents the location dashboard for employers within the application.
+ * This class extends {@link AppCompatPermissionActivity} to handle permissions
+ * and integrates with the device's location services to fetch and display the current location.
+ */
 public class EmployerDashLocation extends AppCompatPermissionActivity {
 
     Button detectLocationButton;
@@ -34,7 +38,10 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
         setContentView(R.layout.activity_employer_dash_location);
         init();
     }
-
+    /**
+     * Initializes UI components and sets up the location provider and geocoder.
+     * Also sets a click listener on the 'detect location' button to start location detection.
+     */
     private void init() {
         detectLocationButton = findViewById(R.id.detectLocationButton);
         addressText = findViewById(R.id.addressText);
@@ -43,7 +50,10 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
 
         detectLocationButton.setOnClickListener(v -> detectLocation());
     }
-
+    /**
+     * Initiates the location detection process. Uses the {@link AndroidLocationProvider} to fetch the current location
+     * and updates the UI with the retrieved address. Shows a toast message in case of an error.
+     */
     private void detectLocation() {
         locationProvider.fetchLocation(location -> {
             currentLocation = location;
@@ -52,7 +62,11 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
         });
     }
-
+    /**
+     * Updates the address display TextView with the current address.
+     * Converts the current location's latitude and longitude into a human-readable address using {@link Geocoder}.
+     * Displays a message if the address is not found or an error occurs during the geocoding process.
+     */
     @SuppressLint("SetTextI18n")
     private void updateAddressDisplay() {
         try {
