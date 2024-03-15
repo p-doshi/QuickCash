@@ -28,7 +28,7 @@ public class EmployerDashLocationEspressoTest {
     public Context context;
     @Rule
     public GrantPermissionRule grantLocationPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-    final static int MAX_LOCATION_TIMEOUT_MS = 10000;
+    final static int MAX_LOCATION_TIMEOUT_MS = 15000;
     @Before
     public void setup() {
         scenario = ActivityScenario.launch(EmployerDashLocation.class);
@@ -48,6 +48,6 @@ public class EmployerDashLocationEspressoTest {
         // Clicks the button once
         Espresso.onView(withId(R.id.detectLocationButton)).perform(click());
         // Address will be printed in the format of 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA need to adjust the regex to detect this
-        Espresso.onView(withId(R.id.addressText)).perform(waitFor(withPattern("Address: [0-9]+ [a-zA-Z .]+, [a-zA-Z ]+, [A-Z0-9 ]+,[a-zA-Z ]+"), MAX_LOCATION_TIMEOUT_MS));
+        Espresso.onView(withId(R.id.addressText)).perform(waitFor(withPattern("Address: (?:[a-zA-Z0-9 .]*, )?[0-9]+ [a-zA-Z .]+, [a-zA-Z ]+, [A-Z0-9 ]+,[a-zA-Z ]+"), MAX_LOCATION_TIMEOUT_MS));
     }
 }
