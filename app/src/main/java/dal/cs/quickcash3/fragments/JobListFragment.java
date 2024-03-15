@@ -31,29 +31,28 @@ import dal.cs.quickcash3.search.SearchFilter;
  * A fragment representing a list of Items.
  */
 public class JobListFragment extends Fragment {
+    private static final String LOG_TAG = JobListFragment.class.getName();
     private final Database database;
-
-    private SearchFilter<AvailableJob> searchFilter;
+    private final SearchFilter<AvailableJob> searchFilter;
+    private final MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter();
+    private final Map<String,AvailableJob> availableJobMap = new HashMap<>();
     private int listenerId;
-    private MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter();
-    private Map<String,AvailableJob> availableJobMap = new HashMap<>();
 
-    public JobListFragment(@NonNull Database database,SearchFilter<AvailableJob> searchFilter) {
+    public JobListFragment(@NonNull Database database, @NonNull SearchFilter<AvailableJob> searchFilter) {
+        super();
         this.database = database;
         this.searchFilter = searchFilter;
-
-
     }
 
-    public void resetList(SearchFilter<AvailableJob> filter){
+    public void resetList(@NonNull SearchFilter<AvailableJob> filter){
         List<AvailableJob> newJobs = new ArrayList<>();
-
 
         for (AvailableJob job : availableJobMap.values()){
             if(filter.isValid(job)){
                 newJobs.add(job);
             }
         }
+
         adapter.newList(newJobs);
     }
 
@@ -67,20 +66,21 @@ public class JobListFragment extends Fragment {
         if (!(view instanceof RecyclerView)) {
             throw new ClassCastException("JOb list fragment not a recycler view");
         }
+
         RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setAdapter(adapter);
         listenerId = database.addSearchListener(AVAILABLE_JOBS.getValue(), AvailableJob.class, searchFilter,
             (key, job) -> {
-
-                if (job==null){
+                Log.v(LOG_TAG, key + ": " + job);
+                if (job == null) {
                     availableJobMap.remove(key);
-                }else {
+                } else {
                     this.availableJobMap.put(key,job);
                     adapter.addJob(job);
                 }
             },
             error -> {
-                // TODO: write code here. Remove the line below as well
+                Log.w(LOG_TAG, "received database error: " + error);
             });
         return view;
     }
@@ -89,5 +89,6 @@ public class JobListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         database.removeListener(listenerId);
+        Log.d(LOG_TAG, "Destroyed");
     }
 }

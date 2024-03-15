@@ -15,37 +15,30 @@ import java.util.List;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link AvailableJob}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+    private List<AvailableJob> jobs = new ArrayList<>();
 
-    public List<AvailableJob> jobs = new ArrayList<>();
-
-
-    public void addJob (AvailableJob availableJob){
+    public void addJob(@NonNull AvailableJob availableJob) {
         jobs.add(availableJob);
-        notifyItemInserted(jobs.size()-1);
+        notifyItemInserted(jobs.size() - 1);
     }
-    @SuppressLint("NotifyDataSetChanged") //will do later
-    public void newList (List<AvailableJob> newJobs){
+
+    @SuppressLint("NotifyDataSetChanged") // TODO: fix this.
+    public void newList(@NonNull List<AvailableJob> newJobs) {
         jobs = newJobs;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.job = jobs.get(position);
-        holder.title.setText(holder.job.getTitle());
-        holder.subheading.setText(holder.job.getDescription());
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        holder.setJob(jobs.get(position));
     }
 
     @Override
@@ -53,16 +46,22 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return jobs.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView title;
-        public final TextView subheading;
-        public AvailableJob job;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView title;
+        private final TextView subheading;
+        /** @noinspection FieldCanBeLocal*/
+        private AvailableJob job;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.title); // Change to R.id.title
-            subheading = itemView.findViewById(R.id.subhead); // Change to R.id.subhead
+            title = itemView.findViewById(R.id.title);
+            subheading = itemView.findViewById(R.id.subhead);
         }
 
+        public void setJob(@NonNull AvailableJob job) {
+            this.job = job;
+            title.setText(this.job.getTitle());
+            subheading.setText(this.job.getDescription());
+        }
     }
 }

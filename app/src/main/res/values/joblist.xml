@@ -2,6 +2,5 @@
 <resources>
     <string name="title">I am title</string>
     <string name="subheading">I am a sub heading</string>
-    <string name="searchResult">Search Result Title</string>
     <string name="filter">Filter</string>
 </resources>

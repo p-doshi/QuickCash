@@ -36,7 +36,7 @@ public class SearchFragment extends Fragment {
         combinedFilter = uselessFilter;
     }
 
-    public SearchFilter<AvailableJob> getCombinedFilter() {
+    public @NonNull SearchFilter<AvailableJob> getCombinedFilter() {
         return combinedFilter;
     }
 

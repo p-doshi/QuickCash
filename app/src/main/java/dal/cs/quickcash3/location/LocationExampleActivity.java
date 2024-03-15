@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,8 +21,8 @@ public class LocationExampleActivity extends AppCompatPermissionActivity {
     private final AtomicReference<Location> location = new AtomicReference<>();
     private final AtomicBoolean buttonWaiting = new AtomicBoolean(false);
     private TextView status;
-    private TextView latTextbox;
-    private TextView longTextbox;
+    private TextView latText;
+    private TextView longText;
 
     @SuppressLint("StringFormatTrivial") // There are two conflicting errors here so I chose to ignore one.
     @Override
@@ -31,12 +30,11 @@ public class LocationExampleActivity extends AppCompatPermissionActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_example);
 
-        LocationProvider locationProvider = new AndroidLocationProvider(this, 5000); // Update location every 5 seconds.
-
+        latText = findViewById(R.id.latText);
+        longText = findViewById(R.id.longText);
         status = findViewById(R.id.locationStatus);
-        latTextbox = findViewById(R.id.latText);
-        longTextbox = findViewById(R.id.longText);
 
+        LocationProvider locationProvider = new AndroidLocationProvider(this, 5000); // Update location every 5 seconds.
         locationProvider.addLocationCallback(
             location -> {
                 this.location.set(location);
@@ -44,30 +42,33 @@ public class LocationExampleActivity extends AppCompatPermissionActivity {
                     showLocation(location);
                 }
             },
-            error -> status.setText(String.format("Error: %s", error)));
+            this::showError);
 
         Button detectButton = findViewById(R.id.detectButton);
         detectButton.setOnClickListener(view -> {
-            try {
-                Location currentLocation = location.get();
-                if (currentLocation == null) {
-                    buttonWaiting.set(true);
-                }
-                else {
-                    showLocation(currentLocation);
-                }
-            } catch (SecurityException exception) {
-                Log.w(LOG_TAG, Objects.requireNonNull(exception.getMessage()));
-                status.setText(String.format("%s: Not Granted", getString(R.string.location_permission)));
-                latTextbox.setText(String.format("%s: ERROR", getString(R.string.latitude)));
-                longTextbox.setText(String.format("%s: ERROR", getString(R.string.longitude)));
+            Location currentLocation = location.get();
+            if (currentLocation == null) {
+                buttonWaiting.set(true);
+            }
+            else {
+                showLocation(currentLocation);
             }
         });
     }
 
+    @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
     private void showLocation(@NonNull Location location) {
-        status.setText(String.format("%s: Granted", getString(R.string.location_permission)));
-        latTextbox.setText(String.format("%s: %s", getString(R.string.latitude), location.getLatitude()));
-        longTextbox.setText(String.format("%s: %s", getString(R.string.longitude), location.getLongitude()));
+        status.setText(getString(R.string.location_permission) + ": Granted");
+        latText.setText(getString(R.string.latitude) + ": " + location.getLatitude());
+        longText.setText(getString(R.string.longitude) + ": " + location.getLongitude());
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
+    private void showError(@NonNull String error) {
+        Log.w(LOG_TAG, error);
+        status.setText(getString(R.string.location_permission) + ": Not Granted");
+        latText.setText(getString(R.string.latitude) + ": ERROR");
+        longText.setText(getString(R.string.longitude) + ": ERROR");
     }
 }

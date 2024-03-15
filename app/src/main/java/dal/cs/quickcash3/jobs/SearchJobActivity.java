@@ -12,33 +12,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.regex.Pattern;
-
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.fragments.JobListFragment;
 import dal.cs.quickcash3.fragments.SearchFragment;
 import dal.cs.quickcash3.location.LocationProvider;
-import dal.cs.quickcash3.search.RegexSearchFilter;
 
 public class SearchJobActivity extends Fragment {
-
-//    private JobSearchHandler searchHandler;
-    
     private ImageView filterIcon ;
-    private JobListFragment jobListFragment;
-    private SearchFragment searchFragment;
-    public SearchJobActivity(Database database, LocationProvider locationProvider){
+    private final JobListFragment jobListFragment;
+    private final SearchFragment searchFragment;
 
+    public SearchJobActivity(@NonNull Database database, @NonNull LocationProvider locationProvider){
+        super();
         this.searchFragment = new SearchFragment(locationProvider, this::showList);
         this.jobListFragment=new JobListFragment(database,searchFragment.getCombinedFilter());
     }
 
-    private void showList(){
-        replaceFragment(jobListFragment);
-        filterIcon.setVisibility(View.VISIBLE);
-    }
     @Override
     public @NonNull View onCreateView(
             @NonNull LayoutInflater inflater,
@@ -52,30 +42,12 @@ public class SearchJobActivity extends Fragment {
         return view;
     }
 
-    private void replaceFragment(@NonNull Fragment fragment) {
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.searchResultContainer, fragment);
-        transaction.commit();
-    }
-    
-    public void setUpSearchBar(View currentView){
+    public void setUpSearchBar(@NonNull View currentView){
         SearchView searchView = currentView.findViewById(R.id.searchBar);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                handleSearch(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                handleSearch(newText);
-                return true;
-            }
-            });
+        searchView.setOnQueryTextListener(new JobQueryTextListener(jobListFragment));
     }
 
-    public void setUpFilterIcon(View currentView){
+    public void setUpFilterIcon(@NonNull View currentView){
         filterIcon = currentView.findViewById(R.id.filterIcon);
         filterIcon.setOnClickListener(v -> {
             replaceFragment(searchFragment);
@@ -83,11 +55,15 @@ public class SearchJobActivity extends Fragment {
         });
     }
 
+    private void replaceFragment(@NonNull Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.searchResultContainer, fragment);
+        transaction.commit();
+    }
 
-    private void handleSearch(String query) {
-        RegexSearchFilter<AvailableJob> regexSearchFilter = new RegexSearchFilter<>("title");
-        regexSearchFilter.setPattern(Pattern.compile(".*"+query+".*", Pattern.CASE_INSENSITIVE));
-        jobListFragment.resetList(regexSearchFilter);
-
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    private void showList(){
+        replaceFragment(jobListFragment);
+        filterIcon.setVisibility(View.VISIBLE);
     }
 }
