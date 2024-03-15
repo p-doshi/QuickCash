@@ -14,6 +14,11 @@ public class PostJobFormFields {
     static String empty = "";
     static String errorMessage;
 
+    /**
+     * Method for PostJobForm to call to check form fields properly filled out
+     * @param fields a hashmap containing fields as key and user input as the values
+     * @return A string holding an error message; empty when no errors
+     */
     public static String checkFieldsValid(HashMap<String, String> fields){
         errorMessage = checkIfEmpty(fields);
         if(errorMessage.equals(empty)){
@@ -24,6 +29,11 @@ public class PostJobFormFields {
         return errorMessage;
     }
 
+    /**
+     * Checks to see if any form fields are empty (i.e. have not been filled out)
+     * @param fields a hashmap containing fields as key and user input as the values
+     * @return A string holding an error message; empty when no errors
+     */
     private static String checkIfEmpty(HashMap<String, String> fields){
         errorMessage = empty;
 
@@ -38,8 +48,11 @@ public class PostJobFormFields {
         return errorMessage;
     }
 
-    // How to best return error information???
-    // How to best document code???
+    /**
+     * Method to verify date was entered in proper format
+     * @param date the date as input by the user
+     * @return an error message string for reformatting; empty string if no formatting error
+     */
     public static String checkJobDate(String date){
         errorMessage = empty;
 
@@ -48,6 +61,12 @@ public class PostJobFormFields {
         }
         return errorMessage;
     }
+
+    /**
+     * Method to verify salary was input in proper format
+     * @param salary a string representing the salary
+     * @return an error message string for proper formatting; empty string if no formatting error
+     */
     public static String checkJobSalary(String salary){
         errorMessage = empty;
 

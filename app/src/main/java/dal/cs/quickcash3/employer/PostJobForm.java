@@ -40,13 +40,18 @@ public class PostJobForm extends Activity {
                 }
                 else{
                     createJob();
+                    // save to db
+                    // write success message
+                    // move to next page
                 }
-                // save information - call to separate db class???
 
             }
         });
     }
 
+    /**
+     * Initiate duration spinner
+     */
     protected void setUpDurationSpinner(){
         Spinner durationSpinner = findViewById(R.id.jobDurationSpinner);
 
@@ -57,6 +62,9 @@ public class PostJobForm extends Activity {
         durationSpinner.setAdapter(durationAA);
     }
 
+    /**
+     * Initiate urgency spinner
+     */
     protected void setUpUrgencySpinner(){
         Spinner urgencySpinner = findViewById(R.id.jobUrgencySpinner);
 
@@ -67,6 +75,9 @@ public class PostJobForm extends Activity {
         urgencySpinner.setAdapter(urgencyAA);
     }
 
+    /**
+     * Initiate province spinner
+     */
     protected void setUpProvinceSpinner(){
         Spinner provinceSpinner = findViewById(R.id.addJobProvince);
 
@@ -77,6 +88,10 @@ public class PostJobForm extends Activity {
         provinceSpinner.setAdapter(provinceAA);
     }
 
+    /**
+     * Method to check that all input values are valid
+     * @return A string holding an error message; empty when no input errors
+     */
     protected String checkAllFields(){
         // check fields and return error message?
         HashMap<String, String> fields = getFieldsMap();
@@ -84,6 +99,9 @@ public class PostJobForm extends Activity {
         return errorMessage;
     }
 
+    /**
+     * Creates a new available job in the database
+     */
     protected void createJob(){
         //create a job
     }
@@ -125,6 +143,11 @@ public class PostJobForm extends Activity {
         Spinner jobProvince = findViewById(R.id.addJobProvince);
         return jobProvince.getSelectedItem().toString();
     }
+
+    /**
+     * Method to create a hashmap with all the fields as the keys and the user input as values
+     * @return a hashmap
+     */
     protected HashMap<String, String> getFieldsMap(){
         HashMap<String, String> fields = new HashMap<String, String>();
 
