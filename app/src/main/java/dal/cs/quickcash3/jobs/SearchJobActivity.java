@@ -7,6 +7,8 @@ import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.fragments.ItemFragment;
+
 public class SearchJobActivity extends AppCompatActivity {
 
 //    private JobSearchHandler searchHandler;

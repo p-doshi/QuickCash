@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.jobs.placeholder.PlaceholderContent.PlaceholderItem;
 
 import java.util.List;
@@ -19,9 +20,9 @@ import java.util.List;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
-
-    public MyItemRecyclerViewAdapter(List<PlaceholderItem> items) {
+    private final List<AvailableJob> mValues;
+    private AvailableJob job;
+    public MyItemRecyclerViewAdapter(List<AvailableJob> items) {
         mValues = items;
     }
 
@@ -34,9 +35,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.job = mValues.get(position);
+        holder.title.setText(this.job.getTitle());
+        holder.subheading.setText(this.job.getStartDate());
     }
 
     @Override
@@ -45,20 +46,15 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public final TextView title;
+        public final TextView subheading;
+        public AvailableJob job;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mIdView = itemView.findViewById(R.id.title); // Change to R.id.title
-            mContentView = itemView.findViewById(R.id.subhead); // Change to R.id.subhead
+            title = itemView.findViewById(R.id.title); // Change to R.id.title
+            subheading = itemView.findViewById(R.id.subhead); // Change to R.id.subhead
         }
 
-        @NonNull
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
     }
 }

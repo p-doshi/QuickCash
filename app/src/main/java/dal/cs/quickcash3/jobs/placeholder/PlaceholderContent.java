@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dal.cs.quickcash3.data.AvailableJob;
+
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
@@ -13,33 +15,17 @@ import java.util.Map;
  */
 public class PlaceholderContent {
 
-    /**
-     * An array of sample (placeholder) items.
-     */
-    public static final List<PlaceholderItem> ITEMS = new ArrayList<PlaceholderItem>();
 
     /**
      * A map of sample (placeholder) items, by ID.
      */
-    public static final Map<String, PlaceholderItem> ITEM_MAP = new HashMap<String, PlaceholderItem>();
+    public static final Map<String, AvailableJob> ITEM_MAP = new HashMap<String, AvailableJob>();
 
-    private static final int COUNT = 25;
 
-    static {
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createPlaceholderItem(i));
-        }
+    private static void addItem(AvailableJob job) {
+        ITEM_MAP.put(job., item);
     }
 
-    private static void addItem(PlaceholderItem item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
-    }
-
-    private static PlaceholderItem createPlaceholderItem(int position) {
-        return new PlaceholderItem(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
 
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();

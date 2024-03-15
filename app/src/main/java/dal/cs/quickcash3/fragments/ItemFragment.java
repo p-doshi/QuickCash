@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobs;
+package dal.cs.quickcash3.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.jobs.MyItemRecyclerViewAdapter;
 import dal.cs.quickcash3.jobs.placeholder.PlaceholderContent;
 
 /**
@@ -65,7 +66,7 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS_MAP));
         }
         return view;
     }
