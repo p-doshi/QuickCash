@@ -24,7 +24,7 @@
             android:name="dal.cs.quickcash3.database.DatabaseExampleActivity"
             android:exported="true"/>
         <activity
-            android:name="dal.cs.quickcash3.login.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
@@ -47,6 +47,15 @@
         <activity
             android:name="dal.cs.quickcash3.jobs.SearchJobActivity"
             android:exported="true"/>
+        <activity
+            android:name=".JobListActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
