@@ -1,0 +1,60 @@
+package dal.cs.quickcash3.search;
+
+import static dal.cs.quickcash3.util.GsonHelper.getAt;
+import static dal.cs.quickcash3.util.StringHelper.SLASH;
+import static dal.cs.quickcash3.util.StringHelper.splitString;
+
+import android.location.Location;
+
+import androidx.annotation.NonNull;
+
+import com.google.gson.JsonElement;
+
+import java.util.List;
+
+import dal.cs.quickcash3.location.LocationProvider;
+
+public class LocationSearchFilter<T> extends SearchFilter<T> {
+    private final List<String> latKeys;
+    private final List<String> longKeys;
+    private final LocationProvider locationProvider;
+    private Double maxDistance;
+
+    public LocationSearchFilter(
+        @NonNull String latKey,
+        @NonNull String longKey,
+        @NonNull LocationProvider locationProvider)
+    {
+        latKeys = splitString(latKey, SLASH);
+        longKeys = splitString(longKey, SLASH);
+        this.locationProvider = locationProvider;
+    }
+
+    public void setMaxDistance(double maxDistance) {
+        this.maxDistance = maxDistance;
+    }
+
+    @Override
+    public boolean isCurrentValid(@NonNull final JsonElement root) {
+        if (maxDistance == null) {
+            throw new NullPointerException("Cannot apply JobLocationSearchFilter without a maxDistance");
+        }
+
+        Location currentLocation = locationProvider.getLastLocation();
+        if (currentLocation == null) {
+            throw new NullPointerException("Could not get location from location provider");
+        }
+
+        double latitude = getAt(root, latKeys).getAsDouble();
+        double longitude = getAt(root, longKeys).getAsDouble();
+
+        float[] results = new float[1];
+        Location.distanceBetween(
+            currentLocation.getLatitude(), currentLocation.getLongitude(),
+            latitude, longitude,
+            results);
+
+        double distance = results[0];
+        return distance <= maxDistance;
+    }
+}
