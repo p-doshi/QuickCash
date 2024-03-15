@@ -49,8 +49,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView subheading;
-        /** @noinspection FieldCanBeLocal*/
-        private AvailableJob job;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,9 +57,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         }
 
         public void setJob(@NonNull AvailableJob job) {
-            this.job = job;
-            title.setText(this.job.getTitle());
-            subheading.setText(this.job.getDescription());
+            // TODO: store the job as a local variable so it can be passed into another fragment.
+            title.setText(job.getTitle());
+            subheading.setText(job.getDescription());
         }
     }
 }
