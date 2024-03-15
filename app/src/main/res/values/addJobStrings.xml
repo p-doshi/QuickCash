@@ -20,10 +20,11 @@
     <!-- Other resources -->
 
     <string-array name="durationSpinnerValues">
-        <item>0–3 Days</item>
-        <item>4–7 Days</item>
-        <item>1–2 Weeks</item>
-        <item>3–4 Weeks</item>
+        <item>Under 8 Hours</item>
+        <item>1 – 3 Days</item>
+        <item>4 – 7 Days</item>
+        <item>1 – 2 Weeks</item>
+        <item>2 – 4 Weeks</item>
         <item>4+ Weeks</item>
     </string-array>
 
