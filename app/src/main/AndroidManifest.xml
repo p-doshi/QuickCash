@@ -27,9 +27,12 @@
         <activity
             android:name=".location.MapsActivity"
             android:exported="true" />
+        <activity
+            android:name=".location.WorkerDashMapsTestActivity"
+            android:exported="true" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY"></meta-data>
+            android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY" />
 
         <activity
             android:name=".registration.RegistrationPage"

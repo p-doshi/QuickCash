@@ -20,6 +20,8 @@ import androidx.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 
+import dal.cs.quickCash3.location.WorkerDashMapsTestActivity;
+
 @RunWith(AndroidJUnit4.class)
 public class WorkerDashMapsTest {
     UiDevice device;
