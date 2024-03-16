@@ -24,10 +24,8 @@ import dal.cs.quickcash3.util.RandomStringGenerator;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class FirebaseSecurityTest {
-    private static final String PUBLIC_DIR = "public/DatabaseTest";
     private static final String RANDOM_STRING = "aksdjdkjahsdiou123oiu124kjnoih1";
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
-    private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     private CountingIdlingResource resource;
     private String testDir;
 
