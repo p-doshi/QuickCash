@@ -28,7 +28,7 @@
         <activity
             android:name=".login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustNothing" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -43,7 +43,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".worker.WorkerDashboard"
-            android:exported="true"/>
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>

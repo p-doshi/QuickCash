@@ -8,22 +8,28 @@ import androidx.annotation.NonNull;
 public enum PermissionRequestCode {
     LOCATION(87);
 
-    private final int value;
+    private final int code;
 
-    PermissionRequestCode(int value) {
-        this.value = value;
+    PermissionRequestCode(int code) {
+        this.code = code;
     }
 
-    public static @NonNull PermissionRequestCode get(int value) {
-        for (PermissionRequestCode code : values()) {
-            if (code.value == value) {
-                return code;
+    /**
+     * Get the permission request code with the matching code. Otherwise, throws an exception.
+     *
+     * @param code The code to search for.
+     * @return The matching permission request code.
+     */
+    public static @NonNull PermissionRequestCode get(int code) {
+        for (PermissionRequestCode requestCode : values()) {
+            if (requestCode.code == code) {
+                return requestCode;
             }
         }
-        throw new IllegalArgumentException("Unrecognized Permission Request code: " + value);
+        throw new IllegalArgumentException("Unrecognized Permission Request Code: " + code);
     }
 
-    public int getValue() {
-        return value;
+    public int getCode() {
+        return code;
     }
 }

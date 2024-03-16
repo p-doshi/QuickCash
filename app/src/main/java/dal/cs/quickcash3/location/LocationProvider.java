@@ -19,9 +19,9 @@ public interface LocationProvider {
     int addLocationCallback(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction);
 
     /**
-     * Remove the callback with the given ID from the set of callbacks. Iff a negative number is
-     * returned, a callback has not been set and it can be ignored.
-     * TODO: write more.
+     * Remove the callback with the matching callbackId.
+     *
+     * @param callbackId The ID of the callback to remove.
      */
     void removeLocationCallback(int callbackId);
 

@@ -61,7 +61,7 @@ public class AndroidLocationProvider implements LocationProvider {
         if (isMissingPermission()) {
             activity.requestPermissions(
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                PermissionRequestCode.LOCATION.getValue());
+                PermissionRequestCode.LOCATION.getCode());
             return;
         }
 
@@ -132,8 +132,8 @@ public class AndroidLocationProvider implements LocationProvider {
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
     private void onRequestPermissionsResult(@NonNull PermissionResult result) {
         if (result.isMatchingCode(PermissionRequestCode.LOCATION) &&
-            result.containsPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-            result.isPermissionSuccessful(Manifest.permission.ACCESS_FINE_LOCATION))
+            result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION))
         {
             startLocationUpdates();
         }
