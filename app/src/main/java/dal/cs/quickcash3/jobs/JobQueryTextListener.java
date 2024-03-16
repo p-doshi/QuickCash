@@ -18,8 +18,24 @@ class JobQueryTextListener implements SearchView.OnQueryTextListener {
     }
 
     private void handleSearch(@NonNull String query) {
+        String[] words = query.split("\\s+");
+
+        StringBuilder patternBuilder = new StringBuilder();
+        for (String word : words) {
+            String escapedWord = Pattern.quote(word);
+            patternBuilder.append(".*").append(escapedWord).append(".*|");
+        }
+
+        String patternString = patternBuilder.toString();
+        if (patternString.endsWith("|")) {
+            patternString = patternString.substring(0, patternString.length() - 1);
+        }
+
+        Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+
         RegexSearchFilter<AvailableJob> regexSearchFilter = new RegexSearchFilter<>("title");
-        regexSearchFilter.setPattern(Pattern.compile(".*"+query+".*", Pattern.CASE_INSENSITIVE));
+        regexSearchFilter.setPattern(pattern);
+
         jobListFragment.resetList(regexSearchFilter);
     }
 
