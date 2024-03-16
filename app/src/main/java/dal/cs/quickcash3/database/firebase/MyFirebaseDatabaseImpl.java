@@ -29,9 +29,8 @@ class MyFirebaseDatabaseImpl implements Database {
     private final Map<Integer, FirebaseDatabaseListener> listenerMap = new TreeMap<>();
     private int nextListenerId;
 
-    public MyFirebaseDatabaseImpl(@NonNull Context context) {
-        // Get a reference to the database.
-        database = FirebaseDatabase.getInstance(context.getString(R.string.FIREBASE_DB_URL));
+    public MyFirebaseDatabaseImpl() {
+        database = FirebaseDatabase.getInstance("https://csci3130-group-3-default-rtdb.firebaseio.com/");
     }
 
     private int addListener(FirebaseDatabaseListener listener) {

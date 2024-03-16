@@ -62,7 +62,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Using Mock Database");
         }
         else {
-            database = new MyFirebaseDatabase(this);
+            database = new MyFirebaseDatabase();
         }
     }
 
