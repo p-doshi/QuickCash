@@ -35,10 +35,6 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    protected LatLng getLatLong() {
-        return new LatLng(44.6356, -63.5952);
-    }
-
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
@@ -54,5 +50,9 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         // Navigate camera to current position
         float zoomLevel = 12.0f;
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, zoomLevel));
+    }
+
+    protected LatLng getLatLong() {
+        return new LatLng(44.6356, -63.5952);
     }
 }

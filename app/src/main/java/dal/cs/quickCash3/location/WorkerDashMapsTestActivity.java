@@ -23,7 +23,7 @@ public class WorkerDashMapsTestActivity extends FragmentActivity {
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
-        // Code below added by ~~~~~ for the map section
+        // Code below added by Mathew for the map section
         // Upon loading the worker page it should immediately request location permissions and get current location
         locationProvider = new AndroidLocationProvider(this, this);
         locationProvider.setupLocationPermsSettings();
