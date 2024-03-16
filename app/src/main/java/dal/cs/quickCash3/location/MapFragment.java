@@ -27,7 +27,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // This R.layout. will need to change when integrated with WorkerDashboard
-        View view = inflater.inflate(R.layout.test_mapdashlayout, container, false);
+        View view = inflater.inflate(R.layout.dashboard_worker, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment == null) {
             mapFragment = SupportMapFragment.newInstance();

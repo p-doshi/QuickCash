@@ -7,4 +7,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".location.MapFragment"
-    tools:layout="@layout/test_mapdashlayout" />
+    tools:layout="@layout/dashboard_worker" />

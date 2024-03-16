@@ -19,7 +19,7 @@ public class WorkerDashboardMapExampleActivity extends FragmentActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.test_mapdashlayout); // Replace with dashboard_worker when done
+        this.setContentView(R.layout.dashboard_worker);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
