@@ -14,7 +14,7 @@ import java.util.List;
 
 public class NumericRangeSearchFilter<T> extends SearchFilter<T> {
     private final List<String> keys;
-    private Range<Double> range;
+    private Range<Double> range = new Range<>(0.0, 0.0);
 
     public NumericRangeSearchFilter(@NonNull String key) {
         super();
@@ -27,10 +27,6 @@ public class NumericRangeSearchFilter<T> extends SearchFilter<T> {
 
     @Override
     public boolean isCurrentValid(@NonNull final JsonElement root) {
-        if (range == null) {
-            throw new NullPointerException("Cannot apply " + this + " without a range");
-        }
-
         double number = getAt(root, keys).getAsNumber().doubleValue();
         return range.contains(number);
     }

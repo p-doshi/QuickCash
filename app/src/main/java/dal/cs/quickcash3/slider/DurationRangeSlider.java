@@ -70,7 +70,7 @@ public class DurationRangeSlider {
         }
 
         double min = mapValue(values.get(0));
-        double max = mapValue(values.get(0));
+        double max = mapValue(values.get(1));
         return new Range<>(min, max);
     }
 }

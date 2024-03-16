@@ -18,7 +18,7 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
     private final List<String> latKeys;
     private final List<String> longKeys;
     private final LocationProvider locationProvider;
-    private Double maxDistance;
+    private double maxDistance;
 
     public LocationSearchFilter(
         @NonNull String latKey,
@@ -36,10 +36,6 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
 
     @Override
     public boolean isCurrentValid(@NonNull final JsonElement root) {
-        if (maxDistance == null) {
-            throw new NullPointerException("Cannot apply JobLocationSearchFilter without a maxDistance");
-        }
-
         Location currentLocation = locationProvider.getLastLocation();
         if (currentLocation == null) {
             throw new NullPointerException("Could not get location from location provider");

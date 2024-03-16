@@ -48,7 +48,7 @@ public class SalaryRangeSlider {
         }
 
         double min = mapValue(values.get(0));
-        double max = mapValue(values.get(0));
+        double max = mapValue(values.get(1));
         if (min == PAY_RANGE_VALUES[0]) {
             min = 0.0;
         }

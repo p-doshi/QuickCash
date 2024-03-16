@@ -61,8 +61,11 @@ public class SearchUITests {
             locationProvider = (MockLocationProvider)activity.getLocationProvider();
         });
 
+        // Navigate to the search filter.
         UiObject searchMenuOption = device.findObject(new UiSelector().resourceId(appPackage + ":id/workerSearchPage").clickable(true));
         searchMenuOption.click();
+        UiObject filterOption = device.findObject(new UiSelector().resourceId(appPackage + ":id/filterIcon").clickable(true));
+        filterOption.click();
     }
 
     @Test
