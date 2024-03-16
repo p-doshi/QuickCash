@@ -24,10 +24,8 @@ import dal.cs.quickcash3.util.RandomStringGenerator;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class FirebaseSecurityTest {
-    private static final String PUBLIC_DIR = "public/DatabaseTest";
     private static final String RANDOM_STRING = "aksdjdkjahsdiou123oiu124kjnoih1";
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
-    private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     private CountingIdlingResource resource;
     private String testDir;
 
@@ -49,7 +47,7 @@ public class FirebaseSecurityTest {
 
     @Test
     public void writeDatabaseFailure() {
-        Database database = new MyFirebaseDatabaseImpl(context);
+        Database database = new MyFirebaseDatabaseImpl();
         AtomicBoolean passed = new AtomicBoolean(false);
         AtomicReference<String> error = new AtomicReference<>(null);
 
@@ -75,7 +73,7 @@ public class FirebaseSecurityTest {
 
     @Test
     public void readDatabaseFailure() {
-        Database database = new MyFirebaseDatabaseImpl(context);
+        Database database = new MyFirebaseDatabaseImpl();
 
         // We need a value that shows that we have not received anything.
         AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
@@ -103,7 +101,7 @@ public class FirebaseSecurityTest {
 
     @Test
     public void writeSecureDatabaseSuccess() {
-        Database database = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase();
         AtomicBoolean passed = new AtomicBoolean(false);
 
         resource.increment();
@@ -124,7 +122,7 @@ public class FirebaseSecurityTest {
 
     @Test
     public void readSecureDatabaseSuccess() {
-        Database database = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase();
 
         // We need a value that shows that we have not received anything.
         AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
@@ -149,7 +147,7 @@ public class FirebaseSecurityTest {
 
     @Test
     public void writeReadSecureDatabaseSuccess() {
-        Database database = new MyFirebaseDatabase(context);
+        Database database = new MyFirebaseDatabase();
         AtomicReference<String> value = new AtomicReference<>(null);
 
         resource.increment();

@@ -98,7 +98,7 @@ public class WorkerDashboard extends FragmentPermissionActivity {
             Log.d(LOG_TAG, "Using Mock Database");
         }
         else {
-            database = new MyFirebaseDatabase(this);
+            database = new MyFirebaseDatabase();
         }
 
         if (categories.contains(getString(R.string.MOCK_LOCATION))) {

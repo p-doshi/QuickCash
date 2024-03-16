@@ -6,8 +6,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.database.annotations.Nullable;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -16,8 +14,8 @@ import dal.cs.quickcash3.search.SearchFilter;
 public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     private static final String DB_KEY = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
 
-    public MyFirebaseDatabase(@NonNull Context context) {
-        super(context);
+    public MyFirebaseDatabase() {
+        super();
     }
 
     protected @NonNull String relocate(@NonNull String location) {
@@ -44,7 +42,7 @@ public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     @Override
     public <T> void write(
         @NonNull String location,
-        @Nullable T value,
+        @NonNull T value,
         @NonNull Consumer<String> errorFunction)
     {
         super.write(relocate(location), value, errorFunction);
@@ -53,7 +51,7 @@ public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     @Override
     public <T> void write(
         @NonNull String location,
-        @Nullable T value,
+        @NonNull T value,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {

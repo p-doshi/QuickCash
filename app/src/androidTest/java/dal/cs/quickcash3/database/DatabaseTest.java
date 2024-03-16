@@ -39,8 +39,7 @@ import dal.cs.quickcash3.util.RandomStringGenerator;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
-    private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-    private final Database database = new MyFirebaseDatabase(context);
+    private final Database database = new MyFirebaseDatabase();
     private CountingIdlingResource resource;
     private String testDir;
 
