@@ -10,7 +10,7 @@ import java.util.List;
 public class MaxDistanceSlider {
     private static final int KILOMETER = 1000;
     private static final int[] MAX_DISTANCE_VALUES = {
-        50, 100, 200, 300, 500, KILOMETER,
+        100, 200, 300, 500, KILOMETER,
         KILOMETER * 2, KILOMETER * 3, KILOMETER * 5, KILOMETER * 10,
         KILOMETER * 20, KILOMETER * 30, KILOMETER * 50, KILOMETER * 100,
         KILOMETER * 200, KILOMETER * 300

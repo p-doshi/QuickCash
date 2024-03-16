@@ -85,6 +85,7 @@ public class JobListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         database.removeListener(listenerId);
+        availableJobMap.clear();
         Log.d(LOG_TAG, "Destroyed");
     }
 }

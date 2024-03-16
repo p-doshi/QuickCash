@@ -71,6 +71,12 @@ public class DurationRangeSlider {
 
         double min = mapValue(values.get(0));
         double max = mapValue(values.get(1));
+        if (min == TIME_ESTIMATE_VALUES[0]) {
+            min = 0.0;
+        }
+        if (max == TIME_ESTIMATE_VALUES[TIME_ESTIMATE_VALUES.length - 1]) {
+            max = Double.POSITIVE_INFINITY;
+        }
         return new Range<>(min, max);
     }
 }

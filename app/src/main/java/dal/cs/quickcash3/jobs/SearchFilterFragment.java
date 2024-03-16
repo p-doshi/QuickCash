@@ -23,7 +23,7 @@ import dal.cs.quickcash3.slider.SalaryRangeSlider;
 import dal.cs.quickcash3.slider.DurationRangeSlider;
 
 public class SearchFilterFragment extends Fragment {
-    private static final String LOG_TAG = SearchFilterFragment.class.getName();
+    private static final String LOG_TAG = SearchFilterFragment.class.getSimpleName();
     private final Runnable showResultsFunction;
     private final SearchFilter<AvailableJob> combinedFilter;
     private final LocationSearchFilter<AvailableJob> locationFilter;
