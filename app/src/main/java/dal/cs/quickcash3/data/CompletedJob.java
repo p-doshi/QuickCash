@@ -17,9 +17,19 @@ public class CompletedJob extends JobPost {
 
     @Override
     public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        writeToDatabase(database, () -> {}, errorFunction);
+    }
+
+    @Override
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.write(
             DatabaseDirectory.COMPLETED_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
             this,
+            successFunction,
             errorFunction);
     }
 
