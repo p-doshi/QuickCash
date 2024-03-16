@@ -13,6 +13,7 @@ public final class RandomStringGenerator {
 
     /**
      * Generates a random string with the given length.
+     *
      * @param length The number of characters to generate in the string.
      * @return The random string of the given length.
      */
