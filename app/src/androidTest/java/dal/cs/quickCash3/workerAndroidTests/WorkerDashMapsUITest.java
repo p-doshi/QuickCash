@@ -2,7 +2,6 @@ package dal.cs.quickCash3.workerAndroidTests;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
@@ -30,6 +30,7 @@ public class WorkerDashMapsUITest {
     UiDevice device;
     private static final int LAUNCH_TIMEOUT = 5000;
     final String launcherPackage = "dal.cs.quickCash3";
+    private final int SDK_VERSION = Build.VERSION.SDK_INT;
 
     @Before
     public void setup() {
@@ -42,17 +43,18 @@ public class WorkerDashMapsUITest {
         context.startActivity(launcherIntent);
         device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
 
+        // This just dismisses the allow permission popup
         try {
-            UiObject acceptButton = device.findObject(new UiSelector().text("Allow"));
-            acceptButton.click();
+            allowPermissions();
         } catch (UiObjectNotFoundException e) {
-            // If the accept permission button doesn't exist that's fine for now
+            // If we can't find the allow permission that's fine, it means it was already granted
         }
+
         try {
             UiObject mapTab=device.findObject(new UiSelector().descriptionContains("Map"));
             mapTab.click();
         } catch (UiObjectNotFoundException e) {
-            // If we can't find the Map tab that means I programmed it wrong...
+            // The map will always be found so its fine
         }
     }
 
@@ -75,5 +77,21 @@ public class WorkerDashMapsUITest {
         UiObject Worker2=device.findObject(new UiSelector().descriptionContains("Job 2"));
         Worker2.click();
         assertTrue(Worker2.exists());
+    }
+    private void allowPermissions() throws UiObjectNotFoundException {
+        String allowRegex;
+        switch (SDK_VERSION) {
+            case 28: allowRegex = "ALLOW"; break;
+            case 29: allowRegex = "Allow only while using the app"; break;
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34: allowRegex = "Only this time"; break;
+            default: allowRegex = ""; break;
+        }
+
+        UiObject allowButton = device.findObject(new UiSelector().textMatches(allowRegex));
+        allowButton.click();
     }
 }
