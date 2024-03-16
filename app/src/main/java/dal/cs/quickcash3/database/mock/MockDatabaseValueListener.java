@@ -19,7 +19,7 @@ class MockDatabaseValueListener<T> extends MockDatabaseListener<T> {
         this.readFunction = readFunction;
     }
 
-    public void sendValue(@Nullable String key, @Nullable Object value) {
+    public void sendValue(@Nullable Object value) {
         if (!type.isInstance(value)) {
             throw new ClassCastException("Cannot cast " + value.getClass() + " to " + type);
         }

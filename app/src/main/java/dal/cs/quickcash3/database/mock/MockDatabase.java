@@ -19,27 +19,28 @@ import dal.cs.quickcash3.search.SearchFilter;
 public class MockDatabase implements Database {
     public static final String EMPTY_LOCATION = "Location cannot be empty.";
     public static final String KEY_NOT_FOUND = "Could not find the key: ";
-    private final Map<Integer, MockDatabaseListener<?>> listenerMap = new TreeMap<>();
+    private final Map<Integer, MockDatabaseValueListener<?>> valueListenerMap = new TreeMap<>();
+    private final Map<Integer, MockDatabaseSearchListener<?>> searchListenerMap = new TreeMap<>();
     private int nextListenerId;
     private final Map<String, Object> data = new MapType();
 
     // Let's create a class to avoid generic type cast warnings.
-    public static class MapType extends TreeMap<String, Object> {
+    protected static class MapType extends TreeMap<String, Object> {
         private static final long serialVersionUID = 1L;
     }
-    
+
     private Object get(@NonNull List<String> keys) {
         if (keys.isEmpty()) {
             throw new IllegalArgumentException(EMPTY_LOCATION);
         }
 
         Object currentObj = data;
-        
+
         for (String key : keys) {
             if (!(currentObj instanceof MapType)) {
                 throw new IllegalArgumentException(KEY_NOT_FOUND + key);
             }
-            
+
             Map<String, Object> currentMap = (MapType) currentObj;
             if (!currentMap.containsKey(key)) {
                 throw new IllegalArgumentException(KEY_NOT_FOUND + key);
@@ -56,7 +57,7 @@ public class MockDatabase implements Database {
         }
 
         Map<String, Object> currentMap = data;
-        
+
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             if (i == keys.size() - 1) {
@@ -113,16 +114,37 @@ public class MockDatabase implements Database {
         }
     }
 
+    private <T> void runListener(@NonNull MockDatabaseValueListener<T> listener) {
+        try {
+            Object value = get(listener.getKeys());
+            listener.sendValue(value);
+        }
+        catch (ClassCastException | IllegalArgumentException exception) {
+            listener.sendError(Objects.requireNonNull(exception.getMessage()));
+        }
+    }
+
+    private <T> void runListener(@NonNull MockDatabaseSearchListener<T> listener) {
+        try {
+            Object object = get(listener.getKeys());
+            Map<String, Object> map = (MapType) object;
+            listener.update(map);
+        }
+        catch (ClassCastException | IllegalArgumentException exception) {
+            listener.sendError(Objects.requireNonNull(exception.getMessage()));
+        }
+    }
+
     private void runListeners(@NonNull List<String> keys) {
-        for (MockDatabaseListener<?> listener : listenerMap.values()) {
+        for (MockDatabaseValueListener<?> listener : valueListenerMap.values()) {
             if (listener.isLocation(keys)) {
-                try {
-                    Object value = get(listener.getKeys());
-                    listener.sendValue("", value);
-                }
-                catch (ClassCastException | IllegalArgumentException exception) {
-                    listener.sendError(Objects.requireNonNull(exception.getMessage()));
-                }
+                runListener(listener);
+            }
+        }
+
+        for (MockDatabaseSearchListener<?> listener : searchListenerMap.values()) {
+            if (listener.isLocation(keys)) {
+                runListener(listener);
             }
         }
     }
@@ -149,7 +171,7 @@ public class MockDatabase implements Database {
             runListeners(keys);
             successFunction.run();
         }
-        catch (IllegalStateException | IllegalArgumentException exception) {
+        catch (ClassCastException | IllegalArgumentException exception) {
             errorFunction.accept(exception.getMessage());
         }
     }
@@ -180,12 +202,11 @@ public class MockDatabase implements Database {
         @NonNull Consumer<String> errorFunction)
     {
         int callbackId = nextListenerId++;
-        MockDatabaseListener<T> callbacks =
+        MockDatabaseValueListener<T> listener =
             new MockDatabaseValueListener<>(location, type, readFunction, errorFunction);
-        listenerMap.put(callbackId, callbacks);
+        valueListenerMap.put(callbackId, listener);
 
-        // Read the current data.
-        read(location, type, readFunction, errorFunction);
+        runListener(listener);
 
         return callbackId;
     }
@@ -199,22 +220,26 @@ public class MockDatabase implements Database {
         @NonNull Consumer<String> errorFunction)
     {
         int callbackId = nextListenerId++;
-        MockDatabaseSearchListener<T> callbacks =
+        MockDatabaseSearchListener<T> listener =
             new MockDatabaseSearchListener<>(location, type, filter, readFunction, errorFunction);
-        listenerMap.put(callbackId, callbacks);
+        searchListenerMap.put(callbackId, listener);
 
-        // Read the current data.
-        // TODO: search(location, type, callbacks);
+        runListener(listener);
 
-        return -1;
+        return callbackId;
     }
 
     @Override
     public void removeListener(int listenerId) {
-        if (!listenerMap.containsKey(listenerId)) {
+        if (valueListenerMap.containsKey(listenerId)) {
+            valueListenerMap.remove(listenerId);
+        }
+        else if (searchListenerMap.containsKey(listenerId)) {
+            searchListenerMap.remove(listenerId);
+        }
+        else {
             throw new IllegalArgumentException("Could not find listener callback with ID: " + listenerId);
         }
-        listenerMap.remove(listenerId);
     }
 
     @Override

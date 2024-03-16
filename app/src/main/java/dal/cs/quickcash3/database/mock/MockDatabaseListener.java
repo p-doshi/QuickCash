@@ -1,11 +1,9 @@
 package dal.cs.quickcash3.database.mock;
 
-import static dal.cs.quickcash3.util.StringHelper.splitString;
 import static dal.cs.quickcash3.util.StringHelper.SLASH;
+import static dal.cs.quickcash3.util.StringHelper.splitString;
 
 import androidx.annotation.NonNull;
-
-import com.google.firebase.database.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -48,8 +46,6 @@ abstract class MockDatabaseListener<T> {
     public Class<T> getType() {
         return type;
     }
-
-    public abstract void sendValue(@Nullable String key, @Nullable Object value);
 
     public void sendError(@NonNull String error) {
         errorFunction.accept(error);
