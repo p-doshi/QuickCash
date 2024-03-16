@@ -49,9 +49,13 @@ public class PostJobFormFields {
         errorMessage = empty;
 
         for (HashMap.Entry<String, String> field : fields.entrySet()) {
-            String input = (String)field.getValue();
+            String key = field.getKey();
+            String input = field.getValue();
+            boolean provinceCheck = key.equals("province") && input.equals("province");
+            boolean durationCheck = key.equals("duration") && input.equals("duration");
+            boolean urgencyCheck = key.equals("urgency") && input.equals("urgency");
 
-            if(input.equals(empty)){
+            if(input.equals(empty)||provinceCheck||durationCheck||urgencyCheck){
                 errorMessage = missingFieldError;
                 break;
             }
