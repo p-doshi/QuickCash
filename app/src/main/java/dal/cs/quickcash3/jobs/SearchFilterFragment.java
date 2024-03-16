@@ -63,7 +63,7 @@ public class SearchFilterFragment extends Fragment {
         MaxDistanceSlider maxDistanceSlider =
             new MaxDistanceSlider(searchView.findViewById(R.id.maxDistanceSlider));
 
-        Button searchButton = searchView.findViewById(R.id.searchButton);
+        Button searchButton = searchView.findViewById(R.id.applyButton);
         searchButton.setOnClickListener(view -> {
             Range<Double> newPayRange = salarySlider.getRange();
             Log.d(LOG_TAG, "Salary Range: " + newPayRange);

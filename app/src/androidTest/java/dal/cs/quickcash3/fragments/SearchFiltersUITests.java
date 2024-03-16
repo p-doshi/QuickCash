@@ -3,12 +3,15 @@ package dal.cs.quickcash3.fragments;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 
+import android.Manifest;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
@@ -20,7 +23,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -31,10 +33,11 @@ import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.JobPostHelper;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.location.LocationHelper;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
-public class SearchUITests {
+public class SearchFiltersUITests {
     private final Instrumentation instrumentation = getInstrumentation();
     private final Context context = instrumentation.getTargetContext();
     @Rule
@@ -68,67 +71,73 @@ public class SearchUITests {
         filterOption.click();
     }
 
+    private @NonNull UiObject findText(@NonNull UiScrollable scrollable, @NonNull String text) throws UiObjectNotFoundException {
+        UiSelector selector = new UiSelector().text(text);
+        scrollable.scrollIntoView(selector);
+        return device.findObject(selector);
+    }
+
+    private @NonNull UiObject findResource(@NonNull UiScrollable scrollable, @NonNull String id) throws UiObjectNotFoundException {
+        UiSelector selector = new UiSelector().resourceId(appPackage + ":id/" + id);
+        scrollable.scrollIntoView(selector);
+        return device.findObject(selector);
+    }
+
+    private @NonNull UiObject findText(@NonNull String text) {
+        UiSelector selector = new UiSelector().text(text);
+        return device.findObject(selector);
+    }
+
     @Test
     public void checkIfUIExists() throws UiObjectNotFoundException {
         UiScrollable scrollable = new UiScrollable(new UiSelector().scrollable(true));
-        scrollable.scrollIntoView(new UiSelector().text("Job Search"));
-        scrollable.scrollIntoView(new UiSelector().text("Job Title"));
-        scrollable.scrollIntoView(new UiSelector().text("Pay Range"));
-        scrollable.scrollIntoView(new UiSelector().resourceId(appPackage + ":id/payRangeSlider"));
-        scrollable.scrollIntoView(new UiSelector().text("Time Estimate"));
-        scrollable.scrollIntoView(new UiSelector().resourceId(appPackage + ":id/timeEstimateSlider"));
-        scrollable.scrollIntoView(new UiSelector().text("Max Distance"));
-        scrollable.scrollIntoView(new UiSelector().resourceId(appPackage + ":id/maxDistanceSlider"));
-        scrollable.scrollIntoView(new UiSelector().text("Search").clickable(true));
+        Assert.assertTrue(findText(scrollable, "Salary Range").exists());
+        Assert.assertTrue(findResource(scrollable, "salaryRangeSlider").exists());
+        Assert.assertTrue(findText(scrollable, "Duration Range").exists());
+        Assert.assertTrue(findResource(scrollable, "durationRangeSlider").exists());
+        Assert.assertTrue(findText(scrollable, "Max Distance").exists());
+        Assert.assertTrue(findResource(scrollable, "maxDistanceSlider").exists());
+        Assert.assertTrue(findText(scrollable, "Apply Filters").isClickable());
     }
 
-    @Ignore("Missing connections")
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops") // No.
-    @Test
-    public void successfulSearch() throws UiObjectNotFoundException {
-        LatLng southwest = new LatLng(0.0,0.0);
-        LatLng northeast = new LatLng(0.0001,0.0001); // Roughly 11 m side length
-        LatLngBounds locationBounds = new LatLngBounds(southwest, northeast);
+    private @NonNull List<AvailableJob> generateJobsAround(@NonNull LatLng location, double radius) {
+        LatLngBounds locationBounds = LocationHelper.getBoundingBox(location, radius);
         List<AvailableJob> jobs = JobPostHelper.generateAvailable(5, locationBounds);
         for (AvailableJob job : jobs) {
             job.writeToDatabase(database, Assert::fail);
         }
+        return jobs;
+    }
 
-        locationProvider.setLocation(locationBounds.getCenter());
+    @Test
+    public void successfulSearch() throws UiObjectNotFoundException {
+        LatLng location = new LatLng(0.0, 0.0);
+        List<AvailableJob> jobs = generateJobsAround(location, 50.0);
+        locationProvider.setLocation(location);
 
-        UiScrollable scrollable = new UiScrollable(new UiSelector().scrollable(true));
-        UiSelector buttonSelector = new UiSelector().text("Search").clickable(true);
-        scrollable.scrollIntoView(buttonSelector);
-        UiObject searchButton = device.findObject(buttonSelector);
-        searchButton.clickAndWaitForNewWindow();
+        UiScrollable filterPage = new UiScrollable(new UiSelector().scrollable(true));
+        UiObject button = findText(filterPage, "Apply Filters");
+        button.clickAndWaitForNewWindow();
 
-        scrollable = new UiScrollable(new UiSelector().scrollable(true));
+        UiScrollable resultsPage = new UiScrollable(new UiSelector().resourceId(appPackage + ":id/jobListRecyclerView"));
         for (AvailableJob job : jobs) {
-            scrollable.scrollIntoView(new UiSelector().text(job.getTitle()));
-            scrollable.scrollIntoView(new UiSelector().textContains(String.valueOf(job.getSalary())));
-            scrollable.scrollIntoView(new UiSelector().text(String.valueOf(job.getDuration())));
+            Assert.assertTrue(findText(resultsPage, job.getTitle()).exists());
+            Assert.assertTrue(findText(resultsPage, job.getDescription()).exists());
         }
     }
 
-    @Ignore("Missing connections")
     @Test
     public void failedSearch() throws UiObjectNotFoundException {
-        LatLng southwest = new LatLng(0.0,0.0);
-        LatLng northeast = new LatLng(0.0001,0.0001); // Roughly 11 m side length
-        LatLngBounds locationBounds = new LatLngBounds(southwest, northeast);
-        List<AvailableJob> jobs = JobPostHelper.generateAvailable(4, locationBounds);
+        List<AvailableJob> jobs = generateJobsAround(new LatLng(0.0, 0.0), 1000.0);
+        locationProvider.setLocation(new LatLng(1.0, 1.0));
+
+        UiScrollable filterPage = new UiScrollable(new UiSelector().scrollable(true));
+        UiObject button = findText(filterPage, "Apply Filters");
+        button.clickAndWaitForNewWindow();
+
         for (AvailableJob job : jobs) {
-            job.writeToDatabase(database, Assert::fail);
+            Assert.assertFalse(findText(job.getTitle()).exists());
+            Assert.assertFalse(findText(job.getDescription()).exists());
         }
-
-        locationProvider.setLocation(new LatLng(10.0,10.0)); // Location too far from job postings.
-
-        UiScrollable scrollable = new UiScrollable(new UiSelector().scrollable(true));
-        UiSelector buttonSelector = new UiSelector().text("Search").clickable(true);
-        scrollable.scrollIntoView(buttonSelector);
-        UiObject searchButton = device.findObject(buttonSelector);
-        searchButton.clickAndWaitForNewWindow();
-
-        assertTrue(device.findObject(new UiSelector().textContains("There are no results")).exists());
     }
 }
