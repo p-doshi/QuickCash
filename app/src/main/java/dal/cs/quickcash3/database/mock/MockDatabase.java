@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.search.SearchFilter;
 
+@SuppressWarnings("PMD.GodClass") // Shush! I am God.
 public class MockDatabase implements Database {
     public static final String EMPTY_LOCATION = "Location cannot be empty.";
     public static final String KEY_NOT_FOUND = "Could not find the key: ";
@@ -51,6 +52,7 @@ public class MockDatabase implements Database {
         return currentObj;
     }
 
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops") // There is no reason to make this recursive.
     private <T> void set(@NonNull List<String> keys, @NonNull T value) {
         if (keys.isEmpty()) {
             throw new IllegalArgumentException(EMPTY_LOCATION);
@@ -114,7 +116,7 @@ public class MockDatabase implements Database {
         }
     }
 
-    private <T> void runListener(@NonNull MockDatabaseValueListener<T> listener) {
+    private void runListener(@NonNull MockDatabaseValueListener<?> listener) {
         try {
             Object value = get(listener.getKeys());
             listener.sendValue(value);
@@ -124,7 +126,8 @@ public class MockDatabase implements Database {
         }
     }
 
-    private <T> void runListener(@NonNull MockDatabaseSearchListener<T> listener) {
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is definitely used.
+    private void runListener(@NonNull MockDatabaseSearchListener<?> listener) {
         try {
             Object object = get(listener.getKeys());
             Map<String, Object> map = (MapType) object;
