@@ -4,15 +4,12 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import dal.cs.quickCash3.R;
 
 import android.util.Pair;
-import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -32,31 +29,28 @@ public class WorkerDashboardMapExampleActivity extends FragmentActivity {
         locationProvider.locationPing();
 
         // Sets up a detector to check when navigation bar items clicked
-        workerNavView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentManager fragmentManger = getSupportFragmentManager();
-                Fragment currentFragment = fragmentManger.findFragmentById(R.id.mapContainer);
+        workerNavView.setOnItemSelectedListener(item -> {
+            FragmentManager fragmentManger = getSupportFragmentManager();
+            Fragment currentFragment = fragmentManger.findFragmentById(R.id.mapContainer);
 
-                if (item.getItemId() == R.id.workerMapPage && locationProvider.checkLocationPermissionsEnabled()) {
-                    // If they selected map with location enabled display the map fragment
-                    MapFragment fragment = new MapFragment();
-                    // For the sake of consistent tests (We don't know where the CI is) we'll use a static location while testing
-                    assignTestValues(fragment);
-                    fragmentManger.beginTransaction().replace(R.id.mapContainer, fragment).commit();
-                }
-                else if (item.getItemId() == R.id.workerMapPage && !locationProvider.checkLocationPermissionsEnabled()) {
-                    // If they selected the map WITHOUT location permissions, show them a toast that it won't work
-                    Toast.makeText(WorkerDashboardMapExampleActivity.this,
-                            "Location Permissions must be enabled to use Map", Toast.LENGTH_LONG).show();
-                }
-                else if (currentFragment != null) {
-                    // Detaches current fragment if the user clicks another menu option
-                    // Will be replaced with other tabs eventually
-                    fragmentManger.beginTransaction().detach(currentFragment).commit();
-                }
-                return true;
+            if (item.getItemId() == R.id.workerMapPage && locationProvider.checkLocationPermissionsEnabled()) {
+                // If they selected map with location enabled display the map fragment
+                MapFragment fragment = new MapFragment();
+                // For the sake of consistent tests (We don't know where the CI is) we'll use a static location while testing
+                assignTestValues(fragment);
+                fragmentManger.beginTransaction().replace(R.id.mapContainer, fragment).commit();
             }
+            else if (item.getItemId() == R.id.workerMapPage && !locationProvider.checkLocationPermissionsEnabled()) {
+                // If they selected the map WITHOUT location permissions, show them a toast that it won't work
+                Toast.makeText(WorkerDashboardMapExampleActivity.this,
+                        "Location Permissions must be enabled to use Map", Toast.LENGTH_LONG).show();
+            }
+            else if (currentFragment != null) {
+                // Detaches current fragment if the user clicks another menu option
+                // Will be replaced with other tabs eventually
+                fragmentManger.beginTransaction().detach(currentFragment).commit();
+            }
+            return true;
         });
     }
 

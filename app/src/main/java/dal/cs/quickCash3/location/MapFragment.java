@@ -21,7 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import dal.cs.quickCash3.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
-    private GoogleMap map;
     private Location location;
     private Pair<Location, String>[] jobs;
 
@@ -40,7 +39,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        map = googleMap;
 
         // Add current location as a marker
         LatLng userLocation = getCurrentLocationLatLng();
@@ -48,18 +46,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Log.d("MapFragment", "Location Returned Null");
             return;
         }
-        map.addMarker(new MarkerOptions().position(userLocation).title("Me"));
+        googleMap.addMarker(new MarkerOptions().position(userLocation).title("Me"));
 
         // Add all the jobs as markers
-        for (int i = 0; i < jobs.length; i++) {
-            LatLng jobLocation = new LatLng(jobs[i].first.getLatitude(),jobs[i].first.getLongitude());
-            String jobName = jobs[i].second;
-            map.addMarker(new MarkerOptions().position(jobLocation).title(jobName));
+        for (Pair<Location, String> job : jobs) {
+            LatLng jobLocation = new LatLng(job.first.getLatitude(), job.first.getLongitude());
+            String jobName = job.second;
+            googleMap.addMarker(new MarkerOptions().position(jobLocation).title(jobName));
         }
 
         // Navigate camera to current position
         float zoomLevel = 12.0f;
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, zoomLevel));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, zoomLevel));
     }
 
     /**
