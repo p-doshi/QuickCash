@@ -20,7 +20,7 @@ import androidx.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 
-import dal.cs.quickCash3.location.WorkerDashMapsTestActivity;
+import dal.cs.quickCash3.location.WorkerDashboardMapExampleActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class WorkerDashMapsTest {
@@ -31,7 +31,7 @@ public class WorkerDashMapsTest {
         device = UiDevice.getInstance(getInstrumentation());
 
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        Intent launcherIntent = new Intent(context, WorkerDashMapsTestActivity.class);
+        Intent launcherIntent = new Intent(context, WorkerDashboardMapExampleActivity.class);
 
         launcherIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(launcherIntent);

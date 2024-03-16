@@ -25,10 +25,10 @@
             android:name=".location.AndroidLocationProvider"
             android:foregroundServiceType="location" />
         <activity
-            android:name=".location.MapsActivity"
+            android:name=".location.MapFragment"
             android:exported="true" />
         <activity
-            android:name=".location.WorkerDashMapsTestActivity"
+            android:name=".location.WorkerDashboardMapExampleActivity"
             android:exported="true" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
