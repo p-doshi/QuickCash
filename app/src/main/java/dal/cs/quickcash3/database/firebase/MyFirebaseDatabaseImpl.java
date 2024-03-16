@@ -3,7 +3,6 @@ package dal.cs.quickcash3.database.firebase;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -44,7 +43,7 @@ class MyFirebaseDatabaseImpl implements Database {
     @Override
     public <T> void write(
         @NonNull String location,
-        @Nullable T value,
+        @NonNull T value,
         @NonNull Consumer<String> errorFunction)
     {
         database.getReference(location).setValue(value)
@@ -54,7 +53,7 @@ class MyFirebaseDatabaseImpl implements Database {
     @Override
     public <T> void write(
         @NonNull String location,
-        @Nullable T value,
+        @NonNull T value,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {

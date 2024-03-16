@@ -10,16 +10,18 @@ import com.google.firebase.database.annotations.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-class MockDatabaseListener<T> {
+abstract class MockDatabaseListener<T> {
     private final List<String> keys;
-    private final Class<T> type;
-    private final Consumer<T> readFunction;
+    protected final Class<T> type;
     private final Consumer<String> errorFunction;
 
-    public MockDatabaseListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
+    protected MockDatabaseListener(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull Consumer<String> errorFunction)
+    {
         this.keys = splitString(location, SLASH);
         this.type = type;
-        this.readFunction = readFunction;
         this.errorFunction = errorFunction;
     }
 
@@ -43,12 +45,11 @@ class MockDatabaseListener<T> {
         return keys;
     }
 
-    public void sendValue(@Nullable Object value) {
-        if (!type.isInstance(value)) {
-            throw new ClassCastException("Cannot cast " + value.getClass() + " to " + type);
-        }
-        readFunction.accept(type.cast(value));
+    public Class<T> getType() {
+        return type;
     }
+
+    public abstract void sendValue(@Nullable String key, @Nullable Object value);
 
     public void sendError(@NonNull String error) {
         errorFunction.accept(error);
