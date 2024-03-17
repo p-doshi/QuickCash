@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobSearch;
+package dal.cs.quickcash3.jobsearch;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
