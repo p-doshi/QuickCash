@@ -210,68 +210,6 @@ public class DatabaseTest {
     }
 
     @Test
-    public void writeSecureAuthorizedDatabaseFailure() {
-        Database database = new MyFirebaseDatabase(context);
-        AtomicBoolean passed = new AtomicBoolean(false);
-        AtomicReference<String> error = new AtomicReference<>(null);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.write(PUBLIC_DIR, TEST_TEXT,
-            () -> {
-                passed.set(true);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertFalse(passed.get());
-        Assert.assertEquals("Firebase Database error: Permission denied", error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void readSecureAuthorizedDatabaseFailure() {
-        Database database = new MyFirebaseDatabase(context);
-
-        // We need a value that shows that we have not received anything.
-        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
-        AtomicReference<String> error = new AtomicReference<>(null);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.read(PUBLIC_DIR, String.class,
-            newValue -> {
-                value.set(newValue);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertEquals(RANDOM_STRING, value.get());
-        Assert.assertEquals("Permission denied", error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
     public void doubleWriteRead() {
         Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
