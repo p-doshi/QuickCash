@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobsearch;
+package dal.cs.quickcash3.search;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -35,7 +35,7 @@ public class SearchJobEspressoTest {
         onView(withId(R.id.workerSearchPage)).perform(click());
         onView(allOf(withClassName(is("android.widget.ImageView")), withContentDescription("Search")))
                 .perform(click());
-        onView(allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete"))))
+        onView(withClassName(is("android.widget.SearchView$SearchAutoComplete")))
                 .perform(replaceText("lawn"), pressImeActionButton());
     }
 

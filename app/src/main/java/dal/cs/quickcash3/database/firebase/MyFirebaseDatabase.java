@@ -14,10 +14,6 @@ import dal.cs.quickcash3.search.SearchFilter;
 public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     private static final String DB_KEY = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
 
-    public MyFirebaseDatabase() {
-        super();
-    }
-
     protected @NonNull String relocate(@NonNull String location) {
         StringBuilder newLocation = new StringBuilder(DB_KEY);
 
