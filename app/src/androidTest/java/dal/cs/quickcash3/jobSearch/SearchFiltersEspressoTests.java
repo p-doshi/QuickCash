@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobSearch;
+package dal.cs.quickcash3.jobsearch;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -97,7 +97,7 @@ public class SearchFiltersEspressoTests {
         generateJobPosts();
 
         onView(withId(R.id.maxDistanceSlider)).perform(setRangeSlider(0.0f));
-        onView(withId(R.id.applyButton)).perform(click());
+        //onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Coding problem"
@@ -113,7 +113,7 @@ public class SearchFiltersEspressoTests {
         generateJobPosts();
 
         onView(withId(R.id.maxDistanceSlider)).perform(setRangeSlider(0.5f));
-        onView(withId(R.id.applyButton)).perform(click());
+        //onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Arrays.asList(
             "Walk Dog",
@@ -132,7 +132,7 @@ public class SearchFiltersEspressoTests {
 
         generateJobPosts();
 
-        onView(withId(R.id.applyButton)).perform(click());
+        //onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Snow Removal"
