@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
@@ -37,12 +37,13 @@ public class PostAvailableJobHelper {
         job.setLongitude(address.getLongitude());
 
 
-        job.setEmployer(RandomStringGenerator.generate(30)); //how to do this
+        job.setEmployer(RandomStringGenerator.generate(30)); //how to do this???
         job.setPostTime(new Date().toString());
         job.setApplicants(new ArrayList<>());
         job.setBlackList(new ArrayList<>());
 
-        //job.writeToDatabase();
+        Consumer<String> errors = PostAvailableJobHelper::errorEater;
+        job.writeToDatabase(database,errors);
     }
 
     private Address locToCoordinates(String streetAdd, String city, String province) throws IOException {
@@ -50,23 +51,15 @@ public class PostAvailableJobHelper {
         List<Address> address = geocoder.getFromLocationName(strAddress, 20);
         return address.get(0);
     }
-    private double getLat(Address address){
-
-        return address.getLatitude();
-    }
-    private double getLong(Address address){
-
-        return address.getLongitude();
-    }
 
     private double salaryStringToDouble(String strSalary){
         return Double.parseDouble(strSalary);
     }
 
-    private double durationToDouble(String duration){
+    private double durationToDouble(String duration) {
         double doubleDuration = 0;
 
-        if(duration.equals("Under 8 Hours")){
+        if (duration.equals("Under 8 Hours")) {
             doubleDuration = 8;
         } else if (duration.equals("1 – 3 Days")) {
             doubleDuration = 24;
@@ -76,10 +69,15 @@ public class PostAvailableJobHelper {
             doubleDuration = 112;
         } else if (duration.equals("2 – 4 Weeks")) {
             doubleDuration = 240;
-        } else if(duration.equals("4+ Weeks")){
+        } else if (duration.equals("4+ Weeks")) {
             doubleDuration = 336;
         }
 
         return doubleDuration;
+    }
+
+    //fix this
+    public static void errorEater(String error){
+        String errorHolder = error;
     }
 }
