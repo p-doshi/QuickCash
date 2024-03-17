@@ -70,4 +70,27 @@ public final class StringHelper {
 
         return strings;
     }
+
+    /**
+     * Splits a string into a list of substrings based on a specified delimiter.
+     * Substrings that are empty after the split are omitted from the result.
+     *
+     * @param location The string to be split.
+     * @param delimiter The character used as the delimiter for splitting.
+     * @return A list of substrings resulting from the split, excluding any empty strings.
+     */
+    public static @NonNull String combineList(@NonNull List<String> keys, char delimiter) {
+        StringBuilder output = new StringBuilder();
+
+        boolean first = true;
+        for (String key : keys) {
+            if (!first) {
+                output.append(delimiter);
+            }
+            first = false;
+            output.append(key);
+        }
+
+        return output.toString();
+    }
 }

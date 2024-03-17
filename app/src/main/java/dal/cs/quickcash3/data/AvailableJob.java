@@ -1,6 +1,7 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.database.annotations.Nullable;
 
@@ -21,9 +22,19 @@ public class AvailableJob extends JobPost {
 
     @Override
     public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        writeToDatabase(database, () -> {}, errorFunction);
+    }
+
+    @Override
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.write(
             DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
             this,
+            successFunction,
             errorFunction);
     }
 

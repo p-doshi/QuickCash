@@ -39,8 +39,7 @@ import dal.cs.quickcash3.util.RandomStringGenerator;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
-    private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-    private final Database database = new MyFirebaseDatabase(context);
+    private final Database database = new MyFirebaseDatabase();
     private CountingIdlingResource resource;
     private String testDir;
 
@@ -84,13 +83,7 @@ public class DatabaseTest {
         Assert.assertEquals("Hello", value.get());
     }
 
-    @Ignore("Manual test")
-    @Test
-    public void authenticated() {
-        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
-    }
-
-    @Ignore("Manual test")
+    @Ignore("Code to create some real jobs")
     @Test
     public void createJobs() {
         final int numJobs = 10;
@@ -100,23 +93,11 @@ public class DatabaseTest {
         List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
         Assert.assertEquals(numJobs, jobs.size());
 
-        resource.increment();
-
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("parthdoshi135@gmail.com", "Password")
-            .addOnSuccessListener(result -> resource.decrement())
-            .addOnFailureListener(error -> Assert.fail(error.getMessage()));
-
-        Espresso.onIdle();
-
         Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
 
         for (AvailableJob job : jobs) {
             resource.increment();
-            database.write(
-                DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(20),
-                job,
-                resource::decrement,
-                Assert::fail);
+            job.writeToDatabase(database, resource::decrement, Assert::fail);
         }
 
         Espresso.onIdle();

@@ -21,7 +21,7 @@ public interface Database {
      * @param errorFunction The function that will be called in case of an error.
      * @param <T> Can write any type of data to the database.
      */
-    <T> void write(@NonNull String location, @Nullable T value, @NonNull Consumer<String> errorFunction);
+    <T> void write(@NonNull String location, @NonNull T value, @NonNull Consumer<String> errorFunction);
 
     /**
      * Asynchronously writes the value to the database.
@@ -38,7 +38,7 @@ public interface Database {
      */
     <T> void write(
         @NonNull String location,
-        @Nullable T value,
+        @NonNull T value,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction);
 
