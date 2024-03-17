@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.database;
 
+import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
+
 import android.content.Context;
 import android.util.Range;
 
@@ -86,14 +88,13 @@ public class DatabaseTest {
     @Ignore("Code to create some real jobs")
     @Test
     public void createJobs() {
-        final int numJobs = 10;
-        LatLng southeast = new LatLng(37.322998, -122.032181);
-        LatLng northwest = new LatLng(37.354107, -121.955238);
-        LatLngBounds area = new LatLngBounds(southeast, northwest);
+        final int numJobs = 1;
+        final LatLng location = new LatLng(37.422452349192, -122.08527721558478);
+        final double radiusInM = 1000.0;
+
+        LatLngBounds area = getBoundingBox(location, radiusInM);
         List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
         Assert.assertEquals(numJobs, jobs.size());
-
-        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
 
         for (AvailableJob job : jobs) {
             resource.increment();
