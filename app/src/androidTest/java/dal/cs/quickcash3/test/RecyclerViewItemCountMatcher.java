@@ -29,7 +29,7 @@ public class RecyclerViewItemCountMatcher extends TypeSafeMatcher<View> {
         description.appendText("RecyclerView should have " + count + " items");
     }
 
-    public static Matcher<View> hasItemCount(int count) {
+    public static Matcher<View> recyclerHasItemCount(int count) {
         return new RecyclerViewItemCountMatcher(count);
     }
 }

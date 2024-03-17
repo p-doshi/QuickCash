@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobSearch;
+package dal.cs.quickcash3.search;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.JobUrgency;
 
-public final class ExampleJobList {
+public class ExampleJobList {
     public final static LatLng GOOGLEPLEX = new LatLng(37.42205852363422, -122.08523377972396);
     public final static LatLng DALHOUSIE = new LatLng(44.63562977946508, -63.59517486744167);
     public final static Map<String, AvailableJob> JOBS;
@@ -24,7 +25,7 @@ public final class ExampleJobList {
         job1.setSalary(20);
         job1.setStartDate(new Date().toString());
         job1.setDuration(2);
-        job1.setUrgency("low");
+        job1.setUrgency(JobUrgency.LOW.getValue());
         job1.setPostTime(new Date().toString());
         JOBS.put("S0OGyNIfHY3wHtQDWkUf", job1);
 
@@ -37,7 +38,7 @@ public final class ExampleJobList {
         job2.setSalary(30);
         job2.setStartDate(new Date().toString());
         job2.setDuration(1);
-        job2.setUrgency("medium");
+        job2.setUrgency(JobUrgency.MEDIUM.getValue());
         job2.setPostTime(new Date().toString());
         JOBS.put("VWrRJpSrxGMHR4A4rzIK", job2);
 
@@ -50,7 +51,7 @@ public final class ExampleJobList {
         job3.setSalary(50);
         job3.setStartDate(new Date().toString());
         job3.setDuration(2);
-        job3.setUrgency("low");
+        job3.setUrgency(JobUrgency.LOW.getValue());
         job3.setPostTime(new Date().toString());
         JOBS.put("WNBMabNMuFJ77zxl4zKC", job3);
 
@@ -63,7 +64,7 @@ public final class ExampleJobList {
         job4.setSalary(10);
         job4.setStartDate(new Date().toString());
         job4.setDuration(1);
-        job4.setUrgency("high");
+        job4.setUrgency(JobUrgency.HIGH.getValue());
         job4.setPostTime(new Date().toString());
         JOBS.put("Yh9umH7M3wHrQIDytHt2", job4);
 
@@ -76,7 +77,7 @@ public final class ExampleJobList {
         job5.setSalary(100);
         job5.setStartDate(new Date().toString());
         job5.setDuration(4);
-        job5.setUrgency("high");
+        job5.setUrgency(JobUrgency.HIGH.getValue());
         job5.setPostTime(new Date().toString());
         JOBS.put("kMyYthELmkdYDJcPqyx8", job5);
 
@@ -89,7 +90,7 @@ public final class ExampleJobList {
         job6.setSalary(50);
         job6.setStartDate(new Date().toString());
         job6.setDuration(1);
-        job6.setUrgency("high");
+        job6.setUrgency(JobUrgency.HIGH.getValue());
         job6.setPostTime(new Date().toString());
         JOBS.put("p7isI5Y7mydwQAcDBPvY", job6);
 
@@ -102,7 +103,7 @@ public final class ExampleJobList {
         job7.setSalary(180);
         job7.setStartDate(new Date().toString());
         job7.setDuration(6);
-        job7.setUrgency("medium");
+        job7.setUrgency(JobUrgency.MEDIUM.getValue());
         job7.setPostTime(new Date().toString());
         JOBS.put("rnvH3iXFlB6KVBB8qPbZ", job7);
 
@@ -115,7 +116,7 @@ public final class ExampleJobList {
         job8.setSalary(1000);
         job8.setStartDate(new Date().toString());
         job8.setDuration(72);
-        job8.setUrgency("low");
+        job8.setUrgency(JobUrgency.LOW.getValue());
         job8.setPostTime(new Date().toString());
         JOBS.put("u1ZyFSonrqpBcJTHMt7t", job8);
 
@@ -128,7 +129,7 @@ public final class ExampleJobList {
         job9.setSalary(50);
         job9.setStartDate(new Date().toString());
         job9.setDuration(2);
-        job9.setUrgency("high");
+        job9.setUrgency(JobUrgency.HIGH.getValue());
         job9.setPostTime(new Date().toString());
         JOBS.put("vg1iTndJtajiSwolDdf9", job9);
 
@@ -141,7 +142,7 @@ public final class ExampleJobList {
         job10.setSalary(200);
         job10.setStartDate(new Date().toString());
         job10.setDuration(6);
-        job10.setUrgency("high");
+        job10.setUrgency(JobUrgency.HIGH.getValue());
         job10.setPostTime(new Date().toString());
         JOBS.put("wMEtg4fKZOG1NpGDmfbu", job10);
     }
