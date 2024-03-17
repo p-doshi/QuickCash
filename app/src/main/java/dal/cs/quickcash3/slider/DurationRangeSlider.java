@@ -2,10 +2,12 @@ package dal.cs.quickcash3.slider;
 
 import static dal.cs.quickcash3.util.StringHelper.getPluralEnding;
 
+import android.os.Handler;
 import android.util.Range;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
@@ -22,7 +24,6 @@ public class DurationRangeSlider {
     private static final int NUMBER_THUMBS = 2;
     private static final int DEFAULT_MIN_INDEX = 0;
     private static final int DEFAULT_MAX_INDEX = TIME_ESTIMATE_VALUES.length - 1;
-
     private final RangeSlider rangeSlider;
 
     public DurationRangeSlider(@NonNull RangeSlider rangeSlider) {
@@ -38,6 +39,11 @@ public class DurationRangeSlider {
         rangeSlider.setValues(startingValues);
 
         rangeSlider.setLabelFormatter(DurationRangeSlider::formatLabel);
+
+        rangeSlider.setLabelBehavior(LabelFormatter.LABEL_VISIBLE);
+        new Handler().postDelayed(
+            () -> rangeSlider.setLabelBehavior(LabelFormatter.LABEL_WITHIN_BOUNDS),
+            1000);
     }
 
     private static int mapValue(float value) {

@@ -1,7 +1,12 @@
 package dal.cs.quickcash3.slider;
 
+import android.app.Activity;
+import android.os.Handler;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 
+import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
@@ -16,8 +21,7 @@ public class MaxDistanceSlider {
         KILOMETER * 200, KILOMETER * 300
     };
     private static final int NUMBER_THUMBS = 1;
-    private static final int DEFAULT_INDEX = 0;
-
+    private static final int DEFAULT_INDEX = MAX_DISTANCE_VALUES.length - 1;
     private final RangeSlider rangeSlider;
 
     public MaxDistanceSlider(@NonNull RangeSlider rangeSlider) {
@@ -32,6 +36,11 @@ public class MaxDistanceSlider {
         rangeSlider.setValues(startingValues);
 
         rangeSlider.setLabelFormatter(MaxDistanceSlider::formatLabel);
+
+        rangeSlider.setLabelBehavior(LabelFormatter.LABEL_VISIBLE);
+        new Handler().postDelayed(
+            () -> rangeSlider.setLabelBehavior(LabelFormatter.LABEL_WITHIN_BOUNDS),
+            1000);
     }
 
     private static int mapValue(float value) {
