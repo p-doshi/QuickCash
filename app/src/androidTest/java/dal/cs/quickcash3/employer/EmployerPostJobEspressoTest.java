@@ -62,7 +62,7 @@ public class EmployerPostJobEspressoTest {
     }
 
     @Test
-    public void checkInvalidJobTitleError(){
+    public void checkEmptyJobTitleError(){
         onView(withId(R.id.jobPostingTitle)).perform(typeText("\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
@@ -81,6 +81,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
     }
 
+    //Would always pass cuz your spinner already have something chosen since beginning so you can delete this test
     @Test
     public void checkInvalidJobExpectedDurationError(){
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
@@ -99,6 +100,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
     }
 
+    //Would always pass cuz your spinner already have something chosen since beginning so you can delete this test
     @Test
     public void checkInvalidUrgencyError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
@@ -118,7 +120,7 @@ public class EmployerPostJobEspressoTest {
     }
 
     @Test
-    public void checkInvalidSalaryError() {
+    public void checkEmptySalaryError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
@@ -138,7 +140,27 @@ public class EmployerPostJobEspressoTest {
     }
 
     @Test
-    public void checkInvalidAddressError() {
+    public void checkInvalidSalaryError() {
+        onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
+        onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
+        onView(withId(R.id.jobDurationSpinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onView(withId(R.id.jobUrgencySpinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
+        onView(withId(R.id.addJobSalary)).perform(typeText("12.3365\n"));
+        onView(withId(R.id.addJobAddress)).perform(typeText("1156 Wellington Street\n"));
+        onView(withId(R.id.addJobCity)).perform(typeText("Halifax\n"));
+        onView(withId(R.id.addJobProvince)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
+        onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old."),closeSoftKeyboard());
+
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
+
+        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.salaryError)));
+    }
+
+    @Test
+    public void checkEmptyAddressError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
@@ -158,7 +180,7 @@ public class EmployerPostJobEspressoTest {
     }
 
     @Test
-    public void checkInvalidCityError() {
+    public void checkEmptyCityError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
@@ -177,6 +199,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
     }
 
+    //Would always pass cuz your spinner already have something chosen since beginning so you can delete this test
     @Test
     public void checkInvalidProvinceError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
@@ -196,7 +219,7 @@ public class EmployerPostJobEspressoTest {
     }
 
     @Test
-    public void checkInvalidJobDescriptionError() {
+    public void checkEmptyJobDescriptionError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
@@ -216,7 +239,7 @@ public class EmployerPostJobEspressoTest {
     }
 
     @Test
-    public void checkInvalidDateError() {
+    public void checkEmptyDateError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
@@ -232,5 +255,25 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+    }
+
+    @Test
+    public void checkInvalidDateError() {
+        onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
+        onView(withId(R.id.addJobDate)).perform(typeText("15-03-2024\n"));
+        onView(withId(R.id.jobDurationSpinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onView(withId(R.id.jobUrgencySpinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
+        onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
+        onView(withId(R.id.addJobAddress)).perform(typeText("1156 Wellington Street\n"));
+        onView(withId(R.id.addJobCity)).perform(typeText("Halifax\n"));
+        onView(withId(R.id.addJobProvince)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("NS"))).perform(click());
+        onView(withId(R.id.addJobDescription)).perform(typeText("Need a strong individual to help me mow my lawn because I am old."),closeSoftKeyboard());
+
+        onView(withId(R.id.addJobConfirmButton)).perform(click());
+
+        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.dateError)));
     }
 }
