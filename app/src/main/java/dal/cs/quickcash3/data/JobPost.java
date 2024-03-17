@@ -4,9 +4,10 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.annotations.Nullable;
 
-import dal.cs.quickcash3.database.DatabaseWriter;
+import dal.cs.quickcash3.database.DatabaseObject;
+import dal.cs.quickcash3.util.Copyable;
 
-public abstract class JobPost implements DatabaseWriter {
+public abstract class JobPost implements DatabaseObject {
     protected static final int HASH_SIZE = 20;
     private String title;
     private String employer;
@@ -61,5 +62,14 @@ public abstract class JobPost implements DatabaseWriter {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    protected void copyFrom(@NonNull JobPost other) {
+        title = other.title;
+        employer = other.employer;
+        description = other.description;
+        latitude = other.latitude;
+        longitude = other.longitude;
+        salary = other.salary;
     }
 }
