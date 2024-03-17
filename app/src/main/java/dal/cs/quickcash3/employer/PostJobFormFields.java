@@ -8,11 +8,13 @@ import java.util.regex.Pattern;
 import dal.cs.quickcash3.R;
 
 public class PostJobFormFields {
-    static Context context; // fix this during refactoring
     static String datePattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
-    static String salaryPattern = "[0-9]+\\.\\d\\d";
+    static String salaryPattern = "^([0-9]+|[0-9]+\\.[0-9]{2})$";
     static String empty = "";
     static String errorMessage;
+    static String missingFieldError = "Please fill in all fields!";
+    static String improperDateFormat = "Please enter date in proper format - dd/mm/yyyy";
+    static String improperSalaryFormat = "Please enter valid salary";
 
     /**
      * Method for PostJobForm to call to check form fields properly filled out
@@ -20,10 +22,19 @@ public class PostJobFormFields {
      * @return A string holding an error message; empty when no errors
      */
     public static String checkFieldsValid(HashMap<String, String> fields){
-        errorMessage = checkIfEmpty(fields);
-        if(errorMessage.equals(empty)){
-            errorMessage = checkJobDate(fields.get("date"));
-            errorMessage = checkJobSalary(fields.get("salary"));
+        errorMessage = empty;
+        String emptyError = checkIfEmpty(fields);
+        String dateFormatError = checkJobDate(fields.get("date"));
+        String salaryFormatError = checkJobSalary(fields.get("salary"));
+
+        if(!emptyError.equals(empty)){
+            errorMessage = emptyError;
+        }
+        else if (!dateFormatError.equals(empty)) {
+            errorMessage = dateFormatError;
+        }
+        else if (!salaryFormatError.equals(empty)) {
+            errorMessage = salaryFormatError;
         }
 
         return errorMessage;
@@ -38,10 +49,14 @@ public class PostJobFormFields {
         errorMessage = empty;
 
         for (HashMap.Entry<String, String> field : fields.entrySet()) {
-            String input = (String)field.getValue();
+            String key = field.getKey();
+            String input = field.getValue();
+            boolean provinceCheck = key.equals("province") && input.equals("province");
+            boolean durationCheck = key.equals("duration") && input.equals("duration");
+            boolean urgencyCheck = key.equals("urgency") && input.equals("urgency");
 
-            if(input.equals(empty)){
-                errorMessage = context.getString(R.string.fillAllFields);
+            if(input.equals(empty)||provinceCheck||durationCheck||urgencyCheck){
+                errorMessage = missingFieldError;
                 break;
             }
         }
@@ -57,7 +72,7 @@ public class PostJobFormFields {
         errorMessage = empty;
 
         if(!Pattern.matches(datePattern, date)){
-            errorMessage = context.getString(R.string.dateError);
+            errorMessage = improperDateFormat;
         }
         return errorMessage;
     }
@@ -71,7 +86,7 @@ public class PostJobFormFields {
         errorMessage = empty;
 
         if(!Pattern.matches(salaryPattern, salary)){
-            errorMessage = context.getString(R.string.salaryError);
+            errorMessage = improperSalaryFormat;
         }
         return errorMessage;
     }

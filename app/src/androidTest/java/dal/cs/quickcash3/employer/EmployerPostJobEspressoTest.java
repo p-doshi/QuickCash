@@ -46,7 +46,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
@@ -66,7 +66,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
@@ -81,7 +81,6 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
     }
 
-    //Would always pass cuz your spinner already have something chosen since beginning so you can delete this test
     @Test
     public void checkInvalidJobExpectedDurationError(){
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
@@ -100,13 +99,12 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
     }
 
-    //Would always pass cuz your spinner already have something chosen since beginning so you can delete this test
     @Test
     public void checkInvalidUrgencyError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
         onView(withId(R.id.addJobAddress)).perform(typeText("1156 Wellington Street\n"));
         onView(withId(R.id.addJobCity)).perform(typeText("Halifax\n"));
@@ -124,7 +122,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("abc\n"));
@@ -144,7 +142,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("12.3365\n"));
@@ -164,7 +162,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
@@ -184,9 +182,9 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Urgent"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
         onView(withId(R.id.addJobAddress)).perform(typeText("1156 Wellington Street\n"));
         onView(withId(R.id.addJobCity)).perform(typeText("\n"));
@@ -199,15 +197,14 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
     }
 
-    //Would always pass cuz your spinner already have something chosen since beginning so you can delete this test
     @Test
     public void checkInvalidProvinceError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Urgent"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
         onView(withId(R.id.addJobAddress)).perform(typeText("1156 Wellington Street\n"));
         onView(withId(R.id.addJobCity)).perform(typeText("Halifax\n"));
@@ -223,9 +220,9 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15/03/2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Urgent"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
         onView(withId(R.id.addJobAddress)).perform(typeText("1156 Wellington Street\n"));
         onView(withId(R.id.addJobCity)).perform(typeText("Halifax\n"));
@@ -242,9 +239,9 @@ public class EmployerPostJobEspressoTest {
     public void checkEmptyDateError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Urgent"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));
         onView(withId(R.id.addJobAddress)).perform(typeText("1156 Wellington Street\n"));
         onView(withId(R.id.addJobCity)).perform(typeText("Halifax\n"));
@@ -262,7 +259,7 @@ public class EmployerPostJobEspressoTest {
         onView(withId(R.id.jobPostingTitle)).perform(typeText("Mowing Lawn\n"));
         onView(withId(R.id.addJobDate)).perform(typeText("15-03-2024\n"));
         onView(withId(R.id.jobDurationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1–2 Weeks"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("1 – 2 Weeks"))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Low"))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText("50\n"));

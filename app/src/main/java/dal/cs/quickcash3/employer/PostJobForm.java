@@ -2,7 +2,6 @@ package dal.cs.quickcash3.employer;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,7 +9,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import dal.cs.quickcash3.R;
 
@@ -30,26 +28,23 @@ public class PostJobForm extends Activity {
     }
     protected void setUpConfirmPostButton(){
         Button confirmPostButton = findViewById(R.id.addJobConfirmButton);
-        confirmPostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // check fields
-                String errorMessage = checkAllFields();
-                TextView status = findViewById(R.id.jobSubmitStatus);
+        confirmPostButton.setOnClickListener(view -> {
+            // check fields
+            String errorMessage = checkAllFields();
+            TextView status = findViewById(R.id.jobSubmitStatus);
 
-                if(!errorMessage.equals("")){
-                    // handle error message
-                    status.setText(errorMessage);
-                }
-                else{
-                    createJob();
-                    // save to db
-                    // write success message
-                    status.setText(R.string.success);
-                    // move to next page
-                }
-
+            if(!errorMessage.equals("")){
+                // handle error message
+                status.setText(errorMessage);
             }
+            else{
+                createJob();
+                // save to db
+                // write success message
+                status.setText(R.string.success);
+                // move to next page
+            }
+
         });
     }
 
@@ -99,8 +94,7 @@ public class PostJobForm extends Activity {
     protected String checkAllFields(){
         // check fields and return error message?
         HashMap<String, String> fields = getFieldsMap();
-        String errorMessage = PostJobFormFields.checkFieldsValid(fields);
-        return errorMessage;
+        return PostJobFormFields.checkFieldsValid(fields);
     }
 
     /**
@@ -153,7 +147,7 @@ public class PostJobForm extends Activity {
      * @return a hashmap
      */
     protected HashMap<String, String> getFieldsMap(){
-        HashMap<String, String> fields = new HashMap<String, String>();
+        HashMap<String, String> fields = new HashMap<>();
 
         fields.put("title", getJobTitle());
         fields.put("date", getJobDate());
