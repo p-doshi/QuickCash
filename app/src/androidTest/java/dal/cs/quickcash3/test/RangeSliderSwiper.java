@@ -12,7 +12,6 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 
 import com.google.android.material.slider.RangeSlider;
-import com.google.android.material.slider.Slider;
 
 import org.hamcrest.Matcher;
 
@@ -66,7 +65,7 @@ public class RangeSliderSwiper implements ViewAction {
         float max = slider.getValueTo();
         float step = slider.getStepSize();
         int steps = round((max - min) / step);
-        assert (max - min) / step == (float)steps;
+        assert (max - min) / step == steps;
 
         List<Float> mappedValues = new ArrayList<>(values.size());
         for (Float value : values) {
@@ -75,7 +74,7 @@ public class RangeSliderSwiper implements ViewAction {
         slider.setValues(mappedValues);
     }
 
-    public static ViewAction setRangeSlider(Float... values) {
+    public static ViewAction adjustRangeSliderThumbs(Float... values) {
         return new RangeSliderSwiper(values);
     }
 }

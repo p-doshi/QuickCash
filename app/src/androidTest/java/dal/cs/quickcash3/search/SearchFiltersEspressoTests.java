@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobSearch;
+package dal.cs.quickcash3.search;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -8,11 +8,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
-import static dal.cs.quickcash3.jobSearch.ExampleJobList.DALHOUSIE;
-import static dal.cs.quickcash3.jobSearch.ExampleJobList.GOOGLEPLEX;
-import static dal.cs.quickcash3.jobSearch.ExampleJobList.JOBS;
-import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.hasItemCount;
-import static dal.cs.quickcash3.test.RangeSliderSwiper.setRangeSlider;
+import static dal.cs.quickcash3.search.ExampleJobList.DALHOUSIE;
+import static dal.cs.quickcash3.search.ExampleJobList.GOOGLEPLEX;
+import static dal.cs.quickcash3.search.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
+import static dal.cs.quickcash3.test.RangeSliderSwiper.adjustRangeSliderThumbs;
 
 import android.app.Instrumentation;
 import android.content.Context;
@@ -24,6 +24,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -40,6 +41,7 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
+@SuppressWarnings("PMD.ExcessiveImports") // No.
 public class SearchFiltersEspressoTests {
     private final Instrumentation instrumentation = getInstrumentation();
     private final Context context = instrumentation.getTargetContext();
@@ -63,7 +65,7 @@ public class SearchFiltersEspressoTests {
     }
 
     private void checkJobPosts(@NonNull List<String> expectedJobTitles) {
-        onView(withId(R.id.jobListRecyclerView)).check(matches(hasItemCount(expectedJobTitles.size())));
+        onView(withId(R.id.jobListRecyclerView)).check(matches(recyclerHasItemCount(expectedJobTitles.size())));
 
         for (AvailableJob job : JOBS.values()) {
             if (expectedJobTitles.contains(job.getTitle())) {
@@ -96,7 +98,7 @@ public class SearchFiltersEspressoTests {
 
         generateJobPosts();
 
-        onView(withId(R.id.maxDistanceSlider)).perform(setRangeSlider(0.0f));
+        onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.0f));
         onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
@@ -112,7 +114,7 @@ public class SearchFiltersEspressoTests {
 
         generateJobPosts();
 
-        onView(withId(R.id.maxDistanceSlider)).perform(setRangeSlider(0.5f));
+        onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.5f));
         onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Arrays.asList(
