@@ -36,6 +36,7 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
+@SuppressWarnings("PMD.ExcessiveImports") // No.
 public class SearchFiltersUITests {
     private static final int DESCRIPTION_SIZE = 20;
     private final Instrumentation instrumentation = getInstrumentation();

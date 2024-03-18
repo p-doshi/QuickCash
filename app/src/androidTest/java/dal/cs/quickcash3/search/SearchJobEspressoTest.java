@@ -29,7 +29,6 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobEspressoTest {
-    private static final int MAX_DATABASE_TIMEOUT = 5000;
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
             new ActivityScenarioRule<>(WorkerDashboard.class);
