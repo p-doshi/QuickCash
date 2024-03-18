@@ -11,11 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
 
-import static dal.cs.quickcash3.jobSearch.ExampleJobList.GOOGLEPLEX;
-import static dal.cs.quickcash3.jobSearch.ExampleJobList.JOBS;
-import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.hasItemCount;
 
 import android.Manifest;
 
