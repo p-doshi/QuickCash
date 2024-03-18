@@ -2,8 +2,11 @@ package dal.cs.quickcash3.search;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
+import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
+import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.NEW_YORK;
+import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
 
-import android.Manifest;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
@@ -11,29 +14,24 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.data.JobPostHelper;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
-import dal.cs.quickcash3.location.LocationHelper;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
@@ -49,8 +47,36 @@ public class SearchFiltersUITests {
         );
     private final UiDevice device = UiDevice.getInstance(instrumentation);
     private final String appPackage = context.getPackageName();
+    private final int DESCRIPTION_SIZE = 20;
     private Database database;
     private MockLocationProvider locationProvider;
+
+    private @NonNull UiObject findText(@NonNull UiScrollable scrollable, @NonNull String text) throws UiObjectNotFoundException {
+        UiSelector selector = new UiSelector().text(text);
+        scrollable.scrollIntoView(selector);
+        return device.findObject(selector);
+    }
+
+    private @NonNull UiObject findSubstring(@NonNull UiScrollable scrollable, @NonNull String substring) throws UiObjectNotFoundException {
+        UiSelector selector = new UiSelector().textContains(substring);
+        scrollable.scrollIntoView(selector);
+        return device.findObject(selector);
+    }
+
+    private @NonNull UiObject findText(@NonNull String text) {
+        UiSelector selector = new UiSelector().text(text);
+        return device.findObject(selector);
+    }
+
+    private @NonNull UiObject findSubstring(@NonNull String substring) {
+        UiSelector selector = new UiSelector().textContains(substring);
+        return device.findObject(selector);
+    }
+
+    private @NonNull UiObject findResource(@NonNull String id) {
+        UiSelector selector = new UiSelector().resourceId(appPackage + ":id/" + id);
+        return device.findObject(selector);
+    }
 
     @Before
     public void setup() throws UiObjectNotFoundException {
@@ -65,79 +91,51 @@ public class SearchFiltersUITests {
         });
 
         // Navigate to the search filter.
-        UiObject searchMenuOption = device.findObject(new UiSelector().resourceId(appPackage + ":id/workerSearchPage").clickable(true));
-        searchMenuOption.click();
-        UiObject filterOption = device.findObject(new UiSelector().resourceId(appPackage + ":id/filterIcon").clickable(true));
-        filterOption.click();
-    }
-
-    private @NonNull UiObject findText(@NonNull UiScrollable scrollable, @NonNull String text) throws UiObjectNotFoundException {
-        UiSelector selector = new UiSelector().text(text);
-        scrollable.scrollIntoView(selector);
-        return device.findObject(selector);
-    }
-
-    private @NonNull UiObject findResource(@NonNull UiScrollable scrollable, @NonNull String id) throws UiObjectNotFoundException {
-        UiSelector selector = new UiSelector().resourceId(appPackage + ":id/" + id);
-        scrollable.scrollIntoView(selector);
-        return device.findObject(selector);
-    }
-
-    private @NonNull UiObject findText(@NonNull String text) {
-        UiSelector selector = new UiSelector().text(text);
-        return device.findObject(selector);
+        findResource("workerSearchPage").click();
+        findResource("filterIcon").click();
     }
 
     @Test
     public void checkIfUIExists() throws UiObjectNotFoundException {
-        UiScrollable scrollable = new UiScrollable(new UiSelector().scrollable(true));
-        Assert.assertTrue(findText(scrollable, "Salary Range").exists());
-        Assert.assertTrue(findResource(scrollable, "salaryRangeSlider").exists());
-        Assert.assertTrue(findText(scrollable, "Duration Range").exists());
-        Assert.assertTrue(findResource(scrollable, "durationRangeSlider").exists());
-        Assert.assertTrue(findText(scrollable, "Max Distance").exists());
-        Assert.assertTrue(findResource(scrollable, "maxDistanceSlider").exists());
-        Assert.assertTrue(findText(scrollable, "Apply Filters").isClickable());
-    }
-
-    private @NonNull List<AvailableJob> generateJobsAround(@NonNull LatLng location, double radius) {
-        LatLngBounds locationBounds = LocationHelper.getBoundingBox(location, radius);
-        List<AvailableJob> jobs = JobPostHelper.generateAvailable(5, locationBounds);
-        for (AvailableJob job : jobs) {
-            job.writeToDatabase(database, Assert::fail);
-        }
-        return jobs;
+        Assert.assertTrue(findText("Salary Range").exists());
+        Assert.assertTrue(findResource("salaryRangeSlider").exists());
+        Assert.assertTrue(findText("Duration Range").exists());
+        Assert.assertTrue(findResource("durationRangeSlider").exists());
+        Assert.assertTrue(findText("Max Distance").exists());
+        Assert.assertTrue(findResource("maxDistanceSlider").exists());
+        Assert.assertTrue(findText("Apply Filters").isClickable());
     }
 
     @Test
     public void successfulSearch() throws UiObjectNotFoundException {
-        LatLng location = new LatLng(0.0, 0.0);
-        List<AvailableJob> jobs = generateJobsAround(location, 50.0);
-        locationProvider.setLocation(location);
+        locationProvider.setLocation(GOOGLEPLEX);
+        generateJobPosts(database, Assert::fail);
 
-        UiScrollable filterPage = new UiScrollable(new UiSelector().scrollable(true));
-        UiObject button = findText(filterPage, "Apply Filters");
-        button.clickAndWaitForNewWindow();
+        findText("Apply Filters").click();
+
+        List<String> excludedJobTitles = Collections.singletonList(
+            "Snow Removal"
+        );
 
         UiScrollable resultsPage = new UiScrollable(new UiSelector().resourceId(appPackage + ":id/jobListRecyclerView"));
-        for (AvailableJob job : jobs) {
-            Assert.assertTrue(findText(resultsPage, job.getTitle()).exists());
-            Assert.assertTrue(findText(resultsPage, job.getDescription()).exists());
+        for (AvailableJob job : JOBS.values()) {
+            if (!excludedJobTitles.contains(job.getTitle())) {
+                Assert.assertTrue(findText(resultsPage, job.getTitle()).exists());
+                Assert.assertTrue(findSubstring(resultsPage, job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
+            }
         }
     }
 
     @Test
     public void failedSearch() throws UiObjectNotFoundException {
-        List<AvailableJob> jobs = generateJobsAround(new LatLng(0.0, 0.0), 1000.0);
-        locationProvider.setLocation(new LatLng(1.0, 1.0));
+        locationProvider.setLocation(NEW_YORK);
+        generateJobPosts(database, Assert::fail);
 
-        UiScrollable filterPage = new UiScrollable(new UiSelector().scrollable(true));
-        UiObject button = findText(filterPage, "Apply Filters");
-        button.clickAndWaitForNewWindow();
+        findText("Apply Filters").click();
 
-        for (AvailableJob job : jobs) {
+        for (AvailableJob job : JOBS.values()) {
             Assert.assertFalse(findText(job.getTitle()).exists());
-            Assert.assertFalse(findText(job.getDescription()).exists());
+            Assert.assertFalse(findSubstring(job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
         }
     }
 }
