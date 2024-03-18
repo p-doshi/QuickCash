@@ -48,6 +48,9 @@
         <activity
             android:name=".worker.WorkerPayPalActivity"
             android:exported="true"/>
+        <activity
+            android:name=".worker.WorkerPaymentConfirmationActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
