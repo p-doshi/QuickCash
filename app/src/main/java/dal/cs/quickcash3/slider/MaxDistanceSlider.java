@@ -1,16 +1,10 @@
 package dal.cs.quickcash3.slider;
 
-import android.os.Handler;
-
 import androidx.annotation.NonNull;
 
-import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MaxDistanceSlider {
+public class MaxDistanceSlider extends MyRangeSlider {
     private static final int KILOMETER = 1000;
     private static final int[] MAX_DISTANCE_VALUES = {
         100, 200, 300, 500, KILOMETER,
@@ -18,35 +12,20 @@ public class MaxDistanceSlider {
         KILOMETER * 20, KILOMETER * 30, KILOMETER * 50, KILOMETER * 100,
         KILOMETER * 200, KILOMETER * 300
     };
-    private static final int NUMBER_THUMBS = 1;
     private static final int DEFAULT_INDEX = MAX_DISTANCE_VALUES.length - 1;
-    private final RangeSlider rangeSlider;
 
     public MaxDistanceSlider(@NonNull RangeSlider rangeSlider) {
-        this.rangeSlider = rangeSlider;
-
-        rangeSlider.setValueFrom(0);
-        rangeSlider.setValueTo(MAX_DISTANCE_VALUES.length - 1);
-        rangeSlider.setStepSize(1.0f);
-
-        List<Float> startingValues = new ArrayList<>(NUMBER_THUMBS);
-        startingValues.add((float) DEFAULT_INDEX);
-        rangeSlider.setValues(startingValues);
-
-        rangeSlider.setLabelFormatter(MaxDistanceSlider::formatLabel);
-
-        rangeSlider.setLabelBehavior(LabelFormatter.LABEL_VISIBLE);
-        new Handler().postDelayed(
-            () -> rangeSlider.setLabelBehavior(LabelFormatter.LABEL_WITHIN_BOUNDS),
-            1000);
+        super(rangeSlider, MAX_DISTANCE_VALUES.length, (float) DEFAULT_INDEX);
     }
 
-    private static int mapValue(float value) {
+    @Override
+    protected int mapValue(float value) {
         int index = (int)Math.floor(value);
         return MAX_DISTANCE_VALUES[index];
     }
 
-    public static @NonNull String formatLabel(float value) {
+    @Override
+    protected @NonNull String formatLabel(float value) {
         int distance = mapValue(value);
 
         String label;
@@ -61,11 +40,6 @@ public class MaxDistanceSlider {
     }
 
     public double getMaxDistance() {
-        List<Float> values = rangeSlider.getValues();
-        if (values.size() != NUMBER_THUMBS) {
-            throw new IllegalArgumentException("Expected slider to have " + NUMBER_THUMBS + " thumbs");
-        }
-
-        return mapValue(values.get(0));
+        return getValues().get(0);
     }
 }

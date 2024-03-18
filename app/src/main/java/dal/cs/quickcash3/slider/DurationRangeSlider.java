@@ -2,57 +2,37 @@ package dal.cs.quickcash3.slider;
 
 import static dal.cs.quickcash3.util.StringHelper.getPluralEnding;
 
-import android.os.Handler;
-
 import androidx.annotation.NonNull;
 
-import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dal.cs.quickcash3.util.Range;
 
-public class DurationRangeSlider {
+public class DurationRangeSlider extends MyRangeSlider {
     private static final int DAY = 24;
     private static final int WEEK = DAY * 7;
-    private static final int[] TIME_ESTIMATE_VALUES = {
+    private static final int[] DURATION_VALUES = {
         1, 2, 4, 6, 12,          // Hours
         DAY, DAY * 2, DAY * 4,   // Days
         WEEK, WEEK * 2, WEEK * 4 // Weeks
     };
-    private static final int NUMBER_THUMBS = 2;
     private static final int DEFAULT_MIN_INDEX = 0;
-    private static final int DEFAULT_MAX_INDEX = TIME_ESTIMATE_VALUES.length - 1;
-    private final RangeSlider rangeSlider;
+    private static final int DEFAULT_MAX_INDEX = DURATION_VALUES.length - 1;
 
     public DurationRangeSlider(@NonNull RangeSlider rangeSlider) {
-        this.rangeSlider = rangeSlider;
-
-        rangeSlider.setValueFrom(0);
-        rangeSlider.setValueTo(TIME_ESTIMATE_VALUES.length - 1);
-        rangeSlider.setStepSize(1.0f);
-
-        List<Float> startingValues = new ArrayList<>(NUMBER_THUMBS);
-        startingValues.add((float) DEFAULT_MIN_INDEX);
-        startingValues.add((float) DEFAULT_MAX_INDEX);
-        rangeSlider.setValues(startingValues);
-
-        rangeSlider.setLabelFormatter(DurationRangeSlider::formatLabel);
-
-        rangeSlider.setLabelBehavior(LabelFormatter.LABEL_VISIBLE);
-        new Handler().postDelayed(
-            () -> rangeSlider.setLabelBehavior(LabelFormatter.LABEL_WITHIN_BOUNDS),
-            1000);
+        super(rangeSlider, DURATION_VALUES.length, (float) DEFAULT_MIN_INDEX, (float) DEFAULT_MAX_INDEX);
     }
 
-    private static int mapValue(float value) {
+    @Override
+    protected int mapValue(float value) {
         int index = (int)Math.floor(value);
-        return TIME_ESTIMATE_VALUES[index];
+        return DURATION_VALUES[index];
     }
 
-    public static @NonNull String formatLabel(float value) {
+    @Override
+    protected @NonNull String formatLabel(float value) {
         int time = mapValue(value);
 
         String label;
@@ -71,19 +51,17 @@ public class DurationRangeSlider {
     }
 
     public @NonNull Range<Double> getRange() {
-        List<Float> values = rangeSlider.getValues();
-        if (values.size() != NUMBER_THUMBS) {
-            throw new IllegalArgumentException("Expected slider to have " + NUMBER_THUMBS + " thumbs");
-        }
+        List<Float> values = getValues();
+        double min = values.get(0);
+        double max = values.get(1);
 
-        double min = mapValue(values.get(0));
-        double max = mapValue(values.get(1));
-        if (min == TIME_ESTIMATE_VALUES[0]) {
+        if (min == DURATION_VALUES[0]) {
             min = 0.0;
         }
-        if (max == TIME_ESTIMATE_VALUES[TIME_ESTIMATE_VALUES.length - 1]) {
+        if (max == DURATION_VALUES[DURATION_VALUES.length - 1]) {
             max = Double.POSITIVE_INFINITY;
         }
+
         return new Range<>(min, max);
     }
 }
