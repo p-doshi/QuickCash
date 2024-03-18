@@ -11,36 +11,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
-
-import static dal.cs.quickcash3.jobSearch.ExampleJobList.GOOGLEPLEX;
-import static dal.cs.quickcash3.jobSearch.ExampleJobList.JOBS;
-import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.hasItemCount;
 
 import android.Manifest;
 
-import androidx.annotation.NonNull;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.hamcrest.Matcher;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
-import dal.cs.quickcash3.database.mock.MockDatabase;
-import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobEspressoTest {

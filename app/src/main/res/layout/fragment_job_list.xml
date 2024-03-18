@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:id="@+id/jobListRecyclerView"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     tools:context=".fragments.JobListFragment"
     tools:listitem="@layout/job_item" />
