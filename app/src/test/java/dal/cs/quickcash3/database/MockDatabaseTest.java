@@ -6,11 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.Firebase;
-import com.google.firebase.database.FirebaseDatabase;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +19,6 @@ import java.util.regex.Pattern;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.test.Person;
-import dal.cs.quickcash3.util.RandomStringGenerator;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // Hard coded literals increase test code clarity.
 public class MockDatabaseTest {

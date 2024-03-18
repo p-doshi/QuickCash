@@ -2,12 +2,15 @@ package dal.cs.quickcash3.util;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.List;
 
 public final class GsonHelper {
+    public static Gson GSON = new Gson();
+
     // Utility class.
     private GsonHelper() {}
 
