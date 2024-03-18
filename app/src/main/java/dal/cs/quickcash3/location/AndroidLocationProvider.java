@@ -13,6 +13,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.Map;
@@ -30,7 +31,7 @@ public class AndroidLocationProvider implements LocationProvider {
     protected final FusedLocationProviderClient locationProviderClient;
     protected final Activity activity;
     private final long updateFrequencyMillis;
-    protected final AtomicReference<Location> lastLocation = new AtomicReference<>();
+    protected final AtomicReference<LatLng> lastLocation = new AtomicReference<>();
     private final AtomicBoolean hasLocationUpdates = new AtomicBoolean(false);
     private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
     private int nextReceiverId;
@@ -50,9 +51,10 @@ public class AndroidLocationProvider implements LocationProvider {
     }
 
     private void receiveLocation(@NonNull Location location) {
-        lastLocation.set(location);
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        lastLocation.set(latLng);
         for (LocationReceiver receiver : locationReceivers.get().values()) {
-            receiver.receiveLocation(location);
+            receiver.receiveLocation(latLng);
         }
     }
 
@@ -90,7 +92,7 @@ public class AndroidLocationProvider implements LocationProvider {
 
     @Override
     public int addLocationCallback(
-        @NonNull Consumer<Location> locationFunction,
+        @NonNull Consumer<LatLng> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
         if (isMissingPermission()) {
@@ -116,7 +118,7 @@ public class AndroidLocationProvider implements LocationProvider {
     }
 
     @Override
-    public @Nullable Location getLastLocation() {
+    public @Nullable LatLng getLastLocation() {
         if (isMissingPermission()) {
             throw new SecurityException(activity.getString(R.string.error_location_permission));
         }

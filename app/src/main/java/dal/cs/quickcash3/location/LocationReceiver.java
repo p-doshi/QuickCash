@@ -4,18 +4,20 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.function.Consumer;
 
 class LocationReceiver {
-    private final Consumer<Location> locationFunction;
+    private final Consumer<LatLng> locationFunction;
     private final Consumer<String> errorFunction;
 
-    public LocationReceiver(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction) {
+    public LocationReceiver(@NonNull Consumer<LatLng> locationFunction, @NonNull Consumer<String> errorFunction) {
         this.locationFunction = locationFunction;
         this.errorFunction = errorFunction;
     }
 
-    public void receiveLocation(@NonNull Location location) {
+    public void receiveLocation(@NonNull LatLng location) {
         locationFunction.accept(location);
     }
 

@@ -51,4 +51,21 @@ public final class LocationHelper {
         double lng = scaleNormalized(RANDOM.nextDouble(), area.southwest.longitude, area.northeast.longitude);
         return new LatLng(lat, lng);
     }
+
+    /**
+     * Calculates the distance between two geographical locations using the Haversine formula.
+     *
+     * @param location1 The first location, not null.
+     * @param location2 The second location, not null.
+     * @return The distance between location1 and location2 in meters.
+     */
+    public static double distanceBetween(@NonNull LatLng location1, @NonNull LatLng location2) {
+        double latDistance = Math.toRadians(location2.latitude - location1.latitude);
+        double lonDistance = Math.toRadians(location2.longitude - location1.longitude);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+            + Math.cos(Math.toRadians(location1.latitude)) * Math.cos(Math.toRadians(location2.latitude))
+            * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS * c;
+    }
 }

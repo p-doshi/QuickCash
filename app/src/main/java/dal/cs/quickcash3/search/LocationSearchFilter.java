@@ -5,13 +5,16 @@ import static dal.cs.quickcash3.util.StringHelper.SLASH;
 import static dal.cs.quickcash3.util.StringHelper.splitString;
 
 import android.location.Location;
+import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonElement;
 
 import java.util.List;
 
+import dal.cs.quickcash3.location.LocationHelper;
 import dal.cs.quickcash3.location.LocationProvider;
 
 public class LocationSearchFilter<T> extends SearchFilter<T> {
@@ -36,7 +39,7 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
 
     @Override
     public boolean isCurrentValid(@NonNull final JsonElement root) {
-        Location currentLocation = locationProvider.getLastLocation();
+        LatLng currentLocation = locationProvider.getLastLocation();
         if (currentLocation == null) {
             throw new NullPointerException("Could not get location from location provider");
         }
@@ -44,13 +47,8 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
         double latitude = getAt(root, latKeys).getAsDouble();
         double longitude = getAt(root, longKeys).getAsDouble();
 
-        float[] results = new float[1];
-        Location.distanceBetween(
-            currentLocation.getLatitude(), currentLocation.getLongitude(),
-            latitude, longitude,
-            results);
+        double distance = LocationHelper.distanceBetween(currentLocation, new LatLng(latitude, longitude));
 
-        double distance = results[0];
         return distance <= maxDistance;
     }
 }
