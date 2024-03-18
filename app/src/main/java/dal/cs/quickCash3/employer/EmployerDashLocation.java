@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.employer;
+package dal.cs.quickcash3.employer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import dal.cs.quickCash3.R;
-import dal.cs.quickCash3.location.AndroidLocationProvider;
+import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.location.AndroidLocationProvider;
 
 public class EmployerDashLocation extends AppCompatActivity {
 

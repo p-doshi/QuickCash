@@ -1,4 +1,4 @@
-package dal.cs.quickCash3.location;
+package dal.cs.quickcash3.location;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Location location;

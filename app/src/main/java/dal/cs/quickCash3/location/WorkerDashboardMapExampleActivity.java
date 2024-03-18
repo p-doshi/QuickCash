@@ -1,11 +1,11 @@
-package dal.cs.quickCash3.location;
+package dal.cs.quickcash3.location;
 
 import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import dal.cs.quickCash3.R;
+import dal.cs.quickcash3.R;
 
 import android.util.Pair;
 import android.widget.Toast;
