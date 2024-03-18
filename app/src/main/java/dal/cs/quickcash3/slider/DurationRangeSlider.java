@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.slider.RangeSlider;
 
+import java.util.Arrays;
 import java.util.List;
 
 import dal.cs.quickcash3.util.Range;
@@ -18,11 +19,12 @@ public class DurationRangeSlider extends MyRangeSlider {
         DAY, DAY * 2, DAY * 4,   // Days
         WEEK, WEEK * 2, WEEK * 4 // Weeks
     };
-    private static final int DEFAULT_MIN_INDEX = 0;
-    private static final int DEFAULT_MAX_INDEX = DURATION_VALUES.length - 1;
+    private static final List<Float> DEFAULT_VALUES = Arrays.asList(
+        0.0f,
+        (float)DURATION_VALUES.length - 1);
 
-    public DurationRangeSlider(@NonNull RangeSlider rangeSlider) {
-        super(rangeSlider, DURATION_VALUES.length, (float) DEFAULT_MIN_INDEX, (float) DEFAULT_MAX_INDEX);
+    public DurationRangeSlider() {
+        super(DEFAULT_VALUES, DURATION_VALUES.length);
     }
 
     @Override

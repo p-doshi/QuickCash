@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.slider.RangeSlider;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class MaxDistanceSlider extends MyRangeSlider {
     private static final int KILOMETER = 1000;
     private static final int[] MAX_DISTANCE_VALUES = {
@@ -12,10 +16,11 @@ public class MaxDistanceSlider extends MyRangeSlider {
         KILOMETER * 20, KILOMETER * 30, KILOMETER * 50, KILOMETER * 100,
         KILOMETER * 200, KILOMETER * 300
     };
-    private static final int DEFAULT_INDEX = MAX_DISTANCE_VALUES.length - 1;
+    private static final List<Float> DEFAULT_VALUES = Collections.singletonList(
+        (float)MAX_DISTANCE_VALUES.length - 1);
 
-    public MaxDistanceSlider(@NonNull RangeSlider rangeSlider) {
-        super(rangeSlider, MAX_DISTANCE_VALUES.length, (float) DEFAULT_INDEX);
+    public MaxDistanceSlider() {
+        super(DEFAULT_VALUES, MAX_DISTANCE_VALUES.length);
     }
 
     @Override

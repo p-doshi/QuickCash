@@ -11,26 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MyRangeSlider {
-    private final RangeSlider rangeSlider;
+    private final List<Float> startingValues;
+    private final int numSteps;
     private final int numThumbs;
+    private RangeSlider rangeSlider;
 
-    public MyRangeSlider(
-        @NonNull RangeSlider rangeSlider,
-        int numSteps,
-        float... startingValues)
-    {
+    public MyRangeSlider(@NonNull List<Float> startingValues, int numSteps) {
+        this.startingValues = startingValues;
+        this.numSteps = numSteps;
+        numThumbs = startingValues.size();
+    }
+
+    public void setRangeSlider(@NonNull RangeSlider rangeSlider) {
         this.rangeSlider = rangeSlider;
-        numThumbs = startingValues.length;
 
         rangeSlider.setValueFrom(0);
         rangeSlider.setValueTo(numSteps - 1);
         rangeSlider.setStepSize(1.0f);
 
-        List<Float> values = new ArrayList<>(numThumbs);
-        for (float value : startingValues) {
-            values.add(value);
-        }
-        rangeSlider.setValues(values);
+        rangeSlider.setValues(startingValues);
 
         rangeSlider.setLabelFormatter(this::formatLabel);
 
@@ -45,12 +44,19 @@ public abstract class MyRangeSlider {
     protected abstract int mapValue(float value);
 
     protected @NonNull List<Float> getValues() {
-        List<Float> values = rangeSlider.getValues();
-        if (values.size() != numThumbs) {
-            throw new IllegalArgumentException("Expected slider to have " + numThumbs + " thumbs");
+        List<Float> values;
+
+        if (rangeSlider == null) {
+            values = new ArrayList<>(startingValues);
+        }
+        else {
+            values = rangeSlider.getValues();
+            if (values.size() != numThumbs) {
+                throw new IllegalArgumentException("Expected slider to have " + numThumbs + " thumbs");
+            }
         }
 
-        values.replaceAll(value -> (float) mapValue(value));
+        values.replaceAll(value -> (float)mapValue(value));
         return values;
     }
 }

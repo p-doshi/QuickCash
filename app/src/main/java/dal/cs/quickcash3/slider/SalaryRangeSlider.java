@@ -1,9 +1,11 @@
 package dal.cs.quickcash3.slider;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.material.slider.RangeSlider;
 
+import java.util.Arrays;
 import java.util.List;
 
 import dal.cs.quickcash3.util.Range;
@@ -14,11 +16,12 @@ public class SalaryRangeSlider extends MyRangeSlider {
          10,  20,  30,  40,  50,  60,  70,  80,  90,
         100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
     };
-    private static final int DEFAULT_MIN_INDEX = 0;
-    private static final int DEFAULT_MAX_INDEX = PAY_RANGE_VALUES.length - 1;
+    private static final List<Float> DEFAULT_VALUES = Arrays.asList(
+        0.0f,
+        (float)PAY_RANGE_VALUES.length - 1);
 
-    public SalaryRangeSlider(@NonNull RangeSlider rangeSlider) {
-        super(rangeSlider, PAY_RANGE_VALUES.length, (float) DEFAULT_MIN_INDEX, (float) DEFAULT_MAX_INDEX);
+    public SalaryRangeSlider() {
+        super(DEFAULT_VALUES, PAY_RANGE_VALUES.length);
     }
 
     @Override

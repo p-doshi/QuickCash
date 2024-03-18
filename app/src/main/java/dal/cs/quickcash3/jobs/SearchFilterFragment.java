@@ -29,6 +29,9 @@ public class SearchFilterFragment extends Fragment {
     private final LocationSearchFilter<AvailableJob> locationFilter;
     private final NumericRangeSearchFilter<AvailableJob> salaryRangeFilter;
     private final NumericRangeSearchFilter<AvailableJob> durationFilter;
+    private final SalaryRangeSlider salarySlider = new SalaryRangeSlider();
+    private final DurationRangeSlider durationRangeSlider = new DurationRangeSlider();
+    private final MaxDistanceSlider maxDistanceSlider = new MaxDistanceSlider();
 
     public SearchFilterFragment(
         @NonNull LocationProvider locationProvider,
@@ -40,6 +43,10 @@ public class SearchFilterFragment extends Fragment {
         locationFilter = new LocationSearchFilter<>("latitude", "longitude", locationProvider);
         salaryRangeFilter = new NumericRangeSearchFilter<>("salary");
         durationFilter = new NumericRangeSearchFilter<>("duration");
+
+        locationFilter.setMaxDistance(maxDistanceSlider.getMaxDistance());
+        salaryRangeFilter.setRange(salarySlider.getRange());
+        durationFilter.setRange(durationRangeSlider.getRange());
 
         locationFilter.addNext(salaryRangeFilter).addNext(durationFilter);
         combinedFilter = locationFilter;
@@ -57,12 +64,9 @@ public class SearchFilterFragment extends Fragment {
     {
         View searchView = inflater.inflate(R.layout.fragment_search_filter, container, false);
 
-        SalaryRangeSlider salarySlider =
-            new SalaryRangeSlider(searchView.findViewById(R.id.salaryRangeSlider));
-        DurationRangeSlider durationRangeSlider =
-            new DurationRangeSlider(searchView.findViewById(R.id.durationRangeSlider));
-        MaxDistanceSlider maxDistanceSlider =
-            new MaxDistanceSlider(searchView.findViewById(R.id.maxDistanceSlider));
+        salarySlider.setRangeSlider(searchView.findViewById(R.id.salaryRangeSlider));
+        durationRangeSlider.setRangeSlider(searchView.findViewById(R.id.durationRangeSlider));
+        maxDistanceSlider.setRangeSlider(searchView.findViewById(R.id.maxDistanceSlider));
 
         Button searchButton = searchView.findViewById(R.id.applyButton);
         searchButton.setOnClickListener(view -> {
