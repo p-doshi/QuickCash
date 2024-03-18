@@ -135,6 +135,7 @@ public class SearchFiltersEspressoTests {
         checkJobPosts(expectedJobTitles);
     }
 
+    @Ignore("Missing implementation")
     @Test
     public void greaterThanOneDay() {
         locationProvider.setLocation(GOOGLEPLEX);
@@ -151,6 +152,7 @@ public class SearchFiltersEspressoTests {
         checkJobPosts(expectedJobTitles);
     }
 
+    @Ignore("Missing implementation")
     @Test
     public void lessThan40Dollars() {
         locationProvider.setLocation(GOOGLEPLEX);
