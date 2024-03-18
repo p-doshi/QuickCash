@@ -4,13 +4,13 @@ import static dal.cs.quickcash3.util.GsonHelper.getAt;
 import static dal.cs.quickcash3.util.StringHelper.SLASH;
 import static dal.cs.quickcash3.util.StringHelper.splitString;
 
-import android.util.Range;
-
 import androidx.annotation.NonNull;
 
 import com.google.gson.JsonElement;
 
 import java.util.List;
+
+import dal.cs.quickcash3.util.Range;
 
 public class NumericRangeSearchFilter<T> extends SearchFilter<T> {
     private final List<String> keys;

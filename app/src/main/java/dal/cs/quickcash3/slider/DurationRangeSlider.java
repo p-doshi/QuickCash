@@ -3,7 +3,6 @@ package dal.cs.quickcash3.slider;
 import static dal.cs.quickcash3.util.StringHelper.getPluralEnding;
 
 import android.os.Handler;
-import android.util.Range;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +11,8 @@ import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import dal.cs.quickcash3.util.Range;
 
 public class DurationRangeSlider {
     private static final int DAY = 24;

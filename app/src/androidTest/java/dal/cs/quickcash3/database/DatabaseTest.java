@@ -3,7 +3,6 @@ package dal.cs.quickcash3.database;
 import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
 
 import android.content.Context;
-import android.util.Range;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
@@ -36,6 +35,7 @@ import dal.cs.quickcash3.search.NumericRangeSearchFilter;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.test.Person;
 import dal.cs.quickcash3.util.RandomStringGenerator;
+import dal.cs.quickcash3.util.Range;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)

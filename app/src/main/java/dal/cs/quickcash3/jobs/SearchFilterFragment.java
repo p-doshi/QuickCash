@@ -2,7 +2,7 @@ package dal.cs.quickcash3.jobs;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Range;
+import dal.cs.quickcash3.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

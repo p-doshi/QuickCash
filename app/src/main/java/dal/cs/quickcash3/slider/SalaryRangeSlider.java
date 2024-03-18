@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.slider;
 
 import android.os.Handler;
-import android.util.Range;
 
 import androidx.annotation.NonNull;
 
@@ -10,6 +9,8 @@ import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import dal.cs.quickcash3.util.Range;
 
 public class SalaryRangeSlider {
     private static final int[] PAY_RANGE_VALUES = {
