@@ -75,6 +75,17 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
     }
 
     @Override
+    public @NonNull String toString() {
+        return super.toString() +
+            "\nstartDate='" + startDate + '\'' +
+            "\nduration=" + duration +
+            "\nurgency='" + urgency + '\'' +
+            "\npostTime='" + postTime + '\'' +
+            "\napplicants=" + applicants +
+            "\nblackList=" + blackList;
+    }
+
+    @Override
     public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
         writeToDatabase(database, () -> {}, errorFunction);
     }

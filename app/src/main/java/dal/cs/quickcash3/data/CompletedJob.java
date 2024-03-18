@@ -41,6 +41,14 @@ public class CompletedJob extends JobPost implements Copyable<CompletedJob> {
     }
 
     @Override
+    public @NonNull String toString() {
+        return super.toString() +
+            "\nworker='" + worker + '\'' +
+            "\ncompletionDate='" + completionDate + '\'' +
+            "\npayId='" + payId + '\'';
+    }
+
+    @Override
     public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
         writeToDatabase(database, () -> {}, errorFunction);
     }

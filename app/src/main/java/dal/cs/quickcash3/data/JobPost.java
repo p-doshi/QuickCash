@@ -64,6 +64,17 @@ public abstract class JobPost implements DatabaseObject {
         this.salary = salary;
     }
 
+    @Override
+    public @NonNull String toString() {
+        return
+            "\ntitle='" + title + '\'' +
+            "\nemployer='" + employer + '\'' +
+            "\ndescription='" + description + '\'' +
+            "\nlatitude=" + latitude +
+            "\nlongitude=" + longitude +
+            "\nsalary=" + salary;
+    }
+
     protected void copyFrom(@NonNull JobPost other) {
         title = other.title;
         employer = other.employer;
