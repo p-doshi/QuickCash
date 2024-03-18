@@ -59,17 +59,17 @@ public class PostAvailableJobHelper {
     private double durationToDouble(String duration) {
         double doubleDuration = 0;
 
-        if (duration.equals("Under 8 Hours")) {
+        if ("Under 8 Hours".equals(duration)) {
             doubleDuration = 8;
-        } else if (duration.equals("1 – 3 Days")) {
+        } else if ("1 – 3 Days".equals(duration)) {
             doubleDuration = 24;
-        } else if (duration.equals("4 – 7 Days")) {
+        } else if ("4 – 7 Days".equals(duration)) {
             doubleDuration = 56;
-        } else if (duration.equals("1 – 2 Weeks")) {
+        } else if ("1 – 2 Weeks".equals(duration)) {
             doubleDuration = 112;
-        } else if (duration.equals("2 – 4 Weeks")) {
+        } else if ("2 – 4 Weeks".equals(duration)) {
             doubleDuration = 240;
-        } else if (duration.equals("4+ Weeks")) {
+        } else if ("4+ Weeks".equals(duration)) {
             doubleDuration = 336;
         }
 

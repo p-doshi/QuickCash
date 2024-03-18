@@ -33,7 +33,7 @@ public class PostJobForm extends Activity {
             String errorMessage = checkAllFields();
             TextView status = findViewById(R.id.jobSubmitStatus);
 
-            if(!errorMessage.equals("")){
+            if(!"".equals(errorMessage)){
                 // handle error message
                 status.setText(errorMessage);
             }
