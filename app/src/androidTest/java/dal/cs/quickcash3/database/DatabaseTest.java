@@ -1,498 +1,347 @@
 package dal.cs.quickcash3.database;
 
 import android.content.Context;
+import android.util.Range;
 
+import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 
-import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.MyFirebaseDatabase;
-import dal.cs.quickcash3.database.MyFirebaseDatabaseImpl;
+import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.JobPostHelper;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.search.NumericRangeSearchFilter;
+import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.test.Person;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
-    private static final String RESOURCE_NAME = "databaseResource";
-    private static final String BASE_TEST_DIR = "test/DatabaseTest/";
-    private static final String PUBLIC_DIR = "public/DatabaseTest";
-    private static final String TEST_TEXT = "Hello";
-    private static final String ALTERNATIVE_TEST_TEXT = "Bye";
-    private static final String RANDOM_STRING = "aksdjdkjahsdiou123oiu124kjnoih1";
-    private static final int RANDOM_LENGTH = 10;
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
-    private final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    private final Database database = new MyFirebaseDatabase();
+    private CountingIdlingResource resource;
+    private String testDir;
+
+    private @NonNull String getNewTestDir() {
+        return "test/DatabaseTest/" + RandomStringGenerator.generate(10) + '/';
+    }
 
     @Before
     public void setup() {
-        // Make sure we are starting in a signed out state.
-        FirebaseAuth.getInstance().signOut();
+        testDir = getNewTestDir();
+        resource = new CountingIdlingResource("databaseResource");
+        registry.register(resource);
     }
 
-    @Test
-    public void writeDatabaseFailure() {
-        Database database = new MyFirebaseDatabaseImpl(context);
-        AtomicBoolean passed = new AtomicBoolean(false);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.write(testDir, TEST_TEXT,
-            () -> {
-                passed.set(true);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertFalse(passed.get());
-        Assert.assertEquals("Firebase Database error: Permission denied", error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void readDatabaseFailure() {
-        Database database = new MyFirebaseDatabaseImpl(context);
-
-        // We need a value that shows that we have not received anything.
-        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.read(testDir, String.class,
-            newValue -> {
-                value.set(newValue);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertEquals(RANDOM_STRING, value.get());
-        Assert.assertEquals("Permission denied", error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void writeSecureDatabaseSuccess() {
-        Database database = new MyFirebaseDatabase(context);
-        AtomicBoolean passed = new AtomicBoolean(false);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.write(testDir, TEST_TEXT,
-            () -> {
-                passed.set(true);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertTrue(passed.get());
-        Assert.assertNull(error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void readSecureDatabaseSuccess() {
-        Database database = new MyFirebaseDatabase(context);
-
-        // We need a value that shows that we have not received anything.
-        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.read(testDir, String.class,
-            newValue -> {
-                value.set(newValue);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        // We cannot guarantee what will be read from the database.
-        // We just know we will receive _something_ or null.
-        Assert.assertNotEquals(RANDOM_STRING, value.get());
-        Assert.assertNull(error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void writeReadSecureDatabaseSuccess() {
-        Database database = new MyFirebaseDatabase(context);
-        AtomicReference<String> value = new AtomicReference<>(null);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.write(
-            testDir,
-            TEST_TEXT,
-            () -> database.read(testDir, String.class,
-                newValue -> {
-                    value.set(newValue);
-                    resource.decrement();
-                },
-                newError -> {
-                    error.set(newError);
-                    resource.decrement();
-                }),
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertEquals(TEST_TEXT, value.get());
-        Assert.assertNull(error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void writeSecureAuthorizedDatabaseFailure() {
-        Database database = new MyFirebaseDatabase(context);
-        AtomicBoolean passed = new AtomicBoolean(false);
-        AtomicReference<String> error = new AtomicReference<>(null);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.write(PUBLIC_DIR, TEST_TEXT,
-            () -> {
-                passed.set(true);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertFalse(passed.get());
-        Assert.assertEquals("Firebase Database error: Permission denied", error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void readSecureAuthorizedDatabaseFailure() {
-        Database database = new MyFirebaseDatabase(context);
-
-        // We need a value that shows that we have not received anything.
-        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
-        AtomicReference<String> error = new AtomicReference<>(null);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        database.read(PUBLIC_DIR, String.class,
-            newValue -> {
-                value.set(newValue);
-                resource.decrement();
-            },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertEquals(RANDOM_STRING, value.get());
-        Assert.assertEquals("Permission denied", error.get());
-
-        registry.unregister(resource);
-    }
-
-    @Test
-    public void doubleWriteRead() {
-        Database database = new MyFirebaseDatabase(context);
-        AtomicReference<String> value = new AtomicReference<>(null);
-        AtomicReference<String> error = new AtomicReference<>(null);
-
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
-        resource.increment();
-
-        String dir1 = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
-        String dir2 = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
-
-        database.write(
-            dir1,
-            TEST_TEXT,
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // This write should not overwrite the first one.
-        database.write(
-            dir2,
-            ALTERNATIVE_TEST_TEXT,
-            () -> database.read(dir1, String.class,
-                newValue -> {
-                    value.set(newValue);
-                    resource.decrement();
-                },
-                newError -> {
-                    error.set(newError);
-                    resource.decrement();
-                }),
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        // Espresso will wait until our idle criterion is met.
-        Espresso.onIdle();
-
-        Assert.assertEquals(TEST_TEXT, value.get());
-        Assert.assertNull(error.get());
-
+    @After
+    public void teardown() {
         registry.unregister(resource);
     }
 
     @Test
     public void writeReadWrite() {
-        Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
         resource.increment();
 
-        database.write(
-            testDir,
-            TEST_TEXT,
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
+        database.write(testDir, "Hello", Assert::fail);
 
-        database.read(testDir, String.class,
+        database.read(
+            testDir,
+            String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
             },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
+            Assert::fail);
 
-        database.write(
-            testDir,
-            ALTERNATIVE_TEST_TEXT,
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
+        database.write(testDir, "Bye", Assert::fail);
 
-        // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
-        Assert.assertEquals(TEST_TEXT, value.get());
-        Assert.assertNull(error.get());
+        Assert.assertEquals("Hello", value.get());
+    }
 
-        registry.unregister(resource);
+    @Ignore("Code to create some real jobs")
+    @Test
+    public void createJobs() {
+        final int numJobs = 10;
+        LatLng southeast = new LatLng(37.322998, -122.032181);
+        LatLng northwest = new LatLng(37.354107, -121.955238);
+        LatLngBounds area = new LatLngBounds(southeast, northwest);
+        List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
+        Assert.assertEquals(numJobs, jobs.size());
+
+        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
+
+        for (AvailableJob job : jobs) {
+            resource.increment();
+            job.writeToDatabase(database, resource::decrement, Assert::fail);
+        }
+
+        Espresso.onIdle();
+    }
+
+    @Test
+    public void doubleWriteRead() {
+        AtomicReference<String> value = new AtomicReference<>(null);
+
+        resource.increment();
+
+        String testDir2 = getNewTestDir();
+
+        database.write(testDir, "Hello", Assert::fail);
+
+        database.write(
+            testDir2,
+            "Bye",
+            () -> database.read(
+                testDir,
+                String.class,
+                newValue -> {
+                    value.set(newValue);
+                    resource.decrement();
+                },
+                Assert::fail),
+            Assert::fail);
+
+        Espresso.onIdle();
+
+        Assert.assertEquals("Hello", value.get());
     }
 
     @Test
     public void doubleWriteListen() {
-        Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
         resource.increment();
         resource.increment();
 
-        database.write(
+        database.write(testDir, "Bye", Assert::fail);
+
+        int listenerId = database.addListener(
             testDir,
-            ALTERNATIVE_TEST_TEXT,
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
-
-        int listenerId = database.addListener(testDir, String.class,
+            String.class,
             newValue -> {
                 value.set(newValue);
                 resource.decrement();
             },
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
+            Assert::fail);
 
-        database.write(
-            testDir,
-            TEST_TEXT,
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
+        database.write(testDir, "Hello", Assert::fail);
 
-        // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals(TEST_TEXT, value.get());
-        Assert.assertNull(error.get());
-
-        registry.unregister(resource);
+        Assert.assertEquals("Hello", value.get());
     }
 
     @Test
     public void writeDelete() {
-        Database database = new MyFirebaseDatabase(context);
         AtomicBoolean passed = new AtomicBoolean(false);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
         resource.increment();
 
         database.write(
             testDir,
-            TEST_TEXT,
-            () -> database.delete(testDir,
+            "Hello",
+            () -> database.delete(
+                testDir,
                 () -> {
                     passed.set(true);
                     resource.decrement();
                 },
-                newError -> {
-                    error.set(newError);
-                    resource.decrement();
-                }),
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
+                Assert::fail),
+            Assert::fail);
 
-        // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
         Assert.assertTrue(passed.get());
-        Assert.assertNull(error.get());
-
-        registry.unregister(resource);
     }
 
     @Test
     public void writeDeleteRead() {
-        Database database = new MyFirebaseDatabase(context);
         AtomicReference<String> value = new AtomicReference<>(null);
-        AtomicReference<String> error = new AtomicReference<>(null);
-        String testDir = BASE_TEST_DIR + RandomStringGenerator.generate(RANDOM_LENGTH);
 
-        // Create and register the Idle Resource.
-        CountingIdlingResource resource = new CountingIdlingResource(RESOURCE_NAME);
-        registry.register(resource);
         resource.increment();
 
-        database.write(testDir, TEST_TEXT,
-            () -> database.delete(testDir,
-                () -> database.read(testDir, String.class,
+        database.write(
+            testDir,
+            "Hello",
+            () -> database.delete(
+                testDir,
+                () -> database.read(
+                    testDir,
+                    String.class,
                     newValue -> {
                         value.set(newValue);
                         resource.decrement();
                     },
-                    newError -> {
-                        error.set(newError);
-                        resource.decrement();
-                    }),
-                newError -> {
-                    error.set(newError);
-                    resource.decrement();
-                }),
-            newError -> {
-                error.set(newError);
-                resource.decrement();
-            });
+                    Assert::fail),
+                Assert::fail),
+            Assert::fail);
 
-        // Espresso will wait until our idle criterion is met.
         Espresso.onIdle();
 
         Assert.assertNull(value.get());
-        Assert.assertNull(error.get());
+    }
 
-        registry.unregister(resource);
+    private void writePeople() {
+        Person[] people = {
+            new Person("aaa", "aaa", 1),
+            new Person("aaa", "aab", 2),
+            new Person("aab", "aaa", 3),
+            new Person("aab", "aab", 4)
+        };
+
+        for (Person person : people) {
+            database.write(testDir + RandomStringGenerator.generate(10), person, Assert::fail);
+        }
+    }
+
+    @Test
+    public void searchOneFilter() {
+        resource.increment();
+        resource.increment();
+
+        writePeople();
+
+        List<Person> people = new ArrayList<>();
+
+        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
+        filter.setPattern(Pattern.compile("aaa"));
+
+        int listenerId = database.addSearchListener(
+            testDir,
+            Person.class,
+            filter,
+            (key, person) -> {
+                people.add(person);
+                resource.decrement();
+            },
+            Assert::fail);
+
+        Espresso.onIdle();
+
+        database.removeListener(listenerId);
+
+        Assert.assertEquals(2, people.size());
+        for (Person person : people) {
+            Assert.assertEquals("aaa", person.getFirstName());
+        }
+    }
+
+    @Test
+    public void searchTwoFilters() {
+        resource.increment();
+        resource.increment();
+
+        writePeople();
+
+        List<Person> people = new ArrayList<>();
+
+        RegexSearchFilter<Person> filter1 = new RegexSearchFilter<>("firstName");
+        filter1.setPattern(Pattern.compile(".*a.*"));
+        NumericRangeSearchFilter<Person> filter2 = new NumericRangeSearchFilter<>("age");
+        filter2.setRange(new Range<>(1.0, 2.0));
+        filter1.addNext(filter2);
+
+        int listenerId = database.addSearchListener(
+            testDir,
+            Person.class,
+            filter1,
+            (key, person) -> {
+                people.add(person);
+                resource.decrement();
+            },
+            Assert::fail);
+
+        Espresso.onIdle();
+
+        database.removeListener(listenerId);
+
+        Assert.assertEquals(2, people.size());
+        for (Person person : people) {
+            Assert.assertEquals("aaa", person.getFirstName());
+            Assert.assertTrue(person.getAge() >= 1.0);
+            Assert.assertTrue(person.getAge() <= 2.0);
+        }
+    }
+
+    @Test
+    public void searchForOneThenRead() {
+        resource.increment();
+
+        writePeople();
+
+        List<String> keys = new ArrayList<>();
+        List<Person> people = new ArrayList<>();
+
+        RegexSearchFilter<Person> filter1 = new RegexSearchFilter<>("firstName");
+        filter1.setPattern(Pattern.compile("aaa"));
+        RegexSearchFilter<Person> filter2 = new RegexSearchFilter<>("lastName");
+        filter2.setPattern(Pattern.compile("aaa"));
+        filter1.addNext(filter2);
+
+        int listenerId = database.addSearchListener(
+            testDir,
+            Person.class,
+            filter1,
+            (key, person) -> {
+                keys.add(key);
+                people.add(person);
+                resource.decrement();
+            },
+            Assert::fail);
+
+        Espresso.onIdle();
+
+        database.removeListener(listenerId);
+
+        Assert.assertEquals(1, people.size());
+        Assert.assertEquals(1, keys.size());
+
+        String key = keys.get(0);
+        Person expectedPerson = people.get(0);
+        Assert.assertNotNull(key);
+        Assert.assertNotNull(expectedPerson);
+
+        resource.increment();
+
+        AtomicReference<Person> actualPerson = new AtomicReference<>();
+        database.read(
+            testDir + key,
+            Person.class,
+            person -> {
+                actualPerson.set(person);
+                resource.decrement();
+            },
+            Assert::fail);
+
+        Espresso.onIdle();
+
+        Assert.assertEquals(expectedPerson, actualPerson.get());
     }
 }

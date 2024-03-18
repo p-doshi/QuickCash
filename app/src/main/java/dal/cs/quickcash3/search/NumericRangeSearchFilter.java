@@ -1,0 +1,37 @@
+package dal.cs.quickcash3.search;
+
+import static dal.cs.quickcash3.util.GsonHelper.getAt;
+import static dal.cs.quickcash3.util.StringHelper.SLASH;
+import static dal.cs.quickcash3.util.StringHelper.splitString;
+
+import android.util.Range;
+
+import androidx.annotation.NonNull;
+
+import com.google.gson.JsonElement;
+
+import java.util.List;
+
+public class NumericRangeSearchFilter<T> extends SearchFilter<T> {
+    private final List<String> keys;
+    private Range<Double> range;
+
+    public NumericRangeSearchFilter(@NonNull String key) {
+        super();
+        keys = splitString(key, SLASH);
+    }
+
+    public void setRange(@NonNull Range<Double> range) {
+        this.range = range;
+    }
+
+    @Override
+    public boolean isCurrentValid(@NonNull final JsonElement root) {
+        if (range == null) {
+            throw new NullPointerException("Cannot apply " + this + " without a range");
+        }
+
+        double number = getAt(root, keys).getAsNumber().doubleValue();
+        return range.contains(number);
+    }
+}
