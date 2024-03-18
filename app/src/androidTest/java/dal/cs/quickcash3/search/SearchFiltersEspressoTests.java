@@ -40,7 +40,10 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
-@SuppressWarnings("PMD.ExcessiveImports") // No.
+@SuppressWarnings({
+    "PMD.ExcessiveImports", // No.
+    "PMD.AvoidDuplicateLiterals" // This will be deleted eventually.
+})
 public class SearchFiltersEspressoTests {
     private final Instrumentation instrumentation = getInstrumentation();
     private final Context context = instrumentation.getTargetContext();

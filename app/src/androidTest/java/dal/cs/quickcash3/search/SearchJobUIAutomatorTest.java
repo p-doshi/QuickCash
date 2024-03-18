@@ -10,7 +10,6 @@ import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,9 +21,6 @@ import org.junit.Test;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobUIAutomatorTest {
-
-    private static final String FILTER_TEXT = "Pay Range";
-
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
             new ActivityScenarioRule<>(WorkerDashboard.class);
@@ -39,7 +35,6 @@ public class SearchJobUIAutomatorTest {
         FirebaseAuth.getInstance().signOut();
     }
 
-
     @Test
     public void checkIfLandingPageIsVisible() throws UiObjectNotFoundException {
         UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
@@ -49,7 +44,6 @@ public class SearchJobUIAutomatorTest {
         UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
         assertTrue(filterIcon.exists());
     }
-
 
     @Test
     public void checkIfMovedToSearchFilter() throws UiObjectNotFoundException {

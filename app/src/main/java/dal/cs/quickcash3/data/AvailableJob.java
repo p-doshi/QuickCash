@@ -21,11 +21,6 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
     private List<String> applicants;
     private List<String> blackList;
 
-    // Empty constructor needed for Firebase
-    public AvailableJob() { 
-        super();
-    }
-
     public @Nullable String getStartDate() {
         return startDate;
     }
