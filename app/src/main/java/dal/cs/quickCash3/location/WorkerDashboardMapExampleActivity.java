@@ -1,20 +1,24 @@
 package dal.cs.quickcash3.location;
 
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
 import android.util.Pair;
 import android.widget.Toast;
+import android.Manifest;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-public class WorkerDashboardMapExampleActivity extends FragmentActivity {
+public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivity {
     LocationProvider locationProvider;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,23 +28,30 @@ public class WorkerDashboardMapExampleActivity extends FragmentActivity {
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
         // Upon loading the worker page it should immediately request location permissions and get current location
-        locationProvider = new AndroidLocationProvider(this, this);
-        locationProvider.setupLocationPermsSettings();
-        locationProvider.locationPing();
+        locationProvider = new AndroidLocationProvider(this, 5000);
+        // Need to request location here
+        locationProvider.fetchLocation(
+                location -> {
+                    // Nothing should happen
+                },
+                error -> {
+                    // If location was not granted that's fine
+                }
+        );
 
         // Sets up a detector to check when navigation bar items clicked
         workerNavView.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManger = getSupportFragmentManager();
             Fragment currentFragment = fragmentManger.findFragmentById(R.id.mapContainer);
 
-            if (item.getItemId() == R.id.workerMapPage && locationProvider.checkLocationPermissionsEnabled()) {
+            if (item.getItemId() == R.id.workerMapPage && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 // If they selected map with location enabled display the map fragment
                 MapFragment fragment = new MapFragment();
                 // For the sake of consistent tests (We don't know where the CI is) we'll use a static location while testing
                 assignTestValues(fragment);
                 fragmentManger.beginTransaction().replace(R.id.mapContainer, fragment).commit();
             }
-            else if (item.getItemId() == R.id.workerMapPage && !locationProvider.checkLocationPermissionsEnabled()) {
+            else if (item.getItemId() == R.id.workerMapPage && !(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
                 // If they selected the map WITHOUT location permissions, show them a toast that it won't work
                 Toast.makeText(WorkerDashboardMapExampleActivity.this,
                         "Location Permissions must be enabled to use Map", Toast.LENGTH_LONG).show();

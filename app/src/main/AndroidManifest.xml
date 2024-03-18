@@ -16,10 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s">
-        <activity
-            android:name=".employer.EmployerDashLocation"
-            android:exported="true" />
-
         <service
             android:name=".location.AndroidLocationProvider"
             android:foregroundServiceType="location" />

@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.workerAndroidTests;
+package dal.cs.quickcash3.worker;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
