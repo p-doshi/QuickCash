@@ -1,7 +1,5 @@
 package dal.cs.quickcash3.location;
 
-import android.location.Location;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;

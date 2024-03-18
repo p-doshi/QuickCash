@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.annotations.Nullable;
 
 import dal.cs.quickcash3.database.DatabaseObject;
-import dal.cs.quickcash3.util.Copyable;
 
 public abstract class JobPost implements DatabaseObject {
     protected static final int HASH_SIZE = 20;

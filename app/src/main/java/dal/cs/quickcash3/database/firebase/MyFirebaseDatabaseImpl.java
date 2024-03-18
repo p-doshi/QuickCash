@@ -1,7 +1,5 @@
 package dal.cs.quickcash3.database.firebase;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.ChildEventListener;
@@ -16,7 +14,6 @@ import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.search.SearchFilter;
 

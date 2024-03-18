@@ -4,9 +4,6 @@ import static dal.cs.quickcash3.util.GsonHelper.getAt;
 import static dal.cs.quickcash3.util.StringHelper.SLASH;
 import static dal.cs.quickcash3.util.StringHelper.splitString;
 
-import android.location.Location;
-import android.location.LocationManager;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -28,6 +25,7 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
         @NonNull String longKey,
         @NonNull LocationProvider locationProvider)
     {
+        super();
         latKeys = splitString(latKey, SLASH);
         longKeys = splitString(longKey, SLASH);
         this.locationProvider = locationProvider;
@@ -38,7 +36,7 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
     }
 
     @Override
-    public boolean isCurrentValid(@NonNull final JsonElement root) {
+    public boolean isCurrentValid(@NonNull JsonElement root) {
         LatLng currentLocation = locationProvider.getLastLocation();
         if (currentLocation == null) {
             throw new NullPointerException("Could not get location from location provider");

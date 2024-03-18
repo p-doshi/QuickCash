@@ -26,7 +26,7 @@ public class NumericRangeSearchFilter<T> extends SearchFilter<T> {
     }
 
     @Override
-    public boolean isCurrentValid(@NonNull final JsonElement root) {
+    public boolean isCurrentValid(@NonNull JsonElement root) {
         double number = getAt(root, keys).getAsNumber().doubleValue();
         return range.contains(number);
     }

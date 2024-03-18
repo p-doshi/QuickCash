@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 public final class GsonHelper {
-    public static Gson GSON = new Gson();
+    public static final Gson GSON = new Gson();
 
     // Utility class.
     private GsonHelper() {}

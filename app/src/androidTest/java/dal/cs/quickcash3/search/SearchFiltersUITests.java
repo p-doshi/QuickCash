@@ -36,6 +36,7 @@ import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchFiltersUITests {
+    private static final int DESCRIPTION_SIZE = 20;
     private final Instrumentation instrumentation = getInstrumentation();
     private final Context context = instrumentation.getTargetContext();
     @Rule
@@ -47,7 +48,6 @@ public class SearchFiltersUITests {
         );
     private final UiDevice device = UiDevice.getInstance(instrumentation);
     private final String appPackage = context.getPackageName();
-    private final int DESCRIPTION_SIZE = 20;
     private Database database;
     private MockLocationProvider locationProvider;
 

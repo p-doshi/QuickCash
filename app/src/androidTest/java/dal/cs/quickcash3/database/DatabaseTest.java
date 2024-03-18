@@ -2,18 +2,14 @@ package dal.cs.quickcash3.database;
 
 import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
 import org.junit.Assert;

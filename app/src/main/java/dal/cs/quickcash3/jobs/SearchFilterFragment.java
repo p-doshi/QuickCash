@@ -34,6 +34,7 @@ public class SearchFilterFragment extends Fragment {
         @NonNull LocationProvider locationProvider,
         @NonNull Runnable showResultsFunction)
     {
+        super();
         this.showResultsFunction = showResultsFunction;
 
         locationFilter = new LocationSearchFilter<>("latitude", "longitude", locationProvider);

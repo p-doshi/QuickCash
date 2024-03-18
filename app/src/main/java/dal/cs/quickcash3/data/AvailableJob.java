@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.database.annotations.Nullable;
 

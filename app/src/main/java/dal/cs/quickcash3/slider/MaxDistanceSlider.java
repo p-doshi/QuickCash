@@ -1,8 +1,6 @@
 package dal.cs.quickcash3.slider;
 
-import android.app.Activity;
 import android.os.Handler;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 

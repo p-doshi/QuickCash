@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.database;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

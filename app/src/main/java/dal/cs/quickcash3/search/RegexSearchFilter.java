@@ -25,7 +25,7 @@ public class RegexSearchFilter<T> extends SearchFilter<T> {
     }
 
     @Override
-    public boolean isCurrentValid(@NonNull final JsonElement root) {
+    public boolean isCurrentValid(@NonNull JsonElement root) {
         if (pattern == null) {
             throw new NullPointerException("Cannot apply " + this + " without a pattern");
         }

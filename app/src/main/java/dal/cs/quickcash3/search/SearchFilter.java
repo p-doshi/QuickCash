@@ -9,7 +9,7 @@ import com.google.gson.JsonElement;
 public abstract class SearchFilter<T> {
     private SearchFilter<T> nextFilter;
 
-    protected abstract boolean isCurrentValid(@NonNull final JsonElement root);
+    protected abstract boolean isCurrentValid(@NonNull JsonElement root);
 
     /**
      * Set the next filter to be applied after this one.

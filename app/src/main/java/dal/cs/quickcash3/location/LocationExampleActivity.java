@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.location;
 
 import android.annotation.SuppressLint;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -62,8 +61,8 @@ public class LocationExampleActivity extends AppCompatPermissionActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         locationProvider.removeLocationCallback(callbackId);
+        super.onDestroy();
     }
 
     @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
