@@ -46,10 +46,10 @@
             android:name=".location.LocationExampleActivity"
             android:exported="true"/>
         <activity
-            android:name=".worker.WorkerPayPalActivity"
+            android:name=".payment.WorkerPayPalActivity"
             android:exported="true"/>
         <activity
-            android:name=".worker.WorkerPaymentConfirmationActivity"
+            android:name=".payment.WorkerPaymentConfirmationActivity"
             android:exported="true"/>
     </application>
 
