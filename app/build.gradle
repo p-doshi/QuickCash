@@ -6,6 +6,10 @@ plugins {
 android {
     namespace 'dal.cs.quickcash3'
     compileSdk 34
+    buildFeatures {
+        buildConfig = true
+    }
+
 
     defaultConfig {
         applicationId "dal.cs.quickcash3"
@@ -15,6 +19,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "PAYPAL_CLIENT_ID", "\"".concat("AbvZtAIIVtf0EHdwf8ep25q3JQaTVQWyeEKbw0BrusejkszZcaaHzNeQEy6fsW3dEtiaB4EYaJMrQfQn").concat("\"")
     }
 
     buildTypes {
@@ -40,6 +45,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.android.gms:play-services-auth:21.0.0'
     implementation 'com.google.android.gms:play-services-location:21.2.0'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

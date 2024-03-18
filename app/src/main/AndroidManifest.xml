@@ -45,6 +45,12 @@
         <activity
             android:name=".location.LocationExampleActivity"
             android:exported="true"/>
+        <activity
+            android:name=".payment.EmployerPaymentConfirmationActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".payment.EmployerPayPalActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
