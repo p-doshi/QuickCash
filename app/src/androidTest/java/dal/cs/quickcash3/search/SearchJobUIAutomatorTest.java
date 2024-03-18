@@ -23,7 +23,7 @@ import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobUIAutomatorTest {
 
-    private static final String FILTER_TEXT = "Apply Filters";
+    private static final String FILTER_TEXT = "Pay Range";
 
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
@@ -58,7 +58,7 @@ public class SearchJobUIAutomatorTest {
         UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
         assertTrue(filterIcon.exists());
         filterIcon.click();
-        UiObject welcomeLabel = device.findObject(new UiSelector().text(FILTER_TEXT));
+        UiObject welcomeLabel = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterFragment"));
         assertTrue(welcomeLabel.exists());
     }
 }
