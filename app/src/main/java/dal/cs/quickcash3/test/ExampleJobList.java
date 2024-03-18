@@ -1,17 +1,23 @@
-package dal.cs.quickcash3.search;
+package dal.cs.quickcash3.test;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.JobUrgency;
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.DatabaseDirectory;
 
 public final class ExampleJobList {
     public final static LatLng GOOGLEPLEX = new LatLng(37.42205852363422, -122.08523377972396);
     public final static LatLng DALHOUSIE = new LatLng(44.63562977946508, -63.59517486744167);
+    public final static LatLng NEW_YORK = new LatLng(40.78255295453477, -73.96558364067354);
     public final static Map<String, AvailableJob> JOBS;
 
     static {
@@ -149,4 +155,13 @@ public final class ExampleJobList {
 
     // Utility class.
     private ExampleJobList() {}
+
+    public static void generateJobPosts(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
+            database.write(
+                DatabaseDirectory.AVAILABLE_JOBS.getValue() + entry.getKey(),
+                entry.getValue(),
+                errorFunction);
+        }
+    }
 }

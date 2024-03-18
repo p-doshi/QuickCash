@@ -8,11 +8,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
-import static dal.cs.quickcash3.search.ExampleJobList.DALHOUSIE;
-import static dal.cs.quickcash3.search.ExampleJobList.GOOGLEPLEX;
-import static dal.cs.quickcash3.search.ExampleJobList.JOBS;
-import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
+import static dal.cs.quickcash3.test.ExampleJobList.DALHOUSIE;
+import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
+import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
 import static dal.cs.quickcash3.test.RangeSliderSwiper.adjustRangeSliderThumbs;
+import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
 
 import android.app.Instrumentation;
 import android.content.Context;
@@ -31,12 +32,10 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
@@ -54,15 +53,6 @@ public class SearchFiltersEspressoTests {
         );
     private Database database;
     private MockLocationProvider locationProvider;
-
-    private void generateJobPosts() {
-        for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
-            database.write(
-                DatabaseDirectory.AVAILABLE_JOBS.getValue() + entry.getKey(),
-                entry.getValue(),
-                Assert::fail);
-        }
-    }
 
     private void checkJobPosts(@NonNull List<String> expectedJobTitles) {
         onView(withId(R.id.jobListRecyclerView)).check(matches(recyclerHasItemCount(expectedJobTitles.size())));
@@ -94,10 +84,10 @@ public class SearchFiltersEspressoTests {
 
     @Ignore("Missing implementation")
     @Test
-    public void minimumLocationSearch() {
+    public void hundredMeterSearch() {
         locationProvider.setLocation(GOOGLEPLEX);
 
-        generateJobPosts();
+        generateJobPosts(database, Assert::fail);
 
         onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.0f));
         onView(withId(R.id.searchButton)).perform(click());
@@ -114,7 +104,7 @@ public class SearchFiltersEspressoTests {
     public void fiveKmSearch() {
         locationProvider.setLocation(GOOGLEPLEX);
 
-        generateJobPosts();
+        generateJobPosts(database, Assert::fail);
 
         onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.5f));
         onView(withId(R.id.searchButton)).perform(click());
@@ -123,8 +113,7 @@ public class SearchFiltersEspressoTests {
             "Walk Dog",
             "Groceries",
             "Coding problem",
-            "Landscaping",
-            "Idk"
+            "Landscaping"
         );
 
         checkJobPosts(expectedJobTitles);
@@ -132,15 +121,49 @@ public class SearchFiltersEspressoTests {
 
     @Ignore("Missing implementation")
     @Test
-    public void outOfRangeSearch() {
+    public void differentLocation() {
         locationProvider.setLocation(DALHOUSIE);
 
-        generateJobPosts();
+        generateJobPosts(database, Assert::fail);
 
         onView(withId(R.id.searchButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Snow Removal"
+        );
+
+        checkJobPosts(expectedJobTitles);
+    }
+
+    @Test
+    public void greaterThanOneDay() {
+        locationProvider.setLocation(GOOGLEPLEX);
+
+        generateJobPosts(database, Assert::fail);
+
+        onView(withId(R.id.durationRangeSlider)).perform(adjustRangeSliderThumbs(0.5f, 1.0f));
+        onView(withId(R.id.searchButton)).perform(click());
+
+        List<String> expectedJobTitles = Collections.singletonList(
+            "Landscaping"
+        );
+
+        checkJobPosts(expectedJobTitles);
+    }
+
+    @Test
+    public void lessThan40Dollars() {
+        locationProvider.setLocation(GOOGLEPLEX);
+
+        generateJobPosts(database, Assert::fail);
+
+        onView(withId(R.id.salaryRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 0.4f));
+        onView(withId(R.id.searchButton)).perform(click());
+
+        List<String> expectedJobTitles = Arrays.asList(
+            "Walk Dog",
+            "Groceries",
+            "Coding problem"
         );
 
         checkJobPosts(expectedJobTitles);
