@@ -28,9 +28,12 @@ public class PayPalPaymentProcess {
     private EmployerPayPalActivity activity;
     private String payID;
     private String state;
+    private String amount;
 
     public PayPalPaymentProcess(EmployerPayPalActivity activity) {
         this.activity = activity;
+        configPayPal();
+        initActivityLauncher();
     }
 
     protected void configPayPal() {
@@ -40,7 +43,6 @@ public class PayPalPaymentProcess {
     }
 
     protected void processPayment() {
-        final String amount = "50";
         final PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(
                 amount), activity.getResources().getString(R.string.currency_cad), activity.getResources().getString(R.string.services), PayPalPayment.PAYMENT_INTENT_SALE);
 
@@ -82,4 +84,11 @@ public class PayPalPaymentProcess {
                 });
     }
 
+    protected void setPaymentAmount(String amount) {
+        this.amount = amount;
+    }
+
+    protected String getPaymentAmount() {
+        return this.amount;
+    }
 }

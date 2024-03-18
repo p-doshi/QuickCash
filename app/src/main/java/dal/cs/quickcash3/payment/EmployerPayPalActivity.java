@@ -3,6 +3,7 @@ package dal.cs.quickcash3.payment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,19 +13,24 @@ public class EmployerPayPalActivity extends AppCompatActivity {
     PayPalPaymentProcess paymentProcess;
     Button employerPayConfirmationButton;
 
+    TextView paymentStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_employer_pay_pal);
-        init();
         paymentProcess = new PayPalPaymentProcess(this);
-        paymentProcess.configPayPal();
-        paymentProcess.initActivityLauncher();
+        paymentProcess.setPaymentAmount("40");
+        init();
+        //paymentProcess.configPayPal();
+        //paymentProcess.initActivityLauncher();
         setListeners();
     }
 
     private void init() {
         employerPayConfirmationButton = findViewById(R.id.employerPayConfirmationButton);
+        paymentStatus = findViewById(R.id.AmountNumText);
+        paymentStatus.setText(paymentProcess.getPaymentAmount());
     }
 
     private void setListeners() {
