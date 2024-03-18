@@ -2,6 +2,8 @@ package dal.cs.quickcash3.slider;
 
 import static dal.cs.quickcash3.util.StringHelper.getPluralEnding;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.material.slider.RangeSlider;
@@ -23,8 +25,8 @@ public class DurationRangeSlider extends MyRangeSlider {
         0.0f,
         (float)DURATION_VALUES.length - 1);
 
-    public DurationRangeSlider() {
-        super(DEFAULT_VALUES, DURATION_VALUES.length);
+    public DurationRangeSlider(@NonNull Activity activity) {
+        super(activity, DEFAULT_VALUES, DURATION_VALUES.length);
     }
 
     @Override

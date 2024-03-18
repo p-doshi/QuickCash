@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.jobs;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,13 @@ public class JobSearchFragment extends Fragment {
     private final JobListFragment jobListFragment;
     private final SearchFilterFragment searchFragment;
 
-    public JobSearchFragment(@NonNull Database database, @NonNull LocationProvider locationProvider){
+    public JobSearchFragment(
+        @NonNull Activity activity,
+        @NonNull Database database,
+        @NonNull LocationProvider locationProvider)
+    {
         super();
-        this.searchFragment = new SearchFilterFragment(locationProvider, this::showList);
+        this.searchFragment = new SearchFilterFragment(activity, locationProvider, this::showList);
         this.jobListFragment=new JobListFragment(database,searchFragment.getCombinedFilter());
     }
 

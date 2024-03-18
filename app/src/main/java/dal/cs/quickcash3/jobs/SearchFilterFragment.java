@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.jobs;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import dal.cs.quickcash3.util.Range;
@@ -29,11 +30,12 @@ public class SearchFilterFragment extends Fragment {
     private final LocationSearchFilter<AvailableJob> locationFilter;
     private final NumericRangeSearchFilter<AvailableJob> salaryRangeFilter;
     private final NumericRangeSearchFilter<AvailableJob> durationFilter;
-    private final SalaryRangeSlider salarySlider = new SalaryRangeSlider();
-    private final DurationRangeSlider durationRangeSlider = new DurationRangeSlider();
-    private final MaxDistanceSlider maxDistanceSlider = new MaxDistanceSlider();
+    private final SalaryRangeSlider salarySlider;
+    private final DurationRangeSlider durationRangeSlider;
+    private final MaxDistanceSlider maxDistanceSlider;
 
     public SearchFilterFragment(
+        @NonNull Activity activity,
         @NonNull LocationProvider locationProvider,
         @NonNull Runnable showResultsFunction)
     {
@@ -43,6 +45,10 @@ public class SearchFilterFragment extends Fragment {
         locationFilter = new LocationSearchFilter<>("latitude", "longitude", locationProvider);
         salaryRangeFilter = new NumericRangeSearchFilter<>("salary");
         durationFilter = new NumericRangeSearchFilter<>("duration");
+
+        salarySlider = new SalaryRangeSlider(activity);
+        durationRangeSlider = new DurationRangeSlider(activity);
+        maxDistanceSlider = new MaxDistanceSlider(activity);
 
         locationFilter.setMaxDistance(maxDistanceSlider.getMaxDistance());
         salaryRangeFilter.setRange(salarySlider.getRange());

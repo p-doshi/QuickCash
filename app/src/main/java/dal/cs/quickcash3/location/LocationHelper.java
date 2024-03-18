@@ -53,19 +53,23 @@ public final class LocationHelper {
     }
 
     /**
-     * Calculates the distance between two geographical locations using the Haversine formula.
+     * Calculates the distance between two geographical locations using the
+     * <a href="https://en.wikipedia.org/wiki/Haversine_formula">Haversine formula</a>.
      *
-     * @param location1 The first location, not null.
-     * @param location2 The second location, not null.
-     * @return The distance between location1 and location2 in meters.
+     * @param firstLocation The first location, not null.
+     * @param secondLocation The second location, not null.
+     * @return The distance between firstLocation and secondLocation in meters.
      */
-    public static double distanceBetween(@NonNull LatLng location1, @NonNull LatLng location2) {
-        double latDistance = Math.toRadians(location2.latitude - location1.latitude);
-        double lonDistance = Math.toRadians(location2.longitude - location1.longitude);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-            + Math.cos(Math.toRadians(location1.latitude)) * Math.cos(Math.toRadians(location2.latitude))
-            * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return EARTH_RADIUS * c;
+    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
+    public static double distanceBetween(@NonNull LatLng firstLocation, @NonNull LatLng secondLocation) {
+        double latitudeDifference = Math.toRadians(secondLocation.latitude - firstLocation.latitude);
+        double longitudeDifference = Math.toRadians(secondLocation.longitude - firstLocation.longitude);
+
+        double haversineFormulaNumerator = Math.sin(latitudeDifference / 2) * Math.sin(latitudeDifference / 2)
+            + Math.cos(Math.toRadians(firstLocation.latitude)) * Math.cos(Math.toRadians(secondLocation.latitude))
+            * Math.sin(longitudeDifference / 2) * Math.sin(longitudeDifference / 2);
+
+        double centralAngle = 2 * Math.atan2(Math.sqrt(haversineFormulaNumerator), Math.sqrt(1 - haversineFormulaNumerator));
+        return EARTH_RADIUS * centralAngle;
     }
 }

@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.slider;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.material.slider.RangeSlider;
@@ -19,8 +21,8 @@ public class MaxDistanceSlider extends MyRangeSlider {
     private static final List<Float> DEFAULT_VALUES = Collections.singletonList(
         (float)MAX_DISTANCE_VALUES.length - 1);
 
-    public MaxDistanceSlider() {
-        super(DEFAULT_VALUES, MAX_DISTANCE_VALUES.length);
+    public MaxDistanceSlider(@NonNull Activity activity) {
+        super(activity, DEFAULT_VALUES, MAX_DISTANCE_VALUES.length);
     }
 
     @Override

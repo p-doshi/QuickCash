@@ -20,7 +20,7 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
     private List<String> applicants;
     private List<String> blackList;
 
-    // Empty constructor needed for Firebase
+    @SuppressWarnings("PMD.UnnecessaryConstructor") // Empty constructor needed to read from Firebase.
     public AvailableJob() { 
         super();
     }

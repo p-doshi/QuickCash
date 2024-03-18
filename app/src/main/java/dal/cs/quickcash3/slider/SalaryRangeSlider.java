@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.slider;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -20,8 +22,8 @@ public class SalaryRangeSlider extends MyRangeSlider {
         0.0f,
         (float)PAY_RANGE_VALUES.length - 1);
 
-    public SalaryRangeSlider() {
-        super(DEFAULT_VALUES, PAY_RANGE_VALUES.length);
+    public SalaryRangeSlider(@NonNull Activity activity) {
+        super(activity, DEFAULT_VALUES, PAY_RANGE_VALUES.length);
     }
 
     @Override

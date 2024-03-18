@@ -65,6 +65,7 @@ public class LocationExampleActivity extends AppCompatPermissionActivity {
         super.onDestroy();
     }
 
+    @SuppressWarnings("PMD.LawOfDemeter") // There is not other way to do this.
     @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
     private void showLocation(@NonNull LatLng location) {
         status.setText(getString(R.string.location_permission) + ": Granted");

@@ -73,8 +73,8 @@ public class SearchFiltersUITests {
         return device.findObject(selector);
     }
 
-    private @NonNull UiObject findResource(@NonNull String id) {
-        UiSelector selector = new UiSelector().resourceId(appPackage + ":id/" + id);
+    private @NonNull UiObject findResource(@NonNull String resourceId) {
+        UiSelector selector = new UiSelector().resourceId(appPackage + ":id/" + resourceId);
         return device.findObject(selector);
     }
 

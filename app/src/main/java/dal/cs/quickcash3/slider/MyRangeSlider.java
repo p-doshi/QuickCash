@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.slider;
 
+import android.app.Activity;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
@@ -11,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MyRangeSlider {
+    private final Activity activity;
     private final List<Float> startingValues;
     private final int numSteps;
     private final int numThumbs;
     private RangeSlider rangeSlider;
 
-    public MyRangeSlider(@NonNull List<Float> startingValues, int numSteps) {
+    public MyRangeSlider(@NonNull Activity activity, @NonNull List<Float> startingValues, int numSteps) {
+        this.activity = activity;
         this.startingValues = startingValues;
         this.numSteps = numSteps;
         numThumbs = startingValues.size();
@@ -34,7 +37,7 @@ public abstract class MyRangeSlider {
         rangeSlider.setLabelFormatter(this::formatLabel);
 
         rangeSlider.setLabelBehavior(LabelFormatter.LABEL_VISIBLE);
-        new Handler().postDelayed(
+        new Handler(activity.getMainLooper()).postDelayed(
             () -> rangeSlider.setLabelBehavior(LabelFormatter.LABEL_WITHIN_BOUNDS),
             1000);
     }

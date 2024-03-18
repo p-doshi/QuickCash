@@ -47,7 +47,7 @@ public class WorkerDashboard extends FragmentPermissionActivity {
         receiptsFragment = new ReceiptsFragment();
         mapFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
-        jobSearchFragment = new JobSearchFragment(database, locationProvider);
+        jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
