@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.search;
 
+import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
@@ -107,9 +108,9 @@ public class SearchFiltersUITests {
     }
 
     @Test
-    public void successfulSearch() throws UiObjectNotFoundException {
+    public void successfulSearch() throws Throwable {
         locationProvider.setLocation(GOOGLEPLEX);
-        generateJobPosts(database, Assert::fail);
+        runOnUiThread(() -> generateJobPosts(database, Assert::fail));
 
         findText("Apply Filters").click();
 

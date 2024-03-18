@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.search;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
@@ -10,10 +11,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
+
+import static dal.cs.quickcash3.test.WaitForAction.waitFor;
 
 import android.Manifest;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -24,7 +29,7 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobEspressoTest {
-
+    private static final int MAX_DATABASE_TIMEOUT = 5000;
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
             new ActivityScenarioRule<>(WorkerDashboard.class);
@@ -71,18 +76,12 @@ public class SearchJobEspressoTest {
 
     @Test
     public void searchResultsTest() {
-//        locationProvider.setLocation(GOOGLEPLEX);
-//        generateJobPosts();
         onView(withId(R.id.workerSearchPage)).perform(click());
         onView(allOf(withClassName(is("android.widget.ImageView")), withContentDescription("Search")))
                 .perform(click());
         onView(withClassName(is("android.widget.SearchView$SearchAutoComplete")))
                 .perform(replaceText("lawn"), pressImeActionButton());
-        String expectedJobTitles=
-                "Lawn Moving";
-        onView(withId(R.id.title)).check(matches(withText(expectedJobTitles)));
-
-//        checkJobPosts(expectedJobTitles);
+        Espresso.onIdle();
+        onView(withId(R.id.title)).check(matches(withText("Lawn Moving")));
     }
-
 }
