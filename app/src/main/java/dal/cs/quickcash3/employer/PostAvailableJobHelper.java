@@ -3,6 +3,7 @@ package dal.cs.quickcash3.employer;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -18,8 +19,10 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public final class PostAvailableJobHelper {
-    private static Database database;
-    public static @NonNull AvailableJob createAvailableJob(@NonNull Map<String, String> fields, @NonNull Context context) throws IOException {
+
+    // utility class
+    private PostAvailableJobHelper(){}
+    public static @NonNull AvailableJob createAvailableJob(@NonNull Map<String, String> fields, @NonNull Context context) {
         AvailableJob job = new AvailableJob();
 
         job.setTitle(Objects.requireNonNull(fields.get("title")));
@@ -44,10 +47,16 @@ public final class PostAvailableJobHelper {
         return job;
     }
 
-    private static Address locToCoordinates(String streetAdd, String city, String province, Context context) throws IOException {
+    private static Address locToCoordinates(String streetAdd, String city, String province, Context context) {
         Geocoder geocoder = new Geocoder(context);
         String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
-        List<Address> address = geocoder.getFromLocationName(strAddress, 20);
+        List<Address> address = null;
+        try {
+            address = geocoder.getFromLocationName(strAddress, 20);
+        } catch (IOException e) {
+            Log.e("PostAvailableJobHelper", Objects.requireNonNull(e.getMessage()));
+        }
+        assert address != null;
         return address.get(0);
     }
 

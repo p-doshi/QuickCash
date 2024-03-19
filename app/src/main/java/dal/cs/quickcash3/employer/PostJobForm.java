@@ -49,11 +49,7 @@ public class PostJobForm extends Activity {
             }
             else{
                 // save to db
-                try {
-                    createJob();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                createJob();
                 // write success message
                 status.setText(R.string.success);
                 // move to next page
@@ -114,7 +110,7 @@ public class PostJobForm extends Activity {
     /**
      * Creates a new available job in the database
      */
-    protected void createJob() throws IOException {
+    protected void createJob() {
         Map<String, String> fields = getFieldsMap();
         AvailableJob job = PostAvailableJobHelper.createAvailableJob(fields, this);
         job.writeToDatabase(database, error-> Log.e("PostJobForm", error));
