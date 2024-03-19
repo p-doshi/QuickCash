@@ -37,7 +37,7 @@ public class ChooseRoleActivity extends AppCompatActivity {
 
     }
 
-    protected void moveToDashboardWindow(@NonNull String role) {
+    private void moveToDashboardWindow(@NonNull String role) {
         if (role.equals(getString(R.string.employer))) {
             Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
         } else if (role.equals(getString(R.string.worker))) {

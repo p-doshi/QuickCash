@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.permission;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,16 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class AppCompatPermissionActivity extends AppCompatActivity {
+public abstract class AppCompatPermissionActivity extends AppCompatActivity implements ActivityPermissionHandler {
     private final List<Consumer<PermissionResult>> permissionHandlers = new ArrayList<>();
 
-    /**
-     * Registers a permission handler to be called when permission results are received.
-     *
-     * @param permissionHandler The permission handler to register.
-     */
+    @Override
     public void registerPermissionHandler(@NonNull Consumer<PermissionResult> permissionHandler) {
         permissionHandlers.add(permissionHandler);
+    }
+
+    @Override
+    public @NonNull Activity getActivity() {
+        return this;
     }
 
     @Override

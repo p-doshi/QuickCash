@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.database.mock.MockDatabase;
 
 @RunWith(AndroidJUnit4.class)
 public class MockDatabasePageTest {
@@ -30,7 +31,8 @@ public class MockDatabasePageTest {
     public final ActivityScenarioRule<DatabaseExampleActivity> activityRule =
         new ActivityScenarioRule<>(
             new Intent(context, DatabaseExampleActivity.class)
-            .addCategory(context.getString(R.string.MOCK_DATABASE)));
+                .addCategory(context.getString(R.string.MOCK_DATABASE))
+        );
 
     @Before
     public void setup() {
