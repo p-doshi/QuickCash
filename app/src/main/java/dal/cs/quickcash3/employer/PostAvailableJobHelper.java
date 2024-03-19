@@ -86,6 +86,6 @@ public class PostAvailableJobHelper {
 
     //fix this
     public static void errorEater(String error){
-        String errorHolder = error;
+        System.out.println(error);
     }
 }

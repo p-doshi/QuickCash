@@ -3,33 +3,32 @@ package dal.cs.quickcash3.employer;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class PostJobFormFields {
-    static final String datePattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
-    static final String salaryPattern = "^([0-9]+|[0-9]+\\.[0-9]{2})$";
-    static final String empty = "";
-    static String errorMessage;
-    static final String missingFieldError = "Please fill in all fields!";
-    static final String improperDateFormat = "Please enter date in proper format - dd/mm/yyyy";
-    static final String improperSalaryFormat = "Please enter valid salary";
+public final class PostJobFormFields {
+    static final String DATE_PATTERN = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
+    static final String SALARY_PATTERN = "^([0-9]+|[0-9]+\\.[0-9]{2})$";
+    static final String EMPTY = "";
+    static final String MISSING_FIELD_ERROR = "Please fill in all fields!";
+    static final String IMPROPER_DATE_FORMAT = "Please enter date in proper format - dd/mm/yyyy";
+    static final String IMPROPER_SALARY_FORMAT = "Please enter valid salary";
 
     /**
      * Method for PostJobForm to call to check form fields properly filled out
      * @param fields a hashmap containing fields as key and user input as the values
      * @return A string holding an error message; empty when no errors
      */
-    protected static String checkFieldsValid(Map<String, String> fields){
-        errorMessage = empty;
+    public static String checkFieldsValid(Map<String, String> fields){
+        String errorMessage = EMPTY;
         String emptyError = checkIfEmpty(fields);
         String dateFormatError = checkJobDate(fields.get("date"));
         String salaryFormatError = checkJobSalary(fields.get("salary"));
 
-        if(!emptyError.equals(empty)){
+        if(!EMPTY.equals(emptyError)){
             errorMessage = emptyError;
         }
-        else if (!dateFormatError.equals(empty)) {
+        else if (!EMPTY.equals(dateFormatError)) {
             errorMessage = dateFormatError;
         }
-        else if (!salaryFormatError.equals(empty)) {
+        else if (!EMPTY.equals(salaryFormatError)) {
             errorMessage = salaryFormatError;
         }
 
@@ -42,7 +41,7 @@ public class PostJobFormFields {
      * @return A string holding an error message; empty when no errors
      */
     private static String checkIfEmpty(Map<String, String> fields){
-        errorMessage = empty;
+        String errorMessage = EMPTY;
 
         for (Map.Entry<String, String> field : fields.entrySet()) {
             String key = field.getKey();
@@ -55,8 +54,8 @@ public class PostJobFormFields {
             boolean durationCheck = key.equals(durationStr) && input.equals(durationStr);
             boolean urgencyCheck = key.equals(urgencyStr) && input.equals(urgencyStr);
 
-            if(input.equals(empty)||provinceCheck||durationCheck||urgencyCheck){
-                errorMessage = missingFieldError;
+            if(EMPTY.equals(input)||provinceCheck||durationCheck||urgencyCheck){
+                errorMessage = MISSING_FIELD_ERROR;
                 break;
             }
         }
@@ -69,10 +68,10 @@ public class PostJobFormFields {
      * @return an error message string for reformatting; empty string if no formatting error
      */
     private static String checkJobDate(String date){
-        errorMessage = empty;
+        String errorMessage = EMPTY;
 
-        if(!Pattern.matches(datePattern, date)){
-            errorMessage = improperDateFormat;
+        if(!Pattern.matches(DATE_PATTERN, date)){
+            errorMessage = IMPROPER_DATE_FORMAT;
         }
         return errorMessage;
     }
@@ -83,10 +82,10 @@ public class PostJobFormFields {
      * @return an error message string for proper formatting; empty string if no formatting error
      */
     private static String checkJobSalary(String salary){
-        errorMessage = empty;
+        String errorMessage = EMPTY;
 
-        if(!Pattern.matches(salaryPattern, salary)){
-            errorMessage = improperSalaryFormat;
+        if(!Pattern.matches(SALARY_PATTERN, salary)){
+            errorMessage = IMPROPER_SALARY_FORMAT;
         }
         return errorMessage;
     }
