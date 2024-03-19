@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -17,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import dal.cs.quickcash3.BuildConfig;
 import dal.cs.quickcash3.R;
@@ -25,12 +28,12 @@ public class PayPalPaymentProcess {
     protected ActivityResultLauncher<Intent> activityResultLauncher;
     private static final String TAG = EmployerPayPalActivity.class.getName();
     protected PayPalConfiguration payPalConfig;
-    private EmployerPayPalActivity activity;
+    private final EmployerPayPalActivity activity;
     private String payID;
     private String state;
     private String amount;
 
-    public PayPalPaymentProcess(EmployerPayPalActivity activity) {
+    public PayPalPaymentProcess(@NonNull EmployerPayPalActivity activity) {
         this.activity = activity;
         configPayPal();
         initActivityLauncher();
@@ -61,6 +64,8 @@ public class PayPalPaymentProcess {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         assert result.getData() != null;
+                        //noinspection RedundantSuppression
+                        @SuppressWarnings({"unchecked", "deprecation"})
                         final PaymentConfirmation confirmation = result.getData().getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                         if (confirmation != null) {
                             try {
@@ -84,11 +89,11 @@ public class PayPalPaymentProcess {
                 });
     }
 
-    protected void setPaymentAmount(String amount) {
+    protected void setPaymentAmount(@NonNull String amount) {
         this.amount = amount;
     }
 
-    protected String getPaymentAmount() {
+    protected @Nullable String getPaymentAmount() {
         return this.amount;
     }
 }

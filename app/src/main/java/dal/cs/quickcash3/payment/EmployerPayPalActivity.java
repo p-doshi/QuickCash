@@ -22,8 +22,6 @@ public class EmployerPayPalActivity extends AppCompatActivity {
         paymentProcess = new PayPalPaymentProcess(this);
         paymentProcess.setPaymentAmount("40");
         init();
-        //paymentProcess.configPayPal();
-        //paymentProcess.initActivityLauncher();
         setListeners();
     }
 
