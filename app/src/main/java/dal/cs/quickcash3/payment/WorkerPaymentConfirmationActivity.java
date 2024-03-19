@@ -4,16 +4,15 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import dal.cs.quickcash3.R;
 
 public class WorkerPaymentConfirmationActivity extends AppCompatActivity {
-    private String status;
-    private String paymentID;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_worker_payment_confirmation);
         init();
@@ -23,8 +22,8 @@ public class WorkerPaymentConfirmationActivity extends AppCompatActivity {
         TextView paymentStatus = findViewById(R.id.workerStatusMessage);
         TextView payID = findViewById(R.id.workerPayID);
         Intent intent = getIntent();
-        status = intent.getStringExtra("Status");
-        paymentID = intent.getStringExtra("PayID");
+        String status = intent.getStringExtra("Status");
+        String paymentID = intent.getStringExtra("PayID");
         paymentStatus.setText(status);
         payID.setText(paymentID);
     }

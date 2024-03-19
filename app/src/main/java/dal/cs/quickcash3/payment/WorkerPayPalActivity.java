@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +13,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseExampleActivity;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 
 public class WorkerPayPalActivity extends AppCompatActivity {
