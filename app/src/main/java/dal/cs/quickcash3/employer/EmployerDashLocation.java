@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
@@ -25,27 +27,43 @@ import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
  * and integrates with the device's location services to fetch and display the current location.
  */
 public class EmployerDashLocation extends AppCompatPermissionActivity {
+    private final AtomicReference<Location> currentLocation = new AtomicReference<>();
+    private final AtomicBoolean buttonWaiting = new AtomicBoolean(false);
+    private AndroidLocationProvider locationProvider;
+    private TextView addressText;
+    private Geocoder geocoder;
+    private List<Address> addresses;
+    private int callbackId;
 
-    Button detectLocationButton;
-    AndroidLocationProvider locationProvider;
-    Location currentLocation;
-    TextView addressText;
-    Geocoder geocoder;
-    List<Address> addresses;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employer_dash_location);
         init();
     }
+
+    @Override
+    protected void onDestroy() {
+        locationProvider.removeLocationCallback(callbackId);
+        super.onDestroy();
+    }
+
     /**
      * Initializes UI components and sets up the location provider and geocoder.
      * Also sets a click listener on the 'detect location' button to start location detection.
      */
     private void init() {
-        detectLocationButton = findViewById(R.id.detectLocationButton);
+        Button detectLocationButton = findViewById(R.id.detectLocationButton);
         addressText = findViewById(R.id.addressText);
-        locationProvider = new AndroidLocationProvider(this, 5000);
+        locationProvider = new AndroidLocationProvider(this, 1000);
+        callbackId = locationProvider.addLocationCallback(
+                location -> {
+                    this.currentLocation.set(location);
+                    if (buttonWaiting.get() && location != null) {
+                        updateAddressDisplay();
+                    }
+                },
+                error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show());
         geocoder = new Geocoder(this, Locale.getDefault());
 
         detectLocationButton.setOnClickListener(v -> detectLocation());
@@ -55,13 +73,14 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
      * and updates the UI with the retrieved address. Shows a toast message in case of an error.
      */
     private void detectLocation() {
-        locationProvider.fetchLocation(location -> {
-            currentLocation = location;
+        if (currentLocation.get() == null) {
+            buttonWaiting.set(true);
+        }
+        else {
             updateAddressDisplay();
-        }, error -> {
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-        });
+        }
     }
+
     /**
      * Updates the address display TextView with the current address.
      * Converts the current location's latitude and longitude into a human-readable address using {@link Geocoder}.
@@ -70,9 +89,10 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
     @SuppressLint("SetTextI18n")
     private void updateAddressDisplay() {
         try {
-            do{
-                addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
-            }while (addresses==null);
+            do {
+                Location location = currentLocation.get();
+                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            } while (addresses == null);
             runOnUiThread(() -> {
                 if (!addresses.isEmpty()) {
                     String addressLine = addresses.get(0).getAddressLine(0);

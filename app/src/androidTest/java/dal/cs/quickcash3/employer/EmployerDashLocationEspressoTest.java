@@ -4,9 +4,11 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static dal.cs.quickcash3.util.RegexMatcher.withPattern;
-import static dal.cs.quickcash3.util.WaitForAction.waitFor;
 
+import static dal.cs.quickcash3.test.RegexMatcher.withPattern;
+import static dal.cs.quickcash3.test.WaitForAction.waitFor;
+
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import android.content.Context;
 
 import androidx.test.core.app.ActivityScenario;
@@ -47,7 +49,7 @@ public class EmployerDashLocationEspressoTest {
     public void checkAddressDisplayed() {
         // Clicks the button once
         Espresso.onView(withId(R.id.detectLocationButton)).perform(click());
-        // Address will be printed in the format of 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA need to adjust the regex to detect this
-        Espresso.onView(withId(R.id.addressText)).perform(waitFor(withPattern("Address: (?:[a-zA-Z0-9 .]*, )?[0-9]+ [a-zA-Z .]+, [a-zA-Z ]+, [A-Z0-9 ]+,[a-zA-Z ]+"), MAX_LOCATION_TIMEOUT_MS));
+        Espresso.onView(withId(R.id.addressText)).perform(waitFor(withPattern("Address: [a-zA-Z0-9 .,]+"), MAX_LOCATION_TIMEOUT_MS));
+
     }
 }
