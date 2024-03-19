@@ -22,12 +22,13 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.MyFirebaseDatabase;
 
 public class PostJobForm extends Activity {
-    Database database = new MyFirebaseDatabase(this);
+    Database database;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.add_job);
+        database = new MyFirebaseDatabase(this);
 
         // initialize spinners
         this.setUpDurationSpinner();
