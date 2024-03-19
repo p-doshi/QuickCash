@@ -26,6 +26,9 @@
             android:name=".location.LocationExampleActivity"
             android:exported="true"/>
         <activity
+            android:name=".employer.EmployerDashLocation"
+            android:exported="true" />
+        <activity
             android:name="dal.cs.quickcash3.login.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing" >
