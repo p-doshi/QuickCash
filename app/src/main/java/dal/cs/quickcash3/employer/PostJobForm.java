@@ -8,6 +8,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +19,7 @@ import dal.cs.quickcash3.R;
 public class PostJobForm extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.add_job);
 
@@ -92,7 +95,7 @@ public class PostJobForm extends Activity {
      * Method to check that all input values are valid
      * @return A string holding an error message; empty when no input errors
      */
-    protected String checkAllFields(){
+    protected @NonNull String checkAllFields(){
         // check fields and return error message?
         Map<String, String> fields = getFieldsMap();
         return PostJobFormFields.checkFieldsValid(fields);
@@ -106,39 +109,39 @@ public class PostJobForm extends Activity {
     }
 
     // Getters
-    protected String getJobTitle(){
+    protected @NonNull String getJobTitle(){
         EditText jobTitle = findViewById(R.id.jobPostingTitle);
         return jobTitle.getText().toString().trim();
     }
-    protected String getJobDate(){
+    protected @NonNull String getJobDate(){
         EditText jobDate = findViewById(R.id.addJobDate);
         return jobDate.getText().toString().trim();
     }
-    protected String getJobSalary(){
+    protected @NonNull String getJobSalary(){
         EditText jobSalary = findViewById(R.id.addJobSalary);
         return jobSalary.getText().toString().trim();
     }
-    protected String getJobAddress(){
+    protected @NonNull String getJobAddress(){
         EditText jobAddress = findViewById(R.id.addJobAddress);
         return jobAddress.getText().toString().trim();
     }
-    protected String getJobCity(){
+    protected @NonNull String getJobCity(){
         EditText jobCity = findViewById(R.id.addJobCity);
         return jobCity.getText().toString().trim();
     }
-    protected String getJobDescription(){
+    protected @NonNull String getJobDescription(){
         EditText jobDescription = findViewById(R.id.addJobDescription);
         return jobDescription.getText().toString().trim();
     }
-    protected String getDuration() {
+    protected @NonNull String getDuration() {
         Spinner jobDuration = findViewById(R.id.jobDurationSpinner);
         return jobDuration.getSelectedItem().toString();
     }
-    protected String getUrgency() {
+    protected @NonNull String getUrgency() {
         Spinner jobUrgency = findViewById(R.id.jobUrgencySpinner);
         return jobUrgency.getSelectedItem().toString();
     }
-    protected String getProvince() {
+    protected @NonNull String getProvince() {
         Spinner jobProvince = findViewById(R.id.addJobProvince);
         return jobProvince.getSelectedItem().toString();
     }
@@ -147,7 +150,7 @@ public class PostJobForm extends Activity {
      * Method to create a hashmap with all the fields as the keys and the user input as values
      * @return a hashmap
      */
-    protected Map<String, String> getFieldsMap(){
+    protected @NonNull Map<String, String> getFieldsMap(){
         Map<String, String> fields = new HashMap<>();
 
         fields.put("title", getJobTitle());

@@ -12,6 +12,7 @@
         tools:context=".PostJobForm">
 
         <com.google.android.material.appbar.MaterialToolbar
+            tools:ignore= "UnusedIds"
             android:id="@+id/HeaderToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

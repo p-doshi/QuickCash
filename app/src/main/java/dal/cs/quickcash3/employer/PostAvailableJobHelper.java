@@ -6,6 +6,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +22,7 @@ import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public final class PostAvailableJobHelper {
     private Database database;
-    public void createAvailableJob(Map<String, String> fields) throws IOException {
+    public void createAvailableJob(@NonNull Map<String, String> fields) throws IOException {
         AvailableJob job = new AvailableJob();
 
         job.setTitle(Objects.requireNonNull(fields.get("title")));
@@ -85,7 +87,7 @@ public final class PostAvailableJobHelper {
     }
 
     //fix this
-    public static void errorEater(String error){
+    public static void errorEater(@NonNull String error){
         Log.e(error, "There's been an error");
     }
 }
