@@ -2,6 +2,8 @@ package dal.cs.quickcash3.database;
 
 import androidx.annotation.NonNull;
 
+import com.google.errorprone.annotations.CheckReturnValue;
+
 import java.util.function.Consumer;
 
 public interface DatabaseObject {
@@ -10,8 +12,10 @@ public interface DatabaseObject {
      *
      * @param database The database to write to.
      * @param errorFunction The function that is called in case of an error.
+     * @return Returns the key that the job was written to.
      */
-    void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction);
+    @CheckReturnValue
+    @NonNull String writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction);
 
     /**
      * Writes this object to the database and executes the successFunction upon successful completion.
@@ -19,8 +23,10 @@ public interface DatabaseObject {
      * @param database The database to write to.
      * @param successFunction The function that is called upon successful completion of the write operation.
      * @param errorFunction The function that is called in case of an error during the write operation.
+     * @return Returns the key that the job was written to.
      */
-    void writeToDatabase(
+    @CheckReturnValue
+    @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction);

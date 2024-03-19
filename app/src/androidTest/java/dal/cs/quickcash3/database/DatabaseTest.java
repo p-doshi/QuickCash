@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
@@ -40,6 +42,7 @@ import dal.cs.quickcash3.util.Range;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
+    private static final String LOG_TAG = DatabaseTest.class.getSimpleName();
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
     private final Database database = new MyFirebaseDatabase();
     private CountingIdlingResource resource;
@@ -98,7 +101,8 @@ public class DatabaseTest {
 
         for (AvailableJob job : jobs) {
             resource.increment();
-            job.writeToDatabase(database, resource::decrement, Assert::fail);
+            String key = job.writeToDatabase(database, resource::decrement, Assert::fail);
+            Log.d(LOG_TAG, "Key: " + key + ". Job: " + job.getTitle());
         }
 
         Espresso.onIdle();

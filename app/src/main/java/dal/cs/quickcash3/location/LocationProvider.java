@@ -3,6 +3,7 @@ package dal.cs.quickcash3.location;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.errorprone.annotations.CheckReturnValue;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -15,6 +16,7 @@ public interface LocationProvider {
      * @param locationFunction The function that receives the location iff accessible. The location will never be null.
      * @param errorFunction The function that receives errors iff they occur.
      */
+    @CheckReturnValue
     int addLocationCallback(@NonNull Consumer<LatLng> locationFunction, @NonNull Consumer<String> errorFunction);
 
     /**

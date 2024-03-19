@@ -49,21 +49,23 @@ public class CompletedJob extends JobPost implements Copyable<CompletedJob> {
     }
 
     @Override
-    public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        writeToDatabase(database, () -> {}, errorFunction);
+    public @NonNull String writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        return writeToDatabase(database, () -> {}, errorFunction);
     }
 
     @Override
-    public void writeToDatabase(
+    public @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
+        String key = RandomStringGenerator.generate(HASH_SIZE);
         database.write(
-            DatabaseDirectory.COMPLETED_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
+            DatabaseDirectory.COMPLETED_JOBS.getValue() + key,
             this,
             successFunction,
             errorFunction);
+        return key;
     }
 
     @Override
