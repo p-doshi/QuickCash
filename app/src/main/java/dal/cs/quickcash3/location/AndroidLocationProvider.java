@@ -33,6 +33,7 @@ public class AndroidLocationProvider implements LocationProvider {
     private final long updateFrequencyMillis;
     protected final AtomicReference<LatLng> lastLocation = new AtomicReference<>();
     private final AtomicBoolean hasLocationUpdates = new AtomicBoolean(false);
+    private final AtomicBoolean deniedPermission = new AtomicBoolean(false);
     private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
     private int nextReceiverId;
 
@@ -45,7 +46,7 @@ public class AndroidLocationProvider implements LocationProvider {
         startLocationUpdates();
     }
 
-    private boolean isMissingPermission() {
+    private boolean missingPermissions() {
         return activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
     }
@@ -60,10 +61,13 @@ public class AndroidLocationProvider implements LocationProvider {
 
     @SuppressLint("MissingPermission") // Using a helper function instead.
     private void startLocationUpdates() {
-        if (isMissingPermission()) {
-            activity.requestPermissions(
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                PermissionRequestCode.LOCATION.getCode());
+        if (missingPermissions()) {
+            // Do not ask more than once.
+            if (!deniedPermission.get()) {
+                activity.requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PermissionRequestCode.LOCATION.getCode());
+            }
             return;
         }
 
@@ -95,9 +99,11 @@ public class AndroidLocationProvider implements LocationProvider {
         @NonNull Consumer<LatLng> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        if (isMissingPermission()) {
-            errorFunction.accept(activity.getString(R.string.error_location_permission));
-            return -1;
+        if (missingPermissions()) {
+            if (deniedPermission.get()) {
+                errorFunction.accept(activity.getString(R.string.error_location_permission));
+                return -1;
+            }
         }
 
         // In case the user re-enabled permissions.
@@ -119,8 +125,13 @@ public class AndroidLocationProvider implements LocationProvider {
 
     @Override
     public @Nullable LatLng getLastLocation() {
-        if (isMissingPermission()) {
-            throw new SecurityException(activity.getString(R.string.error_location_permission));
+        if (missingPermissions()) {
+            if (deniedPermission.get()) {
+                throw new SecurityException(activity.getString(R.string.error_location_permission));
+            }
+            else {
+                return null;
+            }
         }
 
         // In case the user re-enabled permissions.
@@ -134,10 +145,14 @@ public class AndroidLocationProvider implements LocationProvider {
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
     private void onRequestPermissionsResult(@NonNull PermissionResult result) {
         if (result.isMatchingCode(PermissionRequestCode.LOCATION) &&
-            result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) &&
             result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION))
         {
-            startLocationUpdates();
+            if (result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                startLocationUpdates();
+            }
+            else {
+                deniedPermission.set(true);
+            }
         }
     }
 }
