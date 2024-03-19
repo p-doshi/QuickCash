@@ -2,7 +2,7 @@ package dal.cs.quickcash3.search;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -39,9 +39,8 @@ public class SearchJobEspressoTest {
         onView(allOf(withClassName(is("android.widget.ImageView")), withContentDescription("Search")))
                 .perform(click());
         onView(withClassName(is("android.widget.SearchView$SearchAutoComplete")))
-                .perform(replaceText("lawn"), pressImeActionButton());
+                .perform(replaceText("lawn"), closeSoftKeyboard());
         onView(withId(R.id.title)).check(matches(withText("Lawn Mowing")));
-
     }
 
 }
