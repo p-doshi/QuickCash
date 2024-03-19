@@ -1,6 +1,6 @@
 package dal.cs.quickcash3.employer;
 
-import android.annotation.SuppressLint;
+import androidx.annotation.NonNull;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -20,7 +20,7 @@ public final class PostJobFormFields {
      * @param fields a hashmap containing fields as key and user input as the values
      * @return A string holding an error message; empty when no errors
      */
-    public static String checkFieldsValid(Map<String, String> fields){
+    public static @NonNull String checkFieldsValid(@NonNull Map<String, String> fields){
         String errorMessage = EMPTY;
         String emptyError = checkIfEmpty(fields);
         String dateFormatError = checkJobDate(fields.get("date"));
@@ -44,7 +44,7 @@ public final class PostJobFormFields {
      * @param fields a hashmap containing fields as key and user input as the values
      * @return A string holding an error message; empty when no errors
      */
-    private static String checkIfEmpty(Map<String, String> fields){
+    private static @NonNull String checkIfEmpty(@NonNull Map<String, String> fields){
         String errorMessage = EMPTY;
 
         for (Map.Entry<String, String> field : fields.entrySet()) {
@@ -71,7 +71,7 @@ public final class PostJobFormFields {
      * @param date the date as input by the user
      * @return an error message string for reformatting; empty string if no formatting error
      */
-    private static String checkJobDate(String date){
+    private static @NonNull String checkJobDate(@NonNull String date){
         String errorMessage = EMPTY;
 
         if(!Pattern.matches(DATE_PATTERN, date)){
@@ -85,7 +85,7 @@ public final class PostJobFormFields {
      * @param salary a string representing the salary
      * @return an error message string for proper formatting; empty string if no formatting error
      */
-    private static String checkJobSalary(String salary){
+    private static @NonNull String checkJobSalary(@NonNull String salary){
         String errorMessage = EMPTY;
 
         if(!Pattern.matches(SALARY_PATTERN, salary)){

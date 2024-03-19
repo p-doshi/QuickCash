@@ -26,12 +26,13 @@
 
 
         <TextView
+            tools:ignore= "UnusedIds"
             android:id="@+id/addJobHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="15dp"
-            android:text="@string/addJobHeader"
+            android:text="@string/addJob"
             android:textAlignment="center"
             android:textSize="34sp"
             android:textStyle="bold"
@@ -148,7 +149,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="15dp"
             android:ems="10"
-            android:hint="@string/addJobLocation"
+            android:hint="@string/address"
             android:inputType="textPostalAddress"
             android:textSize="20sp"
             android:autofillHints=""

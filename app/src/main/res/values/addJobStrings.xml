@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <lint>
-        <!-- Ignore the Duplicate Strings issue, used for clarity -->
-        <issue id="DuplicateStrings">
-            <ignore path="res/values/addJobString.xml" />
-        </issue>
-    </lint>
-    <string name="addJobHeader">Add Job</string>
     <string name="addJobTitle">Title</string>
     <string name="addJobStartDate">Start Date: dd/mm/yyyy</string>
     <string name="addJobDuration">Duration:</string>
     <string name="addJobUrgency">Urgency:</string>
     <string name="addJobSalary">Salary</string>
-    <string name="addJobLocation">Address</string>
     <string name="addJobDescription">Description</string>
     <string name="addJobCity">City</string>
     <string name="success">Job submitted successfully</string>
