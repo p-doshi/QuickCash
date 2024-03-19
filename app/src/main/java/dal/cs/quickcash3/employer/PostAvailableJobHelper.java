@@ -1,10 +1,8 @@
 package dal.cs.quickcash3.employer;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -14,15 +12,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public final class PostAvailableJobHelper {
-    private Database database;
-    public void createAvailableJob(@NonNull Map<String, String> fields) throws IOException {
+    private static Database database;
+    public static @NonNull AvailableJob createAvailableJob(@NonNull Map<String, String> fields, @NonNull Context context) throws IOException {
         AvailableJob job = new AvailableJob();
 
         job.setTitle(Objects.requireNonNull(fields.get("title")));
@@ -33,33 +30,32 @@ public final class PostAvailableJobHelper {
 
         job.setDescription(Objects.requireNonNull(fields.get("description")));
 
-        Address address = locToCoordinates(fields.get("address"), fields.get("city"), fields.get("province"));
+        Address address = locToCoordinates(fields.get("address"), fields.get("city"), fields.get("province"), context);
         job.setLatitude(address.getLatitude());
         job.setLongitude(address.getLongitude());
 
 
-        job.setEmployer(RandomStringGenerator.generate(30)); //how to do this???
+        //TODO add employer ID
+        job.setEmployer(RandomStringGenerator.generate(30));
         job.setPostTime(new Date().toString());
         job.setApplicants(new ArrayList<>());
         job.setBlackList(new ArrayList<>());
 
-        Consumer<String> errors = PostAvailableJobHelper::errorEater;
-        job.writeToDatabase(database,errors);
+        return job;
     }
 
-    private Address locToCoordinates(String streetAdd, String city, String province) throws IOException {
-        Context context = null;
+    private static Address locToCoordinates(String streetAdd, String city, String province, Context context) throws IOException {
         Geocoder geocoder = new Geocoder(context);
         String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
         List<Address> address = geocoder.getFromLocationName(strAddress, 20);
         return address.get(0);
     }
 
-    private double salaryStringToDouble(String strSalary){
+    private static double salaryStringToDouble(String strSalary){
         return Double.parseDouble(strSalary);
     }
 
-    private double durationToDouble(String duration) {
+    private static double durationToDouble(String duration) {
         double doubleDuration = 0;
 
         String under8Hours = "Under 8 Hours";
@@ -86,8 +82,4 @@ public final class PostAvailableJobHelper {
         return doubleDuration;
     }
 
-    //fix this
-    public static void errorEater(@NonNull String error){
-        Log.e(error, "There's been an error");
-    }
 }

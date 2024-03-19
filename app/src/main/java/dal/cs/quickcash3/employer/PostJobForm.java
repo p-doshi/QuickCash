@@ -2,6 +2,7 @@ package dal.cs.quickcash3.employer;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,12 +12,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.MyFirebaseDatabase;
 
 public class PostJobForm extends Activity {
+    Database database = new MyFirebaseDatabase(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,8 +48,12 @@ public class PostJobForm extends Activity {
                 status.setText(errorMessage);
             }
             else{
-                createJob();
                 // save to db
+                try {
+                    createJob();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 // write success message
                 status.setText(R.string.success);
                 // move to next page
@@ -104,8 +114,10 @@ public class PostJobForm extends Activity {
     /**
      * Creates a new available job in the database
      */
-    protected void createJob(){
-        //create a job
+    protected void createJob() throws IOException {
+        Map<String, String> fields = getFieldsMap();
+        AvailableJob job = PostAvailableJobHelper.createAvailableJob(fields, this);
+        job.writeToDatabase(database, error-> Log.e("PostJobForm", error));
     }
 
     // Getters
