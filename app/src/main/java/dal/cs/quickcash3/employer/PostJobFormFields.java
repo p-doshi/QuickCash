@@ -1,27 +1,23 @@
 package dal.cs.quickcash3.employer;
 
-import android.content.Context;
-
-import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
-import dal.cs.quickcash3.R;
-
 public class PostJobFormFields {
-    static String datePattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
-    static String salaryPattern = "^([0-9]+|[0-9]+\\.[0-9]{2})$";
-    static String empty = "";
+    static final String datePattern = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
+    static final String salaryPattern = "^([0-9]+|[0-9]+\\.[0-9]{2})$";
+    static final String empty = "";
     static String errorMessage;
-    static String missingFieldError = "Please fill in all fields!";
-    static String improperDateFormat = "Please enter date in proper format - dd/mm/yyyy";
-    static String improperSalaryFormat = "Please enter valid salary";
+    static final String missingFieldError = "Please fill in all fields!";
+    static final String improperDateFormat = "Please enter date in proper format - dd/mm/yyyy";
+    static final String improperSalaryFormat = "Please enter valid salary";
 
     /**
      * Method for PostJobForm to call to check form fields properly filled out
      * @param fields a hashmap containing fields as key and user input as the values
      * @return A string holding an error message; empty when no errors
      */
-    public static String checkFieldsValid(HashMap<String, String> fields){
+    protected static String checkFieldsValid(Map<String, String> fields){
         errorMessage = empty;
         String emptyError = checkIfEmpty(fields);
         String dateFormatError = checkJobDate(fields.get("date"));
@@ -45,15 +41,19 @@ public class PostJobFormFields {
      * @param fields a hashmap containing fields as key and user input as the values
      * @return A string holding an error message; empty when no errors
      */
-    private static String checkIfEmpty(HashMap<String, String> fields){
+    private static String checkIfEmpty(Map<String, String> fields){
         errorMessage = empty;
 
-        for (HashMap.Entry<String, String> field : fields.entrySet()) {
+        for (Map.Entry<String, String> field : fields.entrySet()) {
             String key = field.getKey();
             String input = field.getValue();
-            boolean provinceCheck = key.equals("province") && input.equals("province");
-            boolean durationCheck = key.equals("duration") && input.equals("duration");
-            boolean urgencyCheck = key.equals("urgency") && input.equals("urgency");
+            String provinceStr = "province";
+            String durationStr = "duration";
+            String urgencyStr = "urgency";
+
+            boolean provinceCheck = key.equals(provinceStr) && input.equals(provinceStr);
+            boolean durationCheck = key.equals(durationStr) && input.equals(durationStr);
+            boolean urgencyCheck = key.equals(urgencyStr) && input.equals(urgencyStr);
 
             if(input.equals(empty)||provinceCheck||durationCheck||urgencyCheck){
                 errorMessage = missingFieldError;
@@ -68,7 +68,7 @@ public class PostJobFormFields {
      * @param date the date as input by the user
      * @return an error message string for reformatting; empty string if no formatting error
      */
-    public static String checkJobDate(String date){
+    private static String checkJobDate(String date){
         errorMessage = empty;
 
         if(!Pattern.matches(datePattern, date)){
@@ -82,7 +82,7 @@ public class PostJobFormFields {
      * @param salary a string representing the salary
      * @return an error message string for proper formatting; empty string if no formatting error
      */
-    public static String checkJobSalary(String salary){
+    private static String checkJobSalary(String salary){
         errorMessage = empty;
 
         if(!Pattern.matches(salaryPattern, salary)){

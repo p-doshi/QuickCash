@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import dal.cs.quickcash3.R;
 
@@ -93,7 +94,7 @@ public class PostJobForm extends Activity {
      */
     protected String checkAllFields(){
         // check fields and return error message?
-        HashMap<String, String> fields = getFieldsMap();
+        Map<String, String> fields = getFieldsMap();
         return PostJobFormFields.checkFieldsValid(fields);
     }
 
@@ -146,8 +147,8 @@ public class PostJobForm extends Activity {
      * Method to create a hashmap with all the fields as the keys and the user input as values
      * @return a hashmap
      */
-    protected HashMap<String, String> getFieldsMap(){
-        HashMap<String, String> fields = new HashMap<>();
+    protected Map<String, String> getFieldsMap(){
+        Map<String, String> fields = new HashMap<>();
 
         fields.put("title", getJobTitle());
         fields.put("date", getJobDate());
