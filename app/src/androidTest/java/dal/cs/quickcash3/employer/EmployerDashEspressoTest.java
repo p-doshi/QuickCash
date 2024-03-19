@@ -7,7 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class EmployerDashEspressoTest {
 
     @Test
     public void testEmployerNavBarExist(){
-        onView(ViewMatchers.withId(R.id.employerBottomNavView)).perform(click());
+        onView(withId(R.id.employerBottomNavView)).perform(click());
     }
 
     @Test

@@ -63,7 +63,7 @@ public class AndroidLocationProvider implements LocationProvider {
             hasPendingLocation.set(false);
 
             // Send an asynchronous request for location access.
-            activity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PermissionRequestCode.LOCATION.getValue());
+            activity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PermissionRequestCode.LOCATION.getCode());
 
             return;
         }

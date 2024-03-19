@@ -6,5 +6,4 @@
     <string name="location_permission">Location Permission</string>
     <string name="error_location_permission">User declined location permissions</string>
     <string name="error_location_spam">Cannot fetch location before previous fetch completes</string>
-    <string name="location_error">Location error</string>
 </resources>

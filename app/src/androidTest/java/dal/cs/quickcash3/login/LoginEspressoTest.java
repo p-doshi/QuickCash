@@ -8,7 +8,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -35,7 +34,7 @@ public class LoginEspressoTest {
 
     @Test
     public void testEmptyEmail() {
-        onView(ViewMatchers.withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
+        onView(withId(R.id.emailaddress)).perform(typeText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.etPassword)).perform(typeText("hi")).perform(closeSoftKeyboard());
         onView(withId(R.id.continueButton)).perform(click());
         onView(withId(R.id.statusLabel)).check(matches(withText(R.string.EMPTY_EMAIL_TOAST)));

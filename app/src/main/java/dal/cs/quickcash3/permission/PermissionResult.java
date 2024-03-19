@@ -19,7 +19,7 @@ public class PermissionResult {
             throw new IllegalArgumentException("Permission result arrays are not of the same size");
         }
 
-        this.requestCode = PermissionRequestCode.values()[requestCode];
+        this.requestCode = PermissionRequestCode.get(requestCode);
         this.permissions = Arrays.asList(permissions);
         this.grantResults = new ArrayList<>();
         for (int grantResult : grantResults) {

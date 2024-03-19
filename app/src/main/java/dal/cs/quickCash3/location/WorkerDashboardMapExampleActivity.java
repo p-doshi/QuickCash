@@ -1,26 +1,27 @@
 package dal.cs.quickcash3.location;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
-import android.util.Pair;
-import android.widget.Toast;
-import android.Manifest;
-
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivity {
-    LocationProvider locationProvider;
+        LocationProvider locationProvider;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dashboard_worker);
 
@@ -48,7 +49,7 @@ public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivi
                 MapFragment fragment = new MapFragment();
                 // For the sake of consistent tests (We don't know where the CI is) we'll use a static location while testing
                 assignTestValues(fragment);
-                fragmentManger.beginTransaction().replace(R.id.mapContainer, fragment).commit();
+                fragmentManger.beginTransaction().add(R.id.mapContainer, fragment).commit();
             }
             else if (item.getItemId() == R.id.workerMapPage && !(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
                 // If they selected the map WITHOUT location permissions, show them a toast that it won't work
@@ -65,27 +66,12 @@ public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivi
     }
 
     // Only used for the test Demo
-    private static void assignTestValues(MapFragment fragment) {
+    private static void assignTestValues(@NonNull MapFragment fragment) {
         // Sets a testing location as the current location
-        Location currentLocationTesting = new Location("Testing Location");
-        currentLocationTesting.setLatitude(44.6356);
-        currentLocationTesting.setLongitude(-63.5952);
-        fragment.setCurrentLocation(currentLocationTesting);
+        fragment.setCurrentLocation(new LatLng(44.6356, -63.5952));
 
         // Create an array of 2 pairs of jobs
-        Location job1Location = new Location("Job 1 Location");
-        job1Location.setLatitude(44.641718);
-        job1Location.setLongitude(-63.584126);
-        Location job2Location = new Location("Job 2 Location");
-        job2Location.setLatitude(44.6398496);
-        job2Location.setLongitude(-63.601291);
-
-        Pair<Location, String>[] jobs = new Pair[] {
-                new Pair(job1Location, "Job 1"),
-                new Pair(job2Location, "Job 2")
-        };
-        fragment.setJobList(jobs);
+        fragment.addJob("Job 1", new LatLng(44.641718, -63.584126));
+        fragment.addJob("Job 2", new LatLng(44.6398496, -63.601291));
     }
-
-
 }

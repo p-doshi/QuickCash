@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 class DatabaseListener<T> {

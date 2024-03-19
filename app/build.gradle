@@ -54,7 +54,7 @@ dependencies {
     // Google Maps & Fragments
     implementation 'com.google.android.gms:play-services-maps:18.2.0'
     implementation 'com.google.android.gms:play-services-location:21.2.0'
-    implementation 'com.google.maps.android:android-maps-utils:0.4'
+    implementation 'com.google.maps.android:android-maps-utils:3.8.2'
     implementation 'androidx.navigation:navigation-fragment:2.7.7'
     implementation 'androidx.navigation:navigation-ui:2.7.7'
 }

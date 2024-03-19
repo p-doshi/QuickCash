@@ -20,9 +20,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY" />
         <activity
-            android:name=".location.MapFragment"
-            android:exported="true" />
-        <activity
             android:name=".location.WorkerDashboardMapExampleActivity"
             android:exported="true" />
         <activity

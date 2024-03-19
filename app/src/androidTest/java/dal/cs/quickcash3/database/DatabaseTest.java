@@ -18,9 +18,6 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.MyFirebaseDatabase;
-import dal.cs.quickcash3.database.MyFirebaseDatabaseImpl;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 @RunWith(AndroidJUnit4.class)
