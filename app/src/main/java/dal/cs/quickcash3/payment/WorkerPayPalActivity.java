@@ -48,7 +48,7 @@ public class WorkerPayPalActivity extends AppCompatActivity {
     }
 
     protected void moveToPaymentStatusWindow() {
-        Intent paymentStatusIntent = null;
+        Intent paymentStatusIntent;
 
         paymentStatusIntent = new Intent(getBaseContext(), WorkerPaymentConfirmationActivity.class);
         paymentStatusIntent.putExtra("PayID", job.getPayId());
