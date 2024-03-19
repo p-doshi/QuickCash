@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.util;
+package dal.cs.quickcash3.test;
 
 import static org.hamcrest.CoreMatchers.any;
 

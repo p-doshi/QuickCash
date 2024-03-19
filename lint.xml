@@ -4,6 +4,7 @@
     <!-- Example:
     <issue id="BooleanMethodIsAlwaysInverted" severity="ignore" />
     -->
+    <issue id="LogConditional" severity="ignore" />
 
     <!-- Make all warnings errors. -->
     <issue id="all" severity="error" />

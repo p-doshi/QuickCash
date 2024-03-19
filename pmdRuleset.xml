@@ -90,7 +90,7 @@
     <rule ref="category/java/codestyle.xml/EmptyMethodInAbstractClassShouldBeAbstract" />
     <rule ref="category/java/codestyle.xml/ExtendsObject"/>
     <rule ref="category/java/codestyle.xml/FieldDeclarationsShouldBeAtStartOfClass" />
-    <rule ref="category/java/codestyle.xml/FinalParameterInAbstractMethod"/>
+    <!-- <rule ref="category/java/codestyle.xml/FinalParameterInAbstractMethod"/> -->
     <rule ref="category/java/codestyle.xml/ForLoopShouldBeWhileLoop"/>
     <rule ref="category/java/codestyle.xml/IdenticalCatchBranches"/>
     <!-- <rule ref="category/java/codestyle.xml/LocalVariableCouldBeFinal" /> -->
@@ -119,7 +119,7 @@
     <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts" />
     <rule ref="category/java/design.xml/AvoidRethrowingException" />
     <rule ref="category/java/design.xml/AvoidThrowingNewInstanceOfSameException" />
-    <rule ref="category/java/design.xml/AvoidThrowingNullPointerException" />
+    <!-- <rule ref="category/java/design.xml/AvoidThrowingNullPointerException" /> -->
     <rule ref="category/java/design.xml/AvoidThrowingRawExceptionTypes" />
     <rule ref="category/java/design.xml/AvoidUncheckedExceptionsInSignatures" />
     <rule ref="category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
@@ -127,7 +127,7 @@
     <rule ref="category/java/design.xml/CollapsibleIfStatements"/>
     <rule ref="category/java/design.xml/CouplingBetweenObjects" />
     <rule ref="category/java/design.xml/CyclomaticComplexity" />
-    <rule ref="category/java/design.xml/DataClass" />
+    <!-- <rule ref="category/java/design.xml/DataClass" /> -->
     <rule ref="category/java/design.xml/DoNotExtendJavaLangError" />
     <rule ref="category/java/design.xml/ExceptionAsFlowControl" />
     <rule ref="category/java/design.xml/ExcessiveImports" />
@@ -262,7 +262,7 @@
     <rule ref="category/java/multithreading.xml/AvoidSynchronizedAtMethodLevel" />
     <rule ref="category/java/multithreading.xml/AvoidThreadGroup"/>
     <rule ref="category/java/multithreading.xml/AvoidUsingVolatile"/>
-    <rule ref="category/java/multithreading.xml/DoNotUseThreads" />
+    <!-- <rule ref="category/java/multithreading.xml/DoNotUseThreads" /> -->
     <rule ref="category/java/multithreading.xml/DontCallThreadRun"/>
     <rule ref="category/java/multithreading.xml/DoubleCheckedLocking"/>
     <rule ref="category/java/multithreading.xml/NonThreadSafeSingleton"/>

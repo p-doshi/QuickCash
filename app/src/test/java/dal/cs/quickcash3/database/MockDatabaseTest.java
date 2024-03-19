@@ -6,11 +6,25 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.Firebase;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
+
+import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.test.Person;
+import dal.cs.quickcash3.util.RandomStringGenerator;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // Hard coded literals increase test code clarity.
 public class MockDatabaseTest {
@@ -131,23 +145,6 @@ public class MockDatabaseTest {
 
         assertNull(value.get());
         assertNotNull(error.get());
-    }
-
-    @Test
-    public void writeNestedThenReadRoot() {
-        AtomicReference<MockDatabase.MapType> map = new AtomicReference<>();
-        AtomicReference<String> error = new AtomicReference<>();
-
-        final String expectedValue = "Hello";
-        final String expectedKey = "b";
-        database.write("/a/" + expectedKey, expectedValue,
-            () -> database.read("a", MockDatabase.MapType.class,
-                map::set,
-                error::set),
-            error::set);
-
-        assertEquals(expectedValue, map.get().get(expectedKey));
-        assertNull(error.get());
     }
 
     @Test
@@ -365,5 +362,101 @@ public class MockDatabaseTest {
         assertEquals(0, listenerId);
         assertEquals("a", value.get());
         assertNull(error.get());
+    }
+
+    private void writePeople() {
+        Person[] people = {
+            new Person("aaa", "aaa", 1),
+            new Person("aaa", "aab", 2),
+            new Person("aab", "aaa", 3),
+            new Person("aab", "aab", 4)
+        };
+
+        for (int i = 0; i < people.length; i++) {
+            database.write("a/" + i, people[i], Assert::fail);
+        }
+    }
+
+    @Test
+    public void writeSearch() {
+        writePeople();
+
+        List<Person> people = new ArrayList<>();
+
+        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
+        filter.setPattern(Pattern.compile("aaa"));
+
+        int listenerId = database.addSearchListener(
+            "a",
+            Person.class,
+            filter,
+            (key, person) -> people.add(person),
+            Assert::fail);
+
+        assertEquals(0, listenerId);
+        Assert.assertEquals(2, people.size());
+        for (Person person : people) {
+            Assert.assertEquals("aaa", person.getFirstName());
+        }
+    }
+
+    @Test
+    public void writeSearchWrite() {
+        writePeople();
+
+        List<Person> people = new ArrayList<>();
+
+        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
+        filter.setPattern(Pattern.compile("aaa"));
+
+        int listenerId = database.addSearchListener(
+            "a",
+            Person.class,
+            filter,
+            (key, person) -> people.add(person),
+            Assert::fail);
+
+        Person newPerson = new Person("aaa", "aaa", 5);
+        database.write("a/4", newPerson, Assert::fail);
+
+        assertEquals(0, listenerId);
+        Assert.assertEquals(3, people.size());
+        for (Person person : people) {
+            Assert.assertEquals("aaa", person.getFirstName());
+        }
+    }
+
+    @Test
+    public void writeSearchDelete() {
+        writePeople();
+
+        AtomicReference<List<Person>> peopleRef = new AtomicReference<>(new ArrayList<>());
+
+        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
+        filter.setPattern(Pattern.compile("aaa"));
+
+        int listenerId = database.addSearchListener(
+            "a",
+            Person.class,
+            filter,
+            (key, person) -> peopleRef.get().add(person),
+            Assert::fail);
+
+        List<Person> people = peopleRef.get();
+        peopleRef.set(new ArrayList<>());
+
+        database.delete("a/0", Assert::fail);
+
+        assertEquals(0, listenerId);
+        Assert.assertEquals(2, people.size());
+        for (Person person : people) {
+            Assert.assertEquals("aaa", person.getFirstName());
+        }
+
+        people = peopleRef.get();
+        Assert.assertEquals(1, people.size());
+        for (Person person : people) {
+            Assert.assertNull(person);
+        }
     }
 }

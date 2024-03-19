@@ -19,7 +19,7 @@ public class PermissionResult {
             throw new IllegalArgumentException("Permission result arrays are not of the same size");
         }
 
-        this.requestCode = PermissionRequestCode.values()[requestCode];
+        this.requestCode = PermissionRequestCode.get(requestCode);
         this.permissions = Arrays.asList(permissions);
         this.grantResults = new ArrayList<>();
         for (int grantResult : grantResults) {
@@ -27,16 +27,37 @@ public class PermissionResult {
         }
     }
 
+    /**
+     * Checks whether the permission result has the same request code as the one provided.
+     *
+     * @param requestCode The request code to check for.
+     * @return True if the request codes match; otherwise, false.
+     */
     public boolean isMatchingCode(@NonNull PermissionRequestCode requestCode) {
          return this.requestCode.equals(requestCode);
     }
 
+    /**
+     * Checks whether the permission result contains the given permission.
+     *
+     * @param permission The permission to check for.
+     * @return True if the permission is contained within the list of permissions; otherwise, false.
+     */
     public boolean containsPermission(@NonNull String permission) {
         return permissions.contains(permission);
     }
 
-    public boolean isPermissionSuccessful(@NonNull String permission) {
-        int index = permissions.indexOf(permission);
-        return grantResults.get(index) == PackageManager.PERMISSION_GRANTED;
+    /**
+     * Checks whether the given permission has been granted.
+     *
+     * @param permission The permission to check for.
+     * @return True if the permission has been granted; otherwise, false.
+     */
+    public boolean isPermissionGranted(@NonNull String permission) {
+        if (containsPermission(permission)) {
+            int index = permissions.indexOf(permission);
+            return grantResults.get(index) == PackageManager.PERMISSION_GRANTED;
+        }
+        return false;
     }
 }
