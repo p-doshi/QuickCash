@@ -39,7 +39,7 @@ public class PayPalPaymentProcess {
         initActivityLauncher();
     }
 
-    protected void configPayPal() {
+    private void configPayPal() {
         payPalConfig = new PayPalConfiguration()
                 .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .clientId(BuildConfig.PAYPAL_CLIENT_ID);
@@ -59,7 +59,7 @@ public class PayPalPaymentProcess {
         activityResultLauncher.launch(intent);
     }
 
-    protected void initActivityLauncher() {
+    private void initActivityLauncher() {
         activityResultLauncher = activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
