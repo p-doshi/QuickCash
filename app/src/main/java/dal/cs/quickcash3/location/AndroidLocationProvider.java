@@ -71,6 +71,7 @@ public class AndroidLocationProvider implements LocationProvider {
             return;
         }
 
+
         LocationRequest locationRequest =
             new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, updateFrequencyMillis)
                 .build();
@@ -102,6 +103,7 @@ public class AndroidLocationProvider implements LocationProvider {
         if (missingPermissions() && deniedPermission.get()) {
             errorFunction.accept(activity.getString(R.string.error_location_permission));
             return -1;
+
         }
 
         // In case the user re-enabled permissions.

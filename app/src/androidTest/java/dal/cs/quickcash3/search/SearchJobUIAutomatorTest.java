@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import android.Manifest;
 
+import androidx.annotation.NonNull;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
@@ -15,15 +17,13 @@ import androidx.test.uiautomator.UiSelector;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobUIAutomatorTest {
-
-    private static final String FILTER_TEXT = "Apply Filters";
-
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
             new ActivityScenarioRule<>(WorkerDashboard.class);
@@ -31,33 +31,34 @@ public class SearchJobUIAutomatorTest {
     public GrantPermissionRule permissionRule =
             GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
+    private final String appPackage = ApplicationProvider.getApplicationContext().getPackageName();
 
-    @After
-    public void teardown() {
-        // Just to be sure.
-        FirebaseAuth.getInstance().signOut();
+    private @NonNull UiObject findResource(@NonNull String resourceId) {
+        UiSelector selector = new UiSelector().resourceId(appPackage + ":id/" + resourceId);
+        return device.findObject(selector);
     }
 
+    @Before
+    public void setup() throws UiObjectNotFoundException {
+        findResource("workerSearchPage").click();
+    }
 
     @Test
-    public void checkIfLandingPageIsVisible() throws UiObjectNotFoundException {
-        UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
-        searchPage.click();
-        UiObject searchBox = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/searchBar"));
-        assertTrue(searchBox.exists());
-        UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
-        assertTrue(filterIcon.exists());
+    public void checkIfLandingPageIsVisible() {
+        assertTrue(findResource("searchBar").exists());
+        assertTrue(findResource("filterIcon").exists());
     }
-
 
     @Test
     public void checkIfMovedToSearchFilter() throws UiObjectNotFoundException {
-        UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
-        searchPage.click();
-        UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
-        assertTrue(filterIcon.exists());
-        filterIcon.click();
-        UiObject welcomeLabel = device.findObject(new UiSelector().text(FILTER_TEXT));
-        assertTrue(welcomeLabel.exists());
+        findResource("filterIcon").click();
+        assertTrue(findResource("filterFragment").exists());
+    }
+
+    @Test
+    public void checkIfMovedToJobSearchPage() throws UiObjectNotFoundException {
+        findResource("filterIcon").click();
+        findResource("applyButton").click();
+        assertTrue(findResource("searchBar").exists());
     }
 }
