@@ -19,11 +19,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import dal.cs.quickcash3.location.WorkerDashboardMapExampleActivity;
+
 @RunWith(AndroidJUnit4.class)
 public class WorkerDashMapsUITest {
+    private static final int MAX_LOAD_TIMEOUT = 10000;
     @Rule
-    public final ActivityScenarioRule<WorkerDashboard> activityRule =
-        new ActivityScenarioRule<>(WorkerDashboard.class);
+    public final ActivityScenarioRule<WorkerDashboardMapExampleActivity> activityRule =
+        new ActivityScenarioRule<>(WorkerDashboardMapExampleActivity.class);
     @Rule
     public GrantPermissionRule permissionRule =
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -38,21 +41,21 @@ public class WorkerDashMapsUITest {
     @Test
     public void testMapMeIsDisplayed() throws UiObjectNotFoundException {
         UiObject myMarker = device.findObject(new UiSelector().descriptionContains("Me"));
-        assertTrue(myMarker.exists());
+        assertTrue(myMarker.waitForExists(MAX_LOAD_TIMEOUT));
         myMarker.click();
     }
 
     @Test
     public void testMapWorker1IsDisplayed() throws UiObjectNotFoundException{
         UiObject jobMarker = device.findObject(new UiSelector().descriptionContains("Job 1"));
-        assertTrue(jobMarker.exists());
+        assertTrue(jobMarker.waitForExists(MAX_LOAD_TIMEOUT));
         jobMarker.click();
     }
 
     @Test
     public void testMapWorker2IsDisplayed() throws UiObjectNotFoundException{
         UiObject jobMarker = device.findObject(new UiSelector().descriptionContains("Job 2"));
-        assertTrue(jobMarker.exists());
+        assertTrue(jobMarker.waitForExists(MAX_LOAD_TIMEOUT));
         jobMarker.click();
     }
 }

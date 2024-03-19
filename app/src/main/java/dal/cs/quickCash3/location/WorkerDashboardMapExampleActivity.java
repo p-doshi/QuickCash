@@ -18,8 +18,8 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
 public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivity {
-        LocationProvider locationProvider;
 
+    @SuppressWarnings("PMD.LawOfDemeter") // This is how R.id is meant to be used.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +28,7 @@ public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivi
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
         // Upon loading the worker page it should immediately request location permissions and get current location
-        locationProvider = new AndroidLocationProvider(this, 5000);
+        LocationProvider locationProvider = new AndroidLocationProvider(this, 5000);
         // Need to request location here
         locationProvider.fetchLocation(
                 location -> {
@@ -51,10 +51,9 @@ public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivi
                 assignTestValues(fragment);
                 fragmentManger.beginTransaction().add(R.id.mapContainer, fragment).commit();
             }
-            else if (item.getItemId() == R.id.workerMapPage && !(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+            else if (item.getItemId() == R.id.workerMapPage && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // If they selected the map WITHOUT location permissions, show them a toast that it won't work
-                Toast.makeText(WorkerDashboardMapExampleActivity.this,
-                        "Location Permissions must be enabled to use Map", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Location Permissions must be enabled to use Map", Toast.LENGTH_LONG).show();
             }
             else if (currentFragment != null) {
                 // Detaches current fragment if the user clicks another menu option

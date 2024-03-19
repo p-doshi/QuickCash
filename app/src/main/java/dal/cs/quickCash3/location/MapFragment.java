@@ -40,6 +40,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops") // No thank you.
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
