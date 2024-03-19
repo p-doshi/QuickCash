@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -17,11 +18,9 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class PostAvailableJobHelper {
-    private Context context;
-    private final Geocoder geocoder = new Geocoder(context);
     private Database database;
 
-    public void createAvailableJob(HashMap<String, String> fields) throws IOException {
+    public void createAvailableJob(Map<String, String> fields) throws IOException {
         AvailableJob job = new AvailableJob();
 
         job.setTitle(Objects.requireNonNull(fields.get("title")));
@@ -47,6 +46,8 @@ public class PostAvailableJobHelper {
     }
 
     private Address locToCoordinates(String streetAdd, String city, String province) throws IOException {
+        Context context = null;
+        Geocoder geocoder = new Geocoder(context);
         String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
         List<Address> address = geocoder.getFromLocationName(strAddress, 20);
         return address.get(0);
@@ -59,17 +60,24 @@ public class PostAvailableJobHelper {
     private double durationToDouble(String duration) {
         double doubleDuration = 0;
 
-        if ("Under 8 Hours".equals(duration)) {
+        String under8Hours = "Under 8 Hours";
+        String days1to3 = "1 – 3 Days";
+        String days4to7 = "4 – 7 Days";
+        String weeks1to2 = "1 – 2 Weeks";
+        String weeks2to4 = "2 – 4 Weeks";
+        String weeks4plus = "4+ Weeks";
+
+        if (under8Hours.equals(duration)) {
             doubleDuration = 8;
-        } else if ("1 – 3 Days".equals(duration)) {
+        } else if (days1to3.equals(duration)) {
             doubleDuration = 24;
-        } else if ("4 – 7 Days".equals(duration)) {
+        } else if (days4to7.equals(duration)) {
             doubleDuration = 56;
-        } else if ("1 – 2 Weeks".equals(duration)) {
+        } else if (weeks1to2.equals(duration)) {
             doubleDuration = 112;
-        } else if ("2 – 4 Weeks".equals(duration)) {
+        } else if (weeks2to4.equals(duration)) {
             doubleDuration = 240;
-        } else if ("4+ Weeks".equals(duration)) {
+        } else if (weeks4plus.equals(duration)) {
             doubleDuration = 336;
         }
 
