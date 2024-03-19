@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <!-- Location Permissions for Mat's UserStory7 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -17,34 +17,37 @@
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s">
         <activity
-            android:name=".database.DatabaseExampleActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".employer.EmployerDashboard"
-            android:exported="true"/>
-        <activity
-            android:name=".location.LocationExampleActivity"
-            android:exported="true"/>
-        <activity
-            android:name="dal.cs.quickcash3.login.LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustNothing" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".registration.ChooseRoleActivity"
-            android:exported="true"/>
+            android:name=".employer.EmployerDashLocation"
+            android:exported="true" />
         <activity
             android:name=".registration.RegistrationPage"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".worker.WorkerDashboard"
+            android:name=".database.DatabaseExampleActivity"
+            android:exported="true" />
+        <activity
+            android:name=".login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".worker.WorkerDashboard"
+            android:exported="true" />
+        <activity
+            android:name=".employer.EmployerDashboard"
+            android:exported="true" />
+        <activity
+            android:name=".registration.ChooseRoleActivity"
+            android:exported="true" />
+        <activity
+            android:name=".location.LocationExampleActivity"
+            android:exported="true" />
         <activity
             android:name=".payment.WorkerPayPalActivity"
             android:exported="true"/>
