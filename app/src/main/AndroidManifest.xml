@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Location & Internet Permissions -->
+
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -16,18 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s">
-        <service
-            android:name=".location.AndroidLocationProvider"
-            android:foregroundServiceType="location" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY" />
         <activity
             android:name=".location.MapFragment"
             android:exported="true" />
         <activity
             android:name=".location.WorkerDashboardMapExampleActivity"
             android:exported="true" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY" />
         <activity
             android:name=".registration.RegistrationPage"
             android:exported="true"

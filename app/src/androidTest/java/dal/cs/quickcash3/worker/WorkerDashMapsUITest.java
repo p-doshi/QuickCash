@@ -1,8 +1,10 @@
 package dal.cs.quickcash3.worker;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -10,10 +12,12 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 
 import static org.junit.Assert.assertTrue;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
@@ -27,35 +31,18 @@ import dal.cs.quickcash3.location.WorkerDashboardMapExampleActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class WorkerDashMapsUITest {
-    UiDevice device;
-    private static final int LAUNCH_TIMEOUT = 5000;
-    final String launcherPackage = "dal.cs.quickcash3";
-    private final int SDK_VERSION = Build.VERSION.SDK_INT;
+    @Rule
+    public final ActivityScenarioRule<WorkerDashboardMapExampleActivity> activityRule =
+        new ActivityScenarioRule<>(WorkerDashboardMapExampleActivity.class);
+    @Rule
+    public GrantPermissionRule permissionRule =
+        GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
+    private final String appPackage = ApplicationProvider.getApplicationContext().getPackageName();
 
     @Before
-    public void setup() {
-        device = UiDevice.getInstance(getInstrumentation());
-
-        Context context = ApplicationProvider.getApplicationContext();
-        Intent launcherIntent = new Intent(context, WorkerDashboardMapExampleActivity.class);
-
-        launcherIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(launcherIntent);
-        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
-
-        // This just dismisses the allow permission popup
-        try {
-            allowPermissions();
-        } catch (UiObjectNotFoundException e) {
-            // If we can't find the allow permission that's fine, it means it was already granted
-        }
-
-        try {
-            UiObject mapTab=device.findObject(new UiSelector().descriptionContains("Map"));
-            mapTab.click();
-        } catch (UiObjectNotFoundException e) {
-            // The map will always be found so its fine
-        }
+    public void setup() throws UiObjectNotFoundException {
+        device.findObject(new UiSelector().resourceId(appPackage + ":id/workerMapPage")).click();
     }
 
     @Test
@@ -77,21 +64,5 @@ public class WorkerDashMapsUITest {
         UiObject Worker2=device.findObject(new UiSelector().descriptionContains("Job 2"));
         Worker2.click();
         assertTrue(Worker2.exists());
-    }
-    private void allowPermissions() throws UiObjectNotFoundException {
-        String allowRegex;
-        switch (SDK_VERSION) {
-            case 28: allowRegex = "ALLOW"; break;
-            case 29: allowRegex = "Allow only while using the app"; break;
-            case 30:
-            case 31:
-            case 32:
-            case 33:
-            case 34: allowRegex = "Only this time"; break;
-            default: allowRegex = ""; break;
-        }
-
-        UiObject allowButton = device.findObject(new UiSelector().textMatches(allowRegex));
-        allowButton.click();
     }
 }
