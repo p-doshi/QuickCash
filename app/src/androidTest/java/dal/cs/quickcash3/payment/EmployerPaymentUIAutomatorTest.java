@@ -4,8 +4,8 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static org.junit.Assert.assertTrue;
 
 import android.Manifest;
+import android.os.SystemClock;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
@@ -13,9 +13,6 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,7 +65,7 @@ public class EmployerPaymentUIAutomatorTest {
         doneButton.clickAndWaitForNewWindow();
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
         chargeButton.clickAndWaitForNewWindow();
-        Thread.sleep(3000);
+        SystemClock.sleep(3000);
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
         assertTrue(approveStatus.exists());
     }
@@ -92,7 +89,7 @@ public class EmployerPaymentUIAutomatorTest {
         doneButton.clickAndWaitForNewWindow();
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
         chargeButton.clickAndWaitForNewWindow();
-        Thread.sleep(3000);
+        SystemClock.sleep(3000);
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
         assertTrue(approveStatus.exists());
     }
