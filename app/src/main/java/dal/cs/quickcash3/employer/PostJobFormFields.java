@@ -1,8 +1,11 @@
 package dal.cs.quickcash3.employer;
 
+import android.annotation.SuppressLint;
+
 import java.util.Map;
 import java.util.regex.Pattern;
 
+@SuppressLint("UseUtilityClass") // no constructor
 public final class PostJobFormFields {
     static final String DATE_PATTERN = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((20|2[0-9])[0-9]{2})$";
     static final String SALARY_PATTERN = "^([0-9]+|[0-9]+\\.[0-9]{2})$";

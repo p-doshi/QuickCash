@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.employer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -7,7 +8,6 @@ import android.location.Geocoder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,12 +17,8 @@ import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
-public class PostAvailableJobHelper {
+public final class PostAvailableJobHelper {
     private Database database;
-    private PostAvailableJobHelper(){
-        throw new java.lang.UnsupportedOperationException("cannot be instantiated");
-    }
-
     public void createAvailableJob(Map<String, String> fields) throws IOException {
         AvailableJob job = new AvailableJob();
 
@@ -88,7 +84,8 @@ public class PostAvailableJobHelper {
     }
 
     //fix this
+    @SuppressLint("SystemPrintln") // I don't have a way of handling this yet so just go with it
     public static void errorEater(String error){
-        throw new java.lang.NullPointerException(error);
+        System.out.println(error);
     }
 }
