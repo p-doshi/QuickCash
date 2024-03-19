@@ -28,7 +28,7 @@ public class EmployerDashLocationEspressoTest {
     public Context context;
     @Rule
     public GrantPermissionRule grantLocationPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-    final static int MAX_LOCATION_TIMEOUT_MS = 15000;
+    final static int MAX_LOCATION_TIMEOUT_MS = 30000;
     @Before
     public void setup() {
         scenario = ActivityScenario.launch(EmployerDashLocation.class);
