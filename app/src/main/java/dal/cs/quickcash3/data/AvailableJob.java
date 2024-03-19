@@ -1,6 +1,7 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.database.annotations.Nullable;
 
@@ -9,23 +10,16 @@ import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseDirectory;
+import dal.cs.quickcash3.util.Copyable;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
-public class AvailableJob extends JobPost {
+public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
     private String startDate;
     private double duration;
     private String urgency;
     private String postTime;
     private List<String> applicants;
     private List<String> blackList;
-
-    @Override
-    public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        database.write(
-            DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
-            this,
-            errorFunction);
-    }
 
     public @Nullable String getStartDate() {
         return startDate;
@@ -73,5 +67,60 @@ public class AvailableJob extends JobPost {
 
     public void setBlackList(@NonNull List<String> blackList) {
         this.blackList = blackList;
+    }
+
+    @Override
+    public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        writeToDatabase(database, () -> {}, errorFunction);
+    }
+
+    @Override
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        database.write(
+            DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
+            this,
+            successFunction,
+            errorFunction);
+    }
+
+    @Override
+    public void readFromDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Consumer<String> errorFunction)
+    {
+        readFromDatabase(database, key, () -> {}, errorFunction);
+    }
+
+    @Override
+    public void readFromDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        database.read(
+            DatabaseDirectory.AVAILABLE_JOBS.getValue() + key,
+            getClass(),
+            job -> {
+                this.copyFrom(job);
+                successFunction.run();
+            },
+            errorFunction);
+    }
+
+    @Override
+    public void copyFrom(@NonNull AvailableJob other) {
+        super.copyFrom(other);
+        startDate = other.startDate;
+        duration = other.duration;
+        urgency = other.urgency;
+        postTime = other.postTime;
+        applicants = other.applicants;
+        blackList = other.blackList;
     }
 }

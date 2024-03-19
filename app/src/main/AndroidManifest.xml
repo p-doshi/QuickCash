@@ -17,40 +17,37 @@
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s">
         <activity
-            android:name=".registration.RegistrationPage"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".database.DatabaseExampleActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".employer.EmployerDashboard"
+            android:exported="true"/>
+        <activity
+            android:name=".location.LocationExampleActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".employer.EmployerDashLocation"
             android:exported="true" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name="dal.cs.quickcash3.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustNothing" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".worker.WorkerDashboard"
-            android:exported="true" />
-        <activity
-            android:name=".employer.EmployerDashboard"
-            android:exported="true" />
-        <activity
             android:name=".registration.ChooseRoleActivity"
-            android:exported="true" />
-        <activity
-            android:name=".location.LocationExampleActivity"
-            android:exported="true" />
-        <activity
-            android:name=".employer.PostJobForm"
             android:exported="true"/>
         <activity
-            android:name=".employer.EmployerDashLocation"
-            android:exported="true"/>
+            android:name=".registration.RegistrationPage"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".worker.WorkerDashboard"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>

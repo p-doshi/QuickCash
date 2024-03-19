@@ -1,25 +1,26 @@
-package dal.cs.quickcash3.database;
+package dal.cs.quickcash3.database.mock;
 
-import static dal.cs.quickcash3.database.DatabaseHelper.splitLocationIntoKeys;
+import static dal.cs.quickcash3.util.StringHelper.SLASH;
+import static dal.cs.quickcash3.util.StringHelper.splitString;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.database.annotations.Nullable;
-
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
-class DatabaseListener<T> {
+@SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod") // No one should be instantiating one of these.
+abstract class MockDatabaseListener<T> {
     private final List<String> keys;
-    private final Class<T> type;
-    private final Consumer<T> readFunction;
+    protected final Class<T> type;
     private final Consumer<String> errorFunction;
 
-    public DatabaseListener(@NonNull String location, @NonNull Class<T> type, @NonNull Consumer<T> readFunction, @NonNull Consumer<String> errorFunction) {
-        this.keys = splitLocationIntoKeys(location);
+    protected MockDatabaseListener(
+        @NonNull String location,
+        @NonNull Class<T> type,
+        @NonNull Consumer<String> errorFunction)
+    {
+        this.keys = splitString(location, SLASH);
         this.type = type;
-        this.readFunction = readFunction;
         this.errorFunction = errorFunction;
     }
 
@@ -41,13 +42,6 @@ class DatabaseListener<T> {
 
     public List<String> getKeys() {
         return keys;
-    }
-
-    public void sendValue(@Nullable Object value) {
-        if (!type.isInstance(value)) {
-            throw new ClassCastException("Cannot cast " + value.getClass() + " to " + type);
-        }
-        readFunction.accept(type.cast(value));
     }
 
     public void sendError(@NonNull String error) {

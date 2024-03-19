@@ -15,10 +15,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class DatabaseExampleActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "DatabaseExample";
+    private static final String LOG_TAG = DatabaseExampleActivity.class.getSimpleName();
     private Database database;
 
     @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
@@ -60,7 +62,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Using Mock Database");
         }
         else {
-            database = new MyFirebaseDatabase(this);
+            database = new MyFirebaseDatabase();
         }
     }
 

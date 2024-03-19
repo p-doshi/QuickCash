@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.data;
 
+import static dal.cs.quickcash3.location.LocationHelper.randomLocation;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -14,29 +16,12 @@ import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public final class JobPostHelper {
     private static final Random RANDOM = new Random();
-    
+
     // Utility class.
     private JobPostHelper() {}
 
     private static double roundToNearestCent(double val) {
         return Math.round(val * 100.0) / 100.0;
-    }
-
-    private static double scaleNormalized(double normal, double min, double max) {
-        return normal * (max - min) + min;
-    }
-
-    /**
-     * Get a random location from within a given area.
-     *
-     * @param area The area to pick a random location from.
-     * @return A random location.
-     */
-    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
-    public static @NonNull LatLng randomLocation(@NonNull LatLngBounds area) {
-        double lat = scaleNormalized(RANDOM.nextDouble(), area.southwest.latitude, area.northeast.latitude);
-        double lng = scaleNormalized(RANDOM.nextDouble(), area.southwest.longitude, area.northeast.longitude);
-        return new LatLng(lat, lng);
     }
 
     /**

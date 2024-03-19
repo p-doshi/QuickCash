@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.util;
+package dal.cs.quickcash3.test;
 
 import android.view.View;
 import android.widget.TextView;

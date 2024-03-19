@@ -1,6 +1,7 @@
 package dal.cs.quickcash3.location;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,7 +13,10 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+import com.google.firebase.database.annotations.Nullable;
 
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -27,46 +31,44 @@ public class AndroidLocationProvider implements LocationProvider {
     protected final Activity activity;
     private final long updateFrequencyMillis;
     protected final AtomicReference<Location> lastLocation = new AtomicReference<>();
-    private final AtomicBoolean hasPendingLocation = new AtomicBoolean(false);
-    private Consumer<Location> pendingLocationFunction;
-    private Consumer<String> pendingErrorFunction;
+    private final AtomicBoolean hasLocationUpdates = new AtomicBoolean(false);
+    private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
+    private final AtomicBoolean deniedPermission = new AtomicBoolean(false);
+    private int nextReceiverId;
 
     public AndroidLocationProvider(@NonNull ActivityPermissionHandler handler, long updateFrequencyMillis) {
         this.activity = handler.getActivity();
         this.updateFrequencyMillis = updateFrequencyMillis;
         handler.registerPermissionHandler(this::onRequestPermissionsResult);
         locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
+
+        startLocationUpdates();
     }
 
-    @Override
-    public void fetchLocation(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction) {
-        if (hasPendingLocation.get()) {
-            errorFunction.accept(activity.getString(R.string.error_location_spam));
-            return;
-        }
-
-        if (lastLocation.get() == null) {
-            fetchNewLocation(locationFunction, errorFunction);
-            return;
-        }
-
-        locationFunction.accept(lastLocation.get());
+    private boolean missingPermissions() {
+        return activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
     }
 
-    private void fetchNewLocation(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction) {
-        pendingLocationFunction = locationFunction;
-        pendingErrorFunction = errorFunction;
+    private void receiveLocation(@NonNull Location location) {
+        lastLocation.set(location);
+        for (LocationReceiver receiver : locationReceivers.get().values()) {
+            receiver.receiveLocation(location);
+        }
+    }
 
-        if (activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            hasPendingLocation.set(false);
-
-            // Send an asynchronous request for location access.
-            activity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PermissionRequestCode.LOCATION.getValue());
-
+    @SuppressLint("MissingPermission") // Using a helper function instead.
+    private void startLocationUpdates() {
+        if (missingPermissions()) {
+            // Do not ask more than once.
+            if (!deniedPermission.get()) {
+                activity.requestPermissions(
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PermissionRequestCode.LOCATION.getCode());
+            }
             return;
         }
+
 
         LocationRequest locationRequest =
             new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, updateFrequencyMillis)
@@ -74,42 +76,77 @@ public class AndroidLocationProvider implements LocationProvider {
 
         LocationCallback locationCallback = new MyLocationCallback(
             locationProviderClient,
-            location -> {
-                lastLocation.set(location);
-                if (hasPendingLocation.get()) {
-                    pendingLocationFunction.accept(location);
-                    hasPendingLocation.set(false);
-                }
-            });
+            this::receiveLocation);
 
-        hasPendingLocation.set(true);
-
-        locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, activity.getMainLooper());
+        locationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            activity.getMainLooper());
+        hasLocationUpdates.set(true);
 
         // Try to use the last known location for now.
         locationProviderClient.getLastLocation().addOnSuccessListener(location -> {
             if (location == null) {
                 return;
             }
-
-            if (hasPendingLocation.get()) {
-                lastLocation.set(location);
-                pendingLocationFunction.accept(location);
-                hasPendingLocation.set(false);
-            }
+            receiveLocation(location);
         });
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
-    private void onRequestPermissionsResult(PermissionResult result) {
-        if (result.isMatchingCode(PermissionRequestCode.LOCATION) &&
-            result.containsPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-            result.isPermissionSuccessful(Manifest.permission.ACCESS_FINE_LOCATION)) {
+    @Override
+    public int addLocationCallback(
+        @NonNull Consumer<Location> locationFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        if (missingPermissions() && deniedPermission.get()) {
+            errorFunction.accept(activity.getString(R.string.error_location_permission));
+            return -1;
 
-            fetchLocation(pendingLocationFunction, pendingErrorFunction);
         }
-        else {
-            pendingErrorFunction.accept(activity.getString(R.string.error_location_permission));
+
+        // In case the user re-enabled permissions.
+        if (!hasLocationUpdates.get()) {
+            startLocationUpdates();
+        }
+
+        LocationReceiver receiver = new LocationReceiver(locationFunction, errorFunction);
+        int receiverId = nextReceiverId++;
+        locationReceivers.get().put(receiverId, receiver);
+
+        return receiverId;
+    }
+
+    @Override
+    public void removeLocationCallback(int callbackId) {
+        locationReceivers.get().remove(callbackId);
+    }
+
+    @Override
+    public @Nullable Location getLastLocation() {
+        if (missingPermissions()) {
+            if (deniedPermission.get()) {
+                throw new SecurityException(activity.getString(R.string.error_location_permission));
+            }
+            else {
+                return null;
+            }
+        }
+
+        // In case the user re-enabled permissions.
+        if (!hasLocationUpdates.get()) {
+            startLocationUpdates();
+        }
+
+        return lastLocation.get();
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
+    private void onRequestPermissionsResult(@NonNull PermissionResult result) {
+        if (result.isMatchingCode(PermissionRequestCode.LOCATION) &&
+            result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION))
+        {
+            startLocationUpdates();
         }
     }
 }

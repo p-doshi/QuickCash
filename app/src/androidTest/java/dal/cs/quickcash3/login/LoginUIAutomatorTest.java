@@ -34,7 +34,7 @@ public class LoginUIAutomatorTest {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public void relaunchApp() {
+    private void relaunchApp() {
         ActivityScenario<LoginActivity> scenario = activityRule.getScenario();
         scenario.recreate();
     }

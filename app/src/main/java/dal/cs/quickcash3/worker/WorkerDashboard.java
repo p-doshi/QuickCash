@@ -14,30 +14,33 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseOwner;
-import dal.cs.quickcash3.database.MockDatabase;
-import dal.cs.quickcash3.database.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.fragments.JobListFragment;
+import dal.cs.quickcash3.jobs.SearchJobActivity;
+import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
 import dal.cs.quickcash3.fragments.SearchFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
-import dal.cs.quickcash3.location.LocationProviderOwner;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.permission.FragmentPermissionActivity;
 
-public class WorkerDashboard extends FragmentPermissionActivity implements DatabaseOwner, LocationProviderOwner {
-    private static final String LOG_TAG = "WorkerDashboard";
+public class WorkerDashboard extends FragmentPermissionActivity {
+    private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
     private Fragment receiptsFragment;
-    private Fragment searchFragment;
+    private Fragment jobSearchFragment;
     private Fragment mapFragment;
     private Fragment profileFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dashboard_worker);
@@ -46,10 +49,9 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
 
         // Initialize the fragments.
         receiptsFragment = new ReceiptsFragment();
-        //searchFragment = new SearchFragment(this);
-        searchFragment = new SearchFragment();
         mapFragment = new MapsFragment();
         profileFragment = new ProfileFragment();
+        jobSearchFragment = new SearchJobActivity(database,locationProvider);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
@@ -61,8 +63,7 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
                 return true;
             }
             else if (itemId == R.id.workerSearchPage) {
-                Log.v(LOG_TAG, "Showing search fragment");
-                replaceFragment(searchFragment);
+                replaceFragment(jobSearchFragment);
                 return true;
             }
             else if (itemId == R.id.workerMapPage) {
@@ -84,11 +85,12 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
         workerNavView.setSelectedItemId(R.id.workerMapPage);
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(@NonNull Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
     }
+
 
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();
@@ -101,7 +103,7 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
             Log.d(LOG_TAG, "Using Mock Database");
         }
         else {
-            database = new MyFirebaseDatabase(this);
+            database = new MyFirebaseDatabase();
         }
 
         if (categories.contains(getString(R.string.MOCK_LOCATION))) {
@@ -113,12 +115,10 @@ public class WorkerDashboard extends FragmentPermissionActivity implements Datab
         }
     }
 
-    @Override
     public @NonNull Database getDatabase() {
         return database;
     }
 
-    @Override
     public @NonNull LocationProvider getLocationProvider() {
         return locationProvider;
     }
