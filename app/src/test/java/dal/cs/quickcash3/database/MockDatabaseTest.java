@@ -388,9 +388,9 @@ public class MockDatabaseTest {
             Assert::fail);
 
         assertEquals(0, listenerId);
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
     }
 
@@ -414,9 +414,9 @@ public class MockDatabaseTest {
         database.write("a/4", newPerson, Assert::fail);
 
         assertEquals(0, listenerId);
-        Assert.assertEquals(3, people.size());
+        assertEquals(3, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
     }
 
@@ -442,15 +442,15 @@ public class MockDatabaseTest {
         database.delete("a/0", Assert::fail);
 
         assertEquals(0, listenerId);
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
 
         people = peopleRef.get();
-        Assert.assertEquals(1, people.size());
+        assertEquals(1, people.size());
         for (Person person : people) {
-            Assert.assertNull(person);
+            assertNull(person);
         }
     }
 }

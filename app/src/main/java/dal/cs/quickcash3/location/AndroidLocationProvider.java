@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.permission.ActivityPermissionHandler;
+import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 import dal.cs.quickcash3.permission.PermissionRequestCode;
 import dal.cs.quickcash3.permission.PermissionResult;
 
@@ -36,10 +36,10 @@ public class AndroidLocationProvider implements LocationProvider {
     private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
     private int nextReceiverId;
 
-    public AndroidLocationProvider(@NonNull ActivityPermissionHandler handler, long updateFrequencyMillis) {
-        this.activity = handler.getActivity();
+    public AndroidLocationProvider(@NonNull AppCompatPermissionActivity activity, long updateFrequencyMillis) {
+        this.activity = activity;
         this.updateFrequencyMillis = updateFrequencyMillis;
-        handler.registerPermissionHandler(this::onRequestPermissionsResult);
+        activity.registerPermissionHandler(this::onRequestPermissionsResult);
         locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
 
         startLocationUpdates();

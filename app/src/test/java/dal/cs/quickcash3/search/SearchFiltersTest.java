@@ -1,12 +1,10 @@
 package dal.cs.quickcash3.search;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
 import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
 
-import dal.cs.quickcash3.location.MockLocationProvider;
-import dal.cs.quickcash3.util.Range;
-
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,6 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.location.MockLocationProvider;
+import dal.cs.quickcash3.util.Range;
 
 public class SearchFiltersTest {
     @Test
@@ -32,9 +32,9 @@ public class SearchFiltersTest {
             "Landscaping"
         );
 
-        Assert.assertEquals(expectedJobTitles.size(), passed.size());
+        assertEquals(expectedJobTitles.size(), passed.size());
         for (AvailableJob job : passed) {
-            Assert.assertTrue(expectedJobTitles.contains(job.getTitle()));
+            assertTrue(expectedJobTitles.contains(job.getTitle()));
         }
     }
 
@@ -58,9 +58,9 @@ public class SearchFiltersTest {
             "Coding problem"
         );
 
-        Assert.assertEquals(expectedJobTitles.size(), passed.size());
+        assertEquals(expectedJobTitles.size(), passed.size());
         for (AvailableJob job : passed) {
-            Assert.assertTrue(expectedJobTitles.contains(job.getTitle()));
+            assertTrue(expectedJobTitles.contains(job.getTitle()));
         }
     }
 
@@ -94,9 +94,9 @@ public class SearchFiltersTest {
             "Landscaping"
         );
 
-        Assert.assertEquals(expectedJobTitles.size(), passed.size());
+        assertEquals(expectedJobTitles.size(), passed.size());
         for (AvailableJob job : passed) {
-            Assert.assertTrue(expectedJobTitles.contains(job.getTitle()));
+            assertTrue(expectedJobTitles.contains(job.getTitle()));
         }
     }
 }

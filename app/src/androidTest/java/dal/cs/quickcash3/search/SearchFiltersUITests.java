@@ -2,6 +2,7 @@ package dal.cs.quickcash3.search;
 
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
 import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
@@ -99,13 +100,13 @@ public class SearchFiltersUITests {
 
     @Test
     public void checkIfUIExists() throws UiObjectNotFoundException {
-        Assert.assertTrue(findText("Salary Range").exists());
-        Assert.assertTrue(findResource("salaryRangeSlider").exists());
-        Assert.assertTrue(findText("Duration Range").exists());
-        Assert.assertTrue(findResource("durationRangeSlider").exists());
-        Assert.assertTrue(findText("Max Distance").exists());
-        Assert.assertTrue(findResource("maxDistanceSlider").exists());
-        Assert.assertTrue(findText("Apply Filters").isClickable());
+        assertTrue(findText("Salary Range").exists());
+        assertTrue(findResource("salaryRangeSlider").exists());
+        assertTrue(findText("Duration Range").exists());
+        assertTrue(findResource("durationRangeSlider").exists());
+        assertTrue(findText("Max Distance").exists());
+        assertTrue(findResource("maxDistanceSlider").exists());
+        assertTrue(findText("Apply Filters").isClickable());
     }
 
     @Test
@@ -122,8 +123,8 @@ public class SearchFiltersUITests {
         UiScrollable resultsPage = new UiScrollable(new UiSelector().resourceId(appPackage + ":id/jobListRecyclerView"));
         for (AvailableJob job : JOBS.values()) {
             if (!excludedJobTitles.contains(job.getTitle())) {
-                Assert.assertTrue(findText(resultsPage, job.getTitle()).exists());
-                Assert.assertTrue(findSubstring(resultsPage, job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
+                assertTrue(findText(resultsPage, job.getTitle()).exists());
+                assertTrue(findSubstring(resultsPage, job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
             }
         }
     }
@@ -136,8 +137,8 @@ public class SearchFiltersUITests {
         findText("Apply Filters").click();
 
         for (AvailableJob job : JOBS.values()) {
-            Assert.assertFalse(findText(job.getTitle()).exists());
-            Assert.assertFalse(findSubstring(job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
+            assertFalse(findText(job.getTitle()).exists());
+            assertFalse(findSubstring(job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
         }
     }
 }

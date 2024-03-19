@@ -1,5 +1,9 @@
 package dal.cs.quickcash3.database;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
 
 import androidx.annotation.NonNull;
@@ -78,7 +82,7 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals("Hello", value.get());
+        assertEquals("Hello", value.get());
     }
 
     @Ignore("Code to create some real jobs")
@@ -90,7 +94,7 @@ public class DatabaseTest {
 
         LatLngBounds area = getBoundingBox(location, radiusInM);
         List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
-        Assert.assertEquals(numJobs, jobs.size());
+        assertEquals(numJobs, jobs.size());
 
         for (AvailableJob job : jobs) {
             resource.increment();
@@ -125,7 +129,7 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals("Hello", value.get());
+        assertEquals("Hello", value.get());
     }
 
     @Test
@@ -152,7 +156,7 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals("Hello", value.get());
+        assertEquals("Hello", value.get());
     }
 
     @Test
@@ -175,7 +179,7 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertTrue(passed.get());
+        assertTrue(passed.get());
     }
 
     @Test
@@ -202,7 +206,7 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertNull(value.get());
+        assertNull(value.get());
     }
 
     private void writePeople() {
@@ -244,9 +248,9 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
     }
 
@@ -279,11 +283,11 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
-            Assert.assertTrue(person.getAge() >= 1.0);
-            Assert.assertTrue(person.getAge() <= 2.0);
+            assertEquals("aaa", person.getFirstName());
+            assertTrue(person.getAge() >= 1.0);
+            assertTrue(person.getAge() <= 2.0);
         }
     }
 
@@ -317,13 +321,13 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals(1, people.size());
-        Assert.assertEquals(1, keys.size());
+        assertEquals(1, people.size());
+        assertEquals(1, keys.size());
 
         String key = keys.get(0);
         Person expectedPerson = people.get(0);
-        Assert.assertNotNull(key);
-        Assert.assertNotNull(expectedPerson);
+        assertNotNull(key);
+        assertNotNull(expectedPerson);
 
         resource.increment();
 
@@ -339,6 +343,6 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals(expectedPerson, actualPerson.get());
+        assertEquals(expectedPerson, actualPerson.get());
     }
 }

@@ -3,9 +3,6 @@ package dal.cs.quickcash3.slider;
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.material.slider.RangeSlider;
 
 import java.util.Arrays;
 import java.util.List;
