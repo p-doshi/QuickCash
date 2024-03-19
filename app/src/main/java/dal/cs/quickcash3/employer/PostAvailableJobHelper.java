@@ -19,6 +19,9 @@ import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class PostAvailableJobHelper {
     private Database database;
+    private PostAvailableJobHelper(){
+        throw new java.lang.UnsupportedOperationException("cannot be instantiated");
+    }
 
     public void createAvailableJob(Map<String, String> fields) throws IOException {
         AvailableJob job = new AvailableJob();
@@ -86,6 +89,6 @@ public class PostAvailableJobHelper {
 
     //fix this
     public static void errorEater(String error){
-        System.out.println(error);
+        throw new java.lang.NullPointerException(error);
     }
 }
