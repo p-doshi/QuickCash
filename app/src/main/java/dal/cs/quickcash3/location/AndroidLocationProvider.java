@@ -99,11 +99,9 @@ public class AndroidLocationProvider implements LocationProvider {
         @NonNull Consumer<LatLng> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        if (missingPermissions()) {
-            if (deniedPermission.get()) {
-                errorFunction.accept(activity.getString(R.string.error_location_permission));
-                return -1;
-            }
+        if (missingPermissions() && deniedPermission.get()) {
+            errorFunction.accept(activity.getString(R.string.error_location_permission));
+            return -1;
         }
 
         // In case the user re-enabled permissions.
@@ -111,6 +109,8 @@ public class AndroidLocationProvider implements LocationProvider {
             startLocationUpdates();
         }
 
+        // This receiver may never be run. But it is important that we track all of them in case
+        // permissions are re-enabled.
         LocationReceiver receiver = new LocationReceiver(locationFunction, errorFunction);
         int receiverId = nextReceiverId++;
         locationReceivers.get().put(receiverId, receiver);

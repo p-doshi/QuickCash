@@ -74,7 +74,7 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
      * and updates the UI with the retrieved address. Shows a toast message in case of an error.
      */
     private void detectLocation() {
-        if (currentLocation == null) {
+        if (currentLocation.get() == null) {
             buttonWaiting.set(true);
         }
         else {
