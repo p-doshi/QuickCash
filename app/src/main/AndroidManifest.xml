@@ -20,6 +20,9 @@
             android:name=".employer.EmployerDashLocation"
             android:exported="true" />
         <activity
+            android:name=".employer.EmployerDashboard"
+            android:exported="true"/>
+        <activity
             android:name=".registration.RegistrationPage"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
