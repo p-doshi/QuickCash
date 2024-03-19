@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,8 +85,7 @@ public final class PostAvailableJobHelper {
     }
 
     //fix this
-    @SuppressLint("SystemPrintln") // I don't have a way of handling this yet so just go with it
     public static void errorEater(String error){
-        System.out.println(error);
+        Log.e(error, "There's been an error");
     }
 }
