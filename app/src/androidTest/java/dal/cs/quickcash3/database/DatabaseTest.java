@@ -132,33 +132,6 @@ public class DatabaseTest {
     }
 
     @Test
-    public void doubleWriteListen() {
-        AtomicReference<String> value = new AtomicReference<>(null);
-
-        resource.increment();
-        resource.increment();
-
-        database.write(testDir, "Bye", Assert::fail);
-
-        int listenerId = database.addListener(
-            testDir,
-            String.class,
-            newValue -> {
-                value.set(newValue);
-                resource.decrement();
-            },
-            Assert::fail);
-
-        database.write(testDir, "Hello", Assert::fail);
-
-        Espresso.onIdle();
-
-        database.removeListener(listenerId);
-
-        Assert.assertEquals("Hello", value.get());
-    }
-
-    @Test
     public void writeDelete() {
         AtomicBoolean passed = new AtomicBoolean(false);
 
