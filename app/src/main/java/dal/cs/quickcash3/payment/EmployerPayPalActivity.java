@@ -2,6 +2,7 @@ package dal.cs.quickcash3.payment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -34,7 +35,10 @@ public class EmployerPayPalActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        employerPayConfirmationButton.setOnClickListener(v -> paymentProcess.processPayment());
+        employerPayConfirmationButton.setOnClickListener(v -> {
+            Log.d("test", "pressed button");
+            paymentProcess.processPayment();
+        });
     }
 
     protected void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {

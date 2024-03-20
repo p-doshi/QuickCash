@@ -161,7 +161,7 @@ public class EmployerPostJobEspressoTest {
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobUrgency))).perform(click());
-        onView(withId(R.id.addJobSalary)).perform(typeText("abc\n"));
+        onView(withId(R.id.addJobSalary)).perform(typeText(empty));
         onView(withId(R.id.addJobAddress)).perform(typeText(jobAddress));
         onView(withId(R.id.addJobCity)).perform(typeText(jobCity));
         onView(withId(R.id.addJobProvince)).perform(click());

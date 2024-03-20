@@ -4,7 +4,6 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static org.junit.Assert.assertTrue;
 
 import android.Manifest;
-import android.os.SystemClock;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
@@ -16,7 +15,6 @@ import androidx.test.uiautomator.UiSelector;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
 
 public class EmployerPaymentUIAutomatorTest {
     private static final String CONFIRM = "Confirm !";
@@ -35,20 +33,17 @@ public class EmployerPaymentUIAutomatorTest {
     private static final String CHARGE = "Charge Card";
     private static final String APPROVED = "approved";
 
-
     @Rule
     public final ActivityScenarioRule<EmployerPayPalActivity> activityRule =
             new ActivityScenarioRule<>(EmployerPayPalActivity.class);
-
     @Rule
-    public GrantPermissionRule permissionRule =
+    public final GrantPermissionRule permissionRule =
             GrantPermissionRule.grant(Manifest.permission.CAMERA);
-
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
-    @Test
     @Ignore("Works locally but not CI yet")
-    public void checkValidCardPayment() throws UiObjectNotFoundException, InterruptedException {
+    @Test
+    public void checkValidCardPayment() throws UiObjectNotFoundException {
         UiObject paymentConfirmButton = device.findObject(new UiSelector().textContains(CONFIRM));
         paymentConfirmButton.clickAndWaitForNewWindow();
         UiObject payCardButton = device.findObject(new UiSelector().textContains(PAY_CARD));
@@ -65,14 +60,13 @@ public class EmployerPaymentUIAutomatorTest {
         doneButton.clickAndWaitForNewWindow();
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
         chargeButton.clickAndWaitForNewWindow();
-        SystemClock.sleep(3000);
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
-        assertTrue(approveStatus.exists());
+        assertTrue(approveStatus.waitForExists(10000));
     }
 
-    @Test
     @Ignore("Cannot find credit that doesn't work")
-    public void checkDeclinedCardPayment() throws UiObjectNotFoundException, InterruptedException {
+    @Test
+    public void checkDeclinedCardPayment() throws UiObjectNotFoundException {
         UiObject paymentConfirmButton = device.findObject(new UiSelector().textContains(CONFIRM));
         paymentConfirmButton.clickAndWaitForNewWindow();
         UiObject payCardButton = device.findObject(new UiSelector().textContains(PAY_CARD));
@@ -89,8 +83,7 @@ public class EmployerPaymentUIAutomatorTest {
         doneButton.clickAndWaitForNewWindow();
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
         chargeButton.clickAndWaitForNewWindow();
-        SystemClock.sleep(3000);
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
-        assertTrue(approveStatus.exists());
+        assertTrue(approveStatus.waitForExists(10000));
     }
 }
