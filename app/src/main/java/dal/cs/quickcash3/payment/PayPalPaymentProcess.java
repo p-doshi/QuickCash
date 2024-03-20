@@ -25,8 +25,10 @@ import dal.cs.quickcash3.BuildConfig;
 import dal.cs.quickcash3.R;
 
 public class PayPalPaymentProcess {
+    @Nullable
     protected ActivityResultLauncher<Intent> activityResultLauncher;
     private static final String TAG = EmployerPayPalActivity.class.getName();
+    @Nullable
     protected PayPalConfiguration payPalConfig;
     private final EmployerPayPalActivity activity;
     private String payID;
