@@ -33,6 +33,7 @@ public class AndroidLocationProvider implements LocationProvider {
     protected final AtomicReference<Location> lastLocation = new AtomicReference<>();
     private final AtomicBoolean hasLocationUpdates = new AtomicBoolean(false);
     private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
+    private final AtomicBoolean deniedPermission = new AtomicBoolean(false);
     private int nextReceiverId;
 
     public AndroidLocationProvider(@NonNull ActivityPermissionHandler handler, long updateFrequencyMillis) {
@@ -44,7 +45,7 @@ public class AndroidLocationProvider implements LocationProvider {
         startLocationUpdates();
     }
 
-    private boolean isMissingPermission() {
+    private boolean missingPermissions() {
         return activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
     }
@@ -58,12 +59,16 @@ public class AndroidLocationProvider implements LocationProvider {
 
     @SuppressLint("MissingPermission") // Using a helper function instead.
     private void startLocationUpdates() {
-        if (isMissingPermission()) {
-            activity.requestPermissions(
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                PermissionRequestCode.LOCATION.getCode());
+        if (missingPermissions()) {
+            // Do not ask more than once.
+            if (!deniedPermission.get()) {
+                activity.requestPermissions(
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PermissionRequestCode.LOCATION.getCode());
+            }
             return;
         }
+
 
         LocationRequest locationRequest =
             new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, updateFrequencyMillis)
@@ -93,9 +98,10 @@ public class AndroidLocationProvider implements LocationProvider {
         @NonNull Consumer<Location> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        if (isMissingPermission()) {
+        if (missingPermissions() && deniedPermission.get()) {
             errorFunction.accept(activity.getString(R.string.error_location_permission));
             return -1;
+
         }
 
         // In case the user re-enabled permissions.
@@ -117,8 +123,13 @@ public class AndroidLocationProvider implements LocationProvider {
 
     @Override
     public @Nullable Location getLastLocation() {
-        if (isMissingPermission()) {
-            throw new SecurityException(activity.getString(R.string.error_location_permission));
+        if (missingPermissions()) {
+            if (deniedPermission.get()) {
+                throw new SecurityException(activity.getString(R.string.error_location_permission));
+            }
+            else {
+                return null;
+            }
         }
 
         // In case the user re-enabled permissions.
