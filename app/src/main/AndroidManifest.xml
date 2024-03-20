@@ -51,7 +51,7 @@
         <activity
             android:name=".employer.PostJobForm"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
