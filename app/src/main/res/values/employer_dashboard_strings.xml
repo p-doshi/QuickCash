@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="employerDashTitleText">Current Listings</string>
-    <string name="add_job">Add Job</string>
 </resources>
