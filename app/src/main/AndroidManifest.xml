@@ -48,6 +48,10 @@
             android:name=".worker.WorkerDashboard"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".employer.PostJobForm"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>
