@@ -42,6 +42,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".payment.EmployerPayPalActivity"
+            android:exported="true" />
+        <activity
+            android:name=".payment.EmployerPaymentConfirmationActivity"
+            android:exported="true"/>
+        <activity
             android:name=".payment.WorkerPayPalActivity"
             android:exported="true"/>
         <activity
