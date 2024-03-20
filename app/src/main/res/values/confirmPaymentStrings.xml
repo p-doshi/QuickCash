@@ -2,9 +2,7 @@
 <resources>
     <string name="confirm_payment_string">Confirm Payment</string>
     <string name="amount_string">Amount</string>
-
     <string name="confirm_payment_button">Confirm !</string>
-
     <string name="currency_cad">CAD</string>
     <string name="services">Quick Cash Services</string>
 </resources>
