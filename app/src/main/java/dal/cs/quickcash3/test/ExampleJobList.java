@@ -49,7 +49,7 @@ public final class ExampleJobList {
         JOBS.put("VWrRJpSrxGMHR4A4rzIK", job2);
 
         AvailableJob job3 = new AvailableJob();
-        job3.setTitle("Lawn Moving");
+        job3.setTitle("Lawn Mowing");
         job3.setEmployer("itO5mHHdVeWyu3MRjPSjDrMPmzmWtM");
         job3.setDescription("My lawn is getting a bit long, I need it mowed.");
         job3.setLatitude(37.4363059817969);

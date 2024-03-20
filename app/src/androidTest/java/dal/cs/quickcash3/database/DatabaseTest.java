@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
+import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
 
 import android.util.Log;
 
@@ -26,6 +28,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
@@ -88,21 +91,16 @@ public class DatabaseTest {
         assertEquals("Hello", value.get());
     }
 
-    @Ignore("Code to create some real jobs")
+    @Ignore("Manual job creation")
     @Test
     public void createJobs() {
-        final int numJobs = 1;
-        final LatLng location = new LatLng(37.422452349192, -122.08527721558478);
-        final double radiusInM = 1000.0;
-
-        LatLngBounds area = getBoundingBox(location, radiusInM);
-        List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
-        assertEquals(numJobs, jobs.size());
-
-        for (AvailableJob job : jobs) {
+        for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
             resource.increment();
-            String key = job.writeToDatabase(database, resource::decrement, Assert::fail);
-            Log.d(LOG_TAG, "Key: " + key + ". Job: " + job.getTitle());
+            database.write(
+                DatabaseDirectory.AVAILABLE_JOBS.getValue() + entry.getKey(),
+                entry.getValue(),
+                resource::decrement,
+                Assert::fail);
         }
 
         Espresso.onIdle();
