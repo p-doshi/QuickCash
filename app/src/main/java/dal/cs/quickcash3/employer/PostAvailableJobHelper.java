@@ -18,10 +18,19 @@ import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
+/** @author Hayley Vezeau
+ * Utility class to create an Available Job
+ */
 public final class PostAvailableJobHelper {
 
-    // utility class
     private PostAvailableJobHelper(){}
+
+    /**
+     * Create an Available Job
+     * @param fields a Map that holds the fields as keys and user input as values
+     * @param context the context for the activity
+     * @return an Available job object for the newly created Availble Job
+     */
     public static @NonNull AvailableJob createAvailableJob(@NonNull Map<String, String> fields, @NonNull Context context) {
         AvailableJob job = new AvailableJob();
 
@@ -47,6 +56,14 @@ public final class PostAvailableJobHelper {
         return job;
     }
 
+    /**
+     * Convert full string address to Address object
+     * @param streetAdd a String representing the street address
+     * @param city a String representing the city
+     * @param province a String representing a province
+     * @param context the context of the activity
+     * @return the address as an Address object
+     */
     private static Address locToCoordinates(String streetAdd, String city, String province, Context context) {
         Geocoder geocoder = new Geocoder(context);
         String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
@@ -60,10 +77,20 @@ public final class PostAvailableJobHelper {
         return address.get(0);
     }
 
+    /**
+     * convert the salary to a double of the same value
+     * @param strSalary a String representing the salary
+     * @return a double of the salary amount
+     */
     private static double salaryStringToDouble(String strSalary){
         return Double.parseDouble(strSalary);
     }
 
+    /**
+     * convert the duration to double to allow for filtering
+     * @param duration a String representing the timeframe
+     * @return a double used as a proxy for duration
+     */
     private static double durationToDouble(String duration) {
         double doubleDuration = 0;
 

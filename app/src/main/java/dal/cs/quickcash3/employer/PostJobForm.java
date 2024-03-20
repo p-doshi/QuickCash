@@ -19,8 +19,12 @@ import java.util.Map;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 
+/**
+ * @author Hayely Vezeau
+ * Initialize UI for Post job form
+ */
 public class PostJobForm extends Activity {
     Database database;
 
@@ -28,7 +32,7 @@ public class PostJobForm extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.add_job);
-        database = new MyFirebaseDatabase(this);
+        database = new MyFirebaseDatabase();
 
         // initialize spinners
         this.setUpDurationSpinner();
@@ -37,6 +41,10 @@ public class PostJobForm extends Activity {
 
         this.setUpConfirmPostButton();
     }
+
+    /**
+     * handle on click of confirmation button
+     */
     protected void setUpConfirmPostButton(){
         Button confirmPostButton = findViewById(R.id.addJobConfirmButton);
         confirmPostButton.setOnClickListener(view -> {
