@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.payment;
 
+import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -44,6 +45,7 @@ public class WorkerPaymentEspressoTests {
 
     @Test
     public void showPaymentStatus() {
+        onIdle();
         onView(withId(R.id.seePayStatus)).perform(click());
         monitor.waitForActivityWithTimeout(5000);
         onView(withId(R.id.workerStatusMessage)).check(matches(withText("approved")));

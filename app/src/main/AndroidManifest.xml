@@ -64,6 +64,12 @@ xmlns:tools="http://schemas.android.com/tools">
         android:name=".employer.PostJobForm"
         android:exported="true"
         android:windowSoftInputMode="adjustResize"/>
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY" />
+    <activity
+        android:name=".location.WorkerDashboardMapExampleActivity"
+        android:exported="true" />
 </application>
 
 </manifest>
