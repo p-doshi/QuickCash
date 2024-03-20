@@ -54,6 +54,9 @@ xmlns:tools="http://schemas.android.com/tools">
     <activity
         android:name=".payment.WorkerPaymentConfirmationActivity"
         android:exported="true"/>
+    <activity
+        android:name=".employer.PostJobForm"
+        android:exported="true"/>
 </application>
 
 </manifest>
