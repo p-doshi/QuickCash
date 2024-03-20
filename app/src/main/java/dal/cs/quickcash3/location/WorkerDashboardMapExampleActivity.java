@@ -30,26 +30,19 @@ public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivi
         // Upon loading the worker page it should immediately request location permissions and get current location
         LocationProvider locationProvider = new AndroidLocationProvider(this, 5000);
         // Need to request location here
-        locationProvider.fetchLocation(
-                location -> {
-                    // Nothing should happen
-                },
-                error -> {
-                    // If location was not granted that's fine
-                }
-        );
+        locationProvider.getLastLocation();
 
         // Sets up a detector to check when navigation bar items clicked
         workerNavView.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManger = getSupportFragmentManager();
-            Fragment currentFragment = fragmentManger.findFragmentById(R.id.mapContainer);
+            Fragment currentFragment = fragmentManger.findFragmentById(R.id.workerFragmentView);
 
             if (item.getItemId() == R.id.workerMapPage && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 // If they selected map with location enabled display the map fragment
                 MapFragment fragment = new MapFragment();
                 // For the sake of consistent tests (We don't know where the CI is) we'll use a static location while testing
                 assignTestValues(fragment);
-                fragmentManger.beginTransaction().add(R.id.mapContainer, fragment).commit();
+                fragmentManger.beginTransaction().add(R.id.workerFragmentView, fragment).commit();
             }
             else if (item.getItemId() == R.id.workerMapPage && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // If they selected the map WITHOUT location permissions, show them a toast that it won't work
