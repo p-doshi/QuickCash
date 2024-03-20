@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Csci3130_group_3"
         tools:targetApi="s" >
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY" />
         <activity
             android:name=".database.DatabaseExampleActivity"
             android:exported="true"/>
@@ -32,6 +35,9 @@
         <activity
             android:name=".location.LocationExampleActivity"
             android:exported="true"/>
+        <activity
+            android:name=".location.WorkerDashboardMapExampleActivity"
+            android:exported="true" />
         <activity
             android:name=".login.LoginActivity"
             android:exported="true"
