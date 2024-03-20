@@ -69,7 +69,10 @@ public final class PostAvailableJobHelper {
         String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
         List<Address> address = null;
         try {
-            address = geocoder.getFromLocationName(strAddress, 20);
+            do {
+                address = geocoder.getFromLocationName(strAddress, 20);
+            }
+            while (address == null);
         } catch (IOException e) {
             Log.e("PostAvailableJobHelper", Objects.requireNonNull(e.getMessage()));
         }

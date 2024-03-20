@@ -11,26 +11,37 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertTrue;
 
 
 import android.content.Context;
+import android.content.Intent;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.database.mock.MockDatabase;
 
 @RunWith(AndroidJUnit4.class)
 public class EmployerPostJobEspressoTest {
+    private final Context context = ApplicationProvider.getApplicationContext();
+    @Rule
+    public final ActivityScenarioRule<PostJobForm> activityRule =
+            new ActivityScenarioRule<>(
+                    new Intent(context, PostJobForm.class)
+                            .addCategory(context.getString(R.string.MOCK_DATABASE))
+            );
     public ActivityScenario<PostJobForm> scenario;
-
-    public Context context;
     private String jobTitle;
     private String jobDate;
     private String jobDuration;
@@ -44,7 +55,7 @@ public class EmployerPostJobEspressoTest {
 
     @Before
     public void setup() {
-        scenario = ActivityScenario.launch(PostJobForm.class);
+        scenario = activityRule.getScenario();
         jobTitle = "Mowing Lawn\n";
         jobDate = "15/03/2024\n";
         jobDuration = "1 – 2 Weeks";
@@ -55,9 +66,14 @@ public class EmployerPostJobEspressoTest {
         jobProvince = "NS";
         jobDescription = "Need a strong individual to help me mow my lawn because I am old.";
         empty = "\n";
-        scenario.onActivity(activity -> {
-            context = activity;
-        });
+
+        scenario.onActivity(activity ->
+                // Do not run the test if we are not using the mock database.
+                assertTrue("Not using Mock Database",
+                        activity.getDatabase() instanceof MockDatabase)
+        );
+
+
     }
 
     @Test

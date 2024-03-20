@@ -15,11 +15,15 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.DatabaseExampleActivity;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.mock.MockDatabase;
 
 /**
  * @author Hayely Vezeau
@@ -27,12 +31,14 @@ import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
  */
 public class PostJobForm extends Activity {
     Database database;
+    private static final String LOG_TAG = PostJobForm.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.add_job);
-        database = new MyFirebaseDatabase();
+        initInterfaces();
 
         // initialize spinners
         this.setUpDurationSpinner();
@@ -40,6 +46,25 @@ public class PostJobForm extends Activity {
         this.setUpProvinceSpinner();
 
         this.setUpConfirmPostButton();
+    }
+
+    private void initInterfaces() {
+        Set<String> categories = getIntent().getCategories();
+        if (categories == null) {
+            categories = new TreeSet<>();
+        }
+
+        if (categories.contains(getString(R.string.MOCK_DATABASE))) {
+            database = new MockDatabase();
+            Log.d(LOG_TAG, "Using Mock Database");
+        }
+        else {
+            database = new MyFirebaseDatabase();
+        }
+    }
+
+    public @NonNull Database getDatabase() {
+        return database;
     }
 
     /**
