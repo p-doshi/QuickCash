@@ -47,7 +47,7 @@
         android:layout_marginTop="503dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="17dp"
-        android:text="@string/add_job"
+        android:text="@string/addJob"
         app:layout_constraintBottom_toTopOf="@+id/employerBottomNavView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
