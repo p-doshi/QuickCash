@@ -56,7 +56,8 @@ xmlns:tools="http://schemas.android.com/tools">
         android:exported="true"/>
     <activity
         android:name=".employer.PostJobForm"
-        android:exported="true"/>
+        android:exported="true"
+        android:windowSoftInputMode="adjustResize"/>
 </application>
 
 </manifest>
