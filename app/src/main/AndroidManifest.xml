@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Location Permissions for Mat's UserStory7 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,43 +15,61 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Csci3130_group_3"
-        tools:targetApi="31">
-        <service
-            android:name="AndroidLocationProvider"
-            android:foregroundServiceType="location" >
-        </service>
+        tools:targetApi="s" >
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAPd0jmct4VDZzTu0rsVzC2xrnH2Jir3sY" />
         <activity
-            android:name=".RegistrationPage"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
-            android:name=".RegistrationPage"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
-            android:name=".DatabaseExampleActivity"
+            android:name=".database.DatabaseExampleActivity"
             android:exported="true"/>
         <activity
-            android:name=".LoginActivity"
+            android:name=".employer.EmployerDashboard"
+            android:exported="true"/>
+        <activity
+            android:name=".employer.EmployerDashLocation"
+            android:exported="true" />
+        <activity
+            android:name=".employer.PostJobForm"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".location.LocationExampleActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".location.WorkerDashboardMapExampleActivity"
+            android:exported="true" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".EmployeeDashboard"
+            android:name=".payment.EmployerPayPalActivity"
+            android:exported="true" />
+        <activity
+            android:name=".payment.EmployerPaymentConfirmationActivity"
             android:exported="true"/>
         <activity
-            android:name=".EmployerDashboard"
+            android:name=".payment.WorkerPayPalActivity"
             android:exported="true"/>
         <activity
-            android:name=".ChooseRoleActivity"
+            android:name=".payment.WorkerPaymentConfirmationActivity"
             android:exported="true"/>
         <activity
-            android:name=".LocationExampleActivity"
+            android:name=".registration.ChooseRoleActivity"
             android:exported="true"/>
+        <activity
+            android:name=".registration.RegistrationPage"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".worker.WorkerDashboard"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>
