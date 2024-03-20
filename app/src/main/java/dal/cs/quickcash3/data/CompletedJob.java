@@ -15,6 +15,7 @@ public class CompletedJob extends JobPost implements Copyable<CompletedJob> {
     private String worker;
     private String completionDate;
     private String payId;
+    private String status;
 
     public @Nullable String getWorker() {
         return worker;
@@ -38,6 +39,14 @@ public class CompletedJob extends JobPost implements Copyable<CompletedJob> {
 
     public void setPayId(@NonNull String payId) {
         this.payId = payId;
+    }
+
+    public @Nullable String getStatus() {
+        return status;
+    }
+
+    public void setStatus(@NonNull String status) {
+        this.status = status;
     }
 
     @Override
@@ -90,5 +99,6 @@ public class CompletedJob extends JobPost implements Copyable<CompletedJob> {
         worker = other.worker;
         completionDate = other.completionDate;
         payId = other.payId;
+        status = other.status;
     }
 }
