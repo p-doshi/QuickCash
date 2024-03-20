@@ -24,6 +24,7 @@ import org.junit.Test;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobUIAutomatorTest {
+    private static final int MAX_TIMEOUT = 5000;
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
             new ActivityScenarioRule<>(WorkerDashboard.class);
@@ -40,25 +41,33 @@ public class SearchJobUIAutomatorTest {
 
     @Before
     public void setup() throws UiObjectNotFoundException {
-        findResource("workerSearchPage").click();
+        UiObject searchPage = findResource("workerSearchPage");
+        assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
+        searchPage.click();
     }
 
     @Test
     public void checkIfLandingPageIsVisible() {
-        assertTrue(findResource("searchBar").exists());
-        assertTrue(findResource("filterIcon").exists());
+        assertTrue(findResource("searchBar").waitForExists(MAX_TIMEOUT));
+        assertTrue(findResource("filterIcon").waitForExists(MAX_TIMEOUT));
     }
 
     @Test
     public void checkIfMovedToSearchFilter() throws UiObjectNotFoundException {
-        findResource("filterIcon").click();
-        assertTrue(findResource("filterFragment").exists());
+        UiObject filterIcon = findResource("filterIcon");
+        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
+        filterIcon.click();
+        assertTrue(findResource("filterFragment").waitForExists(MAX_TIMEOUT));
     }
 
     @Test
     public void checkIfMovedToJobSearchPage() throws UiObjectNotFoundException {
-        findResource("filterIcon").click();
-        findResource("applyButton").click();
-        assertTrue(findResource("searchBar").exists());
+        UiObject filterIcon = findResource("filterIcon");
+        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
+        filterIcon.click();
+        UiObject applyButton = findResource("applyButton");
+        assertTrue(applyButton.waitForExists(MAX_TIMEOUT));
+        applyButton.click();
+        assertTrue(findResource("searchBar").waitForExists(MAX_TIMEOUT));
     }
 }
