@@ -49,6 +49,12 @@ xmlns:tools="http://schemas.android.com/tools">
         android:exported="true"
         android:windowSoftInputMode="adjustNothing" />
     <activity
+            android:name=".payment.EmployerPaymentConfirmationActivity"
+            android:exported="true"/>
+    <activity
+        android:name=".payment.EmployerPayPalActivity"
+        android:exported="true" />
+    <activity
         android:name=".payment.WorkerPayPalActivity"
         android:exported="true"/>
     <activity

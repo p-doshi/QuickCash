@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="worker_payment_button">Check Payment Status</string>
-    <string name="worker_payment_title">Payment Status</string>
-    <string name="worker_pay_id">Pay ID:</string>
 </resources>
