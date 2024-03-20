@@ -6,11 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.Firebase;
-import com.google.firebase.database.FirebaseDatabase;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +19,6 @@ import java.util.regex.Pattern;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.test.Person;
-import dal.cs.quickcash3.util.RandomStringGenerator;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // Hard coded literals increase test code clarity.
 public class MockDatabaseTest {
@@ -394,9 +388,9 @@ public class MockDatabaseTest {
             Assert::fail);
 
         assertEquals(0, listenerId);
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
     }
 
@@ -420,9 +414,9 @@ public class MockDatabaseTest {
         database.write("a/4", newPerson, Assert::fail);
 
         assertEquals(0, listenerId);
-        Assert.assertEquals(3, people.size());
+        assertEquals(3, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
     }
 
@@ -448,15 +442,15 @@ public class MockDatabaseTest {
         database.delete("a/0", Assert::fail);
 
         assertEquals(0, listenerId);
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
 
         people = peopleRef.get();
-        Assert.assertEquals(1, people.size());
+        assertEquals(1, people.size());
         for (Person person : people) {
-            Assert.assertNull(person);
+            assertNull(person);
         }
     }
 }

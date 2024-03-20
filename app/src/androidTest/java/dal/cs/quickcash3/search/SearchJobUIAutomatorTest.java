@@ -5,17 +5,19 @@ import static org.junit.Assert.assertTrue;
 
 import android.Manifest;
 
+import androidx.annotation.NonNull;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -30,56 +32,42 @@ public class SearchJobUIAutomatorTest {
     public GrantPermissionRule permissionRule =
             GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
+    private final String appPackage = ApplicationProvider.getApplicationContext().getPackageName();
 
-    @After
-    public void teardown() {
-        // Just to be sure.
-        FirebaseAuth.getInstance().signOut();
+    private @NonNull UiObject findResource(@NonNull String resourceId) {
+        UiSelector selector = new UiSelector().resourceId(appPackage + ":id/" + resourceId);
+        return device.findObject(selector);
     }
 
-
-    @Test
-    public void checkIfLandingPageIsVisible() throws UiObjectNotFoundException {
-        UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
+    @Before
+    public void setup() throws UiObjectNotFoundException {
+        UiObject searchPage = findResource("workerSearchPage");
         assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
         searchPage.click();
-        UiObject searchBox = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/searchBar"));
-        assertTrue(searchBox.waitForExists(MAX_TIMEOUT));
-        UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
-        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
     }
 
+    @Test
+    public void checkIfLandingPageIsVisible() {
+        assertTrue(findResource("searchBar").waitForExists(MAX_TIMEOUT));
+        assertTrue(findResource("filterIcon").waitForExists(MAX_TIMEOUT));
+    }
 
     @Test
     public void checkIfMovedToSearchFilter() throws UiObjectNotFoundException {
-        UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
-        assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
-        searchPage.click();
-        UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
+        UiObject filterIcon = findResource("filterIcon");
         assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
         filterIcon.click();
-        UiObject welcomeLabel = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterFragment"));
-        assertTrue(welcomeLabel.waitForExists(MAX_TIMEOUT));
+        assertTrue(findResource("filterFragment").waitForExists(MAX_TIMEOUT));
     }
-
 
     @Test
     public void checkIfMovedToJobSearchPage() throws UiObjectNotFoundException {
-        UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
-        assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
-        searchPage.click();
-        UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
+        UiObject filterIcon = findResource("filterIcon");
         assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
         filterIcon.click();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Job Search"));
-        assertTrue(welcomeLabel.waitForExists(MAX_TIMEOUT));
-        UiScrollable scrollable = new UiScrollable(new UiSelector().scrollable(true));
-        scrollable.setAsVerticalList();
-        scrollable.scrollForward();
-        UiObject searchButton = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/searchButton"));
-        assertTrue(searchButton.waitForExists(MAX_TIMEOUT));
-        searchButton.click();
-        UiObject searchBox = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/searchBar"));
-        assertTrue(searchBox.waitForExists(MAX_TIMEOUT));
+        UiObject applyButton = findResource("applyButton");
+        assertTrue(applyButton.waitForExists(MAX_TIMEOUT));
+        applyButton.click();
+        assertTrue(findResource("searchBar").waitForExists(MAX_TIMEOUT));
     }
 }

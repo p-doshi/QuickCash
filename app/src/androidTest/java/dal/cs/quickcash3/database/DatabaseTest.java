@@ -1,18 +1,23 @@
 package dal.cs.quickcash3.database;
 
-import android.content.Context;
-import android.util.Range;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
+import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
+
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -23,6 +28,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
@@ -34,10 +40,12 @@ import dal.cs.quickcash3.search.NumericRangeSearchFilter;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.test.Person;
 import dal.cs.quickcash3.util.RandomStringGenerator;
+import dal.cs.quickcash3.util.Range;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
+    private static final String LOG_TAG = DatabaseTest.class.getSimpleName();
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
     private final Database database = new MyFirebaseDatabase();
     private CountingIdlingResource resource;
@@ -80,24 +88,19 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals("Hello", value.get());
+        assertEquals("Hello", value.get());
     }
 
-    @Ignore("Code to create some real jobs")
+    @Ignore("Manual job creation")
     @Test
     public void createJobs() {
-        final int numJobs = 10;
-        LatLng southeast = new LatLng(37.322998, -122.032181);
-        LatLng northwest = new LatLng(37.354107, -121.955238);
-        LatLngBounds area = new LatLngBounds(southeast, northwest);
-        List<AvailableJob> jobs = JobPostHelper.generateAvailable(numJobs, area);
-        Assert.assertEquals(numJobs, jobs.size());
-
-        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
-
-        for (AvailableJob job : jobs) {
+        for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
             resource.increment();
-            job.writeToDatabase(database, resource::decrement, Assert::fail);
+            database.write(
+                DatabaseDirectory.AVAILABLE_JOBS.getValue() + entry.getKey(),
+                entry.getValue(),
+                resource::decrement,
+                Assert::fail);
         }
 
         Espresso.onIdle();
@@ -128,7 +131,34 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals("Hello", value.get());
+        assertEquals("Hello", value.get());
+    }
+
+    @Test
+    public void doubleWriteListen() {
+        AtomicReference<String> value = new AtomicReference<>(null);
+
+        resource.increment();
+        resource.increment();
+
+        database.write(testDir, "Bye", Assert::fail);
+
+        int listenerId = database.addListener(
+            testDir,
+            String.class,
+            newValue -> {
+                value.set(newValue);
+                resource.decrement();
+            },
+            Assert::fail);
+
+        database.write(testDir, "Hello", Assert::fail);
+
+        Espresso.onIdle();
+
+        database.removeListener(listenerId);
+
+        assertEquals("Hello", value.get());
     }
 
     @Test
@@ -151,7 +181,7 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertTrue(passed.get());
+        assertTrue(passed.get());
     }
 
     @Test
@@ -178,7 +208,7 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertNull(value.get());
+        assertNull(value.get());
     }
 
     private void writePeople() {
@@ -220,9 +250,9 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
+            assertEquals("aaa", person.getFirstName());
         }
     }
 
@@ -255,11 +285,11 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals(2, people.size());
+        assertEquals(2, people.size());
         for (Person person : people) {
-            Assert.assertEquals("aaa", person.getFirstName());
-            Assert.assertTrue(person.getAge() >= 1.0);
-            Assert.assertTrue(person.getAge() <= 2.0);
+            assertEquals("aaa", person.getFirstName());
+            assertTrue(person.getAge() >= 1.0);
+            assertTrue(person.getAge() <= 2.0);
         }
     }
 
@@ -293,13 +323,13 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        Assert.assertEquals(1, people.size());
-        Assert.assertEquals(1, keys.size());
+        assertEquals(1, people.size());
+        assertEquals(1, keys.size());
 
         String key = keys.get(0);
         Person expectedPerson = people.get(0);
-        Assert.assertNotNull(key);
-        Assert.assertNotNull(expectedPerson);
+        assertNotNull(key);
+        assertNotNull(expectedPerson);
 
         resource.increment();
 
@@ -315,6 +345,6 @@ public class DatabaseTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals(expectedPerson, actualPerson.get());
+        assertEquals(expectedPerson, actualPerson.get());
     }
 }

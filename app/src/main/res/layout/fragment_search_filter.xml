@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SearchFragment">
+    tools:context=".jobs.SearchFilterFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/filterFragment"
         android:layout_width="match_parent"
@@ -13,25 +13,13 @@
         tools:ignore="UnusedIds">
 
         <TextView
-            android:id="@+id/searchTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/job_search"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/salaryRangeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="@string/pay_range"
+            android:text="@string/salary_range"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/salaryRangeSlider"
-            app:layout_constraintTop_toBottomOf="@+id/searchTitle" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/salaryRangeSlider"
@@ -50,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/time_estimate"
+            android:text="@string/duration_range"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/salaryRangeSlider"
             app:layout_constraintTop_toBottomOf="@+id/salaryRangeSlider" />
@@ -85,13 +73,13 @@
             app:layout_constraintTop_toBottomOf="@+id/maxDistanceText"
             app:tickVisible="false" />
 
-        <Button
-            android:id="@+id/searchButton"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/applyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
-            android:text="@string/searchTitle"
+            android:text="@string/apply_filters"
             android:elevation="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

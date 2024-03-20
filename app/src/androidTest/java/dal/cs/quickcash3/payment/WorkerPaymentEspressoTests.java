@@ -8,6 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.app.Instrumentation;
+import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -45,7 +46,7 @@ public class WorkerPaymentEspressoTests {
 
     @Test
     public void showPaymentStatus() {
-        onIdle();
+        SystemClock.sleep(100);
         onView(withId(R.id.seePayStatus)).perform(click());
         monitor.waitForActivityWithTimeout(5000);
         onView(withId(R.id.workerStatusMessage)).check(matches(withText("approved")));

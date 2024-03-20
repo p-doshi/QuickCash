@@ -61,11 +61,12 @@ public class SearchJobEspressoTest {
     @Test
     public void searchResultsTest() {
         onView(withId(R.id.workerSearchPage)).perform(click());
-        onView(allOf(withClassName(is("android.widget.ImageView")), withContentDescription("Search")))
+        onView(allOf(
+            withClassName(is("androidx.appcompat.widget.AppCompatImageView")),
+            withContentDescription("Search")))
                 .perform(click());
         onView(withClassName(is("android.widget.SearchView$SearchAutoComplete")))
-                .perform(replaceText("lawn"), closeSoftKeyboard());
+            .perform(replaceText("lawn"), closeSoftKeyboard());
         onView(withId(R.id.title)).check(matches(withText("Lawn Mowing")));
     }
-
 }

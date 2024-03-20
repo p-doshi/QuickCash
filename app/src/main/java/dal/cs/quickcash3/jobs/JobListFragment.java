@@ -1,8 +1,7 @@
-package dal.cs.quickcash3.fragments;
+package dal.cs.quickcash3.jobs;
 
 import static dal.cs.quickcash3.database.DatabaseDirectory.AVAILABLE_JOBS;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -24,7 +21,6 @@ import java.util.Map;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.jobs.MyItemRecyclerViewAdapter;
 import dal.cs.quickcash3.search.SearchFilter;
 
 /**
@@ -89,6 +85,8 @@ public class JobListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         database.removeListener(listenerId);
+        adapter.reset();
+        availableJobMap.clear();
         Log.d(LOG_TAG, "Destroyed");
     }
 }

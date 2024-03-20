@@ -1,13 +1,15 @@
 package dal.cs.quickcash3.database.firebase;
 
-import android.content.Context;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -67,8 +69,8 @@ public class FirebaseSecurityTest {
 
         Espresso.onIdle();
 
-        Assert.assertFalse(passed.get());
-        Assert.assertEquals("Firebase Database error: Permission denied", error.get());
+        assertFalse(passed.get());
+        assertEquals("Firebase Database error: Permission denied", error.get());
     }
 
     @Test
@@ -95,8 +97,8 @@ public class FirebaseSecurityTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals(RANDOM_STRING, value.get());
-        Assert.assertEquals("Permission denied", error.get());
+        assertEquals(RANDOM_STRING, value.get());
+        assertEquals("Permission denied", error.get());
     }
 
     @Test
@@ -117,7 +119,7 @@ public class FirebaseSecurityTest {
 
         Espresso.onIdle();
 
-        Assert.assertTrue(passed.get());
+        assertTrue(passed.get());
     }
 
     @Test
@@ -142,7 +144,7 @@ public class FirebaseSecurityTest {
 
         // We cannot guarantee what will be read from the database.
         // We just know we will receive _something_ or null.
-        Assert.assertNotEquals(RANDOM_STRING, value.get());
+        assertNotEquals(RANDOM_STRING, value.get());
     }
 
     @Test
@@ -167,6 +169,6 @@ public class FirebaseSecurityTest {
 
         Espresso.onIdle();
 
-        Assert.assertEquals("Hello", value.get());
+        assertEquals("Hello", value.get());
     }
 }

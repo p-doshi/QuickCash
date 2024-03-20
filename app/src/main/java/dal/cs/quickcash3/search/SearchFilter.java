@@ -1,15 +1,15 @@
 package dal.cs.quickcash3.search;
 
+import static dal.cs.quickcash3.util.GsonHelper.GSON;
+
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 public abstract class SearchFilter<T> {
-    protected final Gson gson = new Gson();
     private SearchFilter<T> nextFilter;
 
-    protected abstract boolean isCurrentValid(@NonNull final JsonElement root);
+    protected abstract boolean isCurrentValid(@NonNull JsonElement root);
 
     /**
      * Set the next filter to be applied after this one.
@@ -32,7 +32,17 @@ public abstract class SearchFilter<T> {
      * @return True if the value passes the filter; otherwise, false.
      */
     public final boolean isValid(@NonNull T value) {
-        JsonElement root = gson.toJsonTree(value);
-        return isCurrentValid(root) && (nextFilter == null || nextFilter.isCurrentValid(root));
+        JsonElement root = GSON.toJsonTree(value);
+
+        for (SearchFilter<T> currentFilter = this;
+             currentFilter != null;
+             currentFilter = currentFilter.nextFilter)
+        {
+            if (!currentFilter.isCurrentValid(root)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

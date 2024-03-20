@@ -47,21 +47,21 @@ class FilteredChildEventListener<T> implements ChildEventListener {
     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
         String key = snapshot.getKey();
         T value = snapshot.getValue(type);
-        readFunction.accept(key, value);
+        add(key, value);
     }
 
     @Override
     public void onChildRemoved(@NonNull DataSnapshot snapshot) {
         String key = snapshot.getKey();
-        readFunction.accept(key, null);
+        add(key, null);
     }
 
     @Override
     public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
         String key = snapshot.getKey();
         T value = snapshot.getValue(type);
-        readFunction.accept(previousChildName, null);
-        readFunction.accept(key, value);
+        add(previousChildName, null);
+        add(key, value);
     }
 
     @Override

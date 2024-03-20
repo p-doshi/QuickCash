@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="salary_range">Salary Range</string>
+    <string name="duration_range">Duration Range</string>
+    <string name="max_distance">Max Distance</string>
+    <string name="apply_filters">Apply Filters</string>
+</resources>

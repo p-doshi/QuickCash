@@ -25,7 +25,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -40,10 +39,6 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
-@SuppressWarnings({
-    "PMD.ExcessiveImports", // No.
-    "PMD.AvoidDuplicateLiterals" // This will be deleted eventually.
-})
 public class SearchFiltersEspressoTests {
     private final Instrumentation instrumentation = getInstrumentation();
     private final Context context = instrumentation.getTargetContext();
@@ -85,7 +80,6 @@ public class SearchFiltersEspressoTests {
         onView(withId(R.id.filterIcon)).perform(click());
     }
 
-    @Ignore("Missing implementation")
     @Test
     public void hundredMeterSearch() {
         locationProvider.setLocation(GOOGLEPLEX);
@@ -93,7 +87,7 @@ public class SearchFiltersEspressoTests {
         generateJobPosts(database, Assert::fail);
 
         onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.0f));
-        onView(withId(R.id.searchButton)).perform(click());
+        onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Coding problem"
@@ -102,7 +96,6 @@ public class SearchFiltersEspressoTests {
         checkJobPosts(expectedJobTitles);
     }
 
-    @Ignore("Missing implementation")
     @Test
     public void fiveKmSearch() {
         locationProvider.setLocation(GOOGLEPLEX);
@@ -110,7 +103,7 @@ public class SearchFiltersEspressoTests {
         generateJobPosts(database, Assert::fail);
 
         onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.5f));
-        onView(withId(R.id.searchButton)).perform(click());
+        onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Arrays.asList(
             "Walk Dog",
@@ -122,14 +115,13 @@ public class SearchFiltersEspressoTests {
         checkJobPosts(expectedJobTitles);
     }
 
-    @Ignore("Missing implementation")
     @Test
     public void differentLocation() {
         locationProvider.setLocation(DALHOUSIE);
 
         generateJobPosts(database, Assert::fail);
 
-        onView(withId(R.id.searchButton)).perform(click());
+        onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Snow Removal"
@@ -138,7 +130,6 @@ public class SearchFiltersEspressoTests {
         checkJobPosts(expectedJobTitles);
     }
 
-    @Ignore("Missing implementation")
     @Test
     public void greaterThanOneDay() {
         locationProvider.setLocation(GOOGLEPLEX);
@@ -146,7 +137,7 @@ public class SearchFiltersEspressoTests {
         generateJobPosts(database, Assert::fail);
 
         onView(withId(R.id.durationRangeSlider)).perform(adjustRangeSliderThumbs(0.5f, 1.0f));
-        onView(withId(R.id.searchButton)).perform(click());
+        onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Landscaping"
@@ -155,7 +146,6 @@ public class SearchFiltersEspressoTests {
         checkJobPosts(expectedJobTitles);
     }
 
-    @Ignore("Missing implementation")
     @Test
     public void lessThan40Dollars() {
         locationProvider.setLocation(GOOGLEPLEX);
@@ -163,7 +153,7 @@ public class SearchFiltersEspressoTests {
         generateJobPosts(database, Assert::fail);
 
         onView(withId(R.id.salaryRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 0.4f));
-        onView(withId(R.id.searchButton)).perform(click());
+        onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Arrays.asList(
             "Walk Dog",

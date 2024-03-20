@@ -3,7 +3,6 @@ package dal.cs.quickcash3.employer;
 import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -11,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +28,7 @@ import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
  * and integrates with the device's location services to fetch and display the current location.
  */
 public class EmployerDashLocation extends AppCompatPermissionActivity {
-    private final AtomicReference<Location> currentLocation = new AtomicReference<>();
+    private final AtomicReference<LatLng> currentLocation = new AtomicReference<>();
     private final AtomicBoolean buttonWaiting = new AtomicBoolean(false);
     private AndroidLocationProvider locationProvider;
     private TextView addressText;
@@ -57,13 +58,13 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
         addressText = findViewById(R.id.addressText);
         locationProvider = new AndroidLocationProvider(this, 1000);
         callbackId = locationProvider.addLocationCallback(
-                location -> {
-                    this.currentLocation.set(location);
-                    if (buttonWaiting.get() && location != null) {
-                        updateAddressDisplay();
-                    }
-                },
-                error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show());
+            location -> {
+                this.currentLocation.set(location);
+                if (buttonWaiting.get() && location != null) {
+                    updateAddressDisplay();
+                }
+            },
+            error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show());
         geocoder = new Geocoder(this, Locale.getDefault());
 
         detectLocationButton.setOnClickListener(v -> detectLocation());
@@ -90,8 +91,8 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
     private void updateAddressDisplay() {
         try {
             do {
-                Location location = currentLocation.get();
-                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                LatLng location = currentLocation.get();
+                addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
             } while (addresses == null);
             runOnUiThread(() -> {
                 if (!addresses.isEmpty()) {

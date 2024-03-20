@@ -51,4 +51,25 @@ public final class LocationHelper {
         double lng = scaleNormalized(RANDOM.nextDouble(), area.southwest.longitude, area.northeast.longitude);
         return new LatLng(lat, lng);
     }
+
+    /**
+     * Calculates the distance between two geographical locations using the
+     * <a href="https://en.wikipedia.org/wiki/Haversine_formula">Haversine formula</a>.
+     *
+     * @param firstLocation The first location, not null.
+     * @param secondLocation The second location, not null.
+     * @return The distance between firstLocation and secondLocation in meters.
+     */
+    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
+    public static double distanceBetween(@NonNull LatLng firstLocation, @NonNull LatLng secondLocation) {
+        double latitudeDifference = Math.toRadians(secondLocation.latitude - firstLocation.latitude);
+        double longitudeDifference = Math.toRadians(secondLocation.longitude - firstLocation.longitude);
+
+        double haversineFormulaNumerator = Math.sin(latitudeDifference / 2) * Math.sin(latitudeDifference / 2)
+            + Math.cos(Math.toRadians(firstLocation.latitude)) * Math.cos(Math.toRadians(secondLocation.latitude))
+            * Math.sin(longitudeDifference / 2) * Math.sin(longitudeDifference / 2);
+
+        double centralAngle = 2 * Math.atan2(Math.sqrt(haversineFormulaNumerator), Math.sqrt(1 - haversineFormulaNumerator));
+        return EARTH_RADIUS * centralAngle;
+    }
 }

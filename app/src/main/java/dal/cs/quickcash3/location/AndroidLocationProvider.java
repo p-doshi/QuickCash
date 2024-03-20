@@ -13,6 +13,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.Map;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.permission.ActivityPermissionHandler;
+import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 import dal.cs.quickcash3.permission.PermissionRequestCode;
 import dal.cs.quickcash3.permission.PermissionResult;
 
@@ -30,16 +31,16 @@ public class AndroidLocationProvider implements LocationProvider {
     protected final FusedLocationProviderClient locationProviderClient;
     protected final Activity activity;
     private final long updateFrequencyMillis;
-    protected final AtomicReference<Location> lastLocation = new AtomicReference<>();
+    protected final AtomicReference<LatLng> lastLocation = new AtomicReference<>();
     private final AtomicBoolean hasLocationUpdates = new AtomicBoolean(false);
-    private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
     private final AtomicBoolean deniedPermission = new AtomicBoolean(false);
+    private final AtomicReference<Map<Integer, LocationReceiver>> locationReceivers = new AtomicReference<>(new TreeMap<>());
     private int nextReceiverId;
 
-    public AndroidLocationProvider(@NonNull ActivityPermissionHandler handler, long updateFrequencyMillis) {
-        this.activity = handler.getActivity();
+    public AndroidLocationProvider(@NonNull AppCompatPermissionActivity activity, long updateFrequencyMillis) {
+        this.activity = activity;
         this.updateFrequencyMillis = updateFrequencyMillis;
-        handler.registerPermissionHandler(this::onRequestPermissionsResult);
+        activity.registerPermissionHandler(this::onRequestPermissionsResult);
         locationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
 
         startLocationUpdates();
@@ -51,9 +52,10 @@ public class AndroidLocationProvider implements LocationProvider {
     }
 
     private void receiveLocation(@NonNull Location location) {
-        lastLocation.set(location);
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        lastLocation.set(latLng);
         for (LocationReceiver receiver : locationReceivers.get().values()) {
-            receiver.receiveLocation(location);
+            receiver.receiveLocation(latLng);
         }
     }
 
@@ -63,8 +65,8 @@ public class AndroidLocationProvider implements LocationProvider {
             // Do not ask more than once.
             if (!deniedPermission.get()) {
                 activity.requestPermissions(
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        PermissionRequestCode.LOCATION.getCode());
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PermissionRequestCode.LOCATION.getCode());
             }
             return;
         }
@@ -95,7 +97,7 @@ public class AndroidLocationProvider implements LocationProvider {
 
     @Override
     public int addLocationCallback(
-        @NonNull Consumer<Location> locationFunction,
+        @NonNull Consumer<LatLng> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
         if (missingPermissions() && deniedPermission.get()) {
@@ -109,6 +111,8 @@ public class AndroidLocationProvider implements LocationProvider {
             startLocationUpdates();
         }
 
+        // This receiver may never be run. But it is important that we track all of them in case
+        // permissions are re-enabled.
         LocationReceiver receiver = new LocationReceiver(locationFunction, errorFunction);
         int receiverId = nextReceiverId++;
         locationReceivers.get().put(receiverId, receiver);
@@ -122,7 +126,7 @@ public class AndroidLocationProvider implements LocationProvider {
     }
 
     @Override
-    public @Nullable Location getLastLocation() {
+    public @Nullable LatLng getLastLocation() {
         if (missingPermissions()) {
             if (deniedPermission.get()) {
                 throw new SecurityException(activity.getString(R.string.error_location_permission));
@@ -143,10 +147,14 @@ public class AndroidLocationProvider implements LocationProvider {
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
     private void onRequestPermissionsResult(@NonNull PermissionResult result) {
         if (result.isMatchingCode(PermissionRequestCode.LOCATION) &&
-            result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) &&
             result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION))
         {
-            startLocationUpdates();
+            if (result.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                startLocationUpdates();
+            }
+            else {
+                deniedPermission.set(true);
+            }
         }
     }
 }

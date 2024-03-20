@@ -23,6 +23,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         notifyItemInserted(jobs.size() - 1);
     }
 
+    public void reset() {
+        notifyItemRangeRemoved(0, jobs.size());
+        jobs.clear();
+    }
+
     @SuppressLint("NotifyDataSetChanged") // TODO: fix this.
     public void newList(@NonNull List<AvailableJob> newJobs) {
         jobs = newJobs;

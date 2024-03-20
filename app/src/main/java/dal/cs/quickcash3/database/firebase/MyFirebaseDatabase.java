@@ -2,8 +2,6 @@ package dal.cs.quickcash3.database.firebase;
 
 import static dal.cs.quickcash3.util.StringHelper.SLASH;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import java.util.function.BiConsumer;

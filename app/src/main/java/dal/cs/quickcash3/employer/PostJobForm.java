@@ -147,7 +147,8 @@ public class PostJobForm extends Activity {
     protected void createJob() {
         Map<String, String> fields = getFieldsMap();
         AvailableJob job = PostAvailableJobHelper.createAvailableJob(fields, this);
-        job.writeToDatabase(database, error-> Log.e("PostJobForm", error));
+        String key = job.writeToDatabase(database, error-> Log.e("PostJobForm", error));
+        Log.d(LOG_TAG, "Job key: " + key);
     }
 
     // Getters

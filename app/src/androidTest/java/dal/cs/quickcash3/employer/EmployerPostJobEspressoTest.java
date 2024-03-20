@@ -80,7 +80,7 @@ public class EmployerPostJobEspressoTest {
     public void fillJobForm() {
 
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -100,7 +100,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkEmptyJobTitleError(){
         onView(withId(R.id.jobPostingTitle)).perform(typeText(empty));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -120,7 +120,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkInvalidJobExpectedDurationError(){
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobUrgency))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText(jobSalary));
@@ -138,7 +138,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkInvalidUrgencyError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.addJobSalary)).perform(typeText(jobSalary));
@@ -156,12 +156,12 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkEmptySalaryError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobUrgency))).perform(click());
-        onView(withId(R.id.addJobSalary)).perform(typeText("abc\n"));
+        onView(withId(R.id.addJobSalary)).perform(typeText(empty));
         onView(withId(R.id.addJobAddress)).perform(typeText(jobAddress));
         onView(withId(R.id.addJobCity)).perform(typeText(jobCity));
         onView(withId(R.id.addJobProvince)).perform(click());
@@ -176,7 +176,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkInvalidSalaryError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -196,7 +196,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkEmptyAddressError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -216,7 +216,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkEmptyCityError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -236,7 +236,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkInvalidProvinceError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -254,7 +254,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkEmptyJobDescriptionError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText(jobDate));
+        onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -274,6 +274,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkEmptyDateError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
+        onView(withId(R.id.addJobDate)).perform(typeText(empty), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());
@@ -293,7 +294,7 @@ public class EmployerPostJobEspressoTest {
     @Test
     public void checkInvalidDateError() {
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
-        onView(withId(R.id.addJobDate)).perform(typeText("15-03-2024\n"));
+        onView(withId(R.id.addJobDate)).perform(typeText("15-03-2024\n"), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(jobDuration))).perform(click());
         onView(withId(R.id.jobUrgencySpinner)).perform(click());

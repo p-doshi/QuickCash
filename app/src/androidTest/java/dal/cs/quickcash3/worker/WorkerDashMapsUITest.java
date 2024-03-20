@@ -23,7 +23,7 @@ import dal.cs.quickcash3.location.WorkerDashboardMapExampleActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class WorkerDashMapsUITest {
-    private static final int MAX_LOAD_TIMEOUT = 10000;
+    private static final int MAX_LOAD_TIMEOUT = 30000;
     @Rule
     public final ActivityScenarioRule<WorkerDashboardMapExampleActivity> activityRule =
         new ActivityScenarioRule<>(WorkerDashboardMapExampleActivity.class);

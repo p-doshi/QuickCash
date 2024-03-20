@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.database.annotations.Nullable;
 
@@ -20,6 +19,11 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
     private String postTime;
     private List<String> applicants;
     private List<String> blackList;
+
+    @SuppressWarnings("PMD.UnnecessaryConstructor") // Empty constructor needed to read from Firebase.
+    public AvailableJob() { 
+        super();
+    }
 
     public @Nullable String getStartDate() {
         return startDate;
@@ -70,21 +74,34 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
     }
 
     @Override
-    public void writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        writeToDatabase(database, () -> {}, errorFunction);
+    public @NonNull String toString() {
+        return super.toString() +
+            "\nstartDate='" + startDate + '\'' +
+            "\nduration=" + duration +
+            "\nurgency='" + urgency + '\'' +
+            "\npostTime='" + postTime + '\'' +
+            "\napplicants=" + applicants +
+            "\nblackList=" + blackList;
     }
 
     @Override
-    public void writeToDatabase(
+    public @NonNull String writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        return writeToDatabase(database, () -> {}, errorFunction);
+    }
+
+    @Override
+    public @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
+        String key = RandomStringGenerator.generate(HASH_SIZE);
         database.write(
-            DatabaseDirectory.AVAILABLE_JOBS.getValue() + RandomStringGenerator.generate(HASH_SIZE),
+            DatabaseDirectory.AVAILABLE_JOBS.getValue() + key,
             this,
             successFunction,
             errorFunction);
+        return key;
     }
 
     @Override

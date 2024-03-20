@@ -14,30 +14,22 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
-import dal.cs.quickcash3.fragments.JobListFragment;
-import dal.cs.quickcash3.jobs.SearchJobActivity;
-import dal.cs.quickcash3.search.SearchFilter;
+import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
-import dal.cs.quickcash3.fragments.SearchFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.location.MockLocationProvider;
-import dal.cs.quickcash3.permission.FragmentPermissionActivity;
+import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
-public class WorkerDashboard extends FragmentPermissionActivity {
+public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
-    private Fragment receiptsFragment;
-    private Fragment jobSearchFragment;
-    private Fragment mapFragment;
-    private Fragment profileFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -48,10 +40,10 @@ public class WorkerDashboard extends FragmentPermissionActivity {
         initInterfaces();
 
         // Initialize the fragments.
-        receiptsFragment = new ReceiptsFragment();
-        mapFragment = new MapsFragment();
-        profileFragment = new ProfileFragment();
-        jobSearchFragment = new SearchJobActivity(database,locationProvider);
+        Fragment receiptsFragment = new ReceiptsFragment();
+        Fragment mapFragment = new MapsFragment();
+        Fragment profileFragment = new ProfileFragment();
+        Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
@@ -63,6 +55,7 @@ public class WorkerDashboard extends FragmentPermissionActivity {
                 return true;
             }
             else if (itemId == R.id.workerSearchPage) {
+                Log.v(LOG_TAG, "Showing job search fragment");
                 replaceFragment(jobSearchFragment);
                 return true;
             }
@@ -77,8 +70,7 @@ public class WorkerDashboard extends FragmentPermissionActivity {
                 return true;
             }
             else {
-                Log.w(LOG_TAG, "Unrecognized item ID: " + itemId);
-                return false;
+                throw new IllegalArgumentException("Unrecognized item ID: " + itemId);
             }
         });
 
@@ -90,7 +82,6 @@ public class WorkerDashboard extends FragmentPermissionActivity {
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
     }
-
 
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();

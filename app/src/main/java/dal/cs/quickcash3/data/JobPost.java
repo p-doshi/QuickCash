@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.annotations.Nullable;
 
 import dal.cs.quickcash3.database.DatabaseObject;
-import dal.cs.quickcash3.util.Copyable;
 
 public abstract class JobPost implements DatabaseObject {
     protected static final int HASH_SIZE = 20;
@@ -62,6 +61,17 @@ public abstract class JobPost implements DatabaseObject {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public @NonNull String toString() {
+        return
+            "\ntitle='" + title + '\'' +
+            "\nemployer='" + employer + '\'' +
+            "\ndescription='" + description + '\'' +
+            "\nlatitude=" + latitude +
+            "\nlongitude=" + longitude +
+            "\nsalary=" + salary;
     }
 
     protected void copyFrom(@NonNull JobPost other) {

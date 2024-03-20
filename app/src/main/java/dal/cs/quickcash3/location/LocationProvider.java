@@ -1,9 +1,9 @@
 package dal.cs.quickcash3.location;
 
-import android.location.Location;
-
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.errorprone.annotations.CheckReturnValue;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -16,7 +16,8 @@ public interface LocationProvider {
      * @param locationFunction The function that receives the location iff accessible. The location will never be null.
      * @param errorFunction The function that receives errors iff they occur.
      */
-    int addLocationCallback(@NonNull Consumer<Location> locationFunction, @NonNull Consumer<String> errorFunction);
+    @CheckReturnValue
+    int addLocationCallback(@NonNull Consumer<LatLng> locationFunction, @NonNull Consumer<String> errorFunction);
 
     /**
      * Remove the callback with the matching callbackId.
@@ -30,5 +31,5 @@ public interface LocationProvider {
      * or even non null location.
      * @return The last received location. Or null if there is none.
      */
-    @Nullable Location getLastLocation();
+    @Nullable LatLng getLastLocation();
 }

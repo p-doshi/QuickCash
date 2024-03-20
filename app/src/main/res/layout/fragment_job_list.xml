@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context=".fragments.JobListFragment"
+    tools:context=".jobs.JobListFragment"
     tools:listitem="@layout/job_item" />
