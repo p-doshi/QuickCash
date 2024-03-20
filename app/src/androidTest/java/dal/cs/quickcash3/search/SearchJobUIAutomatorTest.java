@@ -22,6 +22,7 @@ import org.junit.Test;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class SearchJobUIAutomatorTest {
+    private static final int MAX_TIMEOUT = 5000;
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
             new ActivityScenarioRule<>(WorkerDashboard.class);
@@ -40,44 +41,45 @@ public class SearchJobUIAutomatorTest {
     @Test
     public void checkIfLandingPageIsVisible() throws UiObjectNotFoundException {
         UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
+        assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
         searchPage.click();
         UiObject searchBox = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/searchBar"));
-        assertTrue(searchBox.exists());
+        assertTrue(searchBox.waitForExists(MAX_TIMEOUT));
         UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
-        assertTrue(filterIcon.exists());
+        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
     }
 
 
     @Test
     public void checkIfMovedToSearchFilter() throws UiObjectNotFoundException {
         UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
+        assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
         searchPage.click();
         UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
-        assertTrue(filterIcon.exists());
+        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
         filterIcon.click();
         UiObject welcomeLabel = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterFragment"));
-        assertTrue(welcomeLabel.exists());
+        assertTrue(welcomeLabel.waitForExists(MAX_TIMEOUT));
     }
 
 
     @Test
     public void checkIfMovedToJobSearchPage() throws UiObjectNotFoundException {
         UiObject searchPage = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/workerSearchPage"));
-        searchPage.clickAndWaitForNewWindow();
+        assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
+        searchPage.click();
         UiObject filterIcon = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/filterIcon"));
-        assertTrue(filterIcon.exists());
-        filterIcon.clickAndWaitForNewWindow();
-        device.waitForIdle(2000);
+        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
+        filterIcon.click();
         UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Job Search"));
-        assertTrue(welcomeLabel.exists());
+        assertTrue(welcomeLabel.waitForExists(MAX_TIMEOUT));
         UiScrollable scrollable = new UiScrollable(new UiSelector().scrollable(true));
         scrollable.setAsVerticalList();
         scrollable.scrollForward();
-        device.waitForIdle(2000);
         UiObject searchButton = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/searchButton"));
-        searchButton.clickAndWaitForNewWindow();
-        device.waitForIdle(3000);
+        assertTrue(searchButton.waitForExists(MAX_TIMEOUT));
+        searchButton.click();
         UiObject searchBox = device.findObject(new UiSelector().resourceId("dal.cs.quickcash3:id/searchBar"));
-        assertTrue(searchBox.exists());
+        assertTrue(searchBox.waitForExists(MAX_TIMEOUT));
     }
 }
