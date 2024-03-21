@@ -1,10 +1,12 @@
-package com.example.csci3130_group_3;
+package dal.cs.quickcash3.login;
 
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-public class SignInImplementation implements SignInInterface{
+import dal.cs.quickcash3.login.SignInInterface;
+
+public class SignInImplementation implements SignInInterface {
     private Context mContext;
 
     public SignInImplementation(Context context){

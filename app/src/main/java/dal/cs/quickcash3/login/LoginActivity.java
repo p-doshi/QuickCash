@@ -21,19 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import dal.cs.quickcash3.R;
 
-import com.example.csci3130_group_3.GoogleSignInHelper;
-import com.example.csci3130_group_3.SignInImplementation;
-import com.example.csci3130_group_3.SignInInterface;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-
-import dal.cs.quickcash3.R;
 
 public class LoginActivity extends AppCompatActivity implements SignInInterface {
 

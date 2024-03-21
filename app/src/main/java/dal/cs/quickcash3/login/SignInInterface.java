@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package dal.cs.quickcash3.login;
 
 public interface SignInInterface {
     void moveToDashboard();

@@ -1,4 +1,4 @@
-package com.example.csci3130_group_3;
+package dal.cs.quickcash3.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
+import dal.cs.quickcash3.login.SignInInterface;
 
 public class GoogleSignInHelper {
     private final GoogleSignInClient mGoogleSignInClient;
