@@ -38,7 +38,7 @@ public class EmployerPostJobEspressoTest {
     @Rule
     public final ActivityScenarioRule<EmployerDashboard> activityRule =
             new ActivityScenarioRule<>(
-                    new Intent(context, PostJobForm.class)
+                    new Intent(context, EmployerDashboard.class)
                             .addCategory(context.getString(R.string.MOCK_DATABASE))
             );
     public ActivityScenario<EmployerDashboard> scenario;
@@ -72,6 +72,7 @@ public class EmployerPostJobEspressoTest {
                 assertTrue("Not using Mock Database",
                         activity.getDatabase() instanceof MockDatabase)
         );
+        onView(withId(R.id.addJobButton)).perform(click());
 
 
     }
