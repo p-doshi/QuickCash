@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -84,7 +85,7 @@ public class PostJobForm extends Activity {
                     // write success message
                     status.setText(R.string.success);
                     // move to next page
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException | IOException e) {
                     errorMessage = Objects.requireNonNull(e.getMessage());
                 }
             }
@@ -148,7 +149,7 @@ public class PostJobForm extends Activity {
     /**
      * Creates a new available job in the database
      */
-    protected void createJob() {
+    protected void createJob() throws IOException {
         Map<String, String> fields = getFieldsMap();
         AvailableJob job = PostAvailableJobHelper.createAvailableJob(fields, this);
         String key = job.writeToDatabase(database, error-> {
