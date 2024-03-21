@@ -40,11 +40,9 @@ public class SearchFiltersTest {
 
     @Test
     public void locationBased() {
-        MockLocationProvider locationProvider = new MockLocationProvider();
-        locationProvider.setLocation(GOOGLEPLEX);
-
         LocationSearchFilter<AvailableJob> filter =
-            new LocationSearchFilter<>("latitude", "longitude", locationProvider);
+            new LocationSearchFilter<>("latitude", "longitude");
+        filter.setLocation(GOOGLEPLEX);
         filter.setMaxDistance(100.0);
 
         List<AvailableJob> passed = new ArrayList<>();
@@ -66,11 +64,9 @@ public class SearchFiltersTest {
 
     @Test
     public void durationBasedChained() {
-        MockLocationProvider locationProvider = new MockLocationProvider();
-        locationProvider.setLocation(GOOGLEPLEX);
-
         LocationSearchFilter<AvailableJob> locationFilter =
-            new LocationSearchFilter<>("latitude", "longitude", locationProvider);
+            new LocationSearchFilter<>("latitude", "longitude");
+        locationFilter.setLocation(GOOGLEPLEX);
         locationFilter.setMaxDistance(300000);
 
         NumericRangeSearchFilter<AvailableJob> salaryRangeFilter =

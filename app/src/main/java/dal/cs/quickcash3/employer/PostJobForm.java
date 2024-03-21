@@ -15,13 +15,13 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseExampleActivity;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 
@@ -30,12 +30,12 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
  * Initialize UI for Post job form
  */
 public class PostJobForm extends Activity {
-    Database database;
     private static final String LOG_TAG = PostJobForm.class.getSimpleName();
+    private Database database;
+    private TextView status;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.add_job);
         initInterfaces();
@@ -44,6 +44,8 @@ public class PostJobForm extends Activity {
         this.setUpDurationSpinner();
         this.setUpUrgencySpinner();
         this.setUpProvinceSpinner();
+
+        status = findViewById(R.id.jobSubmitStatus);
 
         this.setUpConfirmPostButton();
     }
@@ -75,20 +77,23 @@ public class PostJobForm extends Activity {
         confirmPostButton.setOnClickListener(view -> {
             // check fields
             String errorMessage = checkAllFields();
-            TextView status = findViewById(R.id.jobSubmitStatus);
 
-            if(!"".equals(errorMessage)){
+            if(errorMessage.isEmpty()){
+                try {
+                    // save to db
+                    createJob();
+                    // write success message
+                    status.setText(R.string.success);
+                    // move to next page
+                } catch (IllegalArgumentException | IOException e) {
+                    errorMessage = Objects.requireNonNull(e.getMessage());
+                }
+            }
+
+            if (!errorMessage.isEmpty()) {
                 // handle error message
                 status.setText(errorMessage);
             }
-            else{
-                // save to db
-                createJob();
-                // write success message
-                status.setText(R.string.success);
-                // move to next page
-            }
-
         });
     }
 
@@ -144,10 +149,13 @@ public class PostJobForm extends Activity {
     /**
      * Creates a new available job in the database
      */
-    protected void createJob() {
+    protected void createJob() throws IOException {
         Map<String, String> fields = getFieldsMap();
         AvailableJob job = PostAvailableJobHelper.createAvailableJob(fields, this);
-        String key = job.writeToDatabase(database, error-> Log.e("PostJobForm", error));
+        String key = job.writeToDatabase(database, error-> {
+            status.setText(error);
+            Log.e(LOG_TAG, error);
+        });
         Log.d(LOG_TAG, "Job key: " + key);
     }
 

@@ -31,7 +31,7 @@ public final class PostAvailableJobHelper {
      * @param context the context for the activity
      * @return an Available job object for the newly created Availble Job
      */
-    public static @NonNull AvailableJob createAvailableJob(@NonNull Map<String, String> fields, @NonNull Context context) {
+    public static @NonNull AvailableJob createAvailableJob(@NonNull Map<String, String> fields, @NonNull Context context) throws IOException {
         AvailableJob job = new AvailableJob();
 
         job.setTitle(Objects.requireNonNull(fields.get("title")));
@@ -64,19 +64,14 @@ public final class PostAvailableJobHelper {
      * @param context the context of the activity
      * @return the address as an Address object
      */
-    private static Address locToCoordinates(String streetAdd, String city, String province, Context context) {
+    private static Address locToCoordinates(String streetAdd, String city, String province, Context context) throws IOException {
         Geocoder geocoder = new Geocoder(context);
         String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
-        List<Address> address = null;
-        try {
-            do {
-                address = geocoder.getFromLocationName(strAddress, 20);
-            }
-            while (address == null);
-        } catch (IOException e) {
-            Log.e("PostAvailableJobHelper", Objects.requireNonNull(e.getMessage()));
+        List<Address> address;
+        do {
+            address = geocoder.getFromLocationName(strAddress, 20);
         }
-        assert address != null;
+        while (address == null);
         return address.get(0);
     }
 

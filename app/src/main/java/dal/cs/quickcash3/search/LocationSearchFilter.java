@@ -4,6 +4,8 @@ import static dal.cs.quickcash3.util.GsonHelper.getAt;
 import static dal.cs.quickcash3.util.StringHelper.SLASH;
 import static dal.cs.quickcash3.util.StringHelper.splitString;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -11,24 +13,24 @@ import com.google.gson.JsonElement;
 
 import java.util.List;
 
+import dal.cs.quickcash3.jobs.SearchFilterFragment;
 import dal.cs.quickcash3.location.LocationHelper;
 import dal.cs.quickcash3.location.LocationProvider;
 
 public class LocationSearchFilter<T> extends SearchFilter<T> {
     private final List<String> latKeys;
     private final List<String> longKeys;
-    private final LocationProvider locationProvider;
+    private LatLng location;
     private double maxDistance;
 
-    public LocationSearchFilter(
-        @NonNull String latKey,
-        @NonNull String longKey,
-        @NonNull LocationProvider locationProvider)
-    {
+    public LocationSearchFilter(@NonNull String latKey, @NonNull String longKey) {
         super();
         latKeys = splitString(latKey, SLASH);
         longKeys = splitString(longKey, SLASH);
-        this.locationProvider = locationProvider;
+    }
+
+    public void setLocation(@NonNull LatLng location) {
+        this.location = location;
     }
 
     public void setMaxDistance(double maxDistance) {
@@ -37,15 +39,14 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
 
     @Override
     public boolean isCurrentValid(@NonNull JsonElement root) {
-        LatLng currentLocation = locationProvider.getLastLocation();
-        if (currentLocation == null) {
-            throw new NullPointerException("Could not get location from location provider");
+        if (location == null) {
+            throw new NullPointerException("Please provide a location to use the location search filter");
         }
 
         double latitude = getAt(root, latKeys).getAsDouble();
         double longitude = getAt(root, longKeys).getAsDouble();
 
-        double distance = LocationHelper.distanceBetween(currentLocation, new LatLng(latitude, longitude));
+        double distance = LocationHelper.distanceBetween(location, new LatLng(latitude, longitude));
 
         return distance <= maxDistance;
     }
