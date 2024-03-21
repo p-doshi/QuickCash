@@ -144,11 +144,9 @@ public class AndroidLocationProvider implements LocationProvider {
 
     @Override
     public void fetchLocation(@NonNull Consumer<LatLng> locationFunction, @NonNull Consumer<String> errorFunction) {
-        if (missingPermissions()) {
-            if (deniedPermission.get()) {
-                errorFunction.accept(activity.getString(R.string.error_location_permission));
-                return;
-            }
+        if (missingPermissions() && deniedPermission.get()) {
+            errorFunction.accept(activity.getString(R.string.error_location_permission));
+            return;
         }
 
         if (!hasLocationUpdates.get()) {

@@ -28,7 +28,7 @@ public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivi
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
         // Upon loading the worker page it should immediately request location permissions and get current location
-        LocationProvider locationProvider = new AndroidLocationProvider(this, 5000);
+        //LocationProvider locationProvider = new AndroidLocationProvider(this, 5000);
         // Need to request location here
         //locationProvider.fetchLocation();
 

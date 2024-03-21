@@ -18,7 +18,6 @@ import dal.cs.quickcash3.location.LocationHelper;
 import dal.cs.quickcash3.location.LocationProvider;
 
 public class LocationSearchFilter<T> extends SearchFilter<T> {
-    private static final String LOG_TAG = LocationSearchFilter.class.getSimpleName();
     private final List<String> latKeys;
     private final List<String> longKeys;
     private LatLng location;
