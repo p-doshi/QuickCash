@@ -33,7 +33,8 @@ public final class PostAvailableJobHelper {
     public static void createAvailableJob(
         @NonNull Context context,
         @NonNull Map<String, String> fields,
-        @NonNull Consumer<AvailableJob> receiverFunction)
+        @NonNull Consumer<AvailableJob> receiverFunction,
+        @NonNull Consumer<String> errorFunction)
     {
         AvailableJob job = new AvailableJob();
 
@@ -55,11 +56,13 @@ public final class PostAvailableJobHelper {
             Objects.requireNonNull(fields.get("address")),
             Objects.requireNonNull(fields.get("city")),
             Objects.requireNonNull(fields.get("province")));
-        LocationHelper.addressToCoordinates(context, address, location -> {
-            job.setLatitude(location.latitude);
-            job.setLongitude(location.longitude);
-            receiverFunction.accept(job);
-        });
+        LocationHelper.addressToCoordinates(context, address,
+            location -> {
+                job.setLatitude(location.latitude);
+                job.setLongitude(location.longitude);
+                receiverFunction.accept(job);
+            },
+            errorFunction);
     }
 
     /**

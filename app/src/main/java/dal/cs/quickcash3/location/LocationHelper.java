@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
-import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
@@ -85,43 +84,27 @@ public final class LocationHelper {
         return EARTH_RADIUS * centralAngle;
     }
 
+    @SuppressWarnings("PMD.LawOfDemeter") // This is how Build.VERSION was meant to be used.
     public static void addressToCoordinates(
         @NonNull Context context,
         @NonNull PostalAddress address,
-        @NonNull Consumer<LatLng> locationFunction)
+        @NonNull Consumer<LatLng> locationFunction,
+        @NonNull Consumer<String> errorFunction)
     {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        boolean calledFromUIThread = context.getMainLooper().isCurrentThread();
-
-        Consumer<List<Address>> addressConverter = addresses -> {
-            LatLng location;
-
-            if (!addresses.isEmpty()) {
-                Address address1 = addresses.get(0);
-                location = new LatLng(address1.getLatitude(), address1.getLongitude());
-            } else {
-                location = null;
-            }
-
-            if (calledFromUIThread) {
-                new Handler(context.getMainLooper())
-                    .post(() -> locationFunction.accept(location));
-            }
-            else {
-                locationFunction.accept(location);
-            }
-        };
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocationName(address.toString(), 1, addressConverter::accept);
+            MyNewGeocodeListener listener = new MyNewGeocodeListener(locationFunction, errorFunction);
+            geocoder.getFromLocationName(address.toString(), 1, listener);
         } else {
             // Found a few sources saying to run this in a non-UI thread to avoid connection errors.
+            MyGeocodeListener listener = new MyGeocodeListener(locationFunction, errorFunction);
             new Thread(() -> {
                 try {
                     List<Address> addresses = geocoder.getFromLocationName(address.toString(), 1);
-                    addressConverter.accept(addresses);
+                    listener.onGeocode(addresses);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    listener.onError(e.getMessage());
                 }
             }).start();
         }

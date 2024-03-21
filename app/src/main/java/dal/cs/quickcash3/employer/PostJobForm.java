@@ -71,7 +71,7 @@ public class PostJobForm extends Activity {
     /**
      * handle on click of confirmation button
      */
-    protected void setUpConfirmPostButton(){
+    private void setUpConfirmPostButton(){
         Button confirmPostButton = findViewById(R.id.addJobConfirmButton);
         confirmPostButton.setOnClickListener(view -> {
             // check fields
@@ -96,7 +96,7 @@ public class PostJobForm extends Activity {
     /**
      * Initiate duration spinner
      */
-    protected void setUpDurationSpinner(){
+    private void setUpDurationSpinner(){
         Spinner durationSpinner = findViewById(R.id.jobDurationSpinner);
 
         String[] durationValues = getResources().getStringArray(R.array.durationSpinnerValues);
@@ -109,7 +109,7 @@ public class PostJobForm extends Activity {
     /**
      * Initiate urgency spinner
      */
-    protected void setUpUrgencySpinner(){
+    private void setUpUrgencySpinner(){
         Spinner urgencySpinner = findViewById(R.id.jobUrgencySpinner);
 
         String[] urgencyValues = getResources().getStringArray(R.array.urgencySpinnerValues);
@@ -122,7 +122,7 @@ public class PostJobForm extends Activity {
     /**
      * Initiate province spinner
      */
-    protected void setUpProvinceSpinner(){
+    private void setUpProvinceSpinner(){
         Spinner provinceSpinner = findViewById(R.id.addJobProvince);
 
         String[] provinceValues = getResources().getStringArray(R.array.provinceSpinnerValues);
@@ -136,7 +136,7 @@ public class PostJobForm extends Activity {
      * Method to check that all input values are valid
      * @return A string holding an error message; empty when no input errors
      */
-    protected @NonNull String checkAllFields(){
+    private @NonNull String checkAllFields(){
         // check fields and return error message?
         Map<String, String> fields = getFieldsMap();
         return PostJobFormFields.checkFieldsValid(fields);
@@ -145,49 +145,50 @@ public class PostJobForm extends Activity {
     /**
      * Creates a new available job in the database
      */
-    protected void createJob(Runnable completionFunction, Consumer<String> errorFunction) {
+    private void createJob(Runnable completionFunction, Consumer<String> errorFunction) {
         Map<String, String> fields = getFieldsMap();
         PostAvailableJobHelper.createAvailableJob(this, fields,
             job -> {
                 String key = job.writeToDatabase(database, completionFunction, errorFunction);
                 Log.d(LOG_TAG, "Job key: " + key);
-            });
+            },
+            errorFunction);
     }
 
     // Getters
-    protected @NonNull String getJobTitle(){
+    private @NonNull String getJobTitle(){
         EditText jobTitle = findViewById(R.id.jobPostingTitle);
         return jobTitle.getText().toString().trim();
     }
-    protected @NonNull String getJobDate(){
+    private @NonNull String getJobDate(){
         EditText jobDate = findViewById(R.id.addJobDate);
         return jobDate.getText().toString().trim();
     }
-    protected @NonNull String getJobSalary(){
+    private @NonNull String getJobSalary(){
         EditText jobSalary = findViewById(R.id.addJobSalary);
         return jobSalary.getText().toString().trim();
     }
-    protected @NonNull String getJobAddress(){
+    private @NonNull String getJobAddress(){
         EditText jobAddress = findViewById(R.id.addJobAddress);
         return jobAddress.getText().toString().trim();
     }
-    protected @NonNull String getJobCity(){
+    private @NonNull String getJobCity(){
         EditText jobCity = findViewById(R.id.addJobCity);
         return jobCity.getText().toString().trim();
     }
-    protected @NonNull String getJobDescription(){
+    private @NonNull String getJobDescription(){
         EditText jobDescription = findViewById(R.id.addJobDescription);
         return jobDescription.getText().toString().trim();
     }
-    protected @NonNull String getDuration() {
+    private @NonNull String getDuration() {
         Spinner jobDuration = findViewById(R.id.jobDurationSpinner);
         return jobDuration.getSelectedItem().toString();
     }
-    protected @NonNull String getUrgency() {
+    private @NonNull String getUrgency() {
         Spinner jobUrgency = findViewById(R.id.jobUrgencySpinner);
         return jobUrgency.getSelectedItem().toString();
     }
-    protected @NonNull String getProvince() {
+    private @NonNull String getProvince() {
         Spinner jobProvince = findViewById(R.id.addJobProvince);
         return jobProvince.getSelectedItem().toString();
     }
@@ -196,7 +197,7 @@ public class PostJobForm extends Activity {
      * Method to create a hashmap with all the fields as the keys and the user input as values
      * @return a hashmap
      */
-    protected @NonNull Map<String, String> getFieldsMap(){
+    private @NonNull Map<String, String> getFieldsMap(){
         Map<String, String> fields = new HashMap<>();
 
         fields.put("title", getJobTitle());
