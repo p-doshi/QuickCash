@@ -17,6 +17,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import dal.cs.quickcash3.R;
+
 public class LoginEspressoTest {
     public ActivityScenario<LoginActivity> scenario;
 

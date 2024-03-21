@@ -21,6 +21,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import dal.cs.quickcash3.R;
+
 public class LoginActivity extends AppCompatActivity implements SignInInterface {
 
     private FirebaseAuth mAuth;
