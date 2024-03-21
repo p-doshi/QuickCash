@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
         }else if (LoginValidator.isEmptyPassword(password)) {
             errorMessage = getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
             setStatusMessage(errorMessage);
-        }else if (!(LoginValidator.isValidEmail(emailAddress))) {
+        }else if (!LoginValidator.isValidEmail(emailAddress)) {
             errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
             setStatusMessage(errorMessage);
         }else {

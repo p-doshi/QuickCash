@@ -23,16 +23,15 @@ import dal.cs.quickcash3.R;
 
 public class LoginEspressoTest {
     public ActivityScenario<LoginActivity> scenario;
-
+    @Rule
+    public final ActivityScenarioRule<LoginActivity> activityRule =
+            new ActivityScenarioRule<>(LoginActivity.class);
 
     @Before
     public void setup() {
         scenario = ActivityScenario.launch(LoginActivity.class);
         scenario.onActivity(LoginActivity::setUpLoginButton);
     }
-    @Rule
-    public final ActivityScenarioRule<LoginActivity> activityRule =
-        new ActivityScenarioRule<>(LoginActivity.class);
 
     @After
     public void teardown() {
