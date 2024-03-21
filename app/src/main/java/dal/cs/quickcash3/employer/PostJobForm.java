@@ -18,14 +18,10 @@ import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
-import dal.cs.quickcash3.database.mock.MockDatabase;
 
 /**
  * @author Hayely Vezeau
@@ -36,6 +32,7 @@ public class PostJobForm extends Fragment {
     private static final String LOG_TAG = PostJobForm.class.getSimpleName();
 
     public PostJobForm(@NonNull Database database){
+        super();
         this.database = database;
     }
 
@@ -47,9 +44,9 @@ public class PostJobForm extends Fragment {
         View addJobView = inflater.inflate(R.layout.add_job, container, false);
         Context context = getContext();
         super.onCreate(savedInstanceState);
-        //this.setContentView(R.layout.add_job);
 
         // initialize spinners
+        assert context != null;
         this.setUpDurationSpinner(addJobView, context);
         this.setUpUrgencySpinner(addJobView, context);
         this.setUpProvinceSpinner(addJobView, context);
@@ -57,16 +54,6 @@ public class PostJobForm extends Fragment {
         this.setUpConfirmPostButton(addJobView, context);
         return addJobView;
     }
-
-    /*
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-
-
-    }
-
-     */
-
 
     public @NonNull Database getDatabase() {
         return database;
