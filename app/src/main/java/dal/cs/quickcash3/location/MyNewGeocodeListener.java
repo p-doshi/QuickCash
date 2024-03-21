@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 import java.util.function.Consumer;
 
+@SuppressWarnings("PMD.MyNewGeocodeListener") // This is proper usage of Build.VERSION_CODES.
 @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 class MyNewGeocodeListener extends MyGeocodeListener implements GeocodeListener {
     public MyNewGeocodeListener(
