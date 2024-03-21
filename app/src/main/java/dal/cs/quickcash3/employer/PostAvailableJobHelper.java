@@ -67,16 +67,15 @@ public final class PostAvailableJobHelper {
     private static Address locToCoordinates(String streetAdd, String city, String province, Context context) {
         Geocoder geocoder = new Geocoder(context);
         String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
-        List<Address> address = null;
+        List<Address> address;
         try {
             do {
                 address = geocoder.getFromLocationName(strAddress, 20);
             }
             while (address == null);
         } catch (IOException e) {
-            Log.e("PostAvailableJobHelper", Objects.requireNonNull(e.getMessage()));
+            throw new IllegalArgumentException(e.getMessage());
         }
-        assert address != null;
         return address.get(0);
     }
 
