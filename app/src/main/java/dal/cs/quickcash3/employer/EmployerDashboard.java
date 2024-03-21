@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,7 +24,10 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 
-public class EmployerDashboard extends Activity {
+import dal.cs.quickcash3.employer.PostJobForm;
+
+
+public class EmployerDashboard extends FragmentActivity {
     Database database;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +64,19 @@ public class EmployerDashboard extends Activity {
     protected void setUpAddJobButton(){
         Button addJobButton = findViewById(R.id.addJobButton);
         addJobButton.setOnClickListener(view -> {
+            getSupportFragmentManager().beginTransaction().replace(R.id.employerDashFragment, new PostJobForm(database)).commit();
+
             //move to page
         });
     }
+
+    /*
+    private void replaceFragment(@NonNull Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id., fragment);
+        transaction.commit();
+    }
+
+     */
+
 }
