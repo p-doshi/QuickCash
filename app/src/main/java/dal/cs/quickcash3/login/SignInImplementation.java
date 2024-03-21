@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import dal.cs.quickcash3.login.SignInInterface;
-
 public class SignInImplementation implements SignInInterface {
-    private Context mContext;
+    private final Context mContext;
 
     public SignInImplementation(Context context){
         mContext = context;

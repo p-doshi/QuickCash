@@ -11,7 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import dal.cs.quickcash3.login.SignInInterface;
+import dal.cs.quickcash3.R;
 
 public class GoogleSignInHelper {
     private final GoogleSignInClient mGoogleSignInClient;
