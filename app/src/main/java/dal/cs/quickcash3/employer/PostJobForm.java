@@ -12,15 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
@@ -81,11 +80,8 @@ public class PostJobForm extends Activity {
             if(errorMessage.isEmpty()){
                 try {
                     // save to db
-                    createJob();
-                    // write success message
-                    status.setText(R.string.success);
-                    // move to next page
-                } catch (IllegalArgumentException | IOException e) {
+                    createJob(() -> status.setText(R.string.success), status::setText);
+                } catch (IllegalArgumentException e) {
                     errorMessage = Objects.requireNonNull(e.getMessage());
                 }
             }
@@ -149,14 +145,13 @@ public class PostJobForm extends Activity {
     /**
      * Creates a new available job in the database
      */
-    protected void createJob() throws IOException {
+    protected void createJob(Runnable completionFunction, Consumer<String> errorFunction) {
         Map<String, String> fields = getFieldsMap();
-        AvailableJob job = PostAvailableJobHelper.createAvailableJob(fields, this);
-        String key = job.writeToDatabase(database, error-> {
-            status.setText(error);
-            Log.e(LOG_TAG, error);
-        });
-        Log.d(LOG_TAG, "Job key: " + key);
+        PostAvailableJobHelper.createAvailableJob(this, fields,
+            job -> {
+                String key = job.writeToDatabase(database, completionFunction, errorFunction);
+                Log.d(LOG_TAG, "Job key: " + key);
+            });
     }
 
     // Getters

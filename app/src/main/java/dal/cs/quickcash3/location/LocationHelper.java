@@ -1,11 +1,23 @@
 package dal.cs.quickcash3.location;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Build;
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.function.Consumer;
+
+import dal.cs.quickcash3.data.PostalAddress;
 
 public final class LocationHelper {
     private static final Random RANDOM = new Random();
@@ -71,5 +83,47 @@ public final class LocationHelper {
 
         double centralAngle = 2 * Math.atan2(Math.sqrt(haversineFormulaNumerator), Math.sqrt(1 - haversineFormulaNumerator));
         return EARTH_RADIUS * centralAngle;
+    }
+
+    public static void addressToCoordinates(
+        @NonNull Context context,
+        @NonNull PostalAddress address,
+        @NonNull Consumer<LatLng> locationFunction)
+    {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        boolean calledFromUIThread = context.getMainLooper().isCurrentThread();
+
+        Consumer<List<Address>> addressConverter = addresses -> {
+            LatLng location;
+
+            if (!addresses.isEmpty()) {
+                Address address1 = addresses.get(0);
+                location = new LatLng(address1.getLatitude(), address1.getLongitude());
+            } else {
+                location = null;
+            }
+
+            if (calledFromUIThread) {
+                new Handler(context.getMainLooper())
+                    .post(() -> locationFunction.accept(location));
+            }
+            else {
+                locationFunction.accept(location);
+            }
+        };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            geocoder.getFromLocationName(address.toString(), 1, addressConverter::accept);
+        } else {
+            // Found a few sources saying to run this in a non-UI thread to avoid connection errors.
+            new Thread(() -> {
+                try {
+                    List<Address> addresses = geocoder.getFromLocationName(address.toString(), 1);
+                    addressConverter.accept(addresses);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     }
 }
