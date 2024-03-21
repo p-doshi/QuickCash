@@ -30,7 +30,7 @@ public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivi
         // Upon loading the worker page it should immediately request location permissions and get current location
         LocationProvider locationProvider = new AndroidLocationProvider(this, 5000);
         // Need to request location here
-        locationProvider.getLastLocation();
+        //locationProvider.fetchLocation();
 
         // Sets up a detector to check when navigation bar items clicked
         workerNavView.setOnItemSelectedListener(item -> {
