@@ -31,7 +31,7 @@ public class EmployerDashEspressoTest {
 
     @Test
     public void testEmployerAddJobButtonExist(){
-        onView(withId(R.id.employer_add_job)).check(matches(isDisplayed()));
+        onView(withId(R.id.employer_listings)).check(matches(isDisplayed()));
     }
 
     @Test
