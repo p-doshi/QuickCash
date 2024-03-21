@@ -148,5 +148,6 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
         }else {
             checkUserInDatabase(emailAddress,password);
         }
+
     }
 }
