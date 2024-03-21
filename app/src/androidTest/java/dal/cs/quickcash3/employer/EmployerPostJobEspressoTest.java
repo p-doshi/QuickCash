@@ -36,12 +36,12 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 public class EmployerPostJobEspressoTest {
     private final Context context = ApplicationProvider.getApplicationContext();
     @Rule
-    public final ActivityScenarioRule<PostJobForm> activityRule =
+    public final ActivityScenarioRule<EmployerDashboard> activityRule =
             new ActivityScenarioRule<>(
                     new Intent(context, PostJobForm.class)
                             .addCategory(context.getString(R.string.MOCK_DATABASE))
             );
-    public ActivityScenario<PostJobForm> scenario;
+    public ActivityScenario<EmployerDashboard> scenario;
     private String jobTitle;
     private String jobDate;
     private String jobDuration;
