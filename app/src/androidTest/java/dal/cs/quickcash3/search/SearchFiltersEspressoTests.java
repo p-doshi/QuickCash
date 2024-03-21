@@ -82,9 +82,9 @@ public class SearchFiltersEspressoTests {
 
     @Test
     public void hundredMeterSearch() {
-        locationProvider.setLocation(GOOGLEPLEX);
-
         generateJobPosts(database, Assert::fail);
+
+        locationProvider.setLocation(GOOGLEPLEX);
 
         onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.0f));
         onView(withId(R.id.applyButton)).perform(click());
@@ -117,9 +117,9 @@ public class SearchFiltersEspressoTests {
 
     @Test
     public void differentLocation() {
-        locationProvider.setLocation(DALHOUSIE);
-
         generateJobPosts(database, Assert::fail);
+
+        locationProvider.setLocation(DALHOUSIE);
 
         onView(withId(R.id.applyButton)).perform(click());
 
@@ -148,9 +148,9 @@ public class SearchFiltersEspressoTests {
 
     @Test
     public void lessThan40Dollars() {
-        locationProvider.setLocation(GOOGLEPLEX);
-
         generateJobPosts(database, Assert::fail);
+
+        locationProvider.setLocation(GOOGLEPLEX);
 
         onView(withId(R.id.salaryRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 0.4f));
         onView(withId(R.id.applyButton)).perform(click());

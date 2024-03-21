@@ -17,27 +17,46 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.search.SearchFilter;
+import dal.cs.quickcash3.util.Promise;
 
 /**
  * A fragment representing a list of Items.
  */
 public class JobListFragment extends Fragment {
     private static final String LOG_TAG = JobListFragment.class.getSimpleName();
-    private final Database database;
-    private final SearchFilter<AvailableJob> searchFilter;
     private final MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter();
     private final Map<String,AvailableJob> availableJobMap = new HashMap<>();
-    private int listenerId;
+    private final AtomicInteger callbackId = new AtomicInteger();
 
-    public JobListFragment(@NonNull Database database, @NonNull SearchFilter<AvailableJob> searchFilter) {
+    public JobListFragment(@NonNull Database database, @NonNull Promise<SearchFilter<AvailableJob>> filterPromise) {
         super();
-        this.database = database;
-        this.searchFilter = searchFilter;
+
+        // Start a new database listener every time the search filter is updated.
+        filterPromise.setUpdateCallback(searchFilter -> {
+            Log.d(LOG_TAG, "Restarting database search listener");
+            database.removeListener(this.callbackId.get());
+            adapter.reset();
+            availableJobMap.clear();
+
+            int callbackId = database.addSearchListener(AVAILABLE_JOBS.getValue(), AvailableJob.class, searchFilter,
+                (key, job) -> {
+                    Log.v(LOG_TAG, key + ": " + job);
+                    if (job == null) {
+                        availableJobMap.remove(key);
+                    } else {
+                        this.availableJobMap.put(key,job);
+                        adapter.addJob(job);
+                    }
+                },
+                error -> Log.w(LOG_TAG, "received database error: " + error));
+            this.callbackId.set(callbackId);
+        });
     }
 
     public void resetList(@NonNull SearchFilter<AvailableJob> filter){
@@ -65,28 +84,6 @@ public class JobListFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setAdapter(adapter);
-        listenerId = database.addSearchListener(AVAILABLE_JOBS.getValue(), AvailableJob.class, searchFilter,
-            (key, job) -> {
-                Log.v(LOG_TAG, key + ": " + job);
-                if (job == null) {
-                    availableJobMap.remove(key);
-                } else {
-                    this.availableJobMap.put(key,job);
-                    adapter.addJob(job);
-                }
-            },
-            error -> {
-                Log.w(LOG_TAG, "received database error: " + error);
-            });
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        database.removeListener(listenerId);
-        adapter.reset();
-        availableJobMap.clear();
-        Log.d(LOG_TAG, "Destroyed");
     }
 }
