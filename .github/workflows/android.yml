@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 20
     strategy:
       matrix:
-        api-level: [28, 29, 30, 31, 33, 34]
+        api-level: [28, 29, 30, 31, 32, 33, 34]
       fail-fast: false
     steps:
       - uses: actions/setup-java@v4
