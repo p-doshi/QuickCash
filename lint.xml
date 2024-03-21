@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Add ignored linting issues here -->
+    <!-- Example:
+    <issue id="BooleanMethodIsAlwaysInverted" severity="ignore" />
+    -->
+    <issue id="LogConditional" severity="ignore" />
+
+    <!-- Make all warnings errors. -->
+    <issue id="all" severity="error" />
+</lint>

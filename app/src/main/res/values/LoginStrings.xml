@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_text">Log In</string>
-    <string name="email_address">email address</string>
     <string name="signup_google">Sign Up With Google</string>
     <string name="signup_manually">Sign Up Manually</string>
     <string name="continue_login">Continue </string>
@@ -10,7 +9,7 @@
     <string name="log_in">Log In</string>
     <string name="or">Or</string>
     <string name="VALID_TOAST">Successful Login</string>
-    <string name="SIGNUP_TOAST">Successful Login</string>
+    <string name="SIGNUP_TOAST">Moved to Registration Page</string>
     <string name="EMPTY_EMAIL_TOAST">Email Required</string>
     <string name="INVALID_EMAIL_TOAST">Email Not In Format</string>
     <string name="EMPTY_PASSWORD_TOAST">Password Required</string>

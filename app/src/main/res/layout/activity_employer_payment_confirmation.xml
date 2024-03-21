@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="415dp"
+        android:layout_height="591dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/PaymentStatusTitle"
+            android:layout_width="347dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="37dp"
+            android:layout_marginEnd="31dp"
+            android:text="@string/PAYMENT_STATUS"
+            android:textColor="#273F31"
+            android:textIsSelectable="true"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/transactionStatus"
+            android:layout_width="151dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="130dp"
+            android:layout_marginTop="63dp"
+            android:layout_marginEnd="129dp"
+            android:textSize="34sp"
+            android:textIsSelectable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/PaymentStatusTitle" />
+
+        <TextView
+            android:id="@+id/PayID"
+            android:layout_width="352dp"
+            android:layout_height="153dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="31dp"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textIsSelectable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/PayIDText" />
+
+        <TextView
+            android:id="@+id/PayIDText"
+            android:layout_width="111dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="149dp"
+            android:layout_marginTop="62dp"
+            android:layout_marginEnd="150dp"
+            android:text="@string/PAYID"
+            android:textSize="34sp"
+            android:textIsSelectable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transactionStatus" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
