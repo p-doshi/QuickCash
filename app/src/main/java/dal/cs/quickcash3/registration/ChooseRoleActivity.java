@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.registration;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -9,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.employer.EmployerDashboard;
+import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class ChooseRoleActivity extends AppCompatActivity {
     private String role;
@@ -38,13 +41,16 @@ public class ChooseRoleActivity extends AppCompatActivity {
     }
 
     private void moveToDashboardWindow(@NonNull String role) {
+        Intent dashboardIntent = null;
+
         if (role.equals(getString(R.string.employer))) {
-            Toast.makeText(getApplicationContext(), "Switch to Employer Dashboard", Toast.LENGTH_LONG).show();
+            dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
         } else if (role.equals(getString(R.string.worker))) {
-            //dashboardIntent = new Intent(getBaseContext(), WorkerDashboard.class);
-            Toast.makeText(getApplicationContext(), "Switch to Worker Dashboard", Toast.LENGTH_LONG).show();
+            dashboardIntent = new Intent(getBaseContext(), WorkerDashboard.class);
         } else {
             throw new IllegalArgumentException("A deadly error has occur when user is choosing role");
         }
+
+        startActivity(dashboardIntent);
     }
 }
