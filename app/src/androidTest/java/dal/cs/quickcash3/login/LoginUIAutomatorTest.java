@@ -52,16 +52,30 @@ public class LoginUIAutomatorTest {
     //below tests wont work until pages connected :(
     @Test
     @Ignore("only after pages connected")
-    public void checkIfMovedToDashboard() throws UiObjectNotFoundException {
+    public void checkIfMovedToEmployerDashboard() throws UiObjectNotFoundException {
 
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
-        emailIDBox.setText(PARTH_GMAIL);
-        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
-        passwordBox.setText(PASSWORD);
-        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        emailIDBox.setText("parthdoshi135@gmail.com");
+        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
+        passwordBox.setText("Password");
+        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
         registerButton.clickAndWaitForNewWindow();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains(WELCOME));
-        assertTrue(welcomeLabel.exists());
+        UiObject employerDashLabel = device.findObject(new UiSelector().textContains("Current Listings"));
+        assertTrue(employerDashLabel.exists());
+    }
+
+    @Test
+    @Ignore("only after pages connected")
+    public void checkIfMovedToEmployeeDashboard() throws UiObjectNotFoundException {
+
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
+        emailIDBox.setText("ethroz@gmail.com");
+        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
+        passwordBox.setText("Password");
+        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        registerButton.clickAndWaitForNewWindow();
+        UiObject workerDashLabel = device.findObject(new UiSelector().textContains("Map"));
+        assertTrue(workerDashLabel.exists());
     }
 
     @Test
@@ -79,16 +93,11 @@ public class LoginUIAutomatorTest {
     }
 
     @Test
-    @Ignore("only after pages connected")
     public void checkIfMovedToSignUpPage() throws UiObjectNotFoundException {
-
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
-        emailIDBox.setText(PARTH_GMAIL);
-        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
-        passwordBox.setText(PASSWORD);
-        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
-        registerButton.clickAndWaitForNewWindow();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains(WELCOME));
-        assertTrue(welcomeLabel.exists());
+        UiObject signUpButton = device.findObject(new UiSelector().text("Sign Up Manually"));
+        signUpButton.clickAndWaitForNewWindow();
+        UiObject registrationLabel = device.findObject(new UiSelector().textContains("First Name"));
+        assertTrue(registrationLabel.exists());
     }
+
 }

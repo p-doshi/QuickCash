@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity  {
         this.editor = preferences.edit();
 
         if(mAuth.getCurrentUser()!=null && preferences.getBoolean("remember",false)){
-           moveToDashboard();
+            moveToDashboard();
         }else{
             editor.putBoolean("remember",false);
             editor.apply();
