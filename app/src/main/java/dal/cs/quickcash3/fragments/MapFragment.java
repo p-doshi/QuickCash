@@ -33,7 +33,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // This R.layout. will need to change when integrated with WorkerDashboard
-        View view = inflater.inflate(R.layout.activity_google_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_google_map, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);

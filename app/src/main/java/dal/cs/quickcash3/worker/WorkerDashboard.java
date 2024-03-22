@@ -18,7 +18,7 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
-import dal.cs.quickcash3.fragments.MapsFragment;
+import dal.cs.quickcash3.fragments.MapFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
@@ -41,7 +41,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         // Initialize the fragments.
         Fragment receiptsFragment = new ReceiptsFragment();
-        Fragment mapFragment = new MapsFragment();
+        Fragment mapFragment = new MapFragment();
         Fragment profileFragment = new ProfileFragment();
         Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
 
