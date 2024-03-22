@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.fragments.MapFragment;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
 public class WorkerDashboardMapExampleActivity extends AppCompatPermissionActivity {

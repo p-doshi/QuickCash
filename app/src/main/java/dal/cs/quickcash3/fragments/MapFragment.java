@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.location;
+package dal.cs.quickcash3.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
