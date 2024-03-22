@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.location;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder.GeocodeListener;
 import android.os.Build;
@@ -13,14 +14,15 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 import java.util.function.Consumer;
 
-@SuppressWarnings("PMD.MyNewGeocodeListener") // This is proper usage of Build.VERSION_CODES.
+@SuppressWarnings("PMD.LawOfDemeter") // This is proper usage of Build.VERSION_CODES.
 @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 class MyNewGeocodeListener extends MyGeocodeListener implements GeocodeListener {
     public MyNewGeocodeListener(
+        @NonNull Context context,
         @NonNull Consumer<LatLng> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        super(locationFunction, errorFunction);
+        super(context, locationFunction, errorFunction);
     }
 
     @Override

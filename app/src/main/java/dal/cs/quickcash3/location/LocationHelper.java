@@ -91,11 +91,11 @@ public final class LocationHelper {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            MyNewGeocodeListener listener = new MyNewGeocodeListener(locationFunction, errorFunction);
+            MyNewGeocodeListener listener = new MyNewGeocodeListener(context, locationFunction, errorFunction);
             geocoder.getFromLocationName(address.toString(), 1, listener);
         } else {
             // Found a few sources saying to run this in a non-UI thread to avoid connection errors.
-            MyGeocodeListener listener = new MyGeocodeListener(locationFunction, errorFunction);
+            MyGeocodeListener listener = new MyGeocodeListener(context, locationFunction, errorFunction);
             new Thread(() -> {
                 try {
                     //noinspection RedundantSuppression
