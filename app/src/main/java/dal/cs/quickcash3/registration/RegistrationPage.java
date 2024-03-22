@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.registration;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -90,6 +91,12 @@ public class RegistrationPage extends AppCompatActivity {
         } else {
             // all inputs is valid
             statusTextView.setText(R.string.registration_successful);
+            moveToChooseRoleWindow();
         }
+    }
+
+    protected void moveToChooseRoleWindow() {
+        Intent chooseRoleIntent = new Intent(getBaseContext(), ChooseRoleActivity.class);
+        startActivity(chooseRoleIntent);
     }
 }
