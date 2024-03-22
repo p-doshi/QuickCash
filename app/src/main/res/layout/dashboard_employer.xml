@@ -43,17 +43,13 @@
 
     <Button
         android:id="@+id/addJobButton"
-        android:layout_width="149dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="226dp"
-        android:layout_marginTop="552dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="109dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="108dp"
         android:text="@string/addJob"
         app:layout_constraintBottom_toBottomOf="@+id/employerDashFragment"
-        app:layout_constraintEnd_toEndOf="@+id/employerDashFragment"
-        app:layout_constraintStart_toStartOf="@+id/employerDashFragment"
-        app:layout_constraintTop_toTopOf="@+id/employerDashFragment" />
+        app:layout_constraintEnd_toEndOf="@+id/employerDashFragment" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/employerDashFragment"

@@ -28,6 +28,8 @@ public class EmployerDashboard extends FragmentActivity {
         this.setContentView(R.layout.dashboard_employer);
         this.setUpAddJobButton();
         initInterfaces();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.employerDashFragment, new PostJobForm(database)).commit();
     }
 
 
@@ -65,8 +67,6 @@ public class EmployerDashboard extends FragmentActivity {
         Button addJobButton = findViewById(R.id.addJobButton);
         addJobButton.setOnClickListener(view -> {
             // move to AddJob fragment
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.employerDashFragment, new PostJobForm(database)).commit();
         });
     }
 

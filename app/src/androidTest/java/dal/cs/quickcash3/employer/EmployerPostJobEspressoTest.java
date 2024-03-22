@@ -72,7 +72,6 @@ public class EmployerPostJobEspressoTest {
                 assertTrue("Not using Mock Database",
                         activity.getDatabase() instanceof MockDatabase)
         );
-        onView(withId(R.id.addJobButton)).perform(click());
 
 
     }
