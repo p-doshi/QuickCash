@@ -17,7 +17,12 @@ import java.util.function.Supplier;
 
 import dal.cs.quickcash3.data.PostalAddress;
 
-@SuppressWarnings("PMD.LawOfDemeter") // These are excessive for LatLng and Build.VERSION.
+/** @noinspection RedundantSuppression*/
+@SuppressWarnings({
+    "unchecked", // I don't really know why this is necessary.
+    "deprecation", // There is no other way to do geocoding.
+    "PMD.LawOfDemeter" // These are excessive for LatLng and Build.VERSION.
+})
 public final class LocationHelper {
     private static final Random RANDOM = new Random();
     private static final int NUM_GEOCODE_TRIES = 3;
