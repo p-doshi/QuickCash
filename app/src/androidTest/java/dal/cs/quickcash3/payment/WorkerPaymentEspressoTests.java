@@ -1,6 +1,5 @@
 package dal.cs.quickcash3.payment;
 
-import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -11,7 +10,6 @@ import android.app.Instrumentation;
 import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -42,7 +40,7 @@ public class WorkerPaymentEspressoTests {
 
     @Test
     public void showPayConfirmationButton(){
-        onView(ViewMatchers.withId(R.id.seePayStatus)).perform(click());
+        onView(withId(R.id.seePayStatus)).perform(click());
     }
 
     @Test

@@ -13,12 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.location.LocationProvider;
-import dal.cs.quickcash3.util.Promise;
 
 public class JobSearchFragment extends Fragment {
     private ImageView filterIcon ;
@@ -32,7 +29,7 @@ public class JobSearchFragment extends Fragment {
     {
         super();
         this.searchFragment = new SearchFilterFragment(activity, locationProvider, this::showList);
-        this.jobListFragment = new JobListFragment(database, searchFragment.getFilterPromise());
+        this.jobListFragment = new JobListFragment(database, searchFragment.getFilter());
     }
 
     @Override

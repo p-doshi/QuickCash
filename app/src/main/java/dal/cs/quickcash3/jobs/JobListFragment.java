@@ -23,22 +23,27 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.search.SearchFilter;
-import dal.cs.quickcash3.util.Promise;
+import dal.cs.quickcash3.util.AsyncLatch;
 
 /**
  * A fragment representing a list of Items.
  */
 public class JobListFragment extends Fragment {
     private static final String LOG_TAG = JobListFragment.class.getSimpleName();
+    private final Database database;
+    private final AsyncLatch<SearchFilter<AvailableJob>> asyncFilter;
     private final MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter();
     private final Map<String,AvailableJob> availableJobMap = new HashMap<>();
     private final AtomicInteger callbackId = new AtomicInteger();
 
-    public JobListFragment(@NonNull Database database, @NonNull Promise<SearchFilter<AvailableJob>> filterPromise) {
+    public JobListFragment(@NonNull Database database, @NonNull AsyncLatch<SearchFilter<AvailableJob>> asyncFilter) {
         super();
+        this.database = database;
+        this.asyncFilter = asyncFilter;
+    }
 
-        // Start a new database listener every time the search filter is updated.
-        filterPromise.setUpdateCallback(searchFilter -> {
+    private void setFilterCallback() {
+        asyncFilter.get(searchFilter -> {
             Log.d(LOG_TAG, "Restarting database search listener");
             database.removeListener(this.callbackId.get());
             adapter.reset();
@@ -59,11 +64,11 @@ public class JobListFragment extends Fragment {
         });
     }
 
-    public void resetList(@NonNull SearchFilter<AvailableJob> filter){
+    public void searchList(@NonNull SearchFilter<AvailableJob> filter){
         List<AvailableJob> newJobs = new ArrayList<>();
 
         for (AvailableJob job : availableJobMap.values()){
-            if(filter.isValid(job)){
+            if (filter.isValid(job)) {
                 newJobs.add(job);
             }
         }
@@ -84,6 +89,9 @@ public class JobListFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setAdapter(adapter);
+
+        setFilterCallback();
+
         return view;
     }
 }
