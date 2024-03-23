@@ -13,7 +13,7 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
-import dal.cs.quickcash3.util.Promise;
+import dal.cs.quickcash3.util.AsyncLatch;
 
 public class WorkerPayPalActivity extends AppCompatActivity {
     private static final String LOG_TAG = WorkerPayPalActivity.class.getSimpleName();
@@ -24,21 +24,22 @@ public class WorkerPayPalActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_worker_pay_pal);
 
         // Initialize UI elements
-        Button checkworkerPaymentButton = findViewById(R.id.seePayStatus);
+        Button checkWorkerPaymentButton = findViewById(R.id.seePayStatus);
         Database database = new MyFirebaseDatabase();
 
-        Promise<CompletedJob> promise = new Promise<>();
+        AsyncLatch<CompletedJob> asyncJob = new AsyncLatch<>();
 
         CompletedJob.readFromDatabase(
             database,
             "kawnerv9823fh",
-            promise::fulfill,
+            asyncJob::set,
             error -> Log.w(LOG_TAG, error));
-        checkworkerPaymentButton.setOnClickListener(view ->
-            promise.setUpdateCallback(this::moveToPaymentStatusWindow));
+        checkWorkerPaymentButton.setOnClickListener(view ->
+            asyncJob.get(this::moveToPaymentStatusWindow));
     }
 
-    protected void moveToPaymentStatusWindow(@NonNull CompletedJob job) {
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    private void moveToPaymentStatusWindow(@NonNull CompletedJob job) {
         Intent paymentStatusIntent;
 
         paymentStatusIntent = new Intent(getBaseContext(), WorkerPaymentConfirmationActivity.class);
