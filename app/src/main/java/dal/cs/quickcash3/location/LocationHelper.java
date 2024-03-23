@@ -83,6 +83,7 @@ public final class LocationHelper {
         return EARTH_RADIUS * centralAngle;
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private static @NonNull LatLng addressesToCoordinates(@NonNull List<Address> addresses) {
         if (addresses.isEmpty()) {
             throw new IllegalArgumentException("Could not get the location from the geocoder");
@@ -92,6 +93,7 @@ public final class LocationHelper {
         return new LatLng(address.getLatitude(), address.getLongitude());
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private static @NonNull String addressesToString(@NonNull List<Address> addresses) {
         if (addresses.isEmpty()) {
             throw new IllegalArgumentException("Could not get the address from the geocoder");
