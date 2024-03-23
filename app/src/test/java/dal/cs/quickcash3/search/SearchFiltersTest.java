@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.util.Range;
 
 public class SearchFiltersTest {

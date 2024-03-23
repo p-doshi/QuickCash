@@ -8,21 +8,26 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
-class MyGeocodeListener extends LocationReceiver {
+import dal.cs.quickcash3.util.AsyncReceiver;
+
+class MyGeocodeListener<T> {
+    private final Function<List<Address>, T> conversionFunction;
+    private final AsyncReceiver<T> receiver;
     private final Looper mainLooper;
     private final boolean calledFromUiThread;
 
     public MyGeocodeListener(
         @NonNull Context context,
-        @NonNull Consumer<LatLng> locationFunction,
+        @NonNull Function<List<Address>, T> conversionFunction,
+        @NonNull Consumer<T> valueFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        super(locationFunction, errorFunction);
+        this.conversionFunction = conversionFunction;
+        receiver = new AsyncReceiver<>(valueFunction, errorFunction);
         mainLooper = context.getMainLooper();
         calledFromUiThread = mainLooper.isCurrentThread();
     }
@@ -37,26 +42,17 @@ class MyGeocodeListener extends LocationReceiver {
         }
     }
 
-    @Override
-    public void receiveLocation(@NonNull LatLng location) {
-        runOnCorrectThread(() -> super.receiveLocation(location));
+    private void receiveValue(@NonNull T location) {
+        runOnCorrectThread(() -> receiver.receiveValue(location));
     }
 
-    @Override
-    public void receiveError(@NonNull String error) {
-        runOnCorrectThread(() -> super.receiveError(error));
+    private void receiveError(@NonNull String error) {
+        runOnCorrectThread(() -> receiver.receiveError(error));
     }
 
-    public void onGeocode(@Nullable List<Address> addresses) {
-        final LatLng location;
-
-        if (addresses != null && !addresses.isEmpty()) {
-            Address address1 = addresses.get(0);
-            location = new LatLng(address1.getLatitude(), address1.getLongitude());
-            receiveLocation(location);
-        } else {
-            receiveError("Could not get the location from the geocoder");
-        }
+    public void onGeocode(@NonNull List<Address> addresses) {
+        T value = conversionFunction.apply(addresses);
+        receiveValue(value);
     }
 
     public void onError(@Nullable String errorMessage) {

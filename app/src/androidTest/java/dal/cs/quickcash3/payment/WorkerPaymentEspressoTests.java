@@ -1,6 +1,5 @@
 package dal.cs.quickcash3.payment;
 
-import static androidx.test.espresso.Espresso.onIdle;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -11,7 +10,6 @@ import android.app.Instrumentation;
 import android.os.SystemClock;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -27,6 +25,7 @@ public class WorkerPaymentEspressoTests {
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
     private final Instrumentation.ActivityMonitor monitor = new Instrumentation.ActivityMonitor(
             WorkerPaymentConfirmationActivity.class.getName(), null, false);
+    private static final int MAX_TIMEOUT = 10000;
 
     @Before
     public void setup() {
@@ -41,14 +40,14 @@ public class WorkerPaymentEspressoTests {
 
     @Test
     public void showPayConfirmationButton(){
-        onView(ViewMatchers.withId(R.id.seePayStatus)).perform(click());
+        onView(withId(R.id.seePayStatus)).perform(click());
     }
 
     @Test
     public void showPaymentStatus() {
         SystemClock.sleep(100);
         onView(withId(R.id.seePayStatus)).perform(click());
-        monitor.waitForActivityWithTimeout(5000);
+        monitor.waitForActivityWithTimeout(MAX_TIMEOUT);
         onView(withId(R.id.workerStatusMessage)).check(matches(withText("approved")));
         onView(withId(R.id.workerPayID)).check(matches(withText("Hello Yuki")));
     }
