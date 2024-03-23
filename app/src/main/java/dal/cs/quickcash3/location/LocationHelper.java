@@ -3,7 +3,6 @@ package dal.cs.quickcash3.location;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -15,12 +14,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import dal.cs.quickcash3.data.PostalAddress;
 
 @SuppressWarnings("PMD.LawOfDemeter") // These are excessive for LatLng and Build.VERSION.
 public final class LocationHelper {
     private static final Random RANDOM = new Random();
+    private static final int NUM_GEOCODE_TRIES = 3;
     public static final double EARTH_RADIUS = 6378137; // In meters.
 
     // Utility class.
@@ -82,30 +83,103 @@ public final class LocationHelper {
         return EARTH_RADIUS * centralAngle;
     }
 
+    private static @NonNull LatLng addressesToCoordinates(@NonNull List<Address> addresses) {
+        if (addresses.isEmpty()) {
+            throw new IllegalArgumentException("Could not get the location from the geocoder");
+        }
+
+        Address address = addresses.get(0);
+        return new LatLng(address.getLatitude(), address.getLongitude());
+    }
+
+    private static @NonNull String addressesToString(@NonNull List<Address> addresses) {
+        if (addresses.isEmpty()) {
+            throw new IllegalArgumentException("Could not get the address from the geocoder");
+        }
+
+        Address address = addresses.get(0);
+        String addressLine = address.getAddressLine(0);
+        if (addressLine == null) {
+            throw new IllegalArgumentException("Geocoder returned null address");
+        }
+
+        return addressLine;
+    }
+
+    private static <T> void geocodeRunner(
+        @NonNull Supplier<List<Address>> geocodeFunction,
+        @NonNull MyGeocodeListener<T> listener)
+    {
+        new Thread(() -> {
+            String error = null;
+
+            for (int i = 0; i < NUM_GEOCODE_TRIES; i++) {
+                try {
+                    List<Address> addresses;
+                    do {
+                        addresses = geocodeFunction.get();
+                    } while (addresses == null);
+                    listener.onGeocode(addresses);
+                } catch (IllegalArgumentException e) {
+                    error = e.getMessage();
+                }
+            }
+
+            if (error != null) {
+                listener.onError(error);
+            }
+        }).start();
+    }
+
     public static void addressToCoordinates(
         @NonNull Context context,
         @NonNull PostalAddress address,
         @NonNull Consumer<LatLng> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(context);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            MyNewGeocodeListener listener = new MyNewGeocodeListener(context, locationFunction, errorFunction);
-            geocoder.getFromLocationName(address.toString(), 1, listener);
-        } else {
-            // Found a few sources saying to run this in a non-UI thread to avoid connection errors.
-            MyGeocodeListener listener = new MyGeocodeListener(context, locationFunction, errorFunction);
-            new Thread(() -> {
+        // Found a few sources saying to run this in a non-UI thread to avoid connection errors.
+        MyGeocodeListener<LatLng> listener = new MyGeocodeListener<>(
+            context,
+            LocationHelper::addressesToCoordinates,
+            locationFunction,
+            errorFunction);
+
+        geocodeRunner(
+            () -> {
                 try {
-                    //noinspection RedundantSuppression
-                    @SuppressWarnings({"unchecked", "deprecation"})
-                    List<Address> addresses = geocoder.getFromLocationName(address.toString(), 1);
-                    listener.onGeocode(addresses);
+                    return geocoder.getFromLocationName(address.toString(), 1);
                 } catch (IOException e) {
-                    listener.onError(e.getMessage());
+                    throw new IllegalArgumentException(e);
                 }
-            }).start();
-        }
+            },
+            listener);
+    }
+
+    public static void coordinatesToAddress(
+        @NonNull Context context,
+        @NonNull LatLng location,
+        @NonNull Consumer<String> addressFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        Geocoder geocoder = new Geocoder(context);
+
+        // Found a few sources saying to run this in a non-UI thread to avoid connection errors.
+        MyGeocodeListener<String> listener = new MyGeocodeListener<>(
+            context,
+            LocationHelper::addressesToString,
+            addressFunction,
+            errorFunction);
+
+        geocodeRunner(
+            () -> {
+                try {
+                    return geocoder.getFromLocation(location.latitude, location.longitude, 1);
+                } catch (IOException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            },
+            listener);
     }
 }

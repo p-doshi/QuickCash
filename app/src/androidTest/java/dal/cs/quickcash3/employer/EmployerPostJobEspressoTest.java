@@ -40,7 +40,7 @@ public class EmployerPostJobEspressoTest {
                     new Intent(context, PostJobForm.class)
                             .addCategory(context.getString(R.string.MOCK_DATABASE))
             );
-    public ActivityScenario<PostJobForm> scenario;
+    private static final int MAX_TIMEOUT_MS = 10000;
     private String jobTitle;
     private String jobDate;
     private String jobDuration;
@@ -54,7 +54,7 @@ public class EmployerPostJobEspressoTest {
 
     @Before
     public void setup() {
-        scenario = activityRule.getScenario();
+        ActivityScenario<PostJobForm> scenario = activityRule.getScenario();
         jobTitle = "Mowing Lawn\n";
         jobDate = "15/03/2024\n";
         jobDuration = "1 – 2 Weeks";
@@ -75,7 +75,6 @@ public class EmployerPostJobEspressoTest {
 
     @Test
     public void fillJobForm() {
-
         onView(withId(R.id.jobPostingTitle)).perform(typeText(jobTitle));
         onView(withId(R.id.addJobDate)).perform(typeText(jobDate), closeSoftKeyboard());
         onView(withId(R.id.jobDurationSpinner)).perform(click());
@@ -91,7 +90,8 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).perform(waitFor(withText(R.string.success), 5000));
+        onView(withId(R.id.jobSubmitStatus))
+            .perform(waitFor(withText(R.string.success), MAX_TIMEOUT_MS));
     }
 
     @Test
