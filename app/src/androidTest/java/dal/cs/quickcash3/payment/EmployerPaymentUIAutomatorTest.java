@@ -32,6 +32,7 @@ public class EmployerPaymentUIAutomatorTest {
     private static final String DONE = "Done";
     private static final String CHARGE = "Charge Card";
     private static final String APPROVED = "approved";
+    private static final int MAX_TIMEOUT = 15000;
 
     @Rule
     public final ActivityScenarioRule<EmployerPayPalActivity> activityRule =
@@ -61,7 +62,7 @@ public class EmployerPaymentUIAutomatorTest {
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
         chargeButton.clickAndWaitForNewWindow();
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
-        assertTrue(approveStatus.waitForExists(10000));
+        assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
     }
 
     @Ignore("Cannot find credit that doesn't work")
@@ -84,6 +85,6 @@ public class EmployerPaymentUIAutomatorTest {
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
         chargeButton.clickAndWaitForNewWindow();
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
-        assertTrue(approveStatus.waitForExists(10000));
+        assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
     }
 }

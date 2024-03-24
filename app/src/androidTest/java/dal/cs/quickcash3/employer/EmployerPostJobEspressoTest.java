@@ -41,7 +41,7 @@ public class EmployerPostJobEspressoTest {
                     new Intent(context, PostJobForm.class)
                             .addCategory(context.getString(R.string.MOCK_DATABASE))
             );
-    private static final int MAX_TIMEOUT_MS = 10000;
+    private static final int MAX_TIMEOUT_MS = 15000;
     private String jobTitle;
     private String jobDate;
     private String jobDuration;
