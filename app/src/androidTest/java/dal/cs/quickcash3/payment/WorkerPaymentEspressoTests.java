@@ -41,7 +41,6 @@ public class WorkerPaymentEspressoTests {
 
     @Test
     public void showPaymentStatus() {
-        SystemClock.sleep(100);
         onView(withId(R.id.seePayStatus)).perform(click());
         monitorRule.waitForActivity(MAX_TIMEOUT);
         onView(withId(R.id.workerStatusMessage)).check(matches(withText("approved")));

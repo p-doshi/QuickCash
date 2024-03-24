@@ -1,6 +1,7 @@
 package dal.cs.quickcash3.test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -13,17 +14,24 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 public class ActivityMonitorRule<T extends Activity> implements TestRule {
+    private final Class<T> type;
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
     private final Instrumentation.ActivityMonitor monitor;
 
     public ActivityMonitorRule(@NonNull Class<T> type) {
+        this.type = type;
         monitor = new Instrumentation.ActivityMonitor(type.getName(), null, false);
     }
 
-    public @NonNull Activity waitForActivity(int timeout) {
+    public @NonNull T waitForActivity(int timeout) {
         Activity activity = monitor.waitForActivityWithTimeout(timeout);
         assertNotNull(activity);
-        return activity;
+
+        assertTrue(type.isInstance(activity));
+        T myActivity = type.cast(activity);
+
+        assertNotNull(myActivity);
+        return myActivity;
     }
 
     @Override
