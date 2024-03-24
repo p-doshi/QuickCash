@@ -13,6 +13,11 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+/**
+ * A TestRule implementation for monitoring activities.
+ *
+ * @param <T> the type of Activity to monitor
+ */
 public class ActivityMonitorRule<T extends Activity> implements TestRule {
     private final Class<T> type;
     private final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
@@ -23,6 +28,12 @@ public class ActivityMonitorRule<T extends Activity> implements TestRule {
         monitor = new Instrumentation.ActivityMonitor(type.getName(), null, false);
     }
 
+    /**
+     * Waits for the specified activity to be launched within the given timeout.
+     *
+     * @param timeout the maximum time to wait for the activity to be launched
+     * @return the launched activity
+     */
     public @NonNull T waitForActivity(int timeout) {
         Activity activity = monitor.waitForActivityWithTimeout(timeout);
         assertNotNull(activity);

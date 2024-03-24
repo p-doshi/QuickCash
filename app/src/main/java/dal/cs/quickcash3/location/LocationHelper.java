@@ -137,6 +137,14 @@ public final class LocationHelper {
         }).start();
     }
 
+    /**
+     * Converts a postal address to coordinates.
+     *
+     * @param context the context
+     * @param address the postal address to convert
+     * @param locationFunction the consumer function for the location
+     * @param errorFunction the consumer function for errors
+     */
     public static void addressToCoordinates(
         @NonNull Context context,
         @NonNull PostalAddress address,
@@ -163,6 +171,14 @@ public final class LocationHelper {
             listener);
     }
 
+    /**
+     * Converts coordinates to an address.
+     *
+     * @param context the context
+     * @param location the coordinates to convert
+     * @param addressFunction the consumer function for the address
+     * @param errorFunction the consumer function for errors
+     */
     public static void coordinatesToAddress(
         @NonNull Context context,
         @NonNull LatLng location,
