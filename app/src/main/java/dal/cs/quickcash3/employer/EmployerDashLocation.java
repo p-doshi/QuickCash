@@ -1,7 +1,5 @@
 package dal.cs.quickcash3.employer;
 
-import static dal.cs.quickcash3.location.LocationHelper.coordinatesToAddress;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
@@ -13,6 +11,8 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.maps.model.LatLng;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.geocode.GeocoderProxy;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 /**
@@ -22,6 +22,7 @@ import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
  */
 public class EmployerDashLocation extends AppCompatPermissionActivity {
     private AndroidLocationProvider locationProvider;
+    private MyGeocoder geocoder;
     private TextView addressText;
 
     @Override
@@ -30,6 +31,7 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
         setContentView(R.layout.activity_employer_dash_location);
 
         locationProvider = new AndroidLocationProvider(this, 1000);
+        geocoder = new GeocoderProxy(this);
 
         addressText = findViewById(R.id.addressText);
         Button detectLocationButton = findViewById(R.id.detectLocationButton);
@@ -43,8 +45,7 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     @SuppressLint("SetTextI18n")
     private void showAddress(@NonNull LatLng location) {
-        coordinatesToAddress(
-            this,
+        geocoder.fetchAddressFromLocation(
             location,
             address -> addressText.setText("Address: " + address),
             this::showError);
