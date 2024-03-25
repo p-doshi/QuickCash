@@ -41,7 +41,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         // Initialize the fragments.
         Fragment receiptsFragment = new ReceiptsFragment();
-        Fragment mapFragment = new MapFragment();
+        MapFragment mapFragment = new MapFragment();
         Fragment profileFragment = new ProfileFragment();
         Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
 
@@ -61,6 +61,17 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             }
             else if (itemId == R.id.workerMapPage) {
                 Log.v(LOG_TAG, "Showing map fragment");
+                mapFragment.setCurrentLocation(locationProvider.getLastLocation());
+                /*int callbackId = locationProvider.addLocationCallback(
+                        location -> {
+                            mapFragment.setCurrentLocation(location);
+                        },
+                        null);*/
+
+                // Here we would grab all job locations from database, then add to map
+                //while (job!=null) {
+                //  mapFragment.addJob("JobName", LatLong position); }
+
                 replaceFragment(mapFragment);
                 return true;
             }
@@ -74,7 +85,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             }
         });
 
-        workerNavView.setSelectedItemId(R.id.workerMapPage);
+        workerNavView.setSelectedItemId(R.id.workerReceiptPage);
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
