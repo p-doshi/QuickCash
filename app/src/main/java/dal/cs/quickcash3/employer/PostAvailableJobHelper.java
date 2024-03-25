@@ -1,7 +1,5 @@
 package dal.cs.quickcash3.employer;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import java.util.function.Consumer;
 
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.PostalAddress;
-import dal.cs.quickcash3.location.LocationHelper;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 /** @author Hayley Vezeau
@@ -26,12 +24,12 @@ public final class PostAvailableJobHelper {
      * Creates an Available Job. Since this requires reverse geocoding, this function requires a
      * lambda to receive the created job.
      *
-     * @param context the context for the activity
+     * @param geocoder the geocoder used by the activity
      * @param fields a Map that holds the fields as keys and user input as values
      * @param receiverFunction the function to receive the created job.
      */
     public static void createAvailableJob(
-        @NonNull Context context,
+        @NonNull MyGeocoder geocoder,
         @NonNull Map<String, String> fields,
         @NonNull Consumer<AvailableJob> receiverFunction,
         @NonNull Consumer<String> errorFunction)
@@ -56,7 +54,7 @@ public final class PostAvailableJobHelper {
             Objects.requireNonNull(fields.get("address")),
             Objects.requireNonNull(fields.get("city")),
             Objects.requireNonNull(fields.get("province")));
-        LocationHelper.addressToCoordinates(context, address,
+        geocoder.fetchLocationFromAddress(address.toString(),
             location -> {
                 job.setLatitude(location.latitude);
                 job.setLongitude(location.longitude);

@@ -14,8 +14,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 
-import static dal.cs.quickcash3.test.WaitForAction.waitFor;
-
 import android.content.Context;
 import android.content.Intent;
 
@@ -24,56 +22,55 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.regex.Pattern;
+
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.geocode.MockGeocoder;
 
 @RunWith(AndroidJUnit4.class)
 public class EmployerPostJobEspressoTest {
     private final Context context = ApplicationProvider.getApplicationContext();
     @Rule
     public final ActivityScenarioRule<PostJobForm> activityRule =
-            new ActivityScenarioRule<>(
-                    new Intent(context, PostJobForm.class)
-                            .addCategory(context.getString(R.string.MOCK_DATABASE))
-            );
-    private static final int MAX_TIMEOUT_MS = 15000;
-    private String jobTitle;
-    private String jobDate;
-    private String jobDuration;
-    private String jobUrgency;
-    private String jobSalary;
-    private String jobAddress;
-    private String jobCity;
-    private String jobProvince;
-    private String jobDescription;
+        new ActivityScenarioRule<>(
+            new Intent(context, PostJobForm.class)
+                .addCategory(context.getString(R.string.MOCK_DATABASE))
+                .addCategory(context.getString(R.string.MOCK_GEOCODER)));
+    private static final String jobTitle = "Mowing Lawn";
+    private static final String jobDate = "15/03/2024";
+    private static final String jobDuration = "1 – 2 Weeks";
+    private static final String jobUrgency = "Low";
+    private static final String jobSalary = "50";
+    private static final String jobAddress = "1156 Wellington Street";
+    private static final String jobCity = "Halifax";
+    private static final String jobProvince = "NS";
+    private static final String jobDescription = "Need a strong individual to help me mow my lawn because I am old.";
+    private MockGeocoder geocoder;
 
     @Before
     public void setup() {
         ActivityScenario<PostJobForm> scenario = activityRule.getScenario();
-        jobTitle = "Mowing Lawn";
-        jobDate = "15/03/2024";
-        jobDuration = "1 – 2 Weeks";
-        jobUrgency = "Low";
-        jobSalary = "50";
-        jobAddress = "1156 Wellington Street";
-        jobCity = "Halifax";
-        jobProvince = "NS";
-        jobDescription = "Need a strong individual to help me mow my lawn because I am old.";
+        scenario.onActivity(activity -> {
+            // Do not run the test if we are not using the mock database.
+            assertTrue("Not using Mock Database", activity.getDatabase() instanceof MockDatabase);
+            assertTrue("Not using Mock Geocoder", activity.getGeocoder() instanceof MockGeocoder);
 
-        scenario.onActivity(activity ->
-                // Do not run the test if we are not using the mock database.
-                assertTrue("Not using Mock Database",
-                        activity.getDatabase() instanceof MockDatabase)
-        );
+            geocoder = (MockGeocoder) activity.getGeocoder();
+        });
     }
 
     @Test
     public void fillJobForm() {
+        geocoder.addAddressMatcher(Pattern.compile(".+"), new LatLng(0.0, 0.0));
+
         onView(withId(R.id.jobPostingTitle)).perform(scrollTo(),typeText(jobTitle));
         onView(withId(R.id.addJobDate)).perform(scrollTo(),typeText(jobDate));
         onView(withId(R.id.jobDurationSpinner)).perform(scrollTo(),click());
@@ -89,7 +86,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(scrollTo(),click());
 
-        onView(withId(R.id.jobSubmitStatus)).perform(waitFor(withText(R.string.success), MAX_TIMEOUT_MS));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.success)));
     }
 
     @Test

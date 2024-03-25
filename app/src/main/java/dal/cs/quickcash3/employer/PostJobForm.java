@@ -23,6 +23,9 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.geocode.GeocoderProxy;
+import dal.cs.quickcash3.geocode.MockGeocoder;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 
 /**
  * @author Hayely Vezeau
@@ -31,6 +34,7 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 public class PostJobForm extends Activity {
     private static final String LOG_TAG = PostJobForm.class.getSimpleName();
     private Database database;
+    private MyGeocoder geocoder;
     private TextView status;
 
     @Override
@@ -62,10 +66,22 @@ public class PostJobForm extends Activity {
         else {
             database = new MyFirebaseDatabase();
         }
+
+        if (categories.contains(getString(R.string.MOCK_GEOCODER))) {
+            geocoder = new MockGeocoder();
+            Log.d(LOG_TAG, "Using Mock Geocoder");
+        }
+        else {
+            geocoder = new GeocoderProxy(this);
+        }
     }
 
     public @NonNull Database getDatabase() {
         return database;
+    }
+
+    public @NonNull MyGeocoder getGeocoder() {
+        return geocoder;
     }
 
     /**
@@ -147,7 +163,7 @@ public class PostJobForm extends Activity {
      */
     private void createJob(Runnable completionFunction, Consumer<String> errorFunction) {
         Map<String, String> fields = getFieldsMap();
-        PostAvailableJobHelper.createAvailableJob(this, fields,
+        PostAvailableJobHelper.createAvailableJob(geocoder, fields,
             job -> {
                 String key = job.writeToDatabase(database, completionFunction, errorFunction);
                 Log.d(LOG_TAG, "Job key: " + key);
