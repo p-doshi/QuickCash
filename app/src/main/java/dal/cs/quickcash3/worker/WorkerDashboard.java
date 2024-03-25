@@ -62,11 +62,6 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             else if (itemId == R.id.workerMapPage) {
                 Log.v(LOG_TAG, "Showing map fragment");
                 mapFragment.setCurrentLocation(locationProvider.getLastLocation());
-                /*int callbackId = locationProvider.addLocationCallback(
-                        location -> {
-                            mapFragment.setCurrentLocation(location);
-                        },
-                        null);*/
 
                 // Here we would grab all job locations from database, then add to map
                 //while (job!=null) {
