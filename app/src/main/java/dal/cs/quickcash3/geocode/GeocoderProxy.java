@@ -64,6 +64,7 @@ public class GeocoderProxy implements MyGeocoder {
         return addressLine;
     }
 
+    @SuppressWarnings("PMD.ExceptionAsFlowControl") // That is not what this is in the slightest.
     @Override
     public void fetchLocationFromAddress(
         @NonNull String address,
@@ -86,6 +87,7 @@ public class GeocoderProxy implements MyGeocoder {
         }
     }
 
+    @SuppressWarnings("PMD.ExceptionAsFlowControl") // That is not what this is in the slightest.
     @Override
     public void fetchAddressFromLocation(
         @NonNull LatLng location,

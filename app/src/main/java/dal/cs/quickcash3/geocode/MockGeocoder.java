@@ -36,6 +36,7 @@ public class MockGeocoder implements MyGeocoder {
         locationMatchers.add(new Pair<>(locationBounds, address));
     }
 
+    @SuppressWarnings("PMD.LawOfDemeter") // This is how Pair was meant to be used.
     @Override
     public void fetchLocationFromAddress(
         @NonNull String address,
@@ -51,6 +52,7 @@ public class MockGeocoder implements MyGeocoder {
         errorFunction.accept("No matching location: '" + address + '\'');
     }
 
+    @SuppressWarnings("PMD.LawOfDemeter") // This is how Pair was meant to be used.
     @Override
     public void fetchAddressFromLocation(
         @NonNull LatLng location,
