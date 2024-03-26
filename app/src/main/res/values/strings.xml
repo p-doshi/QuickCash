@@ -7,6 +7,7 @@
     <string name="password">Password</string>
     <string name="MOCK_DATABASE">MOCK_DATABASE</string>
     <string name="MOCK_LOCATION">MOCK_LOCATION</string>
+    <string name="MOCK_GEOCODER">MOCK_GEOCODER</string>
     <string name="empty" />
     <string name="address">Address</string>
     <string name="addJob">Add Job</string>

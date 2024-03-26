@@ -3,7 +3,6 @@ package dal.cs.quickcash3.jobs;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import dal.cs.quickcash3.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +18,23 @@ import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.search.LocationSearchFilter;
 import dal.cs.quickcash3.search.NumericRangeSearchFilter;
 import dal.cs.quickcash3.search.SearchFilter;
+import dal.cs.quickcash3.slider.DurationRangeSlider;
 import dal.cs.quickcash3.slider.MaxDistanceSlider;
 import dal.cs.quickcash3.slider.SalaryRangeSlider;
-import dal.cs.quickcash3.slider.DurationRangeSlider;
+import dal.cs.quickcash3.util.AsyncLatch;
+import dal.cs.quickcash3.util.Range;
 
 public class SearchFilterFragment extends Fragment {
     private static final String LOG_TAG = SearchFilterFragment.class.getSimpleName();
+    private final LocationProvider locationProvider;
     private final Runnable showResultsFunction;
-    private final SearchFilter<AvailableJob> combinedFilter;
     private final LocationSearchFilter<AvailableJob> locationFilter;
     private final NumericRangeSearchFilter<AvailableJob> salaryRangeFilter;
     private final NumericRangeSearchFilter<AvailableJob> durationFilter;
     private final SalaryRangeSlider salarySlider;
     private final DurationRangeSlider durationRangeSlider;
     private final MaxDistanceSlider maxDistanceSlider;
+    private final AsyncLatch<SearchFilter<AvailableJob>> asyncFilter = new AsyncLatch<>();
 
     public SearchFilterFragment(
         @NonNull Activity activity,
@@ -41,8 +43,9 @@ public class SearchFilterFragment extends Fragment {
     {
         super();
         this.showResultsFunction = showResultsFunction;
+        this.locationProvider = locationProvider;
 
-        locationFilter = new LocationSearchFilter<>("latitude", "longitude", locationProvider);
+        locationFilter = new LocationSearchFilter<>("latitude", "longitude");
         salaryRangeFilter = new NumericRangeSearchFilter<>("salary");
         durationFilter = new NumericRangeSearchFilter<>("duration");
 
@@ -54,12 +57,28 @@ public class SearchFilterFragment extends Fragment {
         salaryRangeFilter.setRange(salarySlider.getRange());
         durationFilter.setRange(durationRangeSlider.getRange());
 
+        // Location filter is the first filter to apply.
         locationFilter.addNext(salaryRangeFilter).addNext(durationFilter);
-        combinedFilter = locationFilter;
+
+        fetchLocationForFilter();
     }
 
-    public @NonNull SearchFilter<AvailableJob> getCombinedFilter() {
-        return combinedFilter;
+    private void fetchLocationForFilter() {
+        locationProvider.fetchLocation(
+            location -> {
+                locationFilter.setLocation(location);
+                asyncFilter.set(locationFilter);
+            },
+            error -> {
+                Log.w(LOG_TAG, error);
+                // Skip the location filter if we can't get a location.
+                asyncFilter.set(salaryRangeFilter);
+            }
+        );
+    }
+
+    public @NonNull AsyncLatch<SearchFilter<AvailableJob>> getFilter() {
+        return asyncFilter;
     }
 
     @Override
@@ -87,6 +106,8 @@ public class SearchFilterFragment extends Fragment {
             double newMaxDistance = maxDistanceSlider.getMaxDistance();
             Log.d(LOG_TAG, "Max Distance: " + newMaxDistance + " m");
             locationFilter.setMaxDistance(newMaxDistance);
+
+            fetchLocationForFilter();
 
             showResultsFunction.run();
         });
