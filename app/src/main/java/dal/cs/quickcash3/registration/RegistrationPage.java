@@ -13,8 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import dal.cs.quickcash3.R;
+
 
 public class RegistrationPage extends AppCompatActivity {
     private EditText firstName;
@@ -36,6 +38,10 @@ public class RegistrationPage extends AppCompatActivity {
         init();
     }
 
+    /**
+     * Initializes UI components and sets up event listeners. It finds UI elements
+     * by their IDs and sets an onClickListener for the confirmation button.
+     */
     private void init(){
         firstName = findViewById(R.id.firstName);
         lastName = findViewById(R.id.lastName);
@@ -51,45 +57,68 @@ public class RegistrationPage extends AppCompatActivity {
         findViewById(R.id.confirmButton).setOnClickListener(v -> submitForm());
     }
 
-    @SuppressWarnings("PMD.CyclomaticComplexity")
+    /**
+     * Submits the registration form after validating all input fields. It validates
+     * each field using {@code validateField} method and shows an error message
+     * if any validation fails.
+     */
     private void submitForm(){
         FormValidator formValidator = new FormValidator();
 
-        String firstNameText = firstName.getText().toString().trim();
-        String lastNameText = lastName.getText().toString().trim();
-        String addressText = address.getText().toString().trim();
-        String userNameText = userName.getText().toString().trim();
-        String emailText = emailAddress.getText().toString().trim();
-        String passwordText = password.getText().toString().trim();
-        String confirmPasswordText = confirmPassword.getText().toString().trim();
+        if (isFieldInvalid(firstName.getText().toString().trim(), formValidator::isFirstNameValid, R.string.invalid_first_name)) return;
+        if (isFieldInvalid(lastName.getText().toString().trim(), formValidator::isLastNameValid, R.string.invalid_last_name)) return;
+        if (isFieldInvalid(address.getText().toString().trim(), formValidator::isAddressValid, R.string.invalid_address)) return;
+        Date birthDate = parseBirthDate();
+        if (isFieldInvalid(birthDate, formValidator::isBirthDateValid, R.string.invalid_birth_date)) return;
+        if (isFieldInvalid(userName.getText().toString().trim(), formValidator::isUserNameValid, R.string.invalid_user_name)) return;
+        if (isFieldInvalid(emailAddress.getText().toString().trim(), formValidator::isEmailValid, R.string.invalid_email_address)) return;
+        if (isFieldInvalid(password.getText().toString().trim(), formValidator::isPasswordValid, R.string.invalid_password)) return;
+        if (isFieldInvalid(confirmPassword.getText().toString().trim(), text -> formValidator.doPasswordsMatch(password.getText().toString().trim(), text), R.string.passwords_do_not_match)) return;
+        // If all inputs are valid
+        statusTextView.setText(R.string.registration_successful);
+    }
 
-        Date birthDate = null;
+    /**
+     * Validates a string field based on the provided validation logic and shows
+     * an error message if validation fails.
+     *
+     * @param fieldValue        The value of the field to be validated.
+     * @param validationLogic   The logic used to validate the field value.
+     * @param errorMessageResId The resource ID of the error message to be shown if validation fails.
+     * @return true if the field value passes the validation logic, false otherwise.
+     */
+    private boolean isFieldInvalid(String fieldValue, Predicate<String> validationLogic, int errorMessageResId) {
+        if (!validationLogic.test(fieldValue)) {
+            statusTextView.setText(errorMessageResId);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isFieldInvalid(Date fieldValue, Predicate<Date> validationLogic, int errorMessageResId) {
+        if (fieldValue == null || !validationLogic.test(fieldValue)) {
+            statusTextView.setText(errorMessageResId);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Parses the birth date entered by the user from the year, month, and day fields.
+     * It combines the separate strings into a date format and attempts to parse it.
+     *
+     * @return The parsed {@link Date} object representing the user's birth date,
+     * or null if parsing fails.
+     */
+    private Date parseBirthDate() {
         try {
-            String birthDateString = birthYear.getText().toString() + "-" + birthMonth.getText().toString() + "-" + birthDay.getText().toString();
-            birthDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(birthDateString);
+            String birthDateString = birthYear.getText().toString().trim() + "-" +
+                    birthMonth.getText().toString().trim() + "-" +
+                    birthDay.getText().toString().trim();
+            return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(birthDateString);
         } catch (ParseException e) {
             Log.w("RegistrationPage", Objects.requireNonNull(e.getMessage()));
-        }
-
-        if (!formValidator.isFirstNameValid(firstNameText)) {
-            statusTextView.setText(R.string.invalid_first_name);
-        } else if (!formValidator.isLastNameValid(lastNameText)) {
-            statusTextView.setText(R.string.invalid_last_name);
-        } else if (!formValidator.isAddressValid(addressText)) {
-            statusTextView.setText(R.string.invalid_address);
-        } else if (!formValidator.isBirthDateValid(birthDate)) {
-            statusTextView.setText(R.string.invalid_birth_date);
-        } else if (!formValidator.isUserNameValid(userNameText)) {
-            statusTextView.setText(R.string.invalid_user_name);
-        } else if (!formValidator.isEmailValid(emailText)) {
-            statusTextView.setText(R.string.invalid_email_address);
-        } else if (!formValidator.isPasswordValid(passwordText)) {
-            statusTextView.setText(R.string.invalid_password);
-        } else if (!formValidator.doPasswordsMatch(passwordText, confirmPasswordText)) {
-            statusTextView.setText(R.string.passwords_do_not_match);
-        } else {
-            // all inputs is valid
-            statusTextView.setText(R.string.registration_successful);
+            return null;
         }
     }
 }
