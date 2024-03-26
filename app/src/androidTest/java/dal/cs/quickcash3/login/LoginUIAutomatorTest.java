@@ -28,7 +28,7 @@ import java.io.IOException;
 
 public class LoginUIAutomatorTest {
     private static final int LAUNCH_TIMEOUT = 10000;
-    final static String launcherPackage = "com.example.csci3130_group_3";
+    final static String launcherPackage = "dal.cs.quickcash3";
     private static final String EMAIL = "Email";
     private static final String PASSWORD = "Password";
     private static final String CONTINUE = "Continue";
