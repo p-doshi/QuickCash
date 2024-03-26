@@ -2,10 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="SearchJobUIAutomatorTest (1)">
+      <entry key="LoginEspressoTest">
+        <State />
+      </entry>
+      <entry key="LoginUIAutomatorTest">
+        <State />
+      </entry>
+      <entry key="SearchJobEspressoTest">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="testEmptyEmail()">
         <State />
       </entry>
     </value>

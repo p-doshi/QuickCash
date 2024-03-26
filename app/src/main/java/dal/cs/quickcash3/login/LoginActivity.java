@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
     }
 
     protected @NonNull String getEmailAddress(){
-        EditText emailInput = findViewById(R.id.emailAddress);
+        EditText emailInput = findViewById(R.id.emailaddress);
         return emailInput.getText().toString().trim();
     }
 

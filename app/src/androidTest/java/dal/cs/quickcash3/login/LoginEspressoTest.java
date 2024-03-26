@@ -27,35 +27,36 @@ import org.junit.Test;
 import dal.cs.quickcash3.R;
 
 public class LoginEspressoTest {
-    public ActivityScenario<LoginActivity> scenario;
+    //public ActivityScenario<LoginActivity> scenario;
     @Rule
     public final ActivityScenarioRule<LoginActivity> activityRule =
             new ActivityScenarioRule<>(LoginActivity.class);
 
-    @Before
-    public void setup() {
-        scenario = ActivityScenario.launch(LoginActivity.class);
-        scenario.onActivity(LoginActivity::setUpLoginButton);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            // On newer versions, we can disable window animations using developer settings
-            InstrumentationRegistry.getInstrumentation().getUiAutomation()
-                    .executeShellCommand("settings put global window_animation_scale 0");
-            InstrumentationRegistry.getInstrumentation().getUiAutomation()
-                    .executeShellCommand("settings put global transition_animation_scale 0");
-            InstrumentationRegistry.getInstrumentation().getUiAutomation()
-                    .executeShellCommand("settings put global animator_duration_scale 0");
-        } else {
-            // On older versions, we need to change system settings directly
-            Settings.Global.putInt(
-                    InstrumentationRegistry.getInstrumentation().getContext().getContentResolver(),
-                    Settings.Global.WINDOW_ANIMATION_SCALE, 0);
-            Settings.Global.putInt(
-                    InstrumentationRegistry.getInstrumentation().getContext().getContentResolver(),
-                    Settings.Global.TRANSITION_ANIMATION_SCALE, 0);
-            Settings.Global.putInt(
-                    InstrumentationRegistry.getInstrumentation().getContext().getContentResolver(),
-                    Settings.Global.ANIMATOR_DURATION_SCALE, 0);
-        }    }
+//    @Before
+//    public void setup() {
+//        scenario = ActivityScenario.launch(LoginActivity.class);
+//        scenario.onActivity(LoginActivity::setUpLoginButton);
+////        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+////            // On newer versions, we can disable window animations using developer settings
+////            InstrumentationRegistry.getInstrumentation().getUiAutomation()
+////                    .executeShellCommand("settings put global window_animation_scale 0");
+////            InstrumentationRegistry.getInstrumentation().getUiAutomation()
+////                    .executeShellCommand("settings put global transition_animation_scale 0");
+////            InstrumentationRegistry.getInstrumentation().getUiAutomation()
+////                    .executeShellCommand("settings put global animator_duration_scale 0");
+////        } else {
+////            // On older versions, we need to change system settings directly
+////            Settings.Global.putInt(
+////                    InstrumentationRegistry.getInstrumentation().getContext().getContentResolver(),
+////                    Settings.Global.WINDOW_ANIMATION_SCALE, 0);
+////            Settings.Global.putInt(
+////                    InstrumentationRegistry.getInstrumentation().getContext().getContentResolver(),
+////                    Settings.Global.TRANSITION_ANIMATION_SCALE, 0);
+////            Settings.Global.putInt(
+////                    InstrumentationRegistry.getInstrumentation().getContext().getContentResolver(),
+////                    Settings.Global.ANIMATOR_DURATION_SCALE, 0);
+////        }
+//    }
 
     @After
     public void teardown() {
