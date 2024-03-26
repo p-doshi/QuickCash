@@ -28,7 +28,6 @@ import java.io.IOException;
 
 public class LoginUIAutomatorTest {
     private static final int LAUNCH_TIMEOUT = 10000;
-    final static String launcherPackage = "dal.cs.quickcash3";
     private static final String EMAIL = "Email";
     private static final String PASSWORD = "Password";
     private static final String CONTINUE = "Continue";
@@ -47,11 +46,11 @@ public class LoginUIAutomatorTest {
     }
 
     public void launchApp() {
-        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage(launcherPackage);
+        final Intent appIntent = context.getPackageManager().getLaunchIntentForPackage("dal.cs.quickcash3");
         assert appIntent != null;
         appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(appIntent);
-        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
+        device.wait(Until.hasObject(By.pkg("dal.cs.quickcash3").depth(0)), LAUNCH_TIMEOUT);
     }
     @After
     public void teardown() {
