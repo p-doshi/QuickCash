@@ -39,9 +39,9 @@ import dal.cs.quickcash3.geocode.MockGeocoder;
 public class EmployerPostJobEspressoTest {
     private final Context context = ApplicationProvider.getApplicationContext();
     @Rule
-    public final ActivityScenarioRule<PostJobForm> activityRule =
+    public final ActivityScenarioRule<EmployerDashboard> activityRule =
         new ActivityScenarioRule<>(
-            new Intent(context, PostJobForm.class)
+            new Intent(context, EmployerDashboard.class)
                 .addCategory(context.getString(R.string.MOCK_DATABASE))
                 .addCategory(context.getString(R.string.MOCK_GEOCODER)));
     private static final String JOB_TITLE = "Mowing Lawn";
@@ -55,16 +55,22 @@ public class EmployerPostJobEspressoTest {
     private static final String JOB_DESCRIPTION = "Need a strong individual to help me mow my lawn because I am old.";
     private MockGeocoder geocoder;
 
+
     @Before
     public void setup() {
-        ActivityScenario<PostJobForm> scenario = activityRule.getScenario();
-        scenario.onActivity(activity -> {
+        ActivityScenario<EmployerDashboard> scenario = activityRule.getScenario();
+
+        scenario.onActivity(activity ->{
             // Do not run the test if we are not using the mock database.
-            assertTrue("Not using Mock Database", activity.getDatabase() instanceof MockDatabase);
+            assertTrue("Not using Mock Database",
+                            activity.getDatabase() instanceof MockDatabase);
             assertTrue("Not using Mock Geocoder", activity.getGeocoder() instanceof MockGeocoder);
 
             geocoder = (MockGeocoder) activity.getGeocoder();
         });
+
+
+
     }
 
     @Test
