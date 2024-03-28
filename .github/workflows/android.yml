@@ -58,7 +58,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-camera
 
       - name: Run connected tests
         uses: ReactiveCircus/android-emulator-runner@v2
@@ -76,7 +76,7 @@ jobs:
           target: google_apis
           arch: ${{ steps.set_arch.outputs.arch }}
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back emulated
           disable-animations: true
           script: |
             adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu geo fix -122.0840 37.4220; done
