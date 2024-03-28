@@ -14,6 +14,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 
+import static dal.cs.quickcash3.test.ScrollAboveKeyboardAction.scrollAboveKeyboard;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -62,33 +64,37 @@ public class EmployerPostJobEspressoTest {
 
         scenario.onActivity(activity ->{
             // Do not run the test if we are not using the mock database.
-            assertTrue("Not using Mock Database",
-                            activity.getDatabase() instanceof MockDatabase);
+            assertTrue("Not using Mock Database", activity.getDatabase() instanceof MockDatabase);
             assertTrue("Not using Mock Geocoder", activity.getGeocoder() instanceof MockGeocoder);
 
             geocoder = (MockGeocoder) activity.getGeocoder();
         });
+    }
 
-
-
+    @Test
+    public void test() {
+        onView(withId(R.id.jobPostingTitle)).perform(scrollAboveKeyboard(),typeText(JOB_TITLE));
+        onView(withId(R.id.addJobSalary)).perform(scrollAboveKeyboard(),typeText(JOB_SALARY));
+        onView(withId(R.id.addJobAddress)).perform(scrollAboveKeyboard(),typeText(JOB_ADDRESS));
+        onView(withId(R.id.addJobDescription)).perform(scrollAboveKeyboard(),typeText(JOB_DESCRIPTION),closeSoftKeyboard());
     }
 
     @Test
     public void fillJobForm() {
         geocoder.addAddressMatcher(Pattern.compile(".+"), new LatLng(0.0, 0.0));
 
-        onView(withId(R.id.jobPostingTitle)).perform(scrollTo(),typeText(JOB_TITLE),closeSoftKeyboard());
-        onView(withId(R.id.addJobDate)).perform(scrollTo(),typeText(JOB_DATE),closeSoftKeyboard());
-        onView(withId(R.id.jobDurationSpinner)).perform(scrollTo(),click());
+        onView(withId(R.id.jobPostingTitle)).perform(scrollAboveKeyboard(),typeText(JOB_TITLE));
+        onView(withId(R.id.addJobDate)).perform(scrollAboveKeyboard(),typeText(JOB_DATE));
+        onView(withId(R.id.jobDurationSpinner)).perform(scrollAboveKeyboard(),click());
         onData(allOf(is(instanceOf(String.class)), is(JOB_DURATION))).perform(scrollTo(),click());
-        onView(withId(R.id.jobUrgencySpinner)).perform(scrollTo(),click());
+        onView(withId(R.id.jobUrgencySpinner)).perform(scrollAboveKeyboard(),click());
         onData(allOf(is(instanceOf(String.class)), is(JOB_URGENCY))).perform(scrollTo(),click());
-        onView(withId(R.id.addJobSalary)).perform(scrollTo(),typeText(JOB_SALARY),closeSoftKeyboard());
-        onView(withId(R.id.addJobAddress)).perform(scrollTo(),typeText(JOB_ADDRESS),closeSoftKeyboard());
-        onView(withId(R.id.addJobCity)).perform(scrollTo(),typeText(JOB_CITY),closeSoftKeyboard());
-        onView(withId(R.id.addJobProvince)).perform(scrollTo(),click());
-        onData(allOf(is(instanceOf(String.class)), is(JOB_PROVINCE))).perform(scrollTo(),click());
-        onView(withId(R.id.addJobDescription)).perform(scrollTo(),typeText(JOB_DESCRIPTION),closeSoftKeyboard());
+        onView(withId(R.id.addJobSalary)).perform(scrollAboveKeyboard(),typeText(JOB_SALARY));
+        onView(withId(R.id.addJobAddress)).perform(scrollAboveKeyboard(),typeText(JOB_ADDRESS));
+        onView(withId(R.id.addJobCity)).perform(scrollAboveKeyboard(),typeText(JOB_CITY));
+        onView(withId(R.id.addJobProvince)).perform(scrollAboveKeyboard(),click());
+        onData(allOf(is(instanceOf(String.class)), is(JOB_PROVINCE))).perform(scrollAboveKeyboard(),click());
+        onView(withId(R.id.addJobDescription)).perform(scrollAboveKeyboard(),typeText(JOB_DESCRIPTION),closeSoftKeyboard());
 
         onView(withId(R.id.addJobConfirmButton)).perform(scrollTo(),click());
 

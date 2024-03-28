@@ -6,8 +6,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,7 +26,7 @@ import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
 
 
-public class EmployerDashboard extends FragmentActivity {
+public class EmployerDashboard extends AppCompatActivity {
     Database database;
     MyGeocoder geocoder;
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();

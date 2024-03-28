@@ -25,7 +25,7 @@
         <activity
             android:name=".employer.EmployerDashboard"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".employer.EmployerDashLocation"
             android:exported="true" />
