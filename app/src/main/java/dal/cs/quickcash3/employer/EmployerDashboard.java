@@ -1,16 +1,93 @@
 package dal.cs.quickcash3.employer;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.annotations.Nullable;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.fragments.ProfileFragment;
+import dal.cs.quickcash3.fragments.ReceiptsFragment;
+import dal.cs.quickcash3.jobs.JobListingsFragment;
 
-public class EmployerDashboard extends Activity {
+public class EmployerDashboard extends AppCompatActivity {
+    private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
+    private Database database;
+
+    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dashboard_employer);
+
+        initInterfaces();
+
+        // Initialize the fragments.
+        Fragment listingsFragment = new JobListingsFragment(database);
+        Fragment receiptsFragment = new ReceiptsFragment();
+        Fragment profileFragment = new ProfileFragment();
+
+        BottomNavigationView workerNavView = findViewById(R.id.employerBottomNavView);
+
+        workerNavView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.employer_job_listings) {
+                Log.v(LOG_TAG, "Showing job listings fragment");
+                replaceFragment(listingsFragment);
+                return true;
+            }
+            else if (itemId == R.id.employer_receipts) {
+                Log.v(LOG_TAG, "Showing receipts fragment");
+                replaceFragment(receiptsFragment);
+                return true;
+            }
+            else if (itemId == R.id.employer_profile) {
+                Log.v(LOG_TAG, "Showing profile fragment");
+                replaceFragment(profileFragment);
+                return true;
+            }
+            else {
+                throw new IllegalArgumentException("Unrecognized item ID: " + itemId);
+            }
+        });
+
+        workerNavView.setSelectedItemId(R.id.employer_job_listings);
+    }
+
+    private void replaceFragment(@NonNull Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.employerFragmentView, fragment);
+        transaction.commit();
+    }
+
+    private void initInterfaces() {
+        Set<String> categories = getIntent().getCategories();
+        if (categories == null) {
+            categories = new TreeSet<>();
+        }
+
+        if (categories.contains(getString(R.string.MOCK_DATABASE))) {
+            database = new MockDatabase();
+            Log.d(LOG_TAG, "Using Mock Database");
+        }
+        else {
+            database = new MyFirebaseDatabase();
+        }
+    }
+
+    public @NonNull Database getDatabase() {
+        return database;
     }
 }
