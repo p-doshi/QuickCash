@@ -1,11 +1,8 @@
 package dal.cs.quickcash3.employer;
 
-import static androidx.core.content.PackageManagerCompat.LOG_TAG;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,21 +19,19 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
-import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
-import dal.cs.quickcash3.employer.PostJobForm;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
-import dal.cs.quickcash3.jobs.JobSearchFragment;
-import dal.cs.quickcash3.jobs.SearchFilterFragment;
 
 
 public class EmployerDashboard extends FragmentActivity {
     Database database;
     MyGeocoder geocoder;
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
+
+    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
