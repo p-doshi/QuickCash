@@ -1,28 +1,27 @@
 package dal.cs.quickcash3.employer;
 
-import androidx.test.core.app.ActivityScenario;
-
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 
+import static dal.cs.quickcash3.test.WaitForAction.waitFor;
 
 import android.content.Context;
 import android.content.Intent;
+
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -72,8 +71,6 @@ public class EmployerPostJobEspressoTest {
                 assertTrue("Not using Mock Database",
                         activity.getDatabase() instanceof MockDatabase)
         );
-
-
     }
 
     @Test
@@ -94,7 +91,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.success)));
+        onView(withId(R.id.jobSubmitStatus)).perform(waitFor(withText(R.string.success), 5000));
     }
 
     @Test
@@ -114,7 +111,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -132,7 +129,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -150,7 +147,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -170,7 +167,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -190,7 +187,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.salaryError)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.salaryError)));
     }
 
     @Test
@@ -210,7 +207,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -230,7 +227,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -248,7 +245,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -268,7 +265,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -288,7 +285,7 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.fillAllFields)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.fillAllFields)));
     }
 
     @Test
@@ -308,6 +305,6 @@ public class EmployerPostJobEspressoTest {
 
         onView(withId(R.id.addJobConfirmButton)).perform(click());
 
-        onView(withId(R.id.jobSubmitStatus)).check(ViewAssertions.matches(ViewMatchers.withText(R.string.dateError)));
+        onView(withId(R.id.jobSubmitStatus)).check(matches(withText(R.string.dateError)));
     }
 }
