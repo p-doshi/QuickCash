@@ -1,11 +1,11 @@
-package dal.cs.quickcash3.registration;
+package dal.cs.quickcash3.field;
 
-import android.app.admin.SystemUpdatePolicy;
 import android.widget.EditText;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.registration.FieldValidationException;
 
-public class NameField implements RegistrationFormField {
+public class NameField implements FormField {
     private final EditText firstNameEditText;
     private final EditText lastNameEditText;
 

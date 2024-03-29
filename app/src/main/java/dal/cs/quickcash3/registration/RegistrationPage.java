@@ -10,10 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.field.AddressField;
+import dal.cs.quickcash3.field.DateField;
+import dal.cs.quickcash3.field.EmailAddressField;
+import dal.cs.quickcash3.field.FormField;
+import dal.cs.quickcash3.field.GeneralField;
+import dal.cs.quickcash3.field.NameField;
+import dal.cs.quickcash3.field.PasswordField;
 
 
 public class RegistrationPage extends AppCompatActivity {
-    private final List<RegistrationFormField> formFields = new ArrayList<>();
+    private final List<FormField> formFields = new ArrayList<>();
     private TextView statusTextView;
 
     @Override
@@ -31,7 +38,7 @@ public class RegistrationPage extends AppCompatActivity {
         formFields.add(new NameField(findViewById(R.id.firstName), findViewById(R.id.lastName)));
         formFields.add(new AddressField(findViewById(R.id.address)));
         formFields.add(new DateField(findViewById(R.id.birthYear), findViewById(R.id.birthMonth), findViewById(R.id.birthDay)));
-        formFields.add(new UserNameField(findViewById(R.id.userName)));
+        formFields.add(new GeneralField(findViewById(R.id.userName)));
         formFields.add(new EmailAddressField(findViewById(R.id.emailAddress)));
         formFields.add(new PasswordField(findViewById(R.id.password), findViewById(R.id.confirmPassword)));
         statusTextView = findViewById(R.id.registrationStatus);
@@ -46,7 +53,7 @@ public class RegistrationPage extends AppCompatActivity {
      */
     private void submitForm(){
         try {
-            for (RegistrationFormField i : formFields) {
+            for (FormField i : formFields) {
                 i.isValid();
             }
             // if all text valid, set view to valid

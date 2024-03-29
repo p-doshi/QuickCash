@@ -1,13 +1,14 @@
-package dal.cs.quickcash3.registration;
+package dal.cs.quickcash3.field;
 
 import android.widget.EditText;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.registration.FieldValidationException;
 
-public class UserNameField implements RegistrationFormField{
-    private EditText editText;
+public class GeneralField implements FormField {
+    private final EditText editText;
 
-    public UserNameField(EditText editText) {
+    public GeneralField(EditText editText) {
         this.editText = editText;
     }
 

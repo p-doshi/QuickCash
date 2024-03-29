@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.registration;
+package dal.cs.quickcash3.field;
 
 import android.widget.EditText;
 
@@ -6,8 +6,9 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.registration.FieldValidationException;
 
-public class DateField implements RegistrationFormField {
+public class DateField implements FormField {
     private final EditText yearEditText;
     private final EditText monthEditText;
     private final EditText dayEditText;

@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.registration;
+package dal.cs.quickcash3.field;
 
 import android.widget.EditText;
 
@@ -7,8 +7,9 @@ import androidx.annotation.NonNull;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.registration.FieldValidationException;
 
-public class PasswordField implements RegistrationFormField{
+public class PasswordField implements FormField {
     private final EditText passwordEditText;
     private final EditText confirmPasswordEditText;
     public PasswordField(EditText passwordEditText, EditText confirmPasswordEditText) {
