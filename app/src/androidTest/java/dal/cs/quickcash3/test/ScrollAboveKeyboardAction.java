@@ -69,7 +69,6 @@ public class ScrollAboveKeyboardAction implements ViewAction {
         return overlappingArea >= percentage * area;
     }
 
-    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     private static void scrollIntoView(View view) {
         Rect displayRect = new Rect();
         view.getWindowVisibleDisplayFrame(displayRect);
@@ -83,7 +82,6 @@ public class ScrollAboveKeyboardAction implements ViewAction {
         parent.scrollBy(0, heightDifference);
     }
 
-    @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
     public void perform(@Nullable UiController uiController, @NonNull View view) {
         if (isDisplayingAtLeast(view, 0.9f)) {
