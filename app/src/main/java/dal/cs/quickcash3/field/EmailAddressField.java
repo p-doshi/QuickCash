@@ -3,7 +3,6 @@ package dal.cs.quickcash3.field;
 import android.widget.EditText;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.registration.FieldValidationException;
 
 public class EmailAddressField implements FormField {
     final private EditText editText;

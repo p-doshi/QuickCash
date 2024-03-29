@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.registration.FieldValidationException;
 
 public class PasswordField implements FormField {
     private final EditText passwordEditText;

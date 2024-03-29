@@ -6,7 +6,6 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.registration.FieldValidationException;
 
 public class DateField implements FormField {
     private final EditText yearEditText;
