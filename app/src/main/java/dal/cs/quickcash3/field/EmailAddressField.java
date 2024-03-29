@@ -13,7 +13,7 @@ public class EmailAddressField implements FormField {
     }
 
     @Override
-    public void isValid() throws FieldValidationException {
+    public void validate() throws FieldValidationException {
         String text = editText.getText().toString().trim();
         String addressPattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
         if(!text.matches(addressPattern)){

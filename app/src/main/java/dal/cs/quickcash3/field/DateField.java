@@ -21,7 +21,7 @@ public class DateField implements FormField {
 
 
     @Override
-    public void isValid() throws FieldValidationException {
+    public void validate() throws FieldValidationException {
         try {
             int year = Integer.parseInt(yearEditText.getText().toString());
             int month = Integer.parseInt(monthEditText.getText().toString());

@@ -14,7 +14,7 @@ public class NameField implements FormField {
         this.lastNameEditText = lastNameEditText;
     }
     @Override
-    public void isValid() throws FieldValidationException {
+    public void validate() throws FieldValidationException {
         String firstName = firstNameEditText.getText().toString().trim();
         String lastName = lastNameEditText.getText().toString().trim();
         if (firstName.isEmpty()) {

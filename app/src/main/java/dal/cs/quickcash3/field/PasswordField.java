@@ -18,7 +18,7 @@ public class PasswordField implements FormField {
     }
 
     @Override
-    public void isValid() throws FieldValidationException {
+    public void validate() throws FieldValidationException {
         String password = passwordEditText.getText().toString();
         String confirmPassword = confirmPasswordEditText.getText().toString();
 

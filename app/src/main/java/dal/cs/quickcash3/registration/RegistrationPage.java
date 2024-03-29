@@ -53,8 +53,8 @@ public class RegistrationPage extends AppCompatActivity {
      */
     private void submitForm(){
         try {
-            for (FormField i : formFields) {
-                i.isValid();
+            for (FormField field : formFields) {
+                field.validate();
             }
             // if all text valid, set view to valid
             statusTextView.setText(R.string.registration_successful);

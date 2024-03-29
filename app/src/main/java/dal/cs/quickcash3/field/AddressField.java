@@ -13,7 +13,7 @@ public class AddressField implements FormField {
     }
 
     @Override
-    public void isValid() throws FieldValidationException {
+    public void validate() throws FieldValidationException {
         String text = editText.getText().toString().trim();
         String addressPattern = "\\d+\\s+\\w+\\s+\\w+";
         if(!text.matches(addressPattern)){

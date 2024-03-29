@@ -14,7 +14,7 @@ public class GeneralField implements FormField {
 
 
     @Override
-    public void isValid() throws FieldValidationException {
+    public void validate() throws FieldValidationException {
         String userName = editText.getText().toString().trim();
         if (userName.isEmpty()) {
             throw new FieldValidationException(R.string.invalid_user_name);
