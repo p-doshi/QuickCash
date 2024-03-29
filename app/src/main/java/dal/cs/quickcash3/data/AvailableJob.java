@@ -9,10 +9,9 @@ import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseDirectory;
-import dal.cs.quickcash3.util.Copyable;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
-public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
+public class AvailableJob extends JobPost {
     private String startDate;
     private double duration;
     private String urgency;
@@ -84,12 +83,13 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
             "\nblackList=" + blackList;
     }
 
-    @Override
-    public @NonNull String writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+    public @NonNull String writeToDatabase(
+        @NonNull Database database,
+        @NonNull Consumer<String> errorFunction)
+    {
         return writeToDatabase(database, () -> {}, errorFunction);
     }
 
-    @Override
     public @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
@@ -104,40 +104,13 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
         return key;
     }
 
-    @Override
-    public void readFromDatabase(
+    public static void readFromDatabase(
         @NonNull Database database,
         @NonNull String key,
+        @NonNull Consumer<AvailableJob> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        readFromDatabase(database, key, () -> {}, errorFunction);
-    }
-
-    @Override
-    public void readFromDatabase(
-        @NonNull Database database,
-        @NonNull String key,
-        @NonNull Runnable successFunction,
-        @NonNull Consumer<String> errorFunction)
-    {
-        database.read(
-            DatabaseDirectory.AVAILABLE_JOBS.getValue() + key,
-            getClass(),
-            job -> {
-                this.copyFrom(job);
-                successFunction.run();
-            },
-            errorFunction);
-    }
-
-    @Override
-    public void copyFrom(@NonNull AvailableJob other) {
-        super.copyFrom(other);
-        startDate = other.startDate;
-        duration = other.duration;
-        urgency = other.urgency;
-        postTime = other.postTime;
-        applicants = other.applicants;
-        blackList = other.blackList;
+        String location = DatabaseDirectory.COMPLETED_JOBS.getValue() + key;
+        database.read(location, AvailableJob.class, readFunction, errorFunction);
     }
 }
