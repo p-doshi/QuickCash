@@ -25,6 +25,11 @@ public class EmployerDashEspressoTest {
     }
 
     @Test
+    public void testEmployerNavBarExist(){
+        onView(withId(R.id.employerBottomNavView)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testEmployerAddJobButtonExist(){
         onView(withId(R.id.employer_add_job)).check(matches(isDisplayed()));
     }
