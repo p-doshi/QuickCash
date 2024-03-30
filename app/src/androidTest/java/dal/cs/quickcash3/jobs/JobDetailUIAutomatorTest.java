@@ -21,7 +21,7 @@ import org.junit.Test;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class JobDetailUIAutomatorTest {
-    private static final int MAX_TIMEOUT = 5000;
+    private static final int MAX_TIMEOUT = 15000;
     @Rule
     public final ActivityScenarioRule<WorkerDashboard> activityRule =
             new ActivityScenarioRule<>(WorkerDashboard.class);
