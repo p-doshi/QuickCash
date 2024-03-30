@@ -58,7 +58,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-camera
+          key: avd-${{ matrix.api-level }}
 
       - name: Run connected tests
         uses: ReactiveCircus/android-emulator-runner@v2
@@ -71,6 +71,7 @@ jobs:
           PROJECT: ${{ secrets.PROJECT }}
           PROJ_USER: ${{ secrets.USER }}
           TOKEN: ${{ secrets.TOKEN }}
+          PACKAGE: ${{ secrets.PACKAGE }}
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
@@ -82,7 +83,7 @@ jobs:
             adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu geo fix -122.0840 37.4220; done
             git clone "https://$PROJ_USER:$TOKEN@$DOMAIN/$OWNER/$PROJECT.git"
             curl -s -o artifacts.zip -L -H "PRIVATE-TOKEN: $TOKEN" "https://$DOMAIN/api/v4/projects/$PROJECT_ID/jobs/$JOB_ID/artifacts"
-            cd $PROJECT && git checkout $COMMIT && chmod +x ./gradlew && unzip ../artifacts.zip
+            cd $PROJECT && git checkout $COMMIT && chmod +x ./gradlew && unzip -qq ../artifacts.zip
             adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
             cd $PROJECT && ./gradlew :app:connectedDebugAndroidTest
             if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
