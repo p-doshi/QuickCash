@@ -25,6 +25,7 @@ public class JobDetailsPage extends Fragment {
     private final AvailableJob currentJob;
 
     public JobDetailsPage(AvailableJob currentJob) {
+        super();
         this.currentJob = currentJob;
     }
 

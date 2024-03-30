@@ -22,6 +22,7 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     private final Consumer<AvailableJob> displayCurrJob;
 
     public MyItemRecyclerViewAdapter(Consumer<AvailableJob> displayCurrJob){
+        super();
         this.displayCurrJob = displayCurrJob;
 
     }

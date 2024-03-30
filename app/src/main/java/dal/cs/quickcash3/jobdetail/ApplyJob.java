@@ -14,6 +14,7 @@ import dal.cs.quickcash3.R;
 public class ApplyJob extends Fragment {
 
     public ApplyJob() {
+        super();
         // Required empty public constructor
     }
 
