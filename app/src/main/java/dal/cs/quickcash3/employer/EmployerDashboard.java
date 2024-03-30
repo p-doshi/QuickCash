@@ -14,8 +14,10 @@ import com.google.firebase.database.annotations.Nullable;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
@@ -25,6 +27,7 @@ import dal.cs.quickcash3.jobs.JobListingsFragment;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
+import dal.cs.quickcash3.search.RegexSearchFilter;
 
 public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
@@ -39,8 +42,18 @@ public class EmployerDashboard extends AppCompatActivity {
 
         initInterfaces();
 
+        // Get a search filter for the current user.
+        String currentUser = getIntent().getStringExtra(getString(R.string.USER));
+        RegexSearchFilter<AvailableJob> searchFilter = new RegexSearchFilter<>("employer");
+        if (currentUser == null) {
+            searchFilter.setPattern(Pattern.compile(".*"));
+        }
+        else {
+            searchFilter.setPattern(Pattern.compile(currentUser));
+        }
+
         // Initialize the fragments.
-        Fragment listingsFragment = new JobListingsFragment(database, this::showJobPostForm);
+        Fragment listingsFragment = new JobListingsFragment(database, searchFilter, this::showJobPostForm);
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment profileFragment = new ProfileFragment();
 

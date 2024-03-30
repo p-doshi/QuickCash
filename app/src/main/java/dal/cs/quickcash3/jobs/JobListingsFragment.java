@@ -16,16 +16,15 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.AsyncLatch;
 
 public class JobListingsFragment extends Fragment {
     private final JobListFragment jobListFragment;
     private final Runnable showJobPostForm;
 
-    public JobListingsFragment(@NonNull Database database, @NonNull Runnable showJobPostForm) {
+    public JobListingsFragment(@NonNull Database database, @NonNull SearchFilter<AvailableJob> searchFilter, @NonNull Runnable showJobPostForm) {
         super();
-        RegexSearchFilter<AvailableJob> searchFilter = new RegexSearchFilter<>("title");
-        searchFilter.setPattern(Pattern.compile(".*"));
         this.jobListFragment = new JobListFragment(database, new AsyncLatch<>(searchFilter));
         this.showJobPostForm = showJobPostForm;
     }
