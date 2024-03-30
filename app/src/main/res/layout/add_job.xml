@@ -76,17 +76,16 @@
             app:layout_constraintTop_toBottomOf="@+id/jobPostingTitle" />
 
         <TextView
+            tools:ignore="UnusedIds"
             android:id="@+id/addJobDuration"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="7dp"
             android:text="@string/addJobDuration"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/jobDurationSpinner"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addJobDate" />
+            app:layout_constraintTop_toTopOf="@+id/jobDurationSpinner" />
 
         <Spinner
             android:id="@+id/jobDurationSpinner"

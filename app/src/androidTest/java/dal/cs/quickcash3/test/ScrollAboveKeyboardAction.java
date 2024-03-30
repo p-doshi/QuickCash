@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 
-import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
@@ -56,7 +55,7 @@ public class ScrollAboveKeyboardAction implements ViewAction {
         return width * height;
     }
 
-    private static boolean isDisplayingAtLeast(View view, @FloatRange(from=0.0f, to=1.0f) float percentage) {
+    private static boolean isDisplayingAtLeast(View view) {
         Rect displayRect = new Rect();
         view.getWindowVisibleDisplayFrame(displayRect);
 
@@ -66,9 +65,10 @@ public class ScrollAboveKeyboardAction implements ViewAction {
         float overlappingArea = rectAreaOverlap(displayRect, viewRect);
         float area = viewRect.height() * viewRect.width();
 
-        return overlappingArea >= percentage * area;
+        return overlappingArea >= 0.9f * area;
     }
 
+    @SuppressWarnings("PMD.LawOfDemeter") // This is how Rect is meant to be used.
     private static void scrollIntoView(View view) {
         Rect displayRect = new Rect();
         view.getWindowVisibleDisplayFrame(displayRect);
@@ -84,7 +84,7 @@ public class ScrollAboveKeyboardAction implements ViewAction {
 
     @Override
     public void perform(@Nullable UiController uiController, @NonNull View view) {
-        if (isDisplayingAtLeast(view, 0.9f)) {
+        if (isDisplayingAtLeast(view)) {
             Log.i(LOG_TAG, "View is already displayed. Returning.");
             return;
         }
@@ -94,11 +94,11 @@ public class ScrollAboveKeyboardAction implements ViewAction {
         assert uiController != null;
         uiController.loopMainThreadUntilIdle();
 
-        if (!isDisplayingAtLeast(view, 0.9f)) {
+        if (!isDisplayingAtLeast(view)) {
             throw new PerformException.Builder()
                 .withActionDescription(this.getDescription())
                 .withViewDescription(HumanReadables.describe(view))
-                .withCause(new RuntimeException("Scrolling to view was attempted, but the view is not displayed"))
+                .withCause(new IllegalStateException("Scrolling to view was attempted, but the view is not displayed"))
                 .build();
         }
     }

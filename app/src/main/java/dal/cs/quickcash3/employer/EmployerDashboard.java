@@ -75,6 +75,7 @@ public class EmployerDashboard extends AppCompatActivity {
         transaction.commit();
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void showJobPostForm() {
         Fragment jobPostFormFragment = new PostJobForm(database, geocoder);
         replaceFragment(jobPostFormFragment);

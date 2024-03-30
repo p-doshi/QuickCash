@@ -16,14 +16,10 @@ public class AsyncLatch<T> {
     private final AtomicReference<T> value = new AtomicReference<>(null);
     private final AtomicReference<Consumer<T>> readyFunction = new AtomicReference<>();
 
-    /**
-     * Construct a latch without a value or ready function.
-     */
-    public AsyncLatch() {}
+    public AsyncLatch() {
+        // The default constructor.
+    }
 
-    /**
-     * Construct a latch with a value but no ready function.
-     */
     public AsyncLatch(@NonNull T item) {
         value.set(item);
     }
