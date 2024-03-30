@@ -24,7 +24,8 @@ public class JobDetailsPage extends Fragment {
 
     private final AvailableJob currentJob;
 
-    public JobDetailsPage(AvailableJob currentJob) {
+    public JobDetailsPage(@NonNull AvailableJob currentJob) {
+
         super();
         this.currentJob = currentJob;
     }
@@ -32,8 +33,9 @@ public class JobDetailsPage extends Fragment {
 
     @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,@NonNull ViewGroup container,
+                             @NonNull Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_job_details_page, container, false);
 

@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobs;
+package dal.cs.quickcash3.recycler;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -15,13 +15,12 @@ import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.jobdetail.RecyclerItemClickListener;
 
-public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements RecyclerItemClickListener.OnItemClickListener {
+public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements OnItemClickListener {
     private List<AvailableJob> jobs = new ArrayList<>();
     private final Consumer<AvailableJob> displayCurrJob;
 
-    public MyItemRecyclerViewAdapter(Consumer<AvailableJob> displayCurrJob){
+    public MyItemRecyclerViewAdapter(@NonNull Consumer<AvailableJob> displayCurrJob){
         super();
         this.displayCurrJob = displayCurrJob;
 
@@ -50,7 +49,7 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull int position) {
         holder.setJob(jobs.get(position));
 
     }
@@ -61,13 +60,14 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(@NonNull View view,@NonNull int position) {
         AvailableJob currJob = jobs.get(position);
         this.displayCurrJob.accept(currJob);
     }
 
     @Override
-    public void onLongItemClick(View view, int position) {
+    public void onLongItemClick(@NonNull View view,@NonNull int position) {
+
      //No Use
     }
 

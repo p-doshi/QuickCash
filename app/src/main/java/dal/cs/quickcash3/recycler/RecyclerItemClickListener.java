@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobdetail;
+package dal.cs.quickcash3.recycler;
 
 import android.content.Context;
 
@@ -14,14 +14,10 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     private final OnItemClickListener mListener;
     GestureDetector mGestureDetector;
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
 
-        void onLongItemClick(View view, int position);
-    }
 
-    public RecyclerItemClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
-        mListener = listener;
+    public RecyclerItemClickListener(@NonNull Context context, @NonNull final RecyclerView recyclerView,@NonNull OnItemClickListener listener) {
+        this.mListener = listener;
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
@@ -30,18 +26,20 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
 
             @Override
             public void onLongPress(@NonNull MotionEvent motionEvent) {
+
                 View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-                if (child != null && mListener != null) {
+                if (child != null) {
                     mListener.onLongItemClick(child, recyclerView.getChildAdapterPosition(child));
                 }
             }
         });
     }
 
-    @Override public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+
+    @Override public boolean onInterceptTouchEvent(@NonNull RecyclerView view,@NonNull MotionEvent motionEvent) {
         View childView = view.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-        if (childView != null && mListener != null && mGestureDetector.onTouchEvent(motionEvent)) {
-            mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
+        if (childView != null && this.mListener != null && mGestureDetector.onTouchEvent(motionEvent)) {
+            this.mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
             return true;
         }
         return false;

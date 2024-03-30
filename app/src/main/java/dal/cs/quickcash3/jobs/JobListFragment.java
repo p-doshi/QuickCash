@@ -24,7 +24,8 @@ import java.util.function.Consumer;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.jobdetail.RecyclerItemClickListener;
+import dal.cs.quickcash3.recycler.MyItemRecyclerViewAdapter;
+import dal.cs.quickcash3.recycler.RecyclerItemClickListener;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.AsyncLatch;
 
