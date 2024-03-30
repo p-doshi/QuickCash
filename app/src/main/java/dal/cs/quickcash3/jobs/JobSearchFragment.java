@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +18,6 @@ import java.util.function.Consumer;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.location.LocationProvider;
 
 public class JobSearchFragment extends Fragment  {

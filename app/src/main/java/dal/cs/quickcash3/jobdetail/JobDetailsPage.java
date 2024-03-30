@@ -22,7 +22,7 @@ import dal.cs.quickcash3.data.AvailableJob;
 public class JobDetailsPage extends Fragment {
 
 
-    private AvailableJob currentJob;
+    private final AvailableJob currentJob;
 
     public JobDetailsPage(AvailableJob currentJob) {
         this.currentJob = currentJob;

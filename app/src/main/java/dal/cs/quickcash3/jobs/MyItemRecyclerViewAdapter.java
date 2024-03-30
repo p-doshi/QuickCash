@@ -19,7 +19,7 @@ import dal.cs.quickcash3.jobdetail.RecyclerItemClickListener;
 
 public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements RecyclerItemClickListener.OnItemClickListener {
     private List<AvailableJob> jobs = new ArrayList<>();
-    private  Consumer<AvailableJob> displayCurrJob;
+    private final Consumer<AvailableJob> displayCurrJob;
 
     public MyItemRecyclerViewAdapter(Consumer<AvailableJob> displayCurrJob){
         this.displayCurrJob = displayCurrJob;
@@ -74,7 +74,6 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView subheading;
-        private  Consumer<AvailableJob> displayCurrJob;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
