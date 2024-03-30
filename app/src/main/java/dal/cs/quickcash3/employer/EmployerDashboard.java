@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.employer;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,10 +22,14 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
 import dal.cs.quickcash3.jobs.JobListingsFragment;
+import dal.cs.quickcash3.geocode.GeocoderProxy;
+import dal.cs.quickcash3.geocode.MockGeocoder;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 
 public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
     private Database database;
+    private MyGeocoder geocoder;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -35,26 +40,23 @@ public class EmployerDashboard extends AppCompatActivity {
         initInterfaces();
 
         // Initialize the fragments.
-        Fragment listingsFragment = new JobListingsFragment(database);
+        Fragment listingsFragment = new JobListingsFragment(database, this::showJobPostForm);
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment profileFragment = new ProfileFragment();
 
-        BottomNavigationView workerNavView = findViewById(R.id.employerBottomNavView);
+        BottomNavigationView employerNavView = findViewById(R.id.employerBottomNavView);
 
-        workerNavView.setOnItemSelectedListener(item -> {
+        employerNavView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.employer_job_listings) {
-                Log.v(LOG_TAG, "Showing job listings fragment");
                 replaceFragment(listingsFragment);
                 return true;
             }
             else if (itemId == R.id.employer_receipts) {
-                Log.v(LOG_TAG, "Showing receipts fragment");
                 replaceFragment(receiptsFragment);
                 return true;
             }
             else if (itemId == R.id.employer_profile) {
-                Log.v(LOG_TAG, "Showing profile fragment");
                 replaceFragment(profileFragment);
                 return true;
             }
@@ -63,15 +65,22 @@ public class EmployerDashboard extends AppCompatActivity {
             }
         });
 
-        workerNavView.setSelectedItemId(R.id.employer_job_listings);
+        employerNavView.setSelectedItemId(R.id.employer_job_listings);
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
+        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName() + " fragment");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.employerFragmentView, fragment);
         transaction.commit();
     }
 
+    private void showJobPostForm() {
+        Fragment jobPostFormFragment = new PostJobForm(database, geocoder);
+        replaceFragment(jobPostFormFragment);
+    }
+
+    @SuppressLint("RestrictedApi")
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();
         if (categories == null) {
@@ -85,9 +94,21 @@ public class EmployerDashboard extends AppCompatActivity {
         else {
             database = new MyFirebaseDatabase();
         }
+
+        if (categories.contains(getString(R.string.MOCK_GEOCODER))) {
+            geocoder = new MockGeocoder();
+            Log.d(LOG_TAG, "Using Mock Geocoder");
+        }
+        else {
+            geocoder = new GeocoderProxy(this);
+        }
     }
 
-    public @NonNull Database getDatabase() {
+    public @NonNull MyGeocoder getGeocoder() {
+        return geocoder;
+    }
+
+    public @NonNull Database getDatabase(){
         return database;
     }
 }
