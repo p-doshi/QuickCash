@@ -20,12 +20,14 @@ import dal.cs.quickcash3.util.AsyncLatch;
 
 public class JobListingsFragment extends Fragment {
     private final JobListFragment jobListFragment;
+    private final Runnable showJobPostForm;
 
-    public JobListingsFragment(@NonNull Database database) {
+    public JobListingsFragment(@NonNull Database database, @NonNull Runnable showJobPostForm) {
         super();
         RegexSearchFilter<AvailableJob> searchFilter = new RegexSearchFilter<>("title");
         searchFilter.setPattern(Pattern.compile(".*"));
         this.jobListFragment = new JobListFragment(database, new AsyncLatch<>(searchFilter));
+        this.showJobPostForm = showJobPostForm;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class JobListingsFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.job_listing_page, container, false);
         replaceFragment(jobListFragment);
+        view.findViewById(R.id.addJobButton).setOnClickListener(unused -> showJobPostForm.run());
         return view;
     }
 
