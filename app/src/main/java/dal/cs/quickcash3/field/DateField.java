@@ -29,7 +29,7 @@ public class DateField implements FormField {
             int day = Integer.parseInt(dayEditText.getText().toString());
             LocalDate.of(year, month, day);
         } catch (DateTimeException | NumberFormatException e) {
-            throw new FieldValidationException(R.string.invalid_birth_date);
+            throw new FieldValidationException(R.string.invalid_birth_date, e);
         }
     }
 }
