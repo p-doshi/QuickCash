@@ -84,7 +84,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
     }
-    @SuppressWarnings("UnusedPrivateMethod")
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void switchToJobDetails(@NonNull AvailableJob availableJob) {
         Log.d("TESTING","PROBLEM HERE !! SPECIAL ONE");
         Fragment jobDetailsPage = new JobDetailsPage(availableJob);
