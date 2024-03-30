@@ -58,7 +58,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-camera
+          key: avd-${{ matrix.api-level }}
 
       - name: Run connected tests
         uses: ReactiveCircus/android-emulator-runner@v2
