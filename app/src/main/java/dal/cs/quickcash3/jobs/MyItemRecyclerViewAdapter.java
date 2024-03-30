@@ -11,13 +11,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.jobdetail.RecyclerItemClickListener;
 
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements RecyclerItemClickListener.OnItemClickListener {
     private List<AvailableJob> jobs = new ArrayList<>();
+    private  Consumer<AvailableJob> displayCurrJob;
 
+    public MyItemRecyclerViewAdapter(Consumer<AvailableJob> displayCurrJob){
+        this.displayCurrJob = displayCurrJob;
+
+    }
     public void addJob(@NonNull AvailableJob availableJob) {
         jobs.add(availableJob);
         notifyItemInserted(jobs.size() - 1);
@@ -44,6 +51,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.setJob(jobs.get(position));
+
     }
 
     @Override
@@ -51,9 +59,22 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return jobs.size();
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        AvailableJob currJob = jobs.get(position);
+        this.displayCurrJob.accept(currJob);
+    }
+
+    @Override
+    public void onLongItemClick(View view, int position) {
+     //No Use
+    }
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView subheading;
+        private  Consumer<AvailableJob> displayCurrJob;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,9 +83,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         }
 
         public void setJob(@NonNull AvailableJob job) {
-            // TODO: store the job as a local variable so it can be passed into another fragment.
+
             title.setText(job.getTitle());
             subheading.setText(job.getDescription());
         }
     }
+
 }

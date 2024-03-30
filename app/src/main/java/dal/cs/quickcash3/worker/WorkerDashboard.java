@@ -14,9 +14,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
@@ -43,7 +45,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
-        Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
+        Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
@@ -82,7 +84,11 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
     }
-
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Log.d("TESTING","PROBLEM HERE !! SPECIAL ONE");
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob);
+        replaceFragment(jobDetailsPage);
+    }
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();
         if (categories == null) {
