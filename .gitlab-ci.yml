@@ -28,7 +28,8 @@ Build:
     expire_in: 1 day
     paths:
       # Give the results of compilation to the next stage.
-      - app/build/outputs/
+      - app/build
+      - .gradle
       - $BUILD_JOB_FILE
 
 PmdLint:
