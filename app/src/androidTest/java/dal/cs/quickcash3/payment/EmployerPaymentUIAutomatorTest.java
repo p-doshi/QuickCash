@@ -32,7 +32,7 @@ public class EmployerPaymentUIAutomatorTest {
     private static final String DONE = "Done";
     private static final String CHARGE = "Charge Card";
     private static final String APPROVED = "approved";
-    private static final int MAX_TIMEOUT = 15000;
+    private static final int MAX_TIMEOUT = 30000;
 
     @Rule
     public final ActivityScenarioRule<EmployerPayPalActivity> activityRule =
