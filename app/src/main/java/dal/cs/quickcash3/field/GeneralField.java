@@ -2,11 +2,13 @@ package dal.cs.quickcash3.field;
 
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
 public class GeneralField implements FormField {
     private final EditText editText;
     private final int errorMessageId;
 
-    public GeneralField(EditText editText, int errorMessageId) {
+    public GeneralField(@NonNull EditText editText, int errorMessageId) {
         this.editText = editText;
         this.errorMessageId = errorMessageId;
     }

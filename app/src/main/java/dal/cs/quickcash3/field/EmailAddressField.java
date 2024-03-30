@@ -2,12 +2,14 @@ package dal.cs.quickcash3.field;
 
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
 import dal.cs.quickcash3.R;
 
 public class EmailAddressField implements FormField {
     final private EditText editText;
 
-    public EmailAddressField(EditText editText) {
+    public EmailAddressField(@NonNull EditText editText) {
         this.editText = editText;
     }
 

@@ -11,7 +11,7 @@ import dal.cs.quickcash3.R;
 public class PasswordField implements FormField {
     private final EditText passwordEditText;
     private final EditText confirmPasswordEditText;
-    public PasswordField(EditText passwordEditText, EditText confirmPasswordEditText) {
+    public PasswordField(@NonNull EditText passwordEditText,@NonNull EditText confirmPasswordEditText) {
         this.passwordEditText = passwordEditText;
         this.confirmPasswordEditText = confirmPasswordEditText;
     }
