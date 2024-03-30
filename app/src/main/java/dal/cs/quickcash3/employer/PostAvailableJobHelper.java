@@ -1,21 +1,16 @@
 package dal.cs.quickcash3.employer;
 
-import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.data.PostalAddress;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 /** @author Hayley Vezeau
@@ -26,12 +21,19 @@ public final class PostAvailableJobHelper {
     private PostAvailableJobHelper(){}
 
     /**
-     * Create an Available Job
+     * Creates an Available Job. Since this requires reverse geocoding, this function requires a
+     * lambda to receive the created job.
+     *
+     * @param geocoder the geocoder used by the activity
      * @param fields a Map that holds the fields as keys and user input as values
-     * @param context the context for the activity
-     * @return an Available job object for the newly created Availble Job
+     * @param receiverFunction the function to receive the created job.
      */
-    public static @NonNull AvailableJob createAvailableJob(@NonNull Map<String, String> fields, @NonNull Context context) {
+    public static void createAvailableJob(
+        @NonNull MyGeocoder geocoder,
+        @NonNull Map<String, String> fields,
+        @NonNull Consumer<AvailableJob> receiverFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         AvailableJob job = new AvailableJob();
 
         job.setTitle(Objects.requireNonNull(fields.get("title")));
@@ -42,42 +44,23 @@ public final class PostAvailableJobHelper {
 
         job.setDescription(Objects.requireNonNull(fields.get("description")));
 
-        Address address = locToCoordinates(fields.get("address"), fields.get("city"), fields.get("province"), context);
-        job.setLatitude(address.getLatitude());
-        job.setLongitude(address.getLongitude());
-
-
         //TODO add employer ID
         job.setEmployer(RandomStringGenerator.generate(30));
         job.setPostTime(new Date().toString());
         job.setApplicants(new ArrayList<>());
         job.setBlackList(new ArrayList<>());
 
-        return job;
-    }
-
-    /**
-     * Convert full string address to Address object
-     * @param streetAdd a String representing the street address
-     * @param city a String representing the city
-     * @param province a String representing a province
-     * @param context the context of the activity
-     * @return the address as an Address object
-     */
-    private static Address locToCoordinates(String streetAdd, String city, String province, Context context) {
-        Geocoder geocoder = new Geocoder(context);
-        String strAddress = streetAdd + ", " + city + ", " + province + ", Canada";
-        List<Address> address = null;
-        try {
-            do {
-                address = geocoder.getFromLocationName(strAddress, 20);
-            }
-            while (address == null);
-        } catch (IOException e) {
-            Log.e("PostAvailableJobHelper", Objects.requireNonNull(e.getMessage()));
-        }
-        assert address != null;
-        return address.get(0);
+        PostalAddress address = PostalAddress.createCanadianAddress(
+            Objects.requireNonNull(fields.get("address")),
+            Objects.requireNonNull(fields.get("city")),
+            Objects.requireNonNull(fields.get("province")));
+        geocoder.fetchLocationFromAddress(address.toString(),
+            location -> {
+                job.setLatitude(location.latitude);
+                job.setLongitude(location.longitude);
+                receiverFunction.accept(job);
+            },
+            errorFunction);
     }
 
     /**

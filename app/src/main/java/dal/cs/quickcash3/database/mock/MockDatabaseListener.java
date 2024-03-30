@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import java.util.List;
 import java.util.function.Consumer;
 
-@SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod") // No one should be instantiating one of these.
 abstract class MockDatabaseListener<T> {
     private final List<String> keys;
     protected final Class<T> type;

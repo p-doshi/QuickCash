@@ -4,20 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static dal.cs.quickcash3.location.LocationHelper.getBoundingBox;
 import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
-import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
-
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -34,7 +27,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.data.JobPostHelper;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.search.NumericRangeSearchFilter;
 import dal.cs.quickcash3.search.RegexSearchFilter;
