@@ -11,12 +11,12 @@ import org.junit.runners.model.Statement;
 /**
  * A test rule for managing a counting resource.
  */
-public class CountingResourceRule implements TestRule {
+public final class CountingResourceRule implements TestRule {
     private final IdlingRegistry registry = IdlingRegistry.getInstance();
     private final String name;
     private CountingIdlingResource resource;
 
-    public CountingResourceRule(@NonNull String name) {
+    private CountingResourceRule(@NonNull String name) {
         this.name = name;
     }
 

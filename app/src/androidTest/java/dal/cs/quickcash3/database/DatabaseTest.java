@@ -39,6 +39,12 @@ import dal.cs.quickcash3.util.Range;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
+    private static final List<Person> PEOPLE = Arrays.asList(
+        new Person("aaa", "aaa", 1),
+        new Person("aaa", "aab", 2),
+        new Person("aab", "aaa", 3),
+        new Person("aab", "aab", 4)
+    );
     @Rule
     public final CountingResourceRule resource = new CountingResourceRule("databaseResource");
     private final Database database = new MyFirebaseDatabase();
@@ -46,6 +52,14 @@ public class DatabaseTest {
 
     private @NonNull String getNewTestDir() {
         return "test/DatabaseTest/" + RandomStringGenerator.generate(10) + '/';
+    }
+
+    private void writePeople() {
+        PEOPLE.forEach(person -> {
+            resource.increment();
+            database.write(testDir + RandomStringGenerator.generate(10), person, resource::decrement, Assert::fail);
+        });
+        Espresso.onIdle();
     }
 
     @Before
@@ -200,21 +214,6 @@ public class DatabaseTest {
         Espresso.onIdle();
 
         assertNull(value.get());
-    }
-
-    private static final List<Person> PEOPLE = Arrays.asList(
-        new Person("aaa", "aaa", 1),
-        new Person("aaa", "aab", 2),
-        new Person("aab", "aaa", 3),
-        new Person("aab", "aab", 4)
-    );
-
-    private void writePeople() {
-        PEOPLE.forEach(person -> {
-            resource.increment();
-            database.write(testDir + RandomStringGenerator.generate(10), person, resource::decrement, Assert::fail);
-        });
-        Espresso.onIdle();
     }
 
     @Test
