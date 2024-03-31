@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.database;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -8,18 +10,17 @@ import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.idling.CountingIdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,6 +31,7 @@ import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.search.NumericRangeSearchFilter;
 import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.test.CountingResourceRule;
 import dal.cs.quickcash3.test.Person;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 import dal.cs.quickcash3.util.Range;
@@ -37,10 +39,9 @@ import dal.cs.quickcash3.util.Range;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
-    private static final String LOG_TAG = DatabaseTest.class.getSimpleName();
-    private final IdlingRegistry registry = IdlingRegistry.getInstance();
+    @Rule
+    public final CountingResourceRule resource = new CountingResourceRule("databaseResource");
     private final Database database = new MyFirebaseDatabase();
-    private CountingIdlingResource resource;
     private String testDir;
 
     private @NonNull String getNewTestDir() {
@@ -50,13 +51,6 @@ public class DatabaseTest {
     @Before
     public void setup() {
         testDir = getNewTestDir();
-        resource = new CountingIdlingResource("databaseResource");
-        registry.register(resource);
-    }
-
-    @After
-    public void teardown() {
-        registry.unregister(resource);
     }
 
     @Test
@@ -64,8 +58,10 @@ public class DatabaseTest {
         AtomicReference<String> value = new AtomicReference<>(null);
 
         resource.increment();
+        resource.increment();
+        resource.increment();
 
-        database.write(testDir, "Hello", Assert::fail);
+        database.write(testDir, "Hello", resource::decrement, Assert::fail);
 
         database.read(
             testDir,
@@ -76,7 +72,7 @@ public class DatabaseTest {
             },
             Assert::fail);
 
-        database.write(testDir, "Bye", Assert::fail);
+        database.write(testDir, "Bye", resource::decrement, Assert::fail);
 
         Espresso.onIdle();
 
@@ -103,10 +99,11 @@ public class DatabaseTest {
         AtomicReference<String> value = new AtomicReference<>(null);
 
         resource.increment();
+        resource.increment();
 
         String testDir2 = getNewTestDir();
 
-        database.write(testDir, "Hello", Assert::fail);
+        database.write(testDir, "Hello", resource::decrement, Assert::fail);
 
         database.write(
             testDir2,
@@ -132,8 +129,10 @@ public class DatabaseTest {
 
         resource.increment();
         resource.increment();
+        resource.increment();
+        resource.increment();
 
-        database.write(testDir, "Bye", Assert::fail);
+        database.write(testDir, "Bye", resource::decrement, Assert::fail);
 
         int listenerId = database.addListener(
             testDir,
@@ -144,7 +143,7 @@ public class DatabaseTest {
             },
             Assert::fail);
 
-        database.write(testDir, "Hello", Assert::fail);
+        database.write(testDir, "Hello", resource::decrement, Assert::fail);
 
         Espresso.onIdle();
 
@@ -203,37 +202,39 @@ public class DatabaseTest {
         assertNull(value.get());
     }
 
-    private void writePeople() {
-        Person[] people = {
-            new Person("aaa", "aaa", 1),
-            new Person("aaa", "aab", 2),
-            new Person("aab", "aaa", 3),
-            new Person("aab", "aab", 4)
-        };
+    private static final List<Person> PEOPLE = Arrays.asList(
+        new Person("aaa", "aaa", 1),
+        new Person("aaa", "aab", 2),
+        new Person("aab", "aaa", 3),
+        new Person("aab", "aab", 4)
+    );
 
-        for (Person person : people) {
-            database.write(testDir + RandomStringGenerator.generate(10), person, Assert::fail);
-        }
+    private void writePeople() {
+        PEOPLE.forEach(person -> {
+            resource.increment();
+            database.write(testDir + RandomStringGenerator.generate(10), person, resource::decrement, Assert::fail);
+        });
+        Espresso.onIdle();
     }
 
     @Test
     public void searchOneFilter() {
-        resource.increment();
-        resource.increment();
-
         writePeople();
 
-        List<Person> people = new ArrayList<>();
+        List<Person> actualPeople = new ArrayList<>();
 
         RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
         filter.setPattern(Pattern.compile("aaa"));
+
+        List<Person> expectedPeople = PEOPLE.subList(0, 2);
+        expectedPeople.forEach(unused -> resource.increment());
 
         int listenerId = database.addSearchListener(
             testDir,
             Person.class,
             filter,
             (key, person) -> {
-                people.add(person);
+                actualPeople.add(person);
                 resource.decrement();
             },
             Assert::fail);
@@ -242,33 +243,30 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        assertEquals(2, people.size());
-        for (Person person : people) {
-            assertEquals("aaa", person.getFirstName());
-        }
+        assertThat(actualPeople, containsInAnyOrder(expectedPeople.toArray()));
     }
 
     @Test
     public void searchTwoFilters() {
-        resource.increment();
-        resource.increment();
-
         writePeople();
 
-        List<Person> people = new ArrayList<>();
+        List<Person> actualPeople = new ArrayList<>();
 
         RegexSearchFilter<Person> filter1 = new RegexSearchFilter<>("firstName");
         filter1.setPattern(Pattern.compile(".*a.*"));
         NumericRangeSearchFilter<Person> filter2 = new NumericRangeSearchFilter<>("age");
-        filter2.setRange(new Range<>(1.0, 2.0));
+        filter2.setRange(new Range<>(2.0, 3.0));
         filter1.addNext(filter2);
+
+        List<Person> expectedPeople = PEOPLE.subList(1, 1);
+        expectedPeople.forEach(unused -> resource.increment());
 
         int listenerId = database.addSearchListener(
             testDir,
             Person.class,
             filter1,
             (key, person) -> {
-                people.add(person);
+                actualPeople.add(person);
                 resource.decrement();
             },
             Assert::fail);
@@ -277,22 +275,15 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        assertEquals(2, people.size());
-        for (Person person : people) {
-            assertEquals("aaa", person.getFirstName());
-            assertTrue(person.getAge() >= 1.0);
-            assertTrue(person.getAge() <= 2.0);
-        }
+        assertThat(actualPeople, containsInAnyOrder(expectedPeople.toArray()));
     }
 
     @Test
     public void searchForOneThenRead() {
-        resource.increment();
-
         writePeople();
 
         List<String> keys = new ArrayList<>();
-        List<Person> people = new ArrayList<>();
+        List<Person> actualPeople = new ArrayList<>();
 
         RegexSearchFilter<Person> filter1 = new RegexSearchFilter<>("firstName");
         filter1.setPattern(Pattern.compile("aaa"));
@@ -300,13 +291,16 @@ public class DatabaseTest {
         filter2.setPattern(Pattern.compile("aaa"));
         filter1.addNext(filter2);
 
+        List<Person> expectedPeople = PEOPLE.subList(0, 1);
+        expectedPeople.forEach(unused -> resource.increment());
+
         int listenerId = database.addSearchListener(
             testDir,
             Person.class,
             filter1,
             (key, person) -> {
                 keys.add(key);
-                people.add(person);
+                actualPeople.add(person);
                 resource.decrement();
             },
             Assert::fail);
@@ -315,11 +309,11 @@ public class DatabaseTest {
 
         database.removeListener(listenerId);
 
-        assertEquals(1, people.size());
+        assertThat(actualPeople, containsInAnyOrder(expectedPeople.toArray()));
         assertEquals(1, keys.size());
 
         String key = keys.get(0);
-        Person expectedPerson = people.get(0);
+        Person expectedPerson = actualPeople.get(0);
         assertNotNull(key);
         assertNotNull(expectedPerson);
 

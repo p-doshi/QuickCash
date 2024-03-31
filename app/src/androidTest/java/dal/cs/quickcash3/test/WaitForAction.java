@@ -14,7 +14,7 @@ import org.hamcrest.Matcher;
 
 import java.util.concurrent.TimeoutException;
 
-public final class WaitForAction implements ViewAction {
+public class WaitForAction implements ViewAction {
     private final Matcher<View> matcher;
     private final long timeout;
 

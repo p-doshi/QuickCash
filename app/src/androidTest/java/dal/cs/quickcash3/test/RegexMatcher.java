@@ -10,7 +10,7 @@ import org.hamcrest.Matcher;
 
 import java.util.regex.Pattern;
 
-public final class RegexMatcher extends BoundedMatcher<View, TextView> {
+public class RegexMatcher extends BoundedMatcher<View, TextView> {
     private final String regex;
     private final Pattern pattern;
 
