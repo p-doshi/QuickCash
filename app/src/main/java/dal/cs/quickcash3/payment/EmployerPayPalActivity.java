@@ -31,6 +31,7 @@ public class EmployerPayPalActivity extends AppCompatActivity {
         paymentStatus.setText(paymentProcess.getPaymentAmount());
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {
         Intent paymentConfirmationIntent;
 
