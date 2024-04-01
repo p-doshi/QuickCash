@@ -62,6 +62,7 @@ jobs:
 
       - name: Run connected tests
         uses: ReactiveCircus/android-emulator-runner@v2
+        if: '!cancelled()'
         env:
           COMMIT: ${{ github.event.inputs.commit }}
           PROJECT_ID: ${{ github.event.inputs.proj_id }}
@@ -87,10 +88,13 @@ jobs:
             adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
             cd $PROJECT && ./gradlew :app:connectedDebugAndroidTest
             if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
+            adb logcat -d > logcat.txt
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: testResultsAPI${{ matrix.api-level }}
-          path: ${{ secrets.PROJECT }}/app/build/reports/androidTests/connected/debug
+          path: |
+            ${{ secrets.PROJECT }}/app/build/reports/androidTests/connected/debug
+            logcat.txt
