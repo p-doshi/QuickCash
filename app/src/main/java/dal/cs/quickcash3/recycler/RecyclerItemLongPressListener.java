@@ -12,9 +12,6 @@ public class RecyclerItemLongPressListener implements RecyclerView.OnItemTouchLi
     private final GestureDetector mGestureDetector;
     private final OnItemClickListener mListener;
 
-    public interface OnItemLongPressListener {
-        void onLongItemClick(@NonNull View view, int position);
-    }
 
     public RecyclerItemLongPressListener(@NonNull Context context, @NonNull final RecyclerView recyclerView, @NonNull OnItemClickListener listener) {
         mListener = listener;
