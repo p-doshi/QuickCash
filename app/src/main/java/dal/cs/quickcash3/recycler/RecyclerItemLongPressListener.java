@@ -12,6 +12,7 @@ public class RecyclerItemLongPressListener extends GestureDetector.SimpleOnGestu
     private final OnItemClickListener mListener;
 
     public RecyclerItemLongPressListener(@NonNull RecyclerView recyclerView, @NonNull OnItemClickListener mListener){
+        super();
         this.recyclerView=recyclerView;
         this.mListener=mListener;
     }
