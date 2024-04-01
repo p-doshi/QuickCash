@@ -12,28 +12,10 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class EmployerPaymentUIAutomatorTest {
-    private static final String CONFIRM = "Confirm !";
-    private static final String PAY_CARD = "Pay with Card";
-    private static final String KEYBOARD = "Keyboard";
-    private static final String CARD_BOX = "1234 5678";
-    private static final String ACCEPT_CARD = "5317805091683572";
-    private static final String DECLINED_CARD = "4002353549083015";
-    private static final String EXP_BOX = "MM/YY";
-    private static final String DATE = "0825";
-    private static final String DECLINED_DATE = "0329";
-    private static final String CVV_BOX = "123";
-    private static final String CVV = "161";
-    private static final String DECLINED_CVV = "123";
-    private static final String DONE = "Done";
-    private static final String CHARGE = "Charge Card";
-    private static final String APPROVED = "approved";
-    private static final int MAX_TIMEOUT = 30000;
-
     @Rule
     public final ActivityScenarioRule<EmployerPayPalActivity> activityRule =
             new ActivityScenarioRule<>(EmployerPayPalActivity.class);
@@ -41,59 +23,39 @@ public class EmployerPaymentUIAutomatorTest {
     public final GrantPermissionRule permissionRule =
             GrantPermissionRule.grant(Manifest.permission.CAMERA);
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
+    private static final int MAX_TIMEOUT = 30000;
 
     @Test
     public void checkValidCardPayment() throws UiObjectNotFoundException {
-        UiObject paymentConfirmButton = device.findObject(new UiSelector().textContains(CONFIRM));
+        UiObject paymentConfirmButton = device.findObject(new UiSelector().textContains("Confirm !"));
         assertTrue(paymentConfirmButton.exists());
         paymentConfirmButton.click();
 
-        UiObject payCardButton = device.findObject(new UiSelector().textContains(PAY_CARD));
+        UiObject payCardButton = device.findObject(new UiSelector().textContains("Pay with Card"));
         assertTrue(payCardButton.waitForExists(MAX_TIMEOUT));
         payCardButton.click();
 
-        UiObject keyboardButton = device.findObject(new UiSelector().textContains(KEYBOARD));
+        UiObject keyboardButton = device.findObject(new UiSelector().textContains("Keyboard"));
         assertTrue(keyboardButton.waitForExists(MAX_TIMEOUT));
         keyboardButton.click();
 
-        UiObject cardNumBox = device.findObject(new UiSelector().textContains(CARD_BOX));
+        UiObject cardNumBox = device.findObject(new UiSelector().textContains("1234 5678"));
         assertTrue(cardNumBox.waitForExists(MAX_TIMEOUT));
-        cardNumBox.setText(ACCEPT_CARD);
-        UiObject expiresBox = device.findObject(new UiSelector().textContains(EXP_BOX));
-        expiresBox.setText(DATE);
-        UiObject cvvBox = device.findObject(new UiSelector().textContains(CVV_BOX));
-        cvvBox.setText(CVV);
-        UiObject doneButton = device.findObject(new UiSelector().textContains(DONE));
+        cardNumBox.setText("5317805091683572");
+        UiObject expiresBox = device.findObject(new UiSelector().textContains("MM/YY"));
+        expiresBox.setText("0825");
+        UiObject cvvBox = device.findObject(new UiSelector().textContains("123"));
+        cvvBox.setText("161");
+        UiObject doneButton = device.findObject(new UiSelector().textContains("Done"));
         doneButton.click();
 
-        UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
+        UiObject chargeButton = device.findObject(new UiSelector().textContains("Charge Card"));
         assertTrue(chargeButton.waitForExists(MAX_TIMEOUT));
         chargeButton.click();
 
-        UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
+        UiObject approveStatus = device.findObject(new UiSelector().textContains("approved"));
         assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
     }
 
-    @Ignore("Cannot find credit that doesn't work")
-    @Test
-    public void checkDeclinedCardPayment() throws UiObjectNotFoundException {
-        UiObject paymentConfirmButton = device.findObject(new UiSelector().textContains(CONFIRM));
-        paymentConfirmButton.clickAndWaitForNewWindow();
-        UiObject payCardButton = device.findObject(new UiSelector().textContains(PAY_CARD));
-        payCardButton.clickAndWaitForNewWindow();
-        UiObject keyboardButton = device.findObject(new UiSelector().textContains(KEYBOARD));
-        keyboardButton.clickAndWaitForNewWindow();
-        UiObject cardNumBox = device.findObject(new UiSelector().textContains(CARD_BOX));
-        cardNumBox.setText(DECLINED_CARD);
-        UiObject expiresBox = device.findObject(new UiSelector().textContains(EXP_BOX));
-        expiresBox.setText(DECLINED_DATE);
-        UiObject cvvBox = device.findObject(new UiSelector().textContains(CVV_BOX));
-        cvvBox.setText(DECLINED_CVV);
-        UiObject doneButton = device.findObject(new UiSelector().textContains(DONE));
-        doneButton.clickAndWaitForNewWindow();
-        UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
-        chargeButton.clickAndWaitForNewWindow();
-        UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
-        assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
-    }
+    // There is no way to give paypal an unapproved card.
 }
