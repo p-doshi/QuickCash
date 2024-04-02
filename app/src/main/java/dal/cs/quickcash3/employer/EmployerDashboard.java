@@ -23,6 +23,7 @@ import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobListingsFragment;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
@@ -53,7 +54,7 @@ public class EmployerDashboard extends AppCompatActivity {
         }
 
         // Initialize the fragments.
-        Fragment listingsFragment = new JobListingsFragment(database, searchFilter, this::showJobPostForm);
+        Fragment listingsFragment = new JobListingsFragment(this, database, searchFilter, this::showJobPostForm, this::switchToJobDetails);
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment profileFragment = new ProfileFragment();
 
@@ -86,6 +87,12 @@ public class EmployerDashboard extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.employerFragmentView, fragment);
         transaction.commit();
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob);
+        replaceFragment(jobDetailsPage);
     }
 
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.

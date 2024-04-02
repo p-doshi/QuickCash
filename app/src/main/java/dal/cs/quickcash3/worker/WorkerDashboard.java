@@ -84,12 +84,14 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
     }
+
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void switchToJobDetails(@NonNull AvailableJob availableJob) {
         Log.d("TESTING","PROBLEM HERE !! SPECIAL ONE");
         Fragment jobDetailsPage = new JobDetailsPage(availableJob);
         replaceFragment(jobDetailsPage);
     }
+
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();
         if (categories == null) {

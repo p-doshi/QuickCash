@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.jobs;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
@@ -23,9 +25,15 @@ public class JobListingsFragment extends Fragment {
     private final JobListFragment jobListFragment;
     private final Runnable showJobPostForm;
 
-    public JobListingsFragment(@NonNull Database database, @NonNull SearchFilter<AvailableJob> searchFilter, @NonNull Runnable showJobPostForm) {
+    public JobListingsFragment(
+        @NonNull Context context,
+        @NonNull Database database,
+        @NonNull SearchFilter<AvailableJob> searchFilter,
+        @NonNull Runnable showJobPostForm,
+        @NonNull Consumer<AvailableJob> showCurrJob)
+    {
         super();
-        this.jobListFragment = new JobListFragment(database, new AsyncLatch<>(searchFilter));
+        this.jobListFragment = new JobListFragment(context, database, new AsyncLatch<>(searchFilter), showCurrJob);
         this.showJobPostForm = showJobPostForm;
     }
 
