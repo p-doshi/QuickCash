@@ -36,7 +36,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
     private Database database;
     private MyGeocoder geocoder;
-    private Fragment listingsFragment;
+    private Fragment listingFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -57,7 +57,7 @@ public class EmployerDashboard extends AppCompatActivity {
         }
 
         // Initialize the fragments.
-        listingsFragment = new EmployerListingFragment(this, database, searchFilter, this::showJobPostForm, this::switchToJobDetails);
+        listingFragment = new EmployerListingFragment(this, database, searchFilter, this::showJobPostForm, this::switchToJobDetails);
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment profileFragment = new ProfileFragment();
 
@@ -101,10 +101,10 @@ public class EmployerDashboard extends AppCompatActivity {
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void switchToJobDetails(@NonNull AvailableJob availableJob) {
         Fragment applicantsFragment = new ApplicantsFragment(availableJob);
-        Fragment jobDetailsPage = new JobDetailsPage(availableJob);
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob, applicantsFragment);
         replaceFragment(jobDetailsPage);
         getOnBackPressedDispatcher().addCallback(jobDetailsPage,
-            new BackButtonListener(() -> replaceFragment(listingsFragment)));
+            new BackButtonListener(() -> replaceFragment(listingFragment)));
     }
 
     @SuppressLint("RestrictedApi")
