@@ -17,8 +17,8 @@ import dal.cs.quickcash3.R;
 
 public class WorkerJobHistoryPageEspressoTest {
     @Rule
-    public final ActivityScenarioRule<WorkerJobHistoryPage> activityRule =
-            new ActivityScenarioRule<>(WorkerJobHistoryPage.class);
+    public final ActivityScenarioRule<WorkHistoryActivity> activityRule =
+            new ActivityScenarioRule<>(WorkHistoryActivity.class);
 
     static JobHistory jobHistory1;
     static JobHistory jobHistory2;
@@ -31,26 +31,25 @@ public class WorkerJobHistoryPageEspressoTest {
         jobHistory2 = Mockito.mock(JobHistory.class);
         jobHistory3 = Mockito.mock(JobHistory.class);
 
-        Mockito.when(jobHistory1.getJobName()).thenReturn("Job 1");
-        Mockito.when(jobHistory1.getIncome()).thenReturn("1000");
-        Mockito.when(jobHistory1.getReputation()).thenReturn("Good");
+        Mockito.when(jobHistory1.getName()).thenReturn("Job 1");
+        Mockito.when(jobHistory1.getIncome()).thenReturn(1000.0);
+        Mockito.when(jobHistory1.getReputation()).thenReturn(4.0);
 
-        Mockito.when(jobHistory2.getJobName()).thenReturn("Job 2");
-        Mockito.when(jobHistory2.getIncome()).thenReturn("1500");
-        Mockito.when(jobHistory2.getReputation()).thenReturn("Excellent");
+        Mockito.when(jobHistory2.getName()).thenReturn("Job 2");
+        Mockito.when(jobHistory2.getIncome()).thenReturn(1500.0);
+        Mockito.when(jobHistory2.getReputation()).thenReturn(5.0);
 
-        Mockito.when(jobHistory3.getJobName()).thenReturn("Job 3");
-        Mockito.when(jobHistory3.getIncome()).thenReturn("2000");
-        Mockito.when(jobHistory3.getReputation()).thenReturn("Average");
+        Mockito.when(jobHistory3.getName()).thenReturn("Job 3");
+        Mockito.when(jobHistory3.getIncome()).thenReturn(2000.0);
+        Mockito.when(jobHistory3.getReputation()).thenReturn(3.0);
 
     }
 
     @Test
     public void emptyJobHistoryPage() {
 
-        onView(withId(R.id.totalJobs)).check(matches(withText("0")));
-        onView(withId(R.id.totalIncome)).check(matches(withText("0")));
-        onView(withId(R.id.averageReputation)).check(matches(withText("0")));
+        onView(withId(R.id.totalIncome)).check(matches(withText(R.string.total_income)));
+        onView(withId(R.id.averageReputation)).check(matches(withText(R.string.average_reputation)));
     }
     @Test
     public void fillJobHistoryPage() {
@@ -67,7 +66,6 @@ public class WorkerJobHistoryPageEspressoTest {
         onView(withId(R.id.jobHistory3Reputation)).check(matches(withText("3")));
 
 
-        onView(withId(R.id.totalJobs)).check(matches(withText("3")));
         onView(withId(R.id.totalIncome)).check(matches(withText("4500")));
         onView(withId(R.id.averageReputation)).check(matches(withText("4")));
     }
