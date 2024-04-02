@@ -43,6 +43,6 @@ jobs:
           target: google_apis
           arch: ${{ steps.set_arch.outputs.arch }}
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back emulated
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
