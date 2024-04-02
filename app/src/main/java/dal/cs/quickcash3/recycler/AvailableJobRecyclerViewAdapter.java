@@ -13,21 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 
 public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<AvailableJobRecyclerViewAdapter.ViewHolder> implements OnItemClickListener {
-    private List<Pair<String, AvailableJob>> jobs = new ArrayList<>();
-    private final BiConsumer<String, AvailableJob> displayCurrJob;
+    private List<AvailableJob> jobs = new ArrayList<>();
+    private final Consumer<AvailableJob> displayCurrJob;
 
-    public AvailableJobRecyclerViewAdapter(@NonNull BiConsumer<String, AvailableJob> displayCurrJob){
+    public AvailableJobRecyclerViewAdapter(@NonNull Consumer<AvailableJob> displayCurrJob){
         super();
         this.displayCurrJob = displayCurrJob;
 
     }
-    public void addJob(@NonNull String jobId, @NonNull AvailableJob availableJob) {
-        jobs.add(new Pair<>(jobId, availableJob));
+    public void addJob(@NonNull AvailableJob availableJob) {
+        jobs.add(availableJob);
         notifyItemInserted(jobs.size() - 1);
     }
 
@@ -37,7 +38,7 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
     }
 
     @SuppressLint("NotifyDataSetChanged") // TODO: fix this.
-    public void newList(@NonNull List<Pair<String, AvailableJob>> newJobs) {
+    public void newList(@NonNull List<AvailableJob> newJobs) {
         jobs = newJobs;
         notifyDataSetChanged();
     }
@@ -51,7 +52,7 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.setJob(jobs.get(position).second);
+        holder.setJob(jobs.get(position));
 
     }
 
@@ -62,8 +63,7 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
 
     @Override
     public void onItemClick(@NonNull View view, int position) {
-        Pair<String, AvailableJob> pair = jobs.get(position);
-        displayCurrJob.accept(pair.first, pair.second);
+        displayCurrJob.accept(jobs.get(position));
     }
 
     @Override

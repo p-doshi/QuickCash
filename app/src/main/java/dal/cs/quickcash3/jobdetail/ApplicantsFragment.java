@@ -10,14 +10,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 
 public class ApplicantsFragment extends Fragment {
     @SuppressWarnings("PMD.UnusedPrivateField") // I will use this soon.
-    private final String jobId;
+    private final AvailableJob job;
 
-    public ApplicantsFragment(@NonNull String jobId) {
+    public ApplicantsFragment(@NonNull AvailableJob job) {
         super();
-        this.jobId = jobId;
+        this.job = job;
     }
 
     @Override

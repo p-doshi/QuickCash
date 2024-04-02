@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
@@ -46,12 +47,12 @@ public class JobListFragment extends Fragment {
         @NonNull Context context,
         @NonNull Database database,
         @NonNull AsyncLatch<SearchFilter<AvailableJob>> asyncFilter,
-        @NonNull BiConsumer<String, AvailableJob> displayCurrJob)
+        @NonNull Consumer<AvailableJob> displayCurrJob)
     {
         super();
         this.database = database;
         this.asyncFilter = asyncFilter;
-        this.adapter = new AvailableJobRecyclerViewAdapter(displayCurrJob) ;
+        this.adapter = new AvailableJobRecyclerViewAdapter(displayCurrJob);
         this.context = context;
     }
 
@@ -69,7 +70,7 @@ public class JobListFragment extends Fragment {
                         availableJobMap.remove(key);
                     } else {
                         this.availableJobMap.put(key,job);
-                        adapter.addJob(key, job);
+                        adapter.addJob(job);
                     }
                 },
                 error -> Log.w(LOG_TAG, "received database error: " + error));
@@ -78,11 +79,11 @@ public class JobListFragment extends Fragment {
     }
 
     public void searchList(@NonNull SearchFilter<AvailableJob> filter){
-        List<Pair<String, AvailableJob>> newJobs = new ArrayList<>();
+        List<AvailableJob> newJobs = new ArrayList<>();
 
-        for (Map.Entry<String, AvailableJob> entry : availableJobMap.entrySet()){
-            if (filter.isValid(entry.getValue())) {
-                newJobs.add(new Pair<>(entry.getKey(), entry.getValue()));
+        for (AvailableJob job : availableJobMap.values()){
+            if (filter.isValid(job)) {
+                newJobs.add(job);
             }
         }
 

@@ -96,8 +96,8 @@ public class EmployerDashboard extends AppCompatActivity {
     }
 
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
-    private void switchToJobDetails(@NonNull String jobId, @NonNull AvailableJob availableJob) {
-        Fragment applicantsFragment = new ApplicantsFragment(jobId);
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Fragment applicantsFragment = new ApplicantsFragment(availableJob);
         Fragment jobDetailsPage = new JobDetailsPage(availableJob, applicantsFragment);
         replaceFragment(jobDetailsPage);
     }

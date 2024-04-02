@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
@@ -29,7 +30,7 @@ public class EmployerListingFragment extends Fragment {
         @NonNull Database database,
         @NonNull SearchFilter<AvailableJob> searchFilter,
         @NonNull Runnable showJobPostForm,
-        @NonNull BiConsumer<String, AvailableJob> showJobDetails)
+        @NonNull Consumer<AvailableJob> showJobDetails)
     {
         super();
         this.jobListFragment = new JobListFragment(context, database, new AsyncLatch<>(searchFilter), showJobDetails);
