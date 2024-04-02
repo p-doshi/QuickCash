@@ -19,12 +19,13 @@ public final class ExampleJobList {
     public final static LatLng DALHOUSIE = new LatLng(44.63562977946508, -63.59517486744167);
     public final static LatLng NEW_YORK = new LatLng(40.78255295453477, -73.96558364067354);
     public final static Map<String, AvailableJob> JOBS;
+    public final static String USER = "5uD10neFj73BcfdgLAPG1SbViAXWtW";
 
     static {
         JOBS = new TreeMap<>();
         AvailableJob job1 = new AvailableJob();
         job1.setTitle("Walk Dog");
-        job1.setEmployer("5uD10neFj73BcfdgLAPG1SbViAXWtW");
+        job1.setEmployer(USER);
         job1.setDescription("Please take my dog for a quick walk in Byxbee park.");
         job1.setLatitude(37.4402896497676);
         job1.setLongitude(-122.11344316636351);
@@ -63,7 +64,7 @@ public final class ExampleJobList {
 
         AvailableJob job4 = new AvailableJob();
         job4.setTitle("Coding problem");
-        job4.setEmployer("dn57R1Q5enMlfOBwyGUdiRHy2RVoUV");
+        job4.setEmployer(USER);
         job4.setDescription("I need help with a coding challenge.");
         job4.setLatitude(37.422305113453845);
         job4.setLongitude(-122.08556157502771);
