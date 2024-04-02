@@ -34,8 +34,7 @@ public class WorkerPayPalActivity extends AppCompatActivity {
             "kawnerv9823fh",
             asyncJob::set,
             error -> Log.w(LOG_TAG, error));
-        checkWorkerPaymentButton.setOnClickListener(view ->
-            asyncJob.get(this::moveToPaymentStatusWindow));
+        checkWorkerPaymentButton.setOnClickListener(view -> asyncJob.get(this::moveToPaymentStatusWindow));
     }
 
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
