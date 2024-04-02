@@ -19,6 +19,7 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.jobdetail.ApplyJob;
+import dal.cs.quickcash3.jobdetail.BackButtonListener;
 import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
@@ -33,6 +34,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
+    private Fragment jobSearchFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -46,7 +48,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
-        Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
+        jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
@@ -88,6 +90,8 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         Fragment applyFragment = new ApplyJob();
         Fragment jobDetailsPage = new JobDetailsPage(availableJob, applyFragment);
         replaceFragment(jobDetailsPage);
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+            new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
     }
 
     private void initInterfaces() {

@@ -19,7 +19,6 @@ import java.util.Locale;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 
-
 public class JobDetailsPage extends Fragment {
     private final AvailableJob currentJob;
     private final Fragment subfragment;
@@ -30,14 +29,12 @@ public class JobDetailsPage extends Fragment {
         this.subfragment = subfragment;
     }
 
-    @NonNull
     @Override
-    public View onCreateView(
+    public @NonNull View onCreateView(
         @NonNull LayoutInflater inflater,
         @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_job_details_page, container, false);
 
         TextView jobTitle =rootView.findViewById(R.id.jobTitle);
