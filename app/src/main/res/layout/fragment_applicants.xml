@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/applicantsFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="20dp"
@@ -31,7 +30,6 @@
         app:layout_constraintTop_toBottomOf="@+id/applicantTitle"
         app:layout_constraintHeight_max="225dp">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/applicantsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -58,7 +56,6 @@
         app:layout_constraintTop_toBottomOf="@+id/rejectedTitle"
         app:layout_constraintHeight_max="225dp">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/blacklistRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

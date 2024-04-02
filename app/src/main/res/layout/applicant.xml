@@ -17,7 +17,6 @@
         android:padding="4dp">
 
         <TextView
-            android:id="@+id/worker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -34,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:contentDescription="@string/accept"
+            android:contentDescription="@string/reject"
             android:src="@drawable/ic_x"
             app:backgroundTint="@color/red"
             app:fabCustomSize="52dp"
