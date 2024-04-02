@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RangeSliderSwiper implements ViewAction {
+public final class RangeSliderSwiper implements ViewAction {
     private final List<Float> values;
 
-    public RangeSliderSwiper(Float... values) {
+    private RangeSliderSwiper(Float... values) {
         this.values = Arrays.asList(values);
     }
 
