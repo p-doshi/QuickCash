@@ -1,6 +1,7 @@
 package dal.cs.quickcash3.recycler;
 
 import android.annotation.SuppressLint;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 
-public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements OnItemClickListener {
-    private List<AvailableJob> jobs = new ArrayList<>();
-    private final Consumer<AvailableJob> displayCurrJob;
+public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<AvailableJobRecyclerViewAdapter.ViewHolder> implements OnItemClickListener {
+    private List<Pair<String, AvailableJob>> jobs = new ArrayList<>();
+    private final BiConsumer<String, AvailableJob> displayCurrJob;
 
-    public MyItemRecyclerViewAdapter(@NonNull Consumer<AvailableJob> displayCurrJob){
+    public AvailableJobRecyclerViewAdapter(@NonNull BiConsumer<String, AvailableJob> displayCurrJob){
         super();
         this.displayCurrJob = displayCurrJob;
 
     }
-    public void addJob(@NonNull AvailableJob availableJob) {
-        jobs.add(availableJob);
+    public void addJob(@NonNull String jobId, @NonNull AvailableJob availableJob) {
+        jobs.add(new Pair<>(jobId, availableJob));
         notifyItemInserted(jobs.size() - 1);
     }
 
@@ -36,7 +37,7 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     }
 
     @SuppressLint("NotifyDataSetChanged") // TODO: fix this.
-    public void newList(@NonNull List<AvailableJob> newJobs) {
+    public void newList(@NonNull List<Pair<String, AvailableJob>> newJobs) {
         jobs = newJobs;
         notifyDataSetChanged();
     }
@@ -49,8 +50,8 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull int position) {
-        holder.setJob(jobs.get(position));
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        holder.setJob(jobs.get(position).second);
 
     }
 
@@ -60,17 +61,15 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     }
 
     @Override
-    public void onItemClick(@NonNull View view,@NonNull int position) {
-        AvailableJob currJob = jobs.get(position);
-        this.displayCurrJob.accept(currJob);
+    public void onItemClick(@NonNull View view, int position) {
+        Pair<String, AvailableJob> pair = jobs.get(position);
+        displayCurrJob.accept(pair.first, pair.second);
     }
 
     @Override
-    public void onLongItemClick(@NonNull View view,@NonNull int position) {
-
-     //No Use
+    public void onLongItemClick(@NonNull View view, int position) {
+        // Not used.
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
@@ -88,5 +87,4 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
             subheading.setText(job.getDescription());
         }
     }
-
 }

@@ -1,5 +1,6 @@
-package dal.cs.quickcash3.jobs;
+package dal.cs.quickcash3.employer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,22 +11,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.regex.Pattern;
+import java.util.function.BiConsumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.jobs.JobListFragment;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.AsyncLatch;
 
-public class JobListingsFragment extends Fragment {
+public class EmployerListingFragment extends Fragment {
     private final JobListFragment jobListFragment;
     private final Runnable showJobPostForm;
 
-    public JobListingsFragment(@NonNull Database database, @NonNull SearchFilter<AvailableJob> searchFilter, @NonNull Runnable showJobPostForm) {
+    public EmployerListingFragment(
+        @NonNull Context context,
+        @NonNull Database database,
+        @NonNull SearchFilter<AvailableJob> searchFilter,
+        @NonNull Runnable showJobPostForm,
+        @NonNull BiConsumer<String, AvailableJob> showJobDetails)
+    {
         super();
-        this.jobListFragment = new JobListFragment(database, new AsyncLatch<>(searchFilter));
+        this.jobListFragment = new JobListFragment(context, database, new AsyncLatch<>(searchFilter), showJobDetails);
         this.showJobPostForm = showJobPostForm;
     }
 
@@ -35,7 +42,7 @@ public class JobListingsFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.job_listing_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_employer_listing, container, false);
         replaceFragment(jobListFragment);
         view.findViewById(R.id.addJobButton).setOnClickListener(unused -> showJobPostForm.run());
         return view;

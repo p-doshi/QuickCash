@@ -3,6 +3,7 @@ package dal.cs.quickcash3.jobdetail;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -20,22 +21,22 @@ import dal.cs.quickcash3.data.AvailableJob;
 
 
 public class JobDetailsPage extends Fragment {
-
-
     private final AvailableJob currentJob;
+    private final Fragment subfragment;
 
-    public JobDetailsPage(@NonNull AvailableJob currentJob) {
-
+    public JobDetailsPage(@NonNull AvailableJob currentJob, @NonNull Fragment subfragment) {
         super();
         this.currentJob = currentJob;
+        this.subfragment = subfragment;
     }
-
 
     @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,@NonNull ViewGroup container,
-                             @NonNull Bundle savedInstanceState) {
-
+    public View onCreateView(
+        @NonNull LayoutInflater inflater,
+        @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_job_details_page, container, false);
 
@@ -51,9 +52,8 @@ public class JobDetailsPage extends Fragment {
         jobAddress.setText(addressCoordinates.toString());
 
         // Add child fragment for the bottom half
-        Fragment applyJob = new ApplyJob();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.bottomHalfContainer, applyJob);
+        transaction.replace(R.id.bottomHalfContainer, subfragment);
         transaction.commit();
 
         return rootView;

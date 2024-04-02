@@ -23,10 +23,11 @@ import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
-import dal.cs.quickcash3.jobs.JobListingsFragment;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
+import dal.cs.quickcash3.jobdetail.ApplicantsFragment;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 
 public class EmployerDashboard extends AppCompatActivity {
@@ -53,7 +54,7 @@ public class EmployerDashboard extends AppCompatActivity {
         }
 
         // Initialize the fragments.
-        Fragment listingsFragment = new JobListingsFragment(database, searchFilter, this::showJobPostForm);
+        Fragment listingFragment = new EmployerListingFragment(this, database, searchFilter, this::showJobPostForm, this::switchToJobDetails);
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment profileFragment = new ProfileFragment();
 
@@ -62,10 +63,10 @@ public class EmployerDashboard extends AppCompatActivity {
         employerNavView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.employer_job_listings) {
-                replaceFragment(listingsFragment);
+                replaceFragment(listingFragment);
                 return true;
             }
-            else if (itemId == R.id.employer_receipts) {
+            else if (itemId == R.id.employer_history) {
                 replaceFragment(receiptsFragment);
                 return true;
             }
@@ -82,7 +83,7 @@ public class EmployerDashboard extends AppCompatActivity {
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
-        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName() + " fragment");
+        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.employerFragmentView, fragment);
         transaction.commit();
@@ -92,6 +93,13 @@ public class EmployerDashboard extends AppCompatActivity {
     private void showJobPostForm() {
         Fragment jobPostFormFragment = new PostJobForm(database, geocoder);
         replaceFragment(jobPostFormFragment);
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    private void switchToJobDetails(@NonNull String jobId, @NonNull AvailableJob availableJob) {
+        Fragment applicantsFragment = new ApplicantsFragment(database, jobId);
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob, applicantsFragment);
+        replaceFragment(jobDetailsPage);
     }
 
     @SuppressLint("RestrictedApi")

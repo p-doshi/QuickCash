@@ -29,7 +29,7 @@ public class EmployerDashEspressoTest {
 
     @Test
     public void testEmployerReceiptsButtonExist(){
-        onView(withId(R.id.employer_receipts)).check(matches(isDisplayed()));
+        onView(withId(R.id.employer_history)).check(matches(isDisplayed()));
     }
 
     @Test

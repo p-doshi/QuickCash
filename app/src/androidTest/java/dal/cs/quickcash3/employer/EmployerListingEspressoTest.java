@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.USER;
 import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
-import static dal.cs.quickcash3.test.RangeSliderSwiper.adjustRangeSliderThumbs;
 import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
 
 import android.content.Context;
@@ -38,7 +37,7 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 
 @RunWith(AndroidJUnit4.class)
-public class JobListingEspressoTest {
+public class EmployerListingEspressoTest {
     private final Context context = ApplicationProvider.getApplicationContext();
     @Rule
     public final ActivityScenarioRule<EmployerDashboard> activityRule =
