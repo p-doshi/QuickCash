@@ -1,12 +1,12 @@
 package dal.cs.quickcash3.recycler;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -35,10 +35,11 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
         jobs.clear();
     }
 
-    @SuppressLint("NotifyDataSetChanged") // TODO: fix this.
+
     public void newList(@NonNull List<AvailableJob> newJobs) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new AvailableJobDiffCallback(jobs, newJobs));
         jobs = newJobs;
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -49,7 +50,7 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.setJob(jobs.get(position));
 
     }
@@ -60,13 +61,13 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
     }
 
     @Override
-    public void onItemClick(@NonNull View view,@NonNull int position) {
+    public void onItemClick(@NonNull View view, int position) {
         AvailableJob currJob = jobs.get(position);
         this.displayCurrJob.accept(currJob);
     }
 
     @Override
-    public void onLongItemClick(@NonNull View view,@NonNull int position) {
+    public void onLongItemClick(@NonNull View view, int position) {
 
      //No Use
     }
