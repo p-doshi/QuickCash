@@ -34,4 +34,19 @@ public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     public <T> void write(String location, T value, Runnable successFunction, Consumer<String> errorFunction) {
         super.write(relocate(location), value, successFunction, errorFunction);
     }
+
+    @Override
+    public <T> int addListener(String location, Class<T> type, Consumer<T> readFunction, Consumer<String> errorFunction) {
+        return super.addListener(relocate(location), type, readFunction, errorFunction);
+    }
+
+    @Override
+    public void delete(String location, Consumer<String> errorFunction) {
+        super.delete(relocate(location), errorFunction);
+    }
+
+    @Override
+    public void delete(String location, Runnable successFunction, Consumer<String> errorFunction) {
+        super.delete(relocate(location), successFunction, errorFunction);
+    }
 }
