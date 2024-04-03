@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import dal.cs.quickcash3.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -36,6 +35,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.employer.EmployerDashboard;
+import dal.cs.quickcash3.registration.RegistrationPage;
+import dal.cs.quickcash3.worker.WorkerDashboard;
 
 
 public class LoginActivity extends AppCompatActivity  {
@@ -151,7 +153,7 @@ public class LoginActivity extends AppCompatActivity  {
     protected void moveToDashboard() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
-                .child("nP5exoTNYnlqpPD1B3BHeuNDcWaPxI").child("public").child("users");;
+                .child("nP5exoTNYnlqpPD1B3BHeuNDcWaPxI").child("public").child("users");
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -172,7 +174,7 @@ public class LoginActivity extends AppCompatActivity  {
                                     } else if (role.equals(getResources().getString(R.string.worker))) {
                                         dashboardIntent = new Intent(getBaseContext(), WorkerDashboard.class);
                                     } else {
-                                        Log.wtf(getResources().getString(R.string.choose_role), getResources().getString(R.string.error_choose_role));
+                                        Log.wtf(getResources().getString(R.string.choose_role_reminder), getResources().getString(R.string.choose_role_reminder));
                                         System.exit(1);
                                     }
                                     startActivity(dashboardIntent);
@@ -194,7 +196,7 @@ public class LoginActivity extends AppCompatActivity  {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Throwable databaseError = null;
+                Throwable databaseError = new Throwable("Error in Database");
                 Log.e("DataError", Objects.requireNonNull(databaseError.getMessage()));
             }
 
