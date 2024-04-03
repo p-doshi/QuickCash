@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="detect_location">Detect Location</string>
+    <string name="location_permission">Location Permission</string>
+    <string name="error_location_permission">User disabled location permissions</string>
+</resources>

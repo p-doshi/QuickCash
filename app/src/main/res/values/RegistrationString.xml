@@ -1,5 +1,4 @@
 <resources>
-    <string name="address">Address</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="day">Day</string>
