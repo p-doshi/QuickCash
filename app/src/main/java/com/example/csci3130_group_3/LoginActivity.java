@@ -34,6 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+import dal.cs.quickcash3.R;
+
+
 public class LoginActivity extends AppCompatActivity  {
 
 
@@ -150,7 +153,7 @@ public class LoginActivity extends AppCompatActivity  {
     protected void moveToDashboard() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
-                .child("nP5exoTNYnlqpPD1B3BHeuNDcWaPxI").child("test").child("users");;
+                .child("nP5exoTNYnlqpPD1B3BHeuNDcWaPxI").child("public").child("users");;
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
