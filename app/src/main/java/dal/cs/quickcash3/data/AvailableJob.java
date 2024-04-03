@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class AvailableJob extends JobPost {
+    public static final String DIR = "public/available_jobs/";
     private String startDate;
     private double duration;
     private String urgency;
@@ -83,6 +83,7 @@ public class AvailableJob extends JobPost {
             "\nblackList=" + blackList;
     }
 
+    @Override
     public @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Consumer<String> errorFunction)
@@ -90,18 +91,38 @@ public class AvailableJob extends JobPost {
         return writeToDatabase(database, () -> {}, errorFunction);
     }
 
+    @Override
     public @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
         String key = RandomStringGenerator.generate(HASH_SIZE);
+        writeToDatabase(database, key, successFunction, errorFunction);
+        return key;
+    }
+
+    @Override
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Consumer<String> errorFunction)
+    {
+        writeToDatabase(database, key, () -> {}, errorFunction);
+    }
+
+    @Override
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.write(
-            DatabaseDirectory.AVAILABLE_JOBS.getValue() + key,
+            DIR + key,
             this,
             successFunction,
             errorFunction);
-        return key;
     }
 
     public static void readFromDatabase(
@@ -110,7 +131,6 @@ public class AvailableJob extends JobPost {
         @NonNull Consumer<AvailableJob> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        String location = DatabaseDirectory.COMPLETED_JOBS.getValue() + key;
-        database.read(location, AvailableJob.class, readFunction, errorFunction);
+        database.read(DIR + key, AvailableJob.class, readFunction, errorFunction);
     }
 }

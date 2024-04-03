@@ -4,7 +4,13 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.annotations.Nullable;
 
-public abstract class JobPost {
+import java.util.function.Consumer;
+
+import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.DatabaseWriter;
+import dal.cs.quickcash3.util.RandomStringGenerator;
+
+public abstract class JobPost implements DatabaseWriter {
     protected static final int HASH_SIZE = 20;
     private String title;
     private String employer;

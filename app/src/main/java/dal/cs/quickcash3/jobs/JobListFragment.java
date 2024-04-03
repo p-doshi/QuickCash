@@ -1,11 +1,8 @@
 package dal.cs.quickcash3.jobs;
 
-import static dal.cs.quickcash3.database.DatabaseDirectory.AVAILABLE_JOBS;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
@@ -63,7 +59,7 @@ public class JobListFragment extends Fragment {
             adapter.reset();
             availableJobMap.clear();
 
-            int callbackId = database.addSearchListener(AVAILABLE_JOBS.getValue(), AvailableJob.class, searchFilter,
+            int callbackId = database.addSearchListener(AvailableJob.DIR, AvailableJob.class, searchFilter,
                 (key, job) -> {
                     Log.v(LOG_TAG, key + ": " + job);
                     if (job == null) {

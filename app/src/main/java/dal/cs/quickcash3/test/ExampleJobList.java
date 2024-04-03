@@ -1,9 +1,14 @@
 package dal.cs.quickcash3.test;
 
+import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
+import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER2;
+import static dal.cs.quickcash3.test.ExampleUserList.USERS;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,20 +17,18 @@ import java.util.function.Consumer;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.JobUrgency;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
 
 public final class ExampleJobList {
     public final static LatLng GOOGLEPLEX = new LatLng(37.42205852363422, -122.08523377972396);
     public final static LatLng DALHOUSIE = new LatLng(44.63562977946508, -63.59517486744167);
     public final static LatLng NEW_YORK = new LatLng(40.78255295453477, -73.96558364067354);
     public final static Map<String, AvailableJob> JOBS;
-    public final static String USER = "5uD10neFj73BcfdgLAPG1SbViAXWtW";
 
     static {
         JOBS = new TreeMap<>();
         AvailableJob job1 = new AvailableJob();
         job1.setTitle("Walk Dog");
-        job1.setEmployer(USER);
+        job1.setEmployer(EMPLOYER1);
         job1.setDescription("Please take my dog for a quick walk in Byxbee park.");
         job1.setLatitude(37.4402896497676);
         job1.setLongitude(-122.11344316636351);
@@ -38,7 +41,7 @@ public final class ExampleJobList {
 
         AvailableJob job2 = new AvailableJob();
         job2.setTitle("Groceries");
-        job2.setEmployer("11garPSt5m6yPr7KhGfgLIdFXbZjlx");
+        job2.setEmployer(EMPLOYER2);
         job2.setDescription("I need someone to get my groceries from the Walmart nearby.");
         job2.setLatitude(37.397619652667686);
         job2.setLongitude(-122.11391466754046);
@@ -51,7 +54,7 @@ public final class ExampleJobList {
 
         AvailableJob job3 = new AvailableJob();
         job3.setTitle("Lawn Mowing");
-        job3.setEmployer("itO5mHHdVeWyu3MRjPSjDrMPmzmWtM");
+        job3.setEmployer(EMPLOYER2);
         job3.setDescription("My lawn is getting a bit long, I need it mowed.");
         job3.setLatitude(37.4363059817969);
         job3.setLongitude(-122.25907955283132);
@@ -64,7 +67,7 @@ public final class ExampleJobList {
 
         AvailableJob job4 = new AvailableJob();
         job4.setTitle("Coding problem");
-        job4.setEmployer(USER);
+        job4.setEmployer(EMPLOYER1);
         job4.setDescription("I need help with a coding challenge.");
         job4.setLatitude(37.422305113453845);
         job4.setLongitude(-122.08556157502771);
@@ -73,6 +76,7 @@ public final class ExampleJobList {
         job4.setDuration(1);
         job4.setUrgency(JobUrgency.HIGH.getValue());
         job4.setPostTime(new Date().toString());
+        job4.setApplicants(new ArrayList<>(USERS.keySet()));
         JOBS.put("Yh9umH7M3wHrQIDytHt2", job4);
 
         AvailableJob job5 = new AvailableJob();
@@ -159,10 +163,7 @@ public final class ExampleJobList {
 
     public static void generateJobPosts(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
         for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
-            database.write(
-                DatabaseDirectory.AVAILABLE_JOBS.getValue() + entry.getKey(),
-                entry.getValue(),
-                errorFunction);
+            entry.getValue().writeToDatabase(database, entry.getKey(), errorFunction);
         }
     }
 }

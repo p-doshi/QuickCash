@@ -7,10 +7,10 @@ import com.google.firebase.database.annotations.Nullable;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class CompletedJob extends JobPost {
+    public static final String DIR = "public/completed_jobs/";
     private String worker;
     private String completionDate;
     private String payId;
@@ -56,6 +56,7 @@ public class CompletedJob extends JobPost {
             "\npayId='" + payId + '\'';
     }
 
+    @Override
     public @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Consumer<String> errorFunction)
@@ -63,18 +64,38 @@ public class CompletedJob extends JobPost {
         return writeToDatabase(database, () -> {}, errorFunction);
     }
 
+    @Override
     public @NonNull String writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
         String key = RandomStringGenerator.generate(HASH_SIZE);
+        writeToDatabase(database, key, successFunction, errorFunction);
+        return key;
+    }
+
+    @Override
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Consumer<String> errorFunction)
+    {
+        writeToDatabase(database, key, () -> {}, errorFunction);
+    }
+
+    @Override
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         database.write(
-            DatabaseDirectory.COMPLETED_JOBS.getValue() + key,
+            DIR + key,
             this,
             successFunction,
             errorFunction);
-        return key;
     }
 
     public static void readFromDatabase(
@@ -83,7 +104,7 @@ public class CompletedJob extends JobPost {
         @NonNull Consumer<CompletedJob> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        String location = DatabaseDirectory.COMPLETED_JOBS.getValue() + key;
+        String location = DIR + key;
         database.read(location, CompletedJob.class, readFunction, errorFunction);
     }
 }

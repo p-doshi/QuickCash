@@ -98,11 +98,7 @@ public class DatabaseTest {
     public void createJobs() {
         for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
             resource.increment();
-            database.write(
-                DatabaseDirectory.AVAILABLE_JOBS.getValue() + entry.getKey(),
-                entry.getValue(),
-                resource::decrement,
-                Assert::fail);
+            entry.getValue().writeToDatabase(database, entry.getKey(), resource::decrement, Assert::fail);
         }
 
         Espresso.onIdle();
