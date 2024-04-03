@@ -19,7 +19,7 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.jobdetail.ApplyJob;
-import dal.cs.quickcash3.jobdetail.BackButtonListener;
+import dal.cs.quickcash3.util.BackButtonListener;
 import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
