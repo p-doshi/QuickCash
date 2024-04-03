@@ -96,6 +96,8 @@ public class EmployerDashboard extends AppCompatActivity {
     private void showJobPostForm() {
         Fragment jobPostFormFragment = new PostJobForm(database, geocoder);
         replaceFragment(jobPostFormFragment);
+        getOnBackPressedDispatcher().addCallback(jobPostFormFragment,
+            new BackButtonListener(() -> replaceFragment(listingFragment)));
     }
 
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
