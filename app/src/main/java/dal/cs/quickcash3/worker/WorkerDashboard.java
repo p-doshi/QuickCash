@@ -14,9 +14,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.jobdetail.BackButtonListener;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
@@ -30,6 +33,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
+    private Fragment jobSearchFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -43,7 +47,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
-        Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
+        jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
@@ -81,6 +85,14 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob);
+        replaceFragment(jobDetailsPage);
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+            new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
     }
 
     private void initInterfaces() {

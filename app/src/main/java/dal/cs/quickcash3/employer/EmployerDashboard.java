@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,8 @@ import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
+import dal.cs.quickcash3.jobdetail.BackButtonListener;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobListingsFragment;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
@@ -33,6 +36,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
     private Database database;
     private MyGeocoder geocoder;
+    private Fragment listingsFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -53,7 +57,7 @@ public class EmployerDashboard extends AppCompatActivity {
         }
 
         // Initialize the fragments.
-        Fragment listingsFragment = new JobListingsFragment(database, searchFilter, this::showJobPostForm);
+        listingsFragment = new JobListingsFragment(this, database, searchFilter, this::showJobPostForm, this::switchToJobDetails);
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment profileFragment = new ProfileFragment();
 
@@ -86,6 +90,14 @@ public class EmployerDashboard extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.employerFragmentView, fragment);
         transaction.commit();
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob);
+        replaceFragment(jobDetailsPage);
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+            new BackButtonListener(() -> replaceFragment(listingsFragment)));
     }
 
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.

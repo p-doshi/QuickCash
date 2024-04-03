@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="jobPay">I dont pay shit</string>
+    <string name="jobAddress">I live here !!</string>
+    <string name="jobDescription">DO some shit, then I give money </string>
+    <string name="jobApply">Apply Now!</string>
+
+</resources>

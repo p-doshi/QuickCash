@@ -3,4 +3,5 @@
     <string name="title">I am title</string>
     <string name="subheading">I am a sub heading</string>
     <string name="filter">Filter</string>
+    <string name="detailsArrow">See Details</string>
 </resources>
