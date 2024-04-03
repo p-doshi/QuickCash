@@ -32,6 +32,7 @@ public class EmployerPaymentUIAutomatorTest {
     private static final String DONE = "Done";
     private static final String CHARGE = "Charge Card";
     private static final String APPROVED = "approved";
+    private static final int MAX_TIMEOUT = 30000;
 
     @Rule
     public final ActivityScenarioRule<EmployerPayPalActivity> activityRule =
@@ -41,27 +42,36 @@ public class EmployerPaymentUIAutomatorTest {
             GrantPermissionRule.grant(Manifest.permission.CAMERA);
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
-    @Ignore("Works locally but not CI yet")
     @Test
     public void checkValidCardPayment() throws UiObjectNotFoundException {
         UiObject paymentConfirmButton = device.findObject(new UiSelector().textContains(CONFIRM));
-        paymentConfirmButton.clickAndWaitForNewWindow();
+        assertTrue(paymentConfirmButton.exists());
+        paymentConfirmButton.click();
+
         UiObject payCardButton = device.findObject(new UiSelector().textContains(PAY_CARD));
-        payCardButton.clickAndWaitForNewWindow();
+        assertTrue(payCardButton.waitForExists(MAX_TIMEOUT));
+        payCardButton.click();
+
         UiObject keyboardButton = device.findObject(new UiSelector().textContains(KEYBOARD));
-        keyboardButton.clickAndWaitForNewWindow();
+        assertTrue(keyboardButton.waitForExists(MAX_TIMEOUT));
+        keyboardButton.click();
+
         UiObject cardNumBox = device.findObject(new UiSelector().textContains(CARD_BOX));
+        assertTrue(cardNumBox.waitForExists(MAX_TIMEOUT));
         cardNumBox.setText(ACCEPT_CARD);
         UiObject expiresBox = device.findObject(new UiSelector().textContains(EXP_BOX));
         expiresBox.setText(DATE);
         UiObject cvvBox = device.findObject(new UiSelector().textContains(CVV_BOX));
         cvvBox.setText(CVV);
         UiObject doneButton = device.findObject(new UiSelector().textContains(DONE));
-        doneButton.clickAndWaitForNewWindow();
+        doneButton.click();
+
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
-        chargeButton.clickAndWaitForNewWindow();
+        assertTrue(chargeButton.waitForExists(MAX_TIMEOUT));
+        chargeButton.click();
+
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
-        assertTrue(approveStatus.waitForExists(10000));
+        assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
     }
 
     @Ignore("Cannot find credit that doesn't work")
@@ -84,6 +94,6 @@ public class EmployerPaymentUIAutomatorTest {
         UiObject chargeButton = device.findObject(new UiSelector().textContains(CHARGE));
         chargeButton.clickAndWaitForNewWindow();
         UiObject approveStatus = device.findObject(new UiSelector().textContains(APPROVED));
-        assertTrue(approveStatus.waitForExists(10000));
+        assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
     }
 }

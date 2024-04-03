@@ -21,7 +21,7 @@ import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.slider.DurationRangeSlider;
 import dal.cs.quickcash3.slider.MaxDistanceSlider;
 import dal.cs.quickcash3.slider.SalaryRangeSlider;
-import dal.cs.quickcash3.util.Promise;
+import dal.cs.quickcash3.util.AsyncLatch;
 import dal.cs.quickcash3.util.Range;
 
 public class SearchFilterFragment extends Fragment {
@@ -34,7 +34,7 @@ public class SearchFilterFragment extends Fragment {
     private final SalaryRangeSlider salarySlider;
     private final DurationRangeSlider durationRangeSlider;
     private final MaxDistanceSlider maxDistanceSlider;
-    private final Promise<SearchFilter<AvailableJob>> filterPromise = new Promise<>();
+    private final AsyncLatch<SearchFilter<AvailableJob>> asyncFilter = new AsyncLatch<>();
 
     public SearchFilterFragment(
         @NonNull Activity activity,
@@ -60,25 +60,25 @@ public class SearchFilterFragment extends Fragment {
         // Location filter is the first filter to apply.
         locationFilter.addNext(salaryRangeFilter).addNext(durationFilter);
 
-        fetchLocationForPromise();
+        fetchLocationForFilter();
     }
 
-    private void fetchLocationForPromise() {
+    private void fetchLocationForFilter() {
         locationProvider.fetchLocation(
             location -> {
                 locationFilter.setLocation(location);
-                filterPromise.fulfill(locationFilter);
+                asyncFilter.set(locationFilter);
             },
             error -> {
                 Log.w(LOG_TAG, error);
                 // Skip the location filter if we can't get a location.
-                filterPromise.fulfill(salaryRangeFilter);
+                asyncFilter.set(salaryRangeFilter);
             }
         );
     }
 
-    public @NonNull Promise<SearchFilter<AvailableJob>> getFilterPromise() {
-        return filterPromise;
+    public @NonNull AsyncLatch<SearchFilter<AvailableJob>> getFilter() {
+        return asyncFilter;
     }
 
     @Override
@@ -107,8 +107,7 @@ public class SearchFilterFragment extends Fragment {
             Log.d(LOG_TAG, "Max Distance: " + newMaxDistance + " m");
             locationFilter.setMaxDistance(newMaxDistance);
 
-            // Will most likely run synchronously.
-            fetchLocationForPromise();
+            fetchLocationForFilter();
 
             showResultsFunction.run();
         });

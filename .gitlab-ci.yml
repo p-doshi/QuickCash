@@ -126,7 +126,7 @@ ConnectedTests:
     - gh workflow run android.yml -R $GITHUB_USER/$GITHUB_REPO -f name=$NAME -f commit=$COMMIT -f proj_id=$CI_PROJECT_ID -f job_id=$BUILD_JOB_ID
 
     # Wait a bit before trying to get job ID.
-    - sleep 5
+    - sleep 10
 
     # Get the Github action job ID from the unique job name.
     - >
@@ -134,6 +134,9 @@ ConnectedTests:
       gh run list -R $GITHUB_USER/$GITHUB_REPO --json "name,databaseId" --jq ".[] | select(.name == \"$NAME\")" |
       grep -o -P '(?<="databaseId":)\d+') &&
       echo $JOB_ID
+    
+    # Show the URL to the github action
+    - gh run view $JOB_ID -R $GITHUB_USER/$GITHUB_REPO
 
     # Watch the Github action job.
     - gh run watch $JOB_ID -R $GITHUB_USER/$GITHUB_REPO -i 60

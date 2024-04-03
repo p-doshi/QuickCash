@@ -1,8 +1,11 @@
 package dal.cs.quickcash3.employer;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,58 +14,49 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
-import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 
 /**
  * @author Hayely Vezeau
  * Initialize UI for Post job form
  */
-public class PostJobForm extends Activity {
+public class PostJobForm extends Fragment {
+    Database database;
+    MyGeocoder geocoder;
     private static final String LOG_TAG = PostJobForm.class.getSimpleName();
-    private Database database;
-    private TextView status;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.add_job);
-        initInterfaces();
-
-        // initialize spinners
-        this.setUpDurationSpinner();
-        this.setUpUrgencySpinner();
-        this.setUpProvinceSpinner();
-
-        status = findViewById(R.id.jobSubmitStatus);
-
-        this.setUpConfirmPostButton();
+    public PostJobForm(@NonNull Database database, @NonNull MyGeocoder geocoder){
+        super();
+        this.geocoder = geocoder;
+        this.database = database;
     }
 
-    private void initInterfaces() {
-        Set<String> categories = getIntent().getCategories();
-        if (categories == null) {
-            categories = new TreeSet<>();
-        }
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View addJobView = inflater.inflate(R.layout.add_job, container, false);
+        Context context = getContext();
+        super.onCreate(savedInstanceState);
 
-        if (categories.contains(getString(R.string.MOCK_DATABASE))) {
-            database = new MockDatabase();
-            Log.d(LOG_TAG, "Using Mock Database");
-        }
-        else {
-            database = new MyFirebaseDatabase();
-        }
+        // initialize spinners
+        assert context != null;
+        this.setUpDurationSpinner(addJobView, context);
+        this.setUpUrgencySpinner(addJobView, context);
+        this.setUpProvinceSpinner(addJobView, context);
+
+        this.setUpConfirmPostButton(addJobView, context);
+        return addJobView;
     }
 
     public @NonNull Database getDatabase() {
@@ -72,20 +66,19 @@ public class PostJobForm extends Activity {
     /**
      * handle on click of confirmation button
      */
-    protected void setUpConfirmPostButton(){
-        Button confirmPostButton = findViewById(R.id.addJobConfirmButton);
+    protected void setUpConfirmPostButton(@NonNull View parentView, @NonNull Context context){
+        Button confirmPostButton = parentView.findViewById(R.id.addJobConfirmButton);
         confirmPostButton.setOnClickListener(view -> {
             // check fields
-            String errorMessage = checkAllFields();
+            String errorMessage = checkAllFields(parentView);
+            TextView status = parentView.findViewById(R.id.jobSubmitStatus);
+            Map<String, String> fields = getFieldsMap(parentView);
 
             if(errorMessage.isEmpty()){
                 try {
                     // save to db
-                    createJob();
-                    // write success message
-                    status.setText(R.string.success);
-                    // move to next page
-                } catch (IllegalArgumentException | IOException e) {
+                    createJob(fields, () -> status.setText(R.string.success), status::setText);
+                } catch (IllegalArgumentException e) {
                     errorMessage = Objects.requireNonNull(e.getMessage());
                 }
             }
@@ -100,12 +93,12 @@ public class PostJobForm extends Activity {
     /**
      * Initiate duration spinner
      */
-    protected void setUpDurationSpinner(){
-        Spinner durationSpinner = findViewById(R.id.jobDurationSpinner);
+    protected void setUpDurationSpinner(@NonNull View parentView, @NonNull Context context){
+        Spinner durationSpinner = parentView.findViewById(R.id.jobDurationSpinner);
 
         String[] durationValues = getResources().getStringArray(R.array.durationSpinnerValues);
 
-        ArrayAdapter<String> durationAA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, durationValues);
+        ArrayAdapter<String> durationAA = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, durationValues);
         durationAA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         durationSpinner.setAdapter(durationAA);
     }
@@ -113,12 +106,12 @@ public class PostJobForm extends Activity {
     /**
      * Initiate urgency spinner
      */
-    protected void setUpUrgencySpinner(){
-        Spinner urgencySpinner = findViewById(R.id.jobUrgencySpinner);
+    protected void setUpUrgencySpinner(@NonNull View parentView, @NonNull Context context){
+        Spinner urgencySpinner = parentView.findViewById(R.id.jobUrgencySpinner);
 
         String[] urgencyValues = getResources().getStringArray(R.array.urgencySpinnerValues);
 
-        ArrayAdapter<String> urgencyAA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, urgencyValues);
+        ArrayAdapter<String> urgencyAA = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, urgencyValues);
         urgencyAA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         urgencySpinner.setAdapter(urgencyAA);
     }
@@ -126,12 +119,12 @@ public class PostJobForm extends Activity {
     /**
      * Initiate province spinner
      */
-    protected void setUpProvinceSpinner(){
-        Spinner provinceSpinner = findViewById(R.id.addJobProvince);
+    protected void setUpProvinceSpinner(@NonNull View parentView, @NonNull Context context){
+        Spinner provinceSpinner = parentView.findViewById(R.id.addJobProvince);
 
         String[] provinceValues = getResources().getStringArray(R.array.provinceSpinnerValues);
 
-        ArrayAdapter<String> provinceAA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, provinceValues);
+        ArrayAdapter<String> provinceAA = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, provinceValues);
         provinceAA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         provinceSpinner.setAdapter(provinceAA);
     }
@@ -140,60 +133,60 @@ public class PostJobForm extends Activity {
      * Method to check that all input values are valid
      * @return A string holding an error message; empty when no input errors
      */
-    protected @NonNull String checkAllFields(){
+    protected @NonNull String checkAllFields(@NonNull View parentView){
         // check fields and return error message?
-        Map<String, String> fields = getFieldsMap();
+        Map<String, String> fields = getFieldsMap(parentView);
         return PostJobFormFields.checkFieldsValid(fields);
     }
 
     /**
      * Creates a new available job in the database
      */
-    protected void createJob() throws IOException {
-        Map<String, String> fields = getFieldsMap();
-        AvailableJob job = PostAvailableJobHelper.createAvailableJob(fields, this);
-        String key = job.writeToDatabase(database, error-> {
-            status.setText(error);
-            Log.e(LOG_TAG, error);
-        });
-        Log.d(LOG_TAG, "Job key: " + key);
+    private void createJob(Map<String, String> fields, Runnable completionFunction, Consumer<String> errorFunction) {
+
+        PostAvailableJobHelper.createAvailableJob(geocoder, fields,
+            job -> {
+                String key = job.writeToDatabase(database, completionFunction, errorFunction);
+                Log.d(LOG_TAG, "Job key: " + key);
+            },
+            errorFunction);
     }
 
     // Getters
-    protected @NonNull String getJobTitle(){
-        EditText jobTitle = findViewById(R.id.jobPostingTitle);
+    protected @NonNull String getJobTitle(@NonNull View parentView){
+        EditText jobTitle = parentView.findViewById(R.id.jobPostingTitle);
         return jobTitle.getText().toString().trim();
     }
-    protected @NonNull String getJobDate(){
-        EditText jobDate = findViewById(R.id.addJobDate);
+    protected @NonNull String getJobDate(@NonNull View parentView){
+        EditText jobDate = parentView.findViewById(R.id.addJobDate);
         return jobDate.getText().toString().trim();
     }
-    protected @NonNull String getJobSalary(){
-        EditText jobSalary = findViewById(R.id.addJobSalary);
+    protected @NonNull String getJobSalary(@NonNull View parentView){
+        EditText jobSalary = parentView.findViewById(R.id.addJobSalary);
         return jobSalary.getText().toString().trim();
     }
-    protected @NonNull String getJobAddress(){
-        EditText jobAddress = findViewById(R.id.addJobAddress);
+    protected @NonNull String getJobAddress(@NonNull View parentView){
+        EditText jobAddress = parentView.findViewById(R.id.addJobAddress);
         return jobAddress.getText().toString().trim();
     }
-    protected @NonNull String getJobCity(){
-        EditText jobCity = findViewById(R.id.addJobCity);
+    protected @NonNull String getJobCity(@NonNull View parentView){
+        EditText jobCity = parentView.findViewById(R.id.addJobCity);
         return jobCity.getText().toString().trim();
     }
-    protected @NonNull String getJobDescription(){
-        EditText jobDescription = findViewById(R.id.addJobDescription);
+    protected @NonNull String getJobDescription(@NonNull View parentView){
+        EditText jobDescription = parentView.findViewById(R.id.addJobDescription);
         return jobDescription.getText().toString().trim();
     }
-    protected @NonNull String getDuration() {
-        Spinner jobDuration = findViewById(R.id.jobDurationSpinner);
+    protected @NonNull String getDuration(@NonNull View parentView) {
+        Spinner jobDuration = parentView.findViewById(R.id.jobDurationSpinner);
         return jobDuration.getSelectedItem().toString();
     }
-    protected @NonNull String getUrgency() {
-        Spinner jobUrgency = findViewById(R.id.jobUrgencySpinner);
+    protected @NonNull String getUrgency(@NonNull View parentView) {
+        Spinner jobUrgency = parentView.findViewById(R.id.jobUrgencySpinner);
         return jobUrgency.getSelectedItem().toString();
     }
-    protected @NonNull String getProvince() {
-        Spinner jobProvince = findViewById(R.id.addJobProvince);
+    protected @NonNull String getProvince(@NonNull View parentView) {
+        Spinner jobProvince = parentView.findViewById(R.id.addJobProvince);
         return jobProvince.getSelectedItem().toString();
     }
 
@@ -201,18 +194,18 @@ public class PostJobForm extends Activity {
      * Method to create a hashmap with all the fields as the keys and the user input as values
      * @return a hashmap
      */
-    protected @NonNull Map<String, String> getFieldsMap(){
+    protected @NonNull Map<String, String> getFieldsMap(@NonNull View parentView){
         Map<String, String> fields = new HashMap<>();
 
-        fields.put("title", getJobTitle());
-        fields.put("date", getJobDate());
-        fields.put("salary", getJobSalary());
-        fields.put("address", getJobAddress());
-        fields.put("city", getJobCity());
-        fields.put("province", getProvince());
-        fields.put("duration", getDuration());
-        fields.put("urgency", getUrgency());
-        fields.put("description", getJobDescription());
+        fields.put("title", getJobTitle(parentView));
+        fields.put("date", getJobDate(parentView));
+        fields.put("salary", getJobSalary(parentView));
+        fields.put("address", getJobAddress(parentView));
+        fields.put("city", getJobCity(parentView));
+        fields.put("province", getProvince(parentView));
+        fields.put("duration", getDuration(parentView));
+        fields.put("urgency", getUrgency(parentView));
+        fields.put("description", getJobDescription(parentView));
         return fields;
     }
 }

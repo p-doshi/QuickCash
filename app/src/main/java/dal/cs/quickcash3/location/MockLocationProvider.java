@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.location;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
-
-import dal.cs.quickcash3.util.Promise;
 
 public class MockLocationProvider implements LocationProvider {
     private final Map<Integer, LocationReceiver> locationReceivers = new TreeMap<>();
