@@ -240,9 +240,6 @@ public class MockDatabase implements Database {
         else if (searchListenerMap.containsKey(listenerId)) {
             searchListenerMap.remove(listenerId);
         }
-        else {
-            throw new IllegalArgumentException("Could not find listener callback with ID: " + listenerId);
-        }
     }
 
     @Override

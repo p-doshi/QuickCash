@@ -35,7 +35,7 @@ class JobQueryTextListener implements SearchView.OnQueryTextListener {
         RegexSearchFilter<AvailableJob> regexSearchFilter = new RegexSearchFilter<>("title");
         regexSearchFilter.setPattern(pattern);
 
-        jobListFragment.resetList(regexSearchFilter);
+        jobListFragment.searchList(regexSearchFilter);
     }
 
     @Override

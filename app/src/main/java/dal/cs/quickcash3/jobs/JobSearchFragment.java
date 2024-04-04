@@ -29,7 +29,7 @@ public class JobSearchFragment extends Fragment {
     {
         super();
         this.searchFragment = new SearchFilterFragment(activity, locationProvider, this::showList);
-        this.jobListFragment=new JobListFragment(database,searchFragment.getCombinedFilter());
+        this.jobListFragment = new JobListFragment(database, searchFragment.getFilter());
     }
 
     @Override

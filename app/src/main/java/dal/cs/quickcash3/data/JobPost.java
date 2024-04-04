@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.annotations.Nullable;
 
-import dal.cs.quickcash3.database.DatabaseObject;
-
-public abstract class JobPost implements DatabaseObject {
+public abstract class JobPost {
     protected static final int HASH_SIZE = 20;
     private String title;
     private String employer;
@@ -72,14 +70,5 @@ public abstract class JobPost implements DatabaseObject {
             "\nlatitude=" + latitude +
             "\nlongitude=" + longitude +
             "\nsalary=" + salary;
-    }
-
-    protected void copyFrom(@NonNull JobPost other) {
-        title = other.title;
-        employer = other.employer;
-        description = other.description;
-        latitude = other.latitude;
-        longitude = other.longitude;
-        salary = other.salary;
     }
 }

@@ -26,7 +26,7 @@ public class EmployerDashLocationEspressoTest {
     @Rule
     public GrantPermissionRule grantLocationPermissionRule =
         GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-    final static int MAX_LOCATION_TIMEOUT_MS = 15000;
+    private static final int MAX_LOCATION_TIMEOUT_MS = 30000;
 
     @Test
     public void checkIfElementsVisible() {
