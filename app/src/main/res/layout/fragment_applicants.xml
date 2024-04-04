@@ -21,22 +21,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:id="@+id/applicantsScrollView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/applicantsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/applicantTitle"
-        app:layout_constraintHeight_max="210dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/applicantsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/applicant" />
-    </ScrollView>
+        app:layout_constraintHeight_max="210dp"
+        tools:listitem="@layout/applicant" />
 
     <TextView
         android:id="@+id/rejectedTitle"
@@ -47,22 +42,18 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/applicantsScrollView" />
+        app:layout_constraintTop_toBottomOf="@+id/applicantsRecyclerView" />
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rejectedRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rejectedTitle"
-        app:layout_constraintHeight_max="210dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rejectedRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/rejectant" />
-    </ScrollView>
+        app:layout_constraintHeight_max="210dp"
+        tools:listitem="@layout/rejectant" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

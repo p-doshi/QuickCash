@@ -90,13 +90,23 @@ public class EmployerDashboard extends AppCompatActivity {
         employerNavView.setSelectedItemId(R.id.employer_job_listings);
     }
 
-    private void replaceFragment(@NonNull Fragment fragment) {
-        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
+    @Override
+    protected void onDestroy() {
+        runPendingWork();
+        super.onDestroy();
+    }
+
+    private void runPendingWork() {
         Runnable function = pendingWork.getAndSet(null);
         if (function != null) {
             Log.v(LOG_TAG, "Running pending work");
             function.run();
         }
+    }
+
+    private void replaceFragment(@NonNull Fragment fragment) {
+        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
+        runPendingWork();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.employerFragmentView, fragment);
         transaction.commit();
