@@ -25,6 +25,14 @@ public class LoginUIAutomatorTest {
     private static final String PASSWORD = "Password";
     private static final String CONTINUE = "Continue";
     private static final String PARTH_GMAIL = "parthdoshi135@gmail.com";
+    private static final String ETHAN_GMAIL = "ethroz@gmail.com";
+    private static final String LISTINGS = "Listings";
+    private static final String MAP = "Map";
+    private static final String REMEMBER = "remember";
+
+
+
+
     @Rule
     public GrantPermissionRule permissionRule =
             GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -63,20 +71,20 @@ public class LoginUIAutomatorTest {
         passwordBox.setText(PASSWORD);
         UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.clickAndWaitForNewWindow();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Listings"));
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains(LISTINGS));
         assertTrue(welcomeLabel.exists());
     }
 
     @Test
     public void checkIfMovedToEmployeeDashboard() throws UiObjectNotFoundException {
 
-        UiObject emailIDBox = device.findObject(new UiSelector().textContains("Email"));
-        emailIDBox.setText("ethroz@gmail.com");
-        UiObject passwordBox = device.findObject(new UiSelector().textContains("Password"));
-        passwordBox.setText("Password");
-        UiObject registerButton = device.findObject(new UiSelector().text("Continue"));
+        UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
+        emailIDBox.setText(ETHAN_GMAIL);
+        UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
+        passwordBox.setText(PASSWORD);
+        UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.clickAndWaitForNewWindow();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Map"));
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains(MAP));
         assertTrue(welcomeLabel.exists());
     }
 
@@ -86,14 +94,14 @@ public class LoginUIAutomatorTest {
         emailIDBox.setText(PARTH_GMAIL);
         UiObject passwordBox = device.findObject(new UiSelector().textContains(PASSWORD));
         passwordBox.setText(PASSWORD);
-        UiObject checkbox = device.findObject(new UiSelector().textContains("Remember"));
+        UiObject checkbox = device.findObject(new UiSelector().textContains(REMEMBER));
         checkbox.click();
         UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         registerButton.click();
         relaunchApp();
         Thread.sleep(2000);
         relaunchApp();
-        UiObject welcomeLabel = device.findObject(new UiSelector().textContains("Listings"));
+        UiObject welcomeLabel = device.findObject(new UiSelector().textContains(LISTINGS));
         assertTrue(welcomeLabel.exists());
 
     }
