@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
@@ -26,7 +25,7 @@ public class ApplicantManager {
     private final Consumer<Worker> acceptFunction;
     private final WorkerRecyclerViewAdapter<ApplicantViewHolder> applicantsAdapter;
     private final WorkerRecyclerViewAdapter<RejectantViewHolder> rejectantsAdapter;
-    private final AtomicInteger callbackId = new AtomicInteger();
+    private int callbackId;
 
     public ApplicantManager(@NonNull Database database, @NonNull AvailableJob job, @NonNull Consumer<Worker> acceptFunction) {
         this.database = database;
@@ -46,9 +45,12 @@ public class ApplicantManager {
         rejectedRecycler.setAdapter(rejectantsAdapter);
     }
 
+    public void onDestroy() {
+        database.removeListener(callbackId);
+    }
+
     private void startUserSearch() {
         Log.d(LOG_TAG, "Starting database search listener");
-        database.removeListener(this.callbackId.get());
         applicantsAdapter.reset();
         rejectantsAdapter.reset();
 
@@ -58,9 +60,8 @@ public class ApplicantManager {
         ObjectSearchAdapter<Worker> searchAdapter = new ObjectSearchAdapter<>(searchFilter);
         searchAdapter.addObserver(new CustomObserver<>(this::addWorker, this::removeWorker));
 
-        int callbackId = database.addDirectoryListener(Worker.DIR, Worker.class, searchAdapter::receive,
+        callbackId = database.addDirectoryListener(Worker.DIR, Worker.class, searchAdapter::receive,
             error -> Log.w(LOG_TAG, "Received database error: " + error));
-        this.callbackId.set(callbackId);
     }
 
     private void addWorker(@NonNull Worker worker) {

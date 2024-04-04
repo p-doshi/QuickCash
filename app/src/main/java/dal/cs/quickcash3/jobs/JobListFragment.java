@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ public class JobListFragment extends Fragment {
     private final AsyncLatch<SearchFilter<AvailableJob>> asyncFilter;
     private final AvailableJobRecyclerViewAdapter adapter;
     private final List<AvailableJob> searchResults = new ArrayList<>();
-    private final AtomicInteger callbackId = new AtomicInteger();
+    private int callbackId;
 
     public JobListFragment(
         @NonNull Context context,
@@ -56,8 +55,7 @@ public class JobListFragment extends Fragment {
 
     private void setFilterCallback() {
         asyncFilter.get(searchFilter -> {
-            Log.d(LOG_TAG, "Restarting database search listener");
-            database.removeListener(this.callbackId.get());
+            Log.i(LOG_TAG, "Starting database search listener");
             adapter.reset();
             searchResults.clear();
 
@@ -65,10 +63,9 @@ public class JobListFragment extends Fragment {
             searchAdapter.addObserver(new CustomObserver<>(adapter::addJob, adapter::removeJob));
             searchAdapter.addObserver(new ListObserver<>(searchResults));
 
-            int callbackId = database.addDirectoryListener(AvailableJob.DIR, AvailableJob.class,
+            callbackId = database.addDirectoryListener(AvailableJob.DIR, AvailableJob.class,
                 searchAdapter::receive,
-                error -> Log.w(LOG_TAG, "received database error: " + error));
-            this.callbackId.set(callbackId);
+                error -> Log.w(LOG_TAG, "Received database error: " + error));
         });
     }
 
@@ -95,5 +92,11 @@ public class JobListFragment extends Fragment {
         setFilterCallback();
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        database.removeListener(callbackId);
+        super.onDestroyView();
     }
 }

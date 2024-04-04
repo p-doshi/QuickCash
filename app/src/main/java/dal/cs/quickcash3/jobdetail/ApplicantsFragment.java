@@ -39,4 +39,10 @@ public class ApplicantsFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onDestroyView() {
+        manager.onDestroy();
+        super.onDestroyView();
+    }
 }

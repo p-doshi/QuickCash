@@ -71,7 +71,7 @@ public abstract class DatabaseObject {
 
     @Override
     public final boolean equals(@Nullable Object obj) {
-        if (obj instanceof User) {
+        if (obj instanceof DatabaseObject) {
             DatabaseObject other = (DatabaseObject) obj;
             return Objects.equals(mKey, other.mKey);
         }
