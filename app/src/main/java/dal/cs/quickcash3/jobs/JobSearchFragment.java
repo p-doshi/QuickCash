@@ -13,11 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.function.Consumer;
+
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.location.LocationProvider;
 
-public class JobSearchFragment extends Fragment {
+public class JobSearchFragment extends Fragment  {
     private ImageView filterIcon ;
     private final JobListFragment jobListFragment;
     private final SearchFilterFragment searchFragment;
@@ -25,11 +28,13 @@ public class JobSearchFragment extends Fragment {
     public JobSearchFragment(
         @NonNull Activity activity,
         @NonNull Database database,
-        @NonNull LocationProvider locationProvider)
+        @NonNull LocationProvider locationProvider,
+        @NonNull Consumer<AvailableJob> displayCurrJob)
     {
         super();
         this.searchFragment = new SearchFilterFragment(activity, locationProvider, this::showList);
-        this.jobListFragment = new JobListFragment(database, searchFragment.getFilter());
+        this.jobListFragment =
+            new JobListFragment(activity,database, searchFragment.getFilter(), displayCurrJob);
     }
 
     @Override
@@ -69,4 +74,5 @@ public class JobSearchFragment extends Fragment {
         replaceFragment(jobListFragment);
         filterIcon.setVisibility(View.VISIBLE);
     }
+
 }

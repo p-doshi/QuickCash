@@ -34,7 +34,7 @@ public class WorkerDashEspressoTest {
 
     @Test
     public void testWorkerReceiptButtonExist(){
-        onView(withId(R.id.workerReceiptPage)).check(matches(isDisplayed()));
+        onView(withId(R.id.workerHistoryPage)).check(matches(isDisplayed()));
     }
 
     @Test

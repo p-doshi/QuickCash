@@ -3,13 +3,13 @@
     <item
         android:id="@+id/employer_job_listings"
         android:title="@string/listingTitle"
-        android:icon="@drawable/ic_add_foreground" />
+        android:icon="@drawable/ic_listings" />
     <item
-        android:id="@+id/employer_receipts"
-        android:title="@string/receiptsTitle"
-        android:icon="@drawable/ic_receipt_foreground" />
+        android:id="@+id/employer_history"
+        android:title="@string/historyTitle"
+        android:icon="@drawable/ic_clock" />
     <item
         android:id="@+id/employer_profile"
         android:title="@string/profileTitle"
-        android:icon="@drawable/ic_profile_box_foreground" />
+        android:icon="@drawable/ic_profile_box" />
 </menu>
