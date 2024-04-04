@@ -52,7 +52,7 @@ public class ApplicantManager {
         applicantsAdapter.reset();
         rejectantsAdapter.reset();
 
-        ListSearchFilter<Worker> searchFilter = new ListSearchFilter<>("key");
+        ListSearchFilter<Worker, String> searchFilter = new ListSearchFilter<>(Worker::key);
         searchFilter.setList(job.allApplicants());
 
         ObjectSearchAdapter<Worker> searchAdapter = new ObjectSearchAdapter<>(searchFilter);

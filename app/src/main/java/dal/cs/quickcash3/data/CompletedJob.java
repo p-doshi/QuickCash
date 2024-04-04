@@ -1,6 +1,6 @@
 package dal.cs.quickcash3.data;
 
-import static dal.cs.quickcash3.util.CopyHelper.deepCopy;
+import static dal.cs.quickcash3.util.CopyHelper.copyTo;
 
 import androidx.annotation.NonNull;
 
@@ -54,7 +54,7 @@ public class CompletedJob extends JobPost {
 
     public static @NonNull CompletedJob completeJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {
         CompletedJob completedJob = new CompletedJob();
-        deepCopy(completedJob, availableJob);
+        copyTo(completedJob, availableJob);
         completedJob.key(Objects.requireNonNull(availableJob.key()));
         completedJob.setWorker(Objects.requireNonNull(worker.key()));
         completedJob.setCompletionDate(new Date().toString());

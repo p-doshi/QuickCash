@@ -17,7 +17,7 @@ import dal.cs.quickcash3.util.Range;
 public class SearchFiltersTest {
     @Test
     public void jobDuration() {
-        NumericRangeSearchFilter<AvailableJob> filter = new NumericRangeSearchFilter<>("duration");
+        RangeSearchFilter<AvailableJob, Double> filter = new RangeSearchFilter<>(AvailableJob::getDuration);
         filter.setRange(new Range<>(24.0, Double.POSITIVE_INFINITY));
 
         List<AvailableJob> passed = new ArrayList<>();
@@ -40,7 +40,7 @@ public class SearchFiltersTest {
     @Test
     public void locationBased() {
         LocationSearchFilter<AvailableJob> filter =
-            new LocationSearchFilter<>("latitude", "longitude");
+            new LocationSearchFilter<>(AvailableJob::getLatitude, AvailableJob::getLongitude);
         filter.setLocation(GOOGLEPLEX);
         filter.setMaxDistance(100.0);
 
@@ -64,16 +64,16 @@ public class SearchFiltersTest {
     @Test
     public void durationBasedChained() {
         LocationSearchFilter<AvailableJob> locationFilter =
-            new LocationSearchFilter<>("latitude", "longitude");
+            new LocationSearchFilter<>(AvailableJob::getLatitude, AvailableJob::getLongitude);
         locationFilter.setLocation(GOOGLEPLEX);
         locationFilter.setMaxDistance(300000);
 
-        NumericRangeSearchFilter<AvailableJob> salaryRangeFilter =
-            new NumericRangeSearchFilter<>("salary");
+        RangeSearchFilter<AvailableJob, Double> salaryRangeFilter =
+            new RangeSearchFilter<>(AvailableJob::getSalary);
         salaryRangeFilter.setRange(new Range<>(0.0, Double.POSITIVE_INFINITY));
 
-        NumericRangeSearchFilter<AvailableJob> durationFilter =
-            new NumericRangeSearchFilter<>("duration");
+        RangeSearchFilter<AvailableJob, Double> durationFilter =
+            new RangeSearchFilter<>(AvailableJob::getDuration);
         durationFilter.setRange(new Range<>(24.0, Double.POSITIVE_INFINITY));
 
         locationFilter.addNext(salaryRangeFilter).addNext(durationFilter);

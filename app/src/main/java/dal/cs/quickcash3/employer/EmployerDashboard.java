@@ -53,7 +53,7 @@ public class EmployerDashboard extends AppCompatActivity {
 
         // Get a search filter for the current user.
         String currentUser = getIntent().getStringExtra(getString(R.string.USER));
-        RegexSearchFilter<AvailableJob> searchFilter = new RegexSearchFilter<>("employer");
+        RegexSearchFilter<AvailableJob> searchFilter = new RegexSearchFilter<>(AvailableJob::getEmployer);
         if (currentUser == null) {
             searchFilter.setPattern(Pattern.compile(".*"));
         }

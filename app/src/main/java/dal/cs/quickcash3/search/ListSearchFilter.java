@@ -1,35 +1,30 @@
 package dal.cs.quickcash3.search;
 
-import static dal.cs.quickcash3.util.GsonHelper.getAt;
-import static dal.cs.quickcash3.util.StringHelper.SLASH;
-import static dal.cs.quickcash3.util.StringHelper.splitString;
-
 import androidx.annotation.NonNull;
 
-import com.google.gson.JsonElement;
-
 import java.util.List;
+import java.util.function.Function;
 
-public class ListSearchFilter<T> extends SearchFilter<T> {
-    private final List<String> keys;
-    private List<String> list;
+public class ListSearchFilter<T, V> extends SearchFilter<T> {
+    private final Function<T, V> memberFunction;
+    private List<V> list;
 
-    public ListSearchFilter(@NonNull String key) {
+    public ListSearchFilter(@NonNull Function<T, V> memberFunction) {
         super();
-        keys = splitString(key, SLASH);
+        this.memberFunction = memberFunction;
     }
 
-    public void setList(@NonNull List<String> list) {
+    public void setList(@NonNull List<V> list) {
         this.list = list;
     }
 
     @Override
-    public boolean isCurrentValid(@NonNull JsonElement root) {
+    public boolean isCurrentValid(@NonNull T elem) {
         if (list == null) {
             throw new NullPointerException("Cannot apply " + this + " without a list");
         }
 
-        String value = getAt(root, keys).getAsString();
+        V value = memberFunction.apply(elem);
         return list.contains(value);
     }
 }
