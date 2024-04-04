@@ -68,7 +68,7 @@ public class PayPalPaymentProcess {
                 try {
                     // Get the payment details
                     JSONObject payObj = confirmation.toJSONObject();
-                    Log.d(TAG, payObj.toString(4));
+                    Log.v(TAG, payObj.toString(4));
                     // Extract json response and display it in a text view.
                     String payID = payObj.getJSONObject("response").getString("id");
                     String state = payObj.getJSONObject("response").getString("state");
@@ -80,7 +80,7 @@ public class PayPalPaymentProcess {
         } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
             Log.e(TAG, "Launcher Result Invalid");
         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-            Log.w(TAG, "Launcher Result Cancelled");
+            Log.i(TAG, "Launcher Result Cancelled");
         }
     }
 

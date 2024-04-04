@@ -99,13 +99,13 @@ public class EmployerDashboard extends AppCompatActivity {
     private void runPendingWork() {
         Runnable function = pendingWork.getAndSet(null);
         if (function != null) {
-            Log.v(LOG_TAG, "Running pending work");
+            Log.i(LOG_TAG, "Running pending work");
             function.run();
         }
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
-        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
+        Log.i(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
         runPendingWork();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.employerFragmentView, fragment);
@@ -159,7 +159,7 @@ public class EmployerDashboard extends AppCompatActivity {
 
         if (categories.contains(getString(R.string.MOCK_DATABASE))) {
             database = new MockDatabase();
-            Log.d(LOG_TAG, "Using Mock Database");
+            Log.i(LOG_TAG, "Using Mock Database");
         }
         else {
             database = new MyFirebaseDatabase();
@@ -167,7 +167,7 @@ public class EmployerDashboard extends AppCompatActivity {
 
         if (categories.contains(getString(R.string.MOCK_GEOCODER))) {
             geocoder = new MockGeocoder();
-            Log.d(LOG_TAG, "Using Mock Geocoder");
+            Log.i(LOG_TAG, "Using Mock Geocoder");
         }
         else {
             geocoder = new GeocoderProxy(this);

@@ -147,7 +147,7 @@ public class PostJobForm extends Fragment {
         PostAvailableJobHelper.createAvailableJob(geocoder, fields,
             job -> {
                 job.writeToDatabase(database, completionFunction, errorFunction);
-                Log.d(LOG_TAG, "Job key: " + job.key());
+                Log.i(LOG_TAG, "Job key: " + job.key());
             },
             errorFunction);
     }

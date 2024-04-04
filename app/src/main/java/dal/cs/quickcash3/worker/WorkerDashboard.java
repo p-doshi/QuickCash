@@ -79,7 +79,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
-        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
+        Log.i(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
@@ -101,7 +101,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         if (categories.contains(getString(R.string.MOCK_DATABASE))) {
             database = new MockDatabase();
-            Log.d(LOG_TAG, "Using Mock Database");
+            Log.i(LOG_TAG, "Using Mock Database");
         }
         else {
             database = new MyFirebaseDatabase();
@@ -109,7 +109,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         if (categories.contains(getString(R.string.MOCK_LOCATION))) {
             locationProvider = new MockLocationProvider();
-            Log.d(LOG_TAG, "Using Mock Location Provider");
+            Log.i(LOG_TAG, "Using Mock Location Provider");
         }
         else {
             locationProvider = new AndroidLocationProvider(this, 5000); // Update location every 5 seconds.

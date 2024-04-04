@@ -50,7 +50,7 @@ public class ApplicantManager {
     }
 
     private void startUserSearch() {
-        Log.d(LOG_TAG, "Starting database search listener");
+        Log.i(LOG_TAG, "Starting database search listener");
         applicantsAdapter.reset();
         rejectantsAdapter.reset();
 
@@ -65,7 +65,7 @@ public class ApplicantManager {
     }
 
     private void addWorker(@NonNull Worker worker) {
-        Log.v(LOG_TAG, "Added worker: " + worker);
+        Log.d(LOG_TAG, "Added worker: " + worker);
         if (job.isApplicant(worker)) {
             applicantsAdapter.addWorker(worker);
         }
@@ -78,7 +78,7 @@ public class ApplicantManager {
     }
 
     private void removeWorker(@NonNull Worker worker) {
-        Log.v(LOG_TAG, "Removed worker: " + worker);
+        Log.d(LOG_TAG, "Removed worker: " + worker);
         if (job.isApplicant(worker)) {
             applicantsAdapter.removeWorker(worker);
         }
@@ -91,19 +91,19 @@ public class ApplicantManager {
     }
 
     private void acceptWorker(@NonNull Worker worker) {
-        Log.v(LOG_TAG, "Accepted worker: " + worker);
+        Log.d(LOG_TAG, "Accepted worker: " + worker);
         acceptFunction.accept(worker);
     }
 
     private void rejectWorker(@NonNull Worker worker) {
-        Log.v(LOG_TAG, "Rejected worker: " + worker);
+        Log.d(LOG_TAG, "Rejected worker: " + worker);
         job.rejectWorker(worker);
         applicantsAdapter.removeWorker(worker);
         rejectantsAdapter.addWorker(worker);
     }
 
     private void reconsiderWorker(@NonNull Worker worker) {
-        Log.v(LOG_TAG, "Reconsidered worker: " + worker);
+        Log.d(LOG_TAG, "Reconsidered worker: " + worker);
         job.reconsiderWorker(worker);
         rejectantsAdapter.removeWorker(worker);
         applicantsAdapter.addWorker(worker);

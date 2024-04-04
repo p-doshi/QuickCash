@@ -51,7 +51,7 @@ public class GeocoderProxy implements MyGeocoder {
                     break;
                 } catch (IllegalArgumentException e) {
                     error = e.getMessage();
-                    Log.v(LOG_TAG, "Geocoder error: " + error);
+                    Log.d(LOG_TAG, "Geocoder error: " + error);
                 }
             }
 

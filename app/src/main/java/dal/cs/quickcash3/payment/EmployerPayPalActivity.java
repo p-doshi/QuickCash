@@ -25,7 +25,6 @@ public class EmployerPayPalActivity extends AppCompatActivity {
         TextView paymentStatus = findViewById(R.id.AmountNumText);
 
         employerPayConfirmationButton.setOnClickListener(v -> {
-            Log.d("test", "pressed button");
             paymentProcess.processPayment();
         });
         paymentStatus.setText(paymentProcess.getPaymentAmount());
