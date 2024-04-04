@@ -24,14 +24,11 @@
             android:exported="true"/>
         <activity
             android:name=".employer.EmployerDashboard"
-            android:exported="true"/>
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".employer.EmployerDashLocation"
             android:exported="true" />
-        <activity
-            android:name=".employer.PostJobForm"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".location.LocationExampleActivity"
             android:exported="true"/>

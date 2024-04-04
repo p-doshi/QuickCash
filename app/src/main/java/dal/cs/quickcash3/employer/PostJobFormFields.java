@@ -24,7 +24,7 @@ public final class PostJobFormFields {
      * @param fields a hashmap containing fields as key and user input as the values
      * @return A string holding an error message; empty when no errors
      */
-    public static @NonNull String checkFieldsValid(@NonNull Map<String, String> fields){
+    public static @NonNull String checkFieldsValid(@NonNull Map<String,String> fields){
         String errorMessage = EMPTY;
         String emptyError = checkIfEmpty(fields);
         String dateFormatError = checkJobDate(fields.get("date"));
