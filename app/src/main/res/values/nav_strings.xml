@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="receiptsTitle">Receipts</string>
+    <string name="historyTitle">History</string>
     <string name="listingTitle">Listings</string>
     <string name="profileTitle">Profile</string>
     <string name="mapTitle">Map</string>
