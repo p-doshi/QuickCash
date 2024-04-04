@@ -28,11 +28,13 @@ public class JobSearchFragment extends Fragment  {
     public JobSearchFragment(
         @NonNull Activity activity,
         @NonNull Database database,
-        @NonNull LocationProvider locationProvider,@NonNull Consumer<AvailableJob> displayCurrJob)
+        @NonNull LocationProvider locationProvider,
+        @NonNull Consumer<AvailableJob> displayCurrJob)
     {
         super();
         this.searchFragment = new SearchFilterFragment(activity, locationProvider, this::showList);
-        this.jobListFragment = new JobListFragment(activity,database, searchFragment.getFilter(),displayCurrJob);
+        this.jobListFragment =
+            new JobListFragment(activity,database, searchFragment.getFilter(), displayCurrJob);
     }
 
     @Override

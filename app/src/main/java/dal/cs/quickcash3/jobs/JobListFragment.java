@@ -5,6 +5,7 @@ import static dal.cs.quickcash3.database.DatabaseDirectory.AVAILABLE_JOBS;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.recycler.MyItemRecyclerViewAdapter;
+import dal.cs.quickcash3.recycler.AvailableJobRecyclerViewAdapter;
 import dal.cs.quickcash3.recycler.RecyclerItemClickListener;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.AsyncLatch;
@@ -37,17 +39,23 @@ public class JobListFragment extends Fragment {
     private final Database database;
     private final Context context;
     private final AsyncLatch<SearchFilter<AvailableJob>> asyncFilter;
-    private final MyItemRecyclerViewAdapter adapter  ;
+    private final AvailableJobRecyclerViewAdapter adapter;
     private final Map<String,AvailableJob> availableJobMap = new HashMap<>();
     private final AtomicInteger callbackId = new AtomicInteger();
 
-    public JobListFragment(@NonNull Context context,@NonNull Database database, @NonNull AsyncLatch<SearchFilter<AvailableJob>> asyncFilter, @NonNull Consumer<AvailableJob> displayCurrJob) {
+    public JobListFragment(
+        @NonNull Context context,
+        @NonNull Database database,
+        @NonNull AsyncLatch<SearchFilter<AvailableJob>> asyncFilter,
+        @NonNull Consumer<AvailableJob> displayCurrJob)
+    {
         super();
         this.database = database;
         this.asyncFilter = asyncFilter;
-        this.adapter = new MyItemRecyclerViewAdapter(displayCurrJob) ;
+        this.adapter = new AvailableJobRecyclerViewAdapter(displayCurrJob);
         this.context = context;
     }
+
     private void setFilterCallback() {
         asyncFilter.get(searchFilter -> {
             Log.d(LOG_TAG, "Restarting database search listener");
@@ -98,9 +106,8 @@ public class JobListFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_job_list, container, false);
         if (!(view instanceof RecyclerView)) {
-            throw new ClassCastException("JOb list fragment not a recycler view");
+            throw new ClassCastException("Job list fragment not a recycler view");
         }
-
 
         RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setAdapter(adapter);

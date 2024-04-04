@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobdetail;
+package dal.cs.quickcash3.util;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
