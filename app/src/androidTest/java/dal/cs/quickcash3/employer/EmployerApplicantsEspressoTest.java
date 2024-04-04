@@ -44,6 +44,7 @@ import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
 public class EmployerApplicantsEspressoTest {
     private final Context context = ApplicationProvider.getApplicationContext();

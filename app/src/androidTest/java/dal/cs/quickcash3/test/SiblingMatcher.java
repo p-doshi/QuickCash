@@ -11,6 +11,7 @@ public final class SiblingMatcher extends TypeSafeMatcher<View> {
     private final Matcher<View> matcher;
 
     private SiblingMatcher(Matcher<View> matcher) {
+        super();
         this.matcher = matcher;
     }
 
@@ -23,7 +24,9 @@ public final class SiblingMatcher extends TypeSafeMatcher<View> {
     @Override
     public boolean matchesSafely(View view) {
         ViewGroup parent = (ViewGroup) view.getParent();
-        if (parent == null) return false;
+        if (parent == null) {
+            return false;
+        }
 
         int index = parent.indexOfChild(view);
         for (int i = 0; i < parent.getChildCount(); i++) {

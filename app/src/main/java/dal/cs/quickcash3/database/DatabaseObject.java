@@ -12,7 +12,7 @@ import dal.cs.quickcash3.data.User;
  * Interface for writing to a database with error handling and optional success handling.
  */
 public abstract class DatabaseObject {
-    private String key;
+    private String mKey;
 
     /**
      * Get the key for this object.
@@ -20,7 +20,7 @@ public abstract class DatabaseObject {
      * @return The key for the object.
      */
     public @Nullable String key() {
-        return key;
+        return mKey;
     }
 
     /**
@@ -29,7 +29,7 @@ public abstract class DatabaseObject {
      * @param key The key for the object.
      */
     protected void key(@NonNull String key) {
-        this.key = key;
+        this.mKey = key;
     }
 
     /**
@@ -65,15 +65,15 @@ public abstract class DatabaseObject {
         @NonNull Consumer<String> errorFunction);
 
     @Override
-    public int hashCode() {
-        return key.hashCode();
+    public final int hashCode() {
+        return mKey.hashCode();
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
+    public final boolean equals(@Nullable Object obj) {
         if (obj instanceof User) {
             DatabaseObject other = (DatabaseObject) obj;
-            return Objects.equals(key, other.key);
+            return Objects.equals(mKey, other.mKey);
         }
         return false;
     }

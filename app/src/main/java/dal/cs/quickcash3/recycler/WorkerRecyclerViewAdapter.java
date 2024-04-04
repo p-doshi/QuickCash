@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 import dal.cs.quickcash3.data.Worker;
 
+@SuppressWarnings("PMD.ReplaceVectorWithList") // Why is this even a problem here???
 public class WorkerRecyclerViewAdapter<T extends RecyclerView.ViewHolder & WorkerViewHolder> extends RecyclerView.Adapter<T> {
     private final int resourceId;
     private final Function<View, T> viewConstructor;
@@ -52,7 +53,7 @@ public class WorkerRecyclerViewAdapter<T extends RecyclerView.ViewHolder & Worke
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final T holder, int position) {
+    public void onBindViewHolder(@NonNull T holder, int position) {
         holder.setWorker(workers.get(position));
     }
 
