@@ -11,6 +11,7 @@ public class AvailableJobDiffCallback extends DiffUtil.Callback {
     private final List<AvailableJob> newJobs;
 
     public AvailableJobDiffCallback(@NonNull List<AvailableJob> oldJobs,@NonNull List<AvailableJob> newJobs) {
+        super();
         this.oldJobs = oldJobs;
         this.newJobs = newJobs;
     }
