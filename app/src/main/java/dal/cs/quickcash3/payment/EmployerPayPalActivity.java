@@ -13,35 +13,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import dal.cs.quickcash3.R;
 
 public class EmployerPayPalActivity extends AppCompatActivity {
-    PayPalPaymentProcess paymentProcess;
-    Button employerPayConfirmationButton;
-
-    TextView paymentStatus;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_employer_pay_pal);
-        paymentProcess = new PayPalPaymentProcess(this);
+
+        PayPalPaymentProcess paymentProcess = new PayPalPaymentProcess(this, this::moveToConfirmPaymentWindow);
         paymentProcess.setPaymentAmount("40");
-        init();
-        setListeners();
-    }
 
-    private void init() {
-        employerPayConfirmationButton = findViewById(R.id.employerPayConfirmationButton);
-        paymentStatus = findViewById(R.id.AmountNumText);
-        paymentStatus.setText(paymentProcess.getPaymentAmount());
-    }
+        Button employerPayConfirmationButton = findViewById(R.id.employerPayConfirmationButton);
+        TextView paymentStatus = findViewById(R.id.AmountNumText);
 
-    private void setListeners() {
         employerPayConfirmationButton.setOnClickListener(v -> {
             Log.d("test", "pressed button");
             paymentProcess.processPayment();
         });
+        paymentStatus.setText(paymentProcess.getPaymentAmount());
     }
 
-    protected void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    private void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {
         Intent paymentConfirmationIntent;
 
         paymentConfirmationIntent = new Intent(getBaseContext(), EmployerPaymentConfirmationActivity.class);
@@ -52,4 +43,3 @@ public class EmployerPayPalActivity extends AppCompatActivity {
         startActivity(paymentConfirmationIntent);
     }
 }
-

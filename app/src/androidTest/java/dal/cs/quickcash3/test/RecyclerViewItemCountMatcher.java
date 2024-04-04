@@ -8,10 +8,10 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class RecyclerViewItemCountMatcher extends TypeSafeMatcher<View> {
+public final class RecyclerViewItemCountMatcher extends TypeSafeMatcher<View> {
     private final int count;
 
-    public RecyclerViewItemCountMatcher(int count) {
+    private RecyclerViewItemCountMatcher(int count) {
         super();
         this.count = count;
     }
