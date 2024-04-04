@@ -1,10 +1,6 @@
 package dal.cs.quickcash3.employer;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
-import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
@@ -29,6 +25,7 @@ import androidx.test.uiautomator.UiSelector;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -100,13 +97,13 @@ public class EmployerPaynowUITest {
         UiObject approveStatus = device.findObject(new UiSelector().textContains("approved"));
         assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
 
-        device.pressBack();
-
         // Make sure that the job is gone.
+        device.pressBack();
         UiScrollable jobListings = new UiScrollable(withResource("jobListRecyclerView"));
         assertFalse(scrollToText(jobListings, "Coding problem").exists());
     }
 
+    @Ignore("This requires paynow to be setup")
     @Test
     public void doubleAccept() throws UiObjectNotFoundException {
         UiScrollable jobDetails = new UiScrollable(new UiSelector().className(ScrollView.class));
@@ -129,9 +126,8 @@ public class EmployerPaynowUITest {
         UiObject approveStatus = device.findObject(new UiSelector().textContains("approved"));
         assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
 
-        device.pressBack();
-
         // Make sure that the job is gone.
+        device.pressBack();
         UiScrollable jobListings = new UiScrollable(withResource("jobListRecyclerView"));
         assertFalse(scrollToText(jobListings, "Coding problem").exists());
     }

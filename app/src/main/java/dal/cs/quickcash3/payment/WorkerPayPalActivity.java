@@ -37,7 +37,6 @@ public class WorkerPayPalActivity extends AppCompatActivity {
         checkWorkerPaymentButton.setOnClickListener(view -> asyncJob.get(this::moveToPaymentStatusWindow));
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void moveToPaymentStatusWindow(@NonNull CompletedJob job) {
         Intent paymentStatusIntent;
 

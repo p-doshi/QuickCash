@@ -7,7 +7,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class SiblingMatcher extends TypeSafeMatcher<View> {
+public final class SiblingMatcher extends TypeSafeMatcher<View> {
     private final Matcher<View> matcher;
 
     private SiblingMatcher(Matcher<View> matcher) {

@@ -3,19 +3,15 @@ package dal.cs.quickcash3.data;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.function.Consumer;
+import dal.cs.quickcash3.database.DatabaseObject;
 
-import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseWriter;
-
-public abstract class User implements DatabaseWriter {
-    protected static final int HASH_SIZE = 20;
-    public static final String DIR = "public/users/";
+@SuppressWarnings("PMD.ShortClassName") // I think it's fine.
+public abstract class User extends DatabaseObject {
+    protected static final int HASH_SIZE = 30;
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
-    private String role;
 
     public @Nullable String getFirstName() {
         return firstName;
@@ -31,15 +27,6 @@ public abstract class User implements DatabaseWriter {
 
     public void setLastName(@NonNull String lastName) {
         this.lastName = lastName;
-    }
-
-    public @Nullable String getWholeName() {
-        if (firstName != null && lastName != null) {
-            return firstName + ' ' + lastName;
-        }
-        else {
-            return null;
-        }
     }
 
     public @Nullable String getEmail() {
@@ -58,34 +45,22 @@ public abstract class User implements DatabaseWriter {
         this.phone = phone;
     }
 
-    public @Nullable String getRole() {
-        return role;
+    public @Nullable String fullName() {
+        if (firstName != null && lastName != null) {
+            return firstName + ' ' + lastName;
+        }
+        else {
+            return null;
+        }
     }
 
-    public void setRole(@NonNull String role) {
-        this.role = role;
-    }
-
-    public static void readFromDatabase(
-        @NonNull Database database,
-        @NonNull String key,
-        @NonNull Consumer<User> readFunction,
-        @NonNull Consumer<String> errorFunction)
-    {
-        String location = DIR + key;
-        database.read(location, User.class,
-            user -> {
-                // A subsequent read from the same location should be almost instant.
-                if (UserRole.EMPLOYER.getValue().equals(user.role)) {
-                    database.read(location, Employer.class, readFunction::accept, errorFunction);
-                }
-                else if (UserRole.WORKER.getValue().equals(user.role)) {
-                    database.read(location, Worker.class, readFunction::accept, errorFunction);
-                }
-                else {
-                    errorFunction.accept("User does not have a role");
-                }
-            },
-            errorFunction);
+    @Override
+    public @NonNull String toString() {
+        return
+            "\nkey='" + key() + '\'' +
+            "\nfirstName='" + firstName + '\'' +
+            "\nlastName='" + lastName + '\'' +
+            "\nemail='" + email + '\'' +
+            "\nphone=" + phone;
     }
 }

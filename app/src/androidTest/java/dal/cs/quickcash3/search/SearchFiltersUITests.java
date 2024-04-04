@@ -3,9 +3,10 @@ package dal.cs.quickcash3.search;
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
-import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.NEW_YORK;
 import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
 
@@ -120,8 +121,10 @@ public class SearchFiltersUITests {
         );
 
         UiScrollable resultsPage = new UiScrollable(new UiSelector().resourceId(appPackage + ":id/jobListRecyclerView"));
-        for (AvailableJob job : JOBS.values()) {
+        for (AvailableJob job : AVAILABLE_JOBS) {
             if (!excludedJobTitles.contains(job.getTitle())) {
+                assertNotNull(job.getTitle());
+                assertNotNull(job.getDescription());
                 assertTrue(findText(resultsPage, job.getTitle()).exists());
                 assertTrue(findSubstring(resultsPage, job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
             }
@@ -135,7 +138,9 @@ public class SearchFiltersUITests {
 
         findText("Apply Filters").click();
 
-        for (AvailableJob job : JOBS.values()) {
+        for (AvailableJob job : AVAILABLE_JOBS) {
+            assertNotNull(job.getTitle());
+            assertNotNull(job.getDescription());
             assertFalse(findText(job.getTitle()).exists());
             assertFalse(findSubstring(job.getDescription().substring(0, DESCRIPTION_SIZE)).exists());
         }

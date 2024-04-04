@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.DALHOUSIE;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
-import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
 import static dal.cs.quickcash3.test.RangeSliderSwiper.adjustRangeSliderThumbs;
 import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
@@ -55,7 +55,7 @@ public class SearchFiltersEspressoTests {
     private void checkJobPosts(@NonNull List<String> expectedJobTitles) {
         onView(withId(R.id.jobListRecyclerView)).check(matches(recyclerHasItemCount(expectedJobTitles.size())));
 
-        for (AvailableJob job : JOBS.values()) {
+        for (AvailableJob job : AVAILABLE_JOBS) {
             if (expectedJobTitles.contains(job.getTitle())) {
                 onView(allOf(withId(R.id.title), withText(job.getTitle())));
                 onView(allOf(withId(R.id.subhead), withText(job.getDescription())));

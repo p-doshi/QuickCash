@@ -11,9 +11,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
-import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKER2;
 import static dal.cs.quickcash3.test.ExampleUserList.generateUsers;
 import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
 import static dal.cs.quickcash3.test.SiblingMatcher.withSibling;
@@ -26,8 +28,6 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.uiautomator.UiObject;
-import androidx.test.uiautomator.UiSelector;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +59,7 @@ public class EmployerApplicantsEspressoTest {
     private void checkJobPosts(@NonNull List<String> expectedJobTitles) {
         onView(withId(R.id.jobListRecyclerView)).check(matches(recyclerHasItemCount(expectedJobTitles.size())));
 
-        for (AvailableJob job : JOBS.values()) {
+        for (AvailableJob job : AVAILABLE_JOBS) {
             if (expectedJobTitles.contains(job.getTitle())) {
                 onView(allOf(withId(R.id.title), withText(job.getTitle())));
                 onView(allOf(withId(R.id.subhead), withText(job.getDescription())));
@@ -75,10 +75,10 @@ public class EmployerApplicantsEspressoTest {
         }
     }
 
-    private void checkRejected(@NonNull List<String> expectedRejected) {
-        onView(withId(R.id.rejectedRecyclerView)).check(matches(recyclerHasItemCount(expectedRejected.size())));
+    private void checkRejected(@NonNull List<String> expectedRejectants) {
+        onView(withId(R.id.rejectedRecyclerView)).check(matches(recyclerHasItemCount(expectedRejectants.size())));
 
-        for (String rejected : expectedRejected) {
+        for (String rejected : expectedRejectants) {
             onView(allOf(isDescendantOfA(withId(R.id.rejectedRecyclerView)), withId(R.id.worker), withText(rejected)));
         }
     }
@@ -94,7 +94,7 @@ public class EmployerApplicantsEspressoTest {
         });
 
         runOnUiThread(() -> generateJobPosts(database, Assert::fail));
-        runOnUiThread(() -> generateUsers(database, Assert::fail));
+        generateUsers(database, Assert::fail);
     }
 
     @Test
@@ -112,22 +112,22 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.applicantsRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText("Ethan Rozee")))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
             .perform(scrollTo(), click());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText("Hayley Vezeau")))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER2)))))
             .perform(scrollTo(), click());
 
         List<String> expectedApplicants = new ArrayList<>();
 
         checkApplicants(expectedApplicants);
 
-        List<String> expectedRejected = Arrays.asList(
-            "Ethan Rozee",
-            "Hayley Vezeau"
+        List<String> expectedRejectants = Arrays.asList(
+            WORKER1,
+            WORKER2
         );
 
-        checkRejected(expectedRejected);
+        checkRejected(expectedRejectants);
     }
 
     @Test
@@ -135,23 +135,23 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.applicantsRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText("Ethan Rozee")))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
             .perform(scrollTo(), click());
         onView(withId(R.id.rejectedRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.undoButton),
-            withSibling(allOf(withId(R.id.worker), withText("Ethan Rozee")))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
             .perform(scrollTo(), click());
 
         List<String> expectedApplicants = Arrays.asList(
-            "Ethan Rozee",
-            "Hayley Vezeau"
+            WORKER1,
+            WORKER2
         );
 
         checkApplicants(expectedApplicants);
 
-        List<String> expectedRejected = new ArrayList<>();
+        List<String> expectedRejectants = new ArrayList<>();
 
-        checkRejected(expectedRejected);
+        checkRejected(expectedRejectants);
     }
 
     @Test
@@ -159,7 +159,7 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.applicantsRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText("Ethan Rozee")))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
             .perform(scrollTo(), click());
 
         pressBack();
@@ -167,18 +167,18 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.rejectedRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.undoButton),
-            withSibling(allOf(withId(R.id.worker), withText("Ethan Rozee")))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
             .perform(scrollTo(), click());
 
         List<String> expectedApplicants = Arrays.asList(
-            "Ethan Rozee",
-            "Hayley Vezeau"
+            WORKER1,
+            WORKER2
         );
 
         checkApplicants(expectedApplicants);
 
-        List<String> expectedRejected = new ArrayList<>();
+        List<String> expectedRejectants = new ArrayList<>();
 
-        checkRejected(expectedRejected);
+        checkRejected(expectedRejectants);
     }
 }

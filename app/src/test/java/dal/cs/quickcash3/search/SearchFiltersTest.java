@@ -3,7 +3,7 @@ package dal.cs.quickcash3.search;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
-import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 
 import org.junit.Test;
 
@@ -21,11 +21,11 @@ public class SearchFiltersTest {
         filter.setRange(new Range<>(24.0, Double.POSITIVE_INFINITY));
 
         List<AvailableJob> passed = new ArrayList<>();
-        for (AvailableJob job : JOBS.values()) {
+        AVAILABLE_JOBS.forEach(job -> {
             if (filter.isValid(job)) {
                 passed.add(job);
             }
-        }
+        });
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Landscaping"
@@ -45,11 +45,11 @@ public class SearchFiltersTest {
         filter.setMaxDistance(100.0);
 
         List<AvailableJob> passed = new ArrayList<>();
-        for (AvailableJob job : JOBS.values()) {
+        AVAILABLE_JOBS.forEach(job -> {
             if (filter.isValid(job)) {
                 passed.add(job);
             }
-        }
+        });
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Coding problem"
@@ -79,11 +79,11 @@ public class SearchFiltersTest {
         locationFilter.addNext(salaryRangeFilter).addNext(durationFilter);
 
         List<AvailableJob> passed = new ArrayList<>();
-        for (AvailableJob job : JOBS.values()) {
+        AVAILABLE_JOBS.forEach(job -> {
             if (locationFilter.isValid(job)) {
                 passed.add(job);
             }
-        }
+        });
 
         List<String> expectedJobTitles = Collections.singletonList(
             "Landscaping"

@@ -1,9 +1,13 @@
 package dal.cs.quickcash3.data;
 
+import static dal.cs.quickcash3.util.CopyHelper.deepCopy;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.annotations.Nullable;
 
+import java.util.Date;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
@@ -48,6 +52,15 @@ public class CompletedJob extends JobPost {
         this.status = status;
     }
 
+    public static @NonNull CompletedJob completeJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {
+        CompletedJob completedJob = new CompletedJob();
+        deepCopy(completedJob, availableJob);
+        completedJob.key(Objects.requireNonNull(availableJob.key()));
+        completedJob.setWorker(Objects.requireNonNull(worker.key()));
+        completedJob.setCompletionDate(new Date().toString());
+        return completedJob;
+    }
+
     @Override
     public @NonNull String toString() {
         return super.toString() +
@@ -57,45 +70,35 @@ public class CompletedJob extends JobPost {
     }
 
     @Override
-    public @NonNull String writeToDatabase(
+    public void writeToDatabase(
         @NonNull Database database,
         @NonNull Consumer<String> errorFunction)
     {
-        return writeToDatabase(database, () -> {}, errorFunction);
-    }
-
-    @Override
-    public @NonNull String writeToDatabase(
-        @NonNull Database database,
-        @NonNull Runnable successFunction,
-        @NonNull Consumer<String> errorFunction)
-    {
-        String key = RandomStringGenerator.generate(HASH_SIZE);
-        writeToDatabase(database, key, successFunction, errorFunction);
-        return key;
+        writeToDatabase(database, () -> {}, errorFunction);
     }
 
     @Override
     public void writeToDatabase(
         @NonNull Database database,
-        @NonNull String key,
-        @NonNull Consumer<String> errorFunction)
-    {
-        writeToDatabase(database, key, () -> {}, errorFunction);
-    }
-
-    @Override
-    public void writeToDatabase(
-        @NonNull Database database,
-        @NonNull String key,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
+        if (key() == null) {
+            key(RandomStringGenerator.generate(HASH_SIZE));
+        }
         database.write(
-            DIR + key,
+            DIR + key(),
             this,
             successFunction,
             errorFunction);
+    }
+
+    @Override
+    public void deleteFromDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        if (key() == null) {
+            throw new IllegalArgumentException("Job doesn't exist");
+        }
+        database.delete(DIR + key(), errorFunction);
     }
 
     public static void readFromDatabase(
@@ -105,6 +108,10 @@ public class CompletedJob extends JobPost {
         @NonNull Consumer<String> errorFunction)
     {
         String location = DIR + key;
-        database.read(location, CompletedJob.class, readFunction, errorFunction);
+        database.read(location, CompletedJob.class, job -> {
+                job.key(key);
+                readFunction.accept(job);
+            },
+            errorFunction);
     }
 }

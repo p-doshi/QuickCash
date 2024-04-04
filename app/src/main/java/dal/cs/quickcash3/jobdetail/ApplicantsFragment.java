@@ -8,17 +8,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.Worker;
+import dal.cs.quickcash3.database.Database;
 
 public class ApplicantsFragment extends Fragment {
-    @SuppressWarnings("PMD.UnusedPrivateField") // I will use this soon.
-    private final AvailableJob job;
+    private final ApplicantManager manager;
 
-    public ApplicantsFragment(@NonNull AvailableJob job) {
+    public ApplicantsFragment(@NonNull Database database, @NonNull AvailableJob job, @NonNull Consumer<Worker> acceptFunction) {
         super();
-        this.job = job;
+        manager = new ApplicantManager(database, job, acceptFunction);
     }
 
     @Override
@@ -27,7 +31,12 @@ public class ApplicantsFragment extends Fragment {
         @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_applicants, container, false);
+        View view = inflater.inflate(R.layout.fragment_applicants, container, false);
+
+        RecyclerView applicantsRecycler = view.findViewById(R.id.applicantsRecyclerView);
+        RecyclerView rejectedRecycler = view.findViewById(R.id.rejectedRecyclerView);
+        manager.onCreate(applicantsRecycler, rejectedRecycler);
+
+        return view;
     }
 }

@@ -2,7 +2,9 @@ package dal.cs.quickcash3.test;
 
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER2;
-import static dal.cs.quickcash3.test.ExampleUserList.USERS;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKERS;
+
+import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
@@ -10,23 +12,25 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.JobUrgency;
 import dal.cs.quickcash3.database.Database;
 
+@SuppressLint("VisibleForTests") // This is a common test code class.
 public final class ExampleJobList {
-    public final static LatLng GOOGLEPLEX = new LatLng(37.42205852363422, -122.08523377972396);
-    public final static LatLng DALHOUSIE = new LatLng(44.63562977946508, -63.59517486744167);
-    public final static LatLng NEW_YORK = new LatLng(40.78255295453477, -73.96558364067354);
-    public final static Map<String, AvailableJob> JOBS;
+    public static final LatLng GOOGLEPLEX = new LatLng(37.42205852363422, -122.08523377972396);
+    public static final LatLng DALHOUSIE = new LatLng(44.63562977946508, -63.59517486744167);
+    public static final LatLng NEW_YORK = new LatLng(40.78255295453477, -73.96558364067354);
+    public static final List<AvailableJob> AVAILABLE_JOBS;
+    public static final String JOB_ID1 = "S0OGyNIfHY3wHtQDWkUf";
 
     static {
-        JOBS = new TreeMap<>();
-        AvailableJob job1 = new AvailableJob();
+        AVAILABLE_JOBS = new ArrayList<>();
+
+        AvailableJob job1 = AvailableJob.createForTest(JOB_ID1);
         job1.setTitle("Walk Dog");
         job1.setEmployer(EMPLOYER1);
         job1.setDescription("Please take my dog for a quick walk in Byxbee park.");
@@ -37,9 +41,9 @@ public final class ExampleJobList {
         job1.setDuration(2);
         job1.setUrgency(JobUrgency.LOW.getValue());
         job1.setPostTime(new Date().toString());
-        JOBS.put("S0OGyNIfHY3wHtQDWkUf", job1);
+        AVAILABLE_JOBS.add(job1);
 
-        AvailableJob job2 = new AvailableJob();
+        AvailableJob job2 = AvailableJob.createForTest("VWrRJpSrxGMHR4A4rzIK");
         job2.setTitle("Groceries");
         job2.setEmployer(EMPLOYER2);
         job2.setDescription("I need someone to get my groceries from the Walmart nearby.");
@@ -50,9 +54,9 @@ public final class ExampleJobList {
         job2.setDuration(1);
         job2.setUrgency(JobUrgency.MEDIUM.getValue());
         job2.setPostTime(new Date().toString());
-        JOBS.put("VWrRJpSrxGMHR4A4rzIK", job2);
+        AVAILABLE_JOBS.add(job2);
 
-        AvailableJob job3 = new AvailableJob();
+        AvailableJob job3 = AvailableJob.createForTest("WNBMabNMuFJ77zxl4zKC");
         job3.setTitle("Lawn Mowing");
         job3.setEmployer(EMPLOYER2);
         job3.setDescription("My lawn is getting a bit long, I need it mowed.");
@@ -63,9 +67,9 @@ public final class ExampleJobList {
         job3.setDuration(2);
         job3.setUrgency(JobUrgency.LOW.getValue());
         job3.setPostTime(new Date().toString());
-        JOBS.put("WNBMabNMuFJ77zxl4zKC", job3);
+        AVAILABLE_JOBS.add(job3);
 
-        AvailableJob job4 = new AvailableJob();
+        AvailableJob job4 = AvailableJob.createForTest("Yh9umH7M3wHrQIDytHt2");
         job4.setTitle("Coding problem");
         job4.setEmployer(EMPLOYER1);
         job4.setDescription("I need help with a coding challenge.");
@@ -76,10 +80,12 @@ public final class ExampleJobList {
         job4.setDuration(1);
         job4.setUrgency(JobUrgency.HIGH.getValue());
         job4.setPostTime(new Date().toString());
-        job4.setApplicants(new ArrayList<>(USERS.keySet()));
-        JOBS.put("Yh9umH7M3wHrQIDytHt2", job4);
+        List<String> applicants = new ArrayList<>();
+        WORKERS.forEach(worker -> applicants.add(worker.key()));
+        job4.setApplicants(applicants);
+        AVAILABLE_JOBS.add(job4);
 
-        AvailableJob job5 = new AvailableJob();
+        AvailableJob job5 = AvailableJob.createForTest("kMyYthELmkdYDJcPqyx8");
         job5.setTitle("Move stuff");
         job5.setEmployer("RvdqabB039Gi5bi28t6Yc7w6GZi5LL");
         job5.setDescription("We are moving out of our house and need help moving the boxes to the house down the road.");
@@ -90,9 +96,9 @@ public final class ExampleJobList {
         job5.setDuration(4);
         job5.setUrgency(JobUrgency.HIGH.getValue());
         job5.setPostTime(new Date().toString());
-        JOBS.put("kMyYthELmkdYDJcPqyx8", job5);
+        AVAILABLE_JOBS.add(job5);
 
-        AvailableJob job6 = new AvailableJob();
+        AvailableJob job6 = AvailableJob.createForTest("p7isI5Y7mydwQAcDBPvY");
         job6.setTitle("Taxi");
         job6.setEmployer("hVGqoIf0OexpFyeaoYF93pyIFBuM0T");
         job6.setDescription("Can someone drive me to the Palo Alto Airport?");
@@ -103,9 +109,9 @@ public final class ExampleJobList {
         job6.setDuration(1);
         job6.setUrgency(JobUrgency.HIGH.getValue());
         job6.setPostTime(new Date().toString());
-        JOBS.put("p7isI5Y7mydwQAcDBPvY", job6);
+        AVAILABLE_JOBS.add(job6);
 
-        AvailableJob job7 = new AvailableJob();
+        AvailableJob job7 = AvailableJob.createForTest("rnvH3iXFlB6KVBB8qPbZ");
         job7.setTitle("Tutoring");
         job7.setEmployer("9U1lYu2cOxintlymWnKGK9iAaGYXoA");
         job7.setDescription("I need help studying for my exam next week.");
@@ -116,9 +122,9 @@ public final class ExampleJobList {
         job7.setDuration(6);
         job7.setUrgency(JobUrgency.MEDIUM.getValue());
         job7.setPostTime(new Date().toString());
-        JOBS.put("rnvH3iXFlB6KVBB8qPbZ", job7);
+        AVAILABLE_JOBS.add(job7);
 
-        AvailableJob job8 = new AvailableJob();
+        AvailableJob job8 = AvailableJob.createForTest("u1ZyFSonrqpBcJTHMt7t");
         job8.setTitle("Landscaping");
         job8.setEmployer("zhkHSMYnzCUXPLyCImfu8Rkw2ToTaA");
         job8.setDescription("My lawn is yellow and I need someone to make it green.");
@@ -129,9 +135,9 @@ public final class ExampleJobList {
         job8.setDuration(72);
         job8.setUrgency(JobUrgency.LOW.getValue());
         job8.setPostTime(new Date().toString());
-        JOBS.put("u1ZyFSonrqpBcJTHMt7t", job8);
+        AVAILABLE_JOBS.add(job8);
 
-        AvailableJob job9 = new AvailableJob();
+        AvailableJob job9 = AvailableJob.createForTest("vg1iTndJtajiSwolDdf9");
         job9.setTitle("Plumbing");
         job9.setEmployer("k7UGobzWQQIM8EQaBVTs6FtkrVvQ5P");
         job9.setDescription("The toilet is clogged :)");
@@ -142,9 +148,9 @@ public final class ExampleJobList {
         job9.setDuration(2);
         job9.setUrgency(JobUrgency.HIGH.getValue());
         job9.setPostTime(new Date().toString());
-        JOBS.put("vg1iTndJtajiSwolDdf9", job9);
+        AVAILABLE_JOBS.add(job9);
 
-        AvailableJob job10 = new AvailableJob();
+        AvailableJob job10 = AvailableJob.createForTest("wMEtg4fKZOG1NpGDmfbu");
         job10.setTitle("Snow Removal");
         job10.setEmployer("W65nwRuLsRiK2ZMISiQOyRJFkFo1GS");
         job10.setDescription("The apartment parking lot was never cleared, can someone clear it?");
@@ -155,15 +161,13 @@ public final class ExampleJobList {
         job10.setDuration(6);
         job10.setUrgency(JobUrgency.HIGH.getValue());
         job10.setPostTime(new Date().toString());
-        JOBS.put("wMEtg4fKZOG1NpGDmfbu", job10);
+        AVAILABLE_JOBS.add(job10);
     }
 
     // Utility class.
     private ExampleJobList() {}
 
     public static void generateJobPosts(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
-            entry.getValue().writeToDatabase(database, entry.getKey(), errorFunction);
-        }
+        AVAILABLE_JOBS.forEach(job -> job.writeToDatabase(database, errorFunction));
     }
 }

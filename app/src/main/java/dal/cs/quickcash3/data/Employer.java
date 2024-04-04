@@ -1,6 +1,7 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import java.util.function.Consumer;
 
@@ -8,45 +9,58 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class Employer extends User {
-    @Override
-    public @NonNull String writeToDatabase(
-        @NonNull Database database,
-        @NonNull Consumer<String> errorFunction)
-    {
-        return writeToDatabase(database, () -> {}, errorFunction);
-    }
+    public static final String DIR = "public/employers/";
 
-    @Override
-    public @NonNull String writeToDatabase(
-        @NonNull Database database,
-        @NonNull Runnable successFunction,
-        @NonNull Consumer<String> errorFunction)
-    {
-        String key = RandomStringGenerator.generate(HASH_SIZE);
-        writeToDatabase(database, key, successFunction, errorFunction);
-        return key;
+    @VisibleForTesting
+    public static @NonNull Employer createForTest(@NonNull String key) {
+        Employer employer = new Employer();
+        employer.key(key);
+        return employer;
     }
 
     @Override
     public void writeToDatabase(
         @NonNull Database database,
-        @NonNull String key,
         @NonNull Consumer<String> errorFunction)
     {
-        writeToDatabase(database, key, () -> {}, errorFunction);
+        writeToDatabase(database, () -> {}, errorFunction);
     }
 
     @Override
     public void writeToDatabase(
         @NonNull Database database,
-        @NonNull String key,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
+        if (key() == null) {
+            key(RandomStringGenerator.generate(HASH_SIZE));
+        }
         database.write(
-            DIR + key,
+            DIR + key(),
             this,
             successFunction,
+            errorFunction);
+    }
+
+    @Override
+    public void deleteFromDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+        if (key() == null) {
+            throw new IllegalArgumentException("User doesn't exist");
+        }
+        database.delete(DIR + key(), errorFunction);
+    }
+
+    public static void readFromDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Consumer<Employer> readFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        String location = DIR + key;
+        database.read(location, Employer.class, worker -> {
+                worker.key(key);
+                readFunction.accept(worker);
+            },
             errorFunction);
     }
 }

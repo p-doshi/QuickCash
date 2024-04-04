@@ -15,7 +15,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.search.SearchFilter;
 
 /**
  * DO NOT use this class to interact with the database!
@@ -38,22 +37,22 @@ class MyFirebaseDatabaseImpl implements Database {
 
     @Override
     public <T> void write(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull T value,
         @NonNull Consumer<String> errorFunction)
     {
-        database.getReference(location).setValue(value)
+        database.getReference(path).setValue(value)
             .addOnFailureListener(e -> errorFunction.accept(e.getMessage()));
     }
 
     @Override
     public <T> void write(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull T value,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        database.getReference(location).setValue(value)
+        database.getReference(path).setValue(value)
             .addOnSuccessListener(unused -> successFunction.run())
             .addOnFailureListener(e -> errorFunction.accept(e.getMessage()));
     }
@@ -61,12 +60,12 @@ class MyFirebaseDatabaseImpl implements Database {
 
     @Override
     public <T> void read(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        database.getReference(location).get()
+        database.getReference(path).get()
             .addOnSuccessListener(dataSnapshot -> {
                 T value = dataSnapshot.getValue(type);
                 readFunction.accept(value);
@@ -76,12 +75,12 @@ class MyFirebaseDatabaseImpl implements Database {
 
     @Override
     public <T> int addListener(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        DatabaseReference reference = database.getReference(location);
+        DatabaseReference reference = database.getReference(path);
         ValueEventListener listener = reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -100,16 +99,15 @@ class MyFirebaseDatabaseImpl implements Database {
     }
 
     @Override
-    public <T> int addSearchListener(
-        @NonNull String location,
+    public <T> int addDirectoryListener(
+        @NonNull String directory,
         @NonNull Class<T> type,
-        @NonNull SearchFilter<T> filter,
         @NonNull BiConsumer<String, T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        DatabaseReference reference = database.getReference(location);
+        DatabaseReference reference = database.getReference(directory);
         ChildEventListener listener = reference.addChildEventListener(
-            new FilteredChildEventListener<>(type, filter, readFunction, errorFunction));
+            new FilteredChildEventListener<>(type, readFunction, errorFunction));
 
         FirebaseDatabaseListener pair = new ReferenceChildListenerPair(reference, listener);
         return addListener(pair);
@@ -124,18 +122,18 @@ class MyFirebaseDatabaseImpl implements Database {
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) {
-        database.getReference(location).removeValue()
+    public void delete(@NonNull String path, @NonNull Consumer<String> errorFunction) {
+        database.getReference(path).removeValue()
             .addOnFailureListener(error -> errorFunction.accept(error.getMessage()));
     }
 
     @Override
     public void delete(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        database.getReference(location).removeValue()
+        database.getReference(path).removeValue()
             .addOnSuccessListener(unused -> successFunction.run())
             .addOnFailureListener(error -> errorFunction.accept(error.getMessage()));
     }

@@ -1,16 +1,11 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.google.firebase.database.annotations.Nullable;
+import dal.cs.quickcash3.database.DatabaseObject;
 
-import java.util.function.Consumer;
-
-import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseWriter;
-import dal.cs.quickcash3.util.RandomStringGenerator;
-
-public abstract class JobPost implements DatabaseWriter {
+public abstract class JobPost extends DatabaseObject {
     protected static final int HASH_SIZE = 20;
     private String title;
     private String employer;
@@ -70,6 +65,7 @@ public abstract class JobPost implements DatabaseWriter {
     @Override
     public @NonNull String toString() {
         return
+            "\nkey='" + key() + '\'' +
             "\ntitle='" + title + '\'' +
             "\nemployer='" + employer + '\'' +
             "\ndescription='" + description + '\'' +

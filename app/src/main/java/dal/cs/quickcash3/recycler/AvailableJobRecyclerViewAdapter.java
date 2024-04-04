@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.recycler;
 
 import android.annotation.SuppressLint;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
@@ -27,7 +25,13 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
         this.displayCurrJob = displayCurrJob;
 
     }
+
     public void addJob(@NonNull AvailableJob availableJob) {
+        jobs.add(availableJob);
+        notifyItemInserted(jobs.size() - 1);
+    }
+
+    public void removeJob(@NonNull AvailableJob availableJob) {
         jobs.add(availableJob);
         notifyItemInserted(jobs.size() - 1);
     }

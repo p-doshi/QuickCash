@@ -58,7 +58,6 @@ public class PayPalPaymentProcess {
         activityLauncher.launch(intent);
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void handlePaymentResult(@NonNull ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_OK) {
             assert result.getData() != null;
