@@ -136,7 +136,7 @@ public class SearchFiltersEspressoTests {
 
         generateJobPosts(database, Assert::fail);
 
-        onView(withId(R.id.durationRangeSlider)).perform(adjustRangeSliderThumbs(0.5f, 1.0f));
+        onView(withId(R.id.preferenceDurationRangeSlider)).perform(adjustRangeSliderThumbs(0.5f, 1.0f));
         onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Collections.singletonList(
@@ -152,7 +152,7 @@ public class SearchFiltersEspressoTests {
 
         locationProvider.setLocation(GOOGLEPLEX);
 
-        onView(withId(R.id.salaryRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 0.4f));
+        onView(withId(R.id.preferenceSalaryRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 0.4f));
         onView(withId(R.id.applyButton)).perform(click());
 
         List<String> expectedJobTitles = Arrays.asList(
