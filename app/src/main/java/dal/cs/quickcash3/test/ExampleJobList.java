@@ -28,6 +28,8 @@ public final class ExampleJobList {
     public static final List<AvailableJob> AVAILABLE_JOBS;
     public static final List<CompletedJob> COMPLETED_JOBS;
     public static final String AVAILABLE_JOB1 = "S0OGyNIfHY3wHtQDWkUf";
+    public static final String COMPLETED_JOB1 = "2nK17fC30dAhE3npb5G8";
+    public static final String COMPLETED_JOB1_PAY_ID = "kOOtTNKEyiEFq6VWPJwx";
 
     static {
         AVAILABLE_JOBS = new ArrayList<>();
@@ -194,7 +196,7 @@ public final class ExampleJobList {
 
         COMPLETED_JOBS = new ArrayList<>();
 
-        CompletedJob job11 = CompletedJob.createForTest("2nK17fC30dAhE3npb5G8");
+        CompletedJob job11 = CompletedJob.createForTest(COMPLETED_JOB1);
         job11.setTitle("House Cleaner");
         job11.setEmployer("8NugQ8moqZ9KnrxG4nuCSyPPRTnjEr");
         job11.setDescription("Clean houses and apartments");
@@ -203,7 +205,7 @@ public final class ExampleJobList {
         job11.setSalary(100);
         job11.setWorker("FPQRbZGxDB5ynyo4VIPOcSvM0pJHUv");
         job11.setCompletionDate(new Date().toString());
-        job11.setPayId("kOOtTNKEyiEFq6VWPJwx");
+        job11.setPayId(COMPLETED_JOB1_PAY_ID);
         COMPLETED_JOBS.add(job11);
 
         CompletedJob job12 = CompletedJob.createForTest("PDqlBkjhfHDLpkaxWbaP");
@@ -253,12 +255,6 @@ public final class ExampleJobList {
         job15.setCompletionDate(new Date().toString());
         job15.setPayId("s2FEqUD9GCEe0f8xFpxR");
         COMPLETED_JOBS.add(job15);
-
-        // TODO: Remove this. This job is here for test compatibility reasons.
-        CompletedJob job16 = CompletedJob.createForTest("kawnerv9823fh");
-        job16.setTitle("DO NOT REMOVE THIS");
-        job16.setPayId("Hello Yuki");
-        COMPLETED_JOBS.add(job16);
     }
 
     // Utility class.

@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.payment;
 
+import static dal.cs.quickcash3.test.ExampleJobList.COMPLETED_JOB1;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +39,7 @@ public class WorkerPayPalActivity extends AppCompatActivity {
     private void handleButton() {
         CompletedJob.readFromDatabase(
             database,
-            "kawnerv9823fh",
+            COMPLETED_JOB1,
             this::moveToPaymentStatusWindow,
             error -> Log.w(LOG_TAG, error));
     }

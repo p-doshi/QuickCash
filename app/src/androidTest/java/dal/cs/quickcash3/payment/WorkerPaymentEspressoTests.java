@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertTrue;
+import static dal.cs.quickcash3.test.ExampleJobList.COMPLETED_JOB1_PAY_ID;
 import static dal.cs.quickcash3.test.ExampleJobList.generateCompletedJobs;
 
 import android.content.Context;
@@ -63,6 +64,6 @@ public class WorkerPaymentEspressoTests {
     public void showPaymentStatus() {
         onView(withId(R.id.seePayStatus)).perform(click());
         monitorRule.waitForActivity(MAX_TIMEOUT);
-        onView(withId(R.id.workerPayID)).check(matches(withText("Hello Yuki")));
+        onView(withId(R.id.workerPayID)).check(matches(withText(COMPLETED_JOB1_PAY_ID)));
     }
 }

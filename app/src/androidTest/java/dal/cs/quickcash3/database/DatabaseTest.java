@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.COMPLETED_JOBS;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYERS;
 import static dal.cs.quickcash3.test.ExampleUserList.WORKERS;
 
@@ -120,6 +121,18 @@ public class DatabaseTest {
             resource.increment();
             job.writeToDatabase(database, resource::decrement, Assert::fail);
         });
+
+        COMPLETED_JOBS.forEach(job -> {
+            resource.increment();
+            job.writeToDatabase(database, resource::decrement, Assert::fail);
+        });
+
+        // TODO: Remove this. This is here for test compatibility reasons.
+        resource.increment();
+        resource.increment();
+        database.write(CompletedJob.DIR + "kawnerv9823fh/NOTE", "DO NOT REMOVE THIS JOB", resource::decrement, Assert::fail);
+        database.write(CompletedJob.DIR + "kawnerv9823fh/payId", "Hello Yuki", resource::decrement, Assert::fail);
+        database.write(CompletedJob.DIR + "kawnerv9823fh/status", "approved", resource::decrement, Assert::fail);
 
         // Create Users.
         EMPLOYERS.forEach(employer -> {
