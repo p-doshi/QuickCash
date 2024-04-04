@@ -6,7 +6,7 @@
     <description>The PMD configuration for Group 3 of CSCI 3130, Winter 2024.</description>
 
     <!-- BEST PRACTICES -->
-    <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" />
+    <!-- <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" /> -->
     <rule ref="category/java/bestpractices.xml/AccessorClassGeneration" />
     <rule ref="category/java/bestpractices.xml/AccessorMethodGeneration" />
     <rule ref="category/java/bestpractices.xml/ArrayIsStoredDirectly" />

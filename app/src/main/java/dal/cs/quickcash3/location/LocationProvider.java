@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.errorprone.annotations.CheckReturnValue;
-import com.google.firebase.database.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -27,9 +26,11 @@ public interface LocationProvider {
     void removeLocationCallback(int callbackId);
 
     /**
-     * Get the last location immediately. There are no guarantees that this will return an accurate
-     * or even non null location.
-     * @return The last received location. Or null if there is none.
+     * Get the location. If successful, the locationFunction will be called. Otherwise, the
+     * errorFunction will be called.
+     *
+     * @param locationFunction The function that receives the location if they are accessible. The location will never be null.
+     * @param errorFunction The function that receives errors if they occur.
      */
-    @Nullable LatLng getLastLocation();
+    void fetchLocation(@NonNull Consumer<LatLng> locationFunction, @NonNull Consumer<String> errorFunction);
 }
