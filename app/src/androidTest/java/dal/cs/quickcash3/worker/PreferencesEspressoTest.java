@@ -19,8 +19,8 @@ import dal.cs.quickcash3.R;
 
 public class PreferencesEspressoTest {
     Context context = getInstrumentation().getTargetContext();
-    private final double min = 0.0;
-    private final double max = Double.POSITIVE_INFINITY;
+    private static final double min = 0.0;
+    private static final double max = Double.POSITIVE_INFINITY;
     SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
     @Rule
     public final ActivityScenarioRule<StorePreferencesActivity> activityRule =
