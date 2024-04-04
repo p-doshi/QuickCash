@@ -19,8 +19,8 @@ import dal.cs.quickcash3.R;
 
 public class PreferencesEspressoTest {
     Context context = getInstrumentation().getTargetContext();
-    private static final double min = 0.0;
-    private static final double max = Double.POSITIVE_INFINITY;
+    private static final double MIN = 0.0;
+    private static final double MAX = Double.POSITIVE_INFINITY;
     SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
     @Rule
     public final ActivityScenarioRule<StorePreferencesActivity> activityRule =
@@ -30,13 +30,13 @@ public class PreferencesEspressoTest {
     public void minDurationPreferenceTest() {
         onView(withId(R.id.preferenceDurationRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 1.0f));
         onView(withId(R.id.confirmPreferencesButton)).perform(click());
-        Assert.assertEquals(min,sharedPreferences.getFloat(context.getString(R.string.time_min), -1.0f),0);
+        Assert.assertEquals(MIN,sharedPreferences.getFloat(context.getString(R.string.time_min), -1.0f),0);
     }
     @Test
     public void maxDurationPreferenceTest() {
         onView(withId(R.id.preferenceDurationRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 1.0f));
         onView(withId(R.id.confirmPreferencesButton)).perform(click());
-        Assert.assertEquals(max,sharedPreferences.getFloat(context.getString(R.string.time_max), -1.0f),0);
+        Assert.assertEquals(MAX,sharedPreferences.getFloat(context.getString(R.string.time_max), -1.0f),0);
     }
     @Test
     public void greaterThanOneDayPreferenceTest() {
@@ -49,13 +49,13 @@ public class PreferencesEspressoTest {
     public void minSalaryPreferenceTest() {
         onView(withId(R.id.preferenceSalaryRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 1.0f));
         onView(withId(R.id.confirmPreferencesButton)).perform(click());
-        Assert.assertEquals(min,sharedPreferences.getFloat(context.getString(R.string.salary_min), -1.0f),0);
+        Assert.assertEquals(MIN,sharedPreferences.getFloat(context.getString(R.string.salary_min), -1.0f),0);
     }
     @Test
     public void maxSalaryPreferenceTest() {
         onView(withId(R.id.preferenceSalaryRangeSlider)).perform(adjustRangeSliderThumbs(0.0f, 1.0f));
         onView(withId(R.id.confirmPreferencesButton)).perform(click());
-        Assert.assertEquals(max,sharedPreferences.getFloat(context.getString(R.string.salary_max), -1.0f),0);
+        Assert.assertEquals(MAX,sharedPreferences.getFloat(context.getString(R.string.salary_max), -1.0f),0);
     }
 
     @Test
