@@ -38,8 +38,8 @@ public class WorkerPaymentEspressoTests {
             new Intent(context, WorkerPayPalActivity.class)
                 .addCategory(context.getString(R.string.MOCK_DATABASE)));
     @Rule
-    public final ActivityMonitorRule<WorkerPaymentConfirmationActivity> monitorRule =
-        new ActivityMonitorRule<>(WorkerPaymentConfirmationActivity.class);
+    public final ActivityMonitorRule<PaymentConfirmationActivity> monitorRule =
+        new ActivityMonitorRule<>(PaymentConfirmationActivity.class);
     private static final int MAX_TIMEOUT = 15000;
     private Database database;
 
@@ -64,6 +64,6 @@ public class WorkerPaymentEspressoTests {
     public void showPaymentStatus() {
         onView(withId(R.id.seePayStatus)).perform(click());
         monitorRule.waitForActivity(MAX_TIMEOUT);
-        onView(withId(R.id.workerPayID)).check(matches(withText(COMPLETED_JOB1_PAY_ID)));
+        onView(withId(R.id.payID)).check(matches(withText(COMPLETED_JOB1_PAY_ID)));
     }
 }

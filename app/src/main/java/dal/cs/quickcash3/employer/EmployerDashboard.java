@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.employer;
 
+import static dal.cs.quickcash3.test.ExampleJobList.COMPLETED_JOB1_PAY_ID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +33,7 @@ import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
 import dal.cs.quickcash3.jobdetail.ApplicantsFragment;
 import dal.cs.quickcash3.jobdetail.JobDetailsPage;
-import dal.cs.quickcash3.payment.EmployerPaymentConfirmationActivity;
+import dal.cs.quickcash3.payment.PaymentConfirmationActivity;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.util.BackButtonListener;
 
@@ -128,10 +130,10 @@ public class EmployerDashboard extends AppCompatActivity {
     }
 
     private void acceptJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {
-        Intent paymentConfirmationIntent = new Intent(this, EmployerPaymentConfirmationActivity.class);
+        Intent paymentConfirmationIntent = new Intent(this, PaymentConfirmationActivity.class);
 
         // TODO: Set this up properly.
-        String payId = "lkajsdoiuqdlkaklsjdq";
+        String payId = COMPLETED_JOB1_PAY_ID;
         paymentConfirmationIntent.putExtra("PAY_ID", payId);
 
         CompletedJob completedJob = CompletedJob.completeJob(availableJob, worker);

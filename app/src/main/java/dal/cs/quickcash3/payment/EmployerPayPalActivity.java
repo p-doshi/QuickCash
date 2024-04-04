@@ -2,7 +2,6 @@ package dal.cs.quickcash3.payment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,10 +32,9 @@ public class EmployerPayPalActivity extends AppCompatActivity {
     private void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {
         Intent paymentConfirmationIntent;
 
-        paymentConfirmationIntent = new Intent(getBaseContext(), EmployerPaymentConfirmationActivity.class);
+        paymentConfirmationIntent = new Intent(getBaseContext(), PaymentConfirmationActivity.class);
 
-        paymentConfirmationIntent.putExtra("PAY_ID", payID);
-        paymentConfirmationIntent.putExtra("STATUS", state);
+        paymentConfirmationIntent.putExtra(getString(R.string.PAY_ID), payID);
 
         startActivity(paymentConfirmationIntent);
     }

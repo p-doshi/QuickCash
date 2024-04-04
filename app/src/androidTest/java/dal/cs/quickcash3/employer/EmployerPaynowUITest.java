@@ -95,7 +95,7 @@ public class EmployerPaynowUITest {
 
         // TODO: paynow stuff.
 
-        UiObject approveStatus = device.findObject(new UiSelector().textContains("approved"));
+        UiObject approveStatus = device.findObject(new UiSelector().textContains("Pay ID"));
         assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
 
         // Make sure that the job is gone.
