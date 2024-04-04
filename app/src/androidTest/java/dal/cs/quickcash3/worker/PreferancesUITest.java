@@ -20,7 +20,7 @@ import dal.cs.quickcash3.registration.RegistrationPage;
 
 public class PreferancesUITest {
     @Rule
-    public final ActivityScenarioRule<RegistrationPage> activityRule =
+    public final ActivityScenarioRule<StorePreferencesActivity> activityRule =
             new ActivityScenarioRule<>(StorePreferencesActivity.class);
     private final Instrumentation instrumentation = getInstrumentation();
     private final Context context = instrumentation.getTargetContext();
