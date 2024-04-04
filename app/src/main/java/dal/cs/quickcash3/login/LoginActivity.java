@@ -25,19 +25,9 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.employer.EmployerDashboard;
 import dal.cs.quickcash3.registration.RegistrationPage;
-import dal.cs.quickcash3.worker.WorkerDashboard;
 
 
 public class LoginActivity extends AppCompatActivity  {
@@ -151,61 +141,11 @@ public class LoginActivity extends AppCompatActivity  {
         signupButton.setOnClickListener(view -> moveToRegistration());
     }
     protected void moveToDashboard() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
-                .child("nP5exoTNYnlqpPD1B3BHeuNDcWaPxI").child("public").child("users");
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        String email = userSnapshot.child("email").getValue(String.class);
-                        String role = userSnapshot.child("role").getValue(String.class);
-
-
-                        if (email != null) {
-                            assert user != null;
-                            if (email.equals(user.getEmail())) {
-                                Intent dashboardIntent = null;
-                                if (role != null) {
-                                    if (role.equals(getResources().getString(R.string.employer))) {
-                                        dashboardIntent = new Intent(getBaseContext(), EmployerDashboard.class);
-                                    } else if (role.equals(getResources().getString(R.string.worker))) {
-                                        dashboardIntent = new Intent(getBaseContext(), WorkerDashboard.class);
-                                    } else {
-                                        Log.wtf(getResources().getString(R.string.choose_role_reminder), getResources().getString(R.string.choose_role_reminder));
-                                        System.exit(1);
-                                    }
-                                    startActivity(dashboardIntent);
-                                } else {
-                                    // Handle if role is not found for the user
-                                    Log.e("RoleError", "User role not found in database");
-                                }
-                                return; // Exit the loop once the user role is found
-                            }
-                        }
-                    }
-                    // Handle if user data not found
-                    Log.e("DataError", "User data not found in database");
-                } else {
-                    // Handle if users node not found
-                    Log.e("DataError", "Users node not found in database");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Throwable databaseError = new Throwable("Error in Database");
-                Log.e("DataError", Objects.requireNonNull(databaseError.getMessage()));
-            }
-
-        });
-
+       MoveToDashboard moveToDashboard = new MoveToDashboard(this);
+       moveToDashboard.dashBoardManager();
     }
 
     protected void moveToRegistration(){
-        //Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
         Intent registrationIntent = new Intent(getBaseContext(), RegistrationPage.class);
         startActivity(registrationIntent);
     }
