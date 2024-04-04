@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
         });
     }
 
-    protected void checkUserInDatabase(String email, String password){
+    protected void checkUserInDatabase(@NonNull String email, @NonNull String password){
 
         CheckBox rememberMe = findViewById(R.id.checkBox);
         mAuth.signInWithEmailAndPassword(email, password)
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
         Toast.makeText(this, getResources().getString(R.string.SIGNUP_TOAST), Toast.LENGTH_SHORT).show();
     }
 
-    public void setStatusMessage(String message){
+    public void setStatusMessage(@NonNull String message){
         TextView statusLabel = findViewById(R.id.statusLabel);
         statusLabel.setText(message);
     }

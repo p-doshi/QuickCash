@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -17,7 +19,7 @@ public class GoogleSignInHelper {
     private final GoogleSignInClient mGoogleSignInClient;
     private final SignInInterface mSignInInterface;
 
-    public GoogleSignInHelper(Context context, SignInInterface signInInterface) {
+    public GoogleSignInHelper(@NonNull Context context,@NonNull SignInInterface signInInterface) {
         mSignInInterface = signInInterface;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -27,15 +29,15 @@ public class GoogleSignInHelper {
         mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
     }
 
-    public Intent getSignInIntent() {
+    public @NonNull Intent getSignInIntent() {
         return mGoogleSignInClient.getSignInIntent();
     }
 
-    public Task<GoogleSignInAccount> getSignedInAccountFromIntent(Intent data) {
+    public @NonNull Task<GoogleSignInAccount> getSignedInAccountFromIntent(@NonNull Intent data) {
         return GoogleSignIn.getSignedInAccountFromIntent(data);
     }
 
-    public void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    public void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // Signed in successfully, show authenticated UI.

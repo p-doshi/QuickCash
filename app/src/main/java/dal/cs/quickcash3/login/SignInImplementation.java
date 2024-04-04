@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 public class SignInImplementation implements SignInInterface {
     private final Context mContext;
 
-    public SignInImplementation(Context context){
+    public SignInImplementation(@NonNull Context context){
         mContext = context;
     }
     @Override
@@ -18,7 +20,7 @@ public class SignInImplementation implements SignInInterface {
     }
 
     @Override
-    public void setStatusMessage(String message) {
+    public void setStatusMessage(@NonNull String message) {
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 }
