@@ -2,6 +2,7 @@ package dal.cs.quickcash3.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -31,8 +32,8 @@ public class StoreToSharedPref {
     public void storeSalaryPrefToSharedPref(@NonNull Range<Double> salaryRange) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat(context.getString(R.string.salary_max), salaryRange.getStart().floatValue());
-        editor.putFloat(context.getString(R.string.salary_min), salaryRange.getEnd().floatValue());
+        editor.putFloat(context.getString(R.string.salary_max), salaryRange.getEnd().floatValue());
+        editor.putFloat(context.getString(R.string.salary_min), salaryRange.getStart().floatValue());
         editor.apply();
     }
 
@@ -43,8 +44,8 @@ public class StoreToSharedPref {
     public void storeTimePrefToSharedPref(@NonNull Range<Double> timeRange) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat(context.getString(R.string.time_max), timeRange.getStart().floatValue());
-        editor.putFloat(context.getString(R.string.time_min), timeRange.getEnd().floatValue());
+        editor.putFloat(context.getString(R.string.time_max), timeRange.getEnd().floatValue());
+        editor.putFloat(context.getString(R.string.time_min), timeRange.getStart().floatValue());
         editor.apply();
     }
 
