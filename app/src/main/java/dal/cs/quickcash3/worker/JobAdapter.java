@@ -14,7 +14,7 @@ import java.util.List;
 import dal.cs.quickcash3.R;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
-    private List<JobHistory> jobList;
+    private final List<JobHistory> jobList;
 
     public JobAdapter(List<JobHistory> jobList) {
         this.jobList = jobList;
@@ -34,6 +34,11 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
         holder.jobName.setText(currentJob.getName());
         holder.jobIncome.setText(String.format("Income: %.2f", currentJob.getIncome()));
         holder.jobRating.setText(String.format("Reputation: %.1f", currentJob.getReputation()));
+
+        final int ID_BASE = 10000;
+        holder.jobName.setId(ID_BASE + position * 3);
+        holder.jobIncome.setId(ID_BASE + 1 + position * 3);
+        holder.jobRating.setId(ID_BASE + 2 + position * 3);
     }
 
     @Override
