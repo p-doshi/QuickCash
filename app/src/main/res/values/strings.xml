@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">csci3130_group_3</string>
+    <string name="app_name">Quick Cash</string>
     <string name="worker">Worker</string>
     <string name="employer">Employer</string>
     <string name="confirm">Confirm</string>
@@ -11,4 +11,5 @@
     <string name="empty" />
     <string name="address">Address</string>
     <string name="addJob">Add Job</string>
+    <string name="USER">user</string>
 </resources>

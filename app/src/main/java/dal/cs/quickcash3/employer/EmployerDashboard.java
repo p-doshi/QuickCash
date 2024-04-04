@@ -5,31 +5,37 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.annotations.Nullable;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.ProfileFragment;
 import dal.cs.quickcash3.fragments.ReceiptsFragment;
+import dal.cs.quickcash3.util.BackButtonListener;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
+import dal.cs.quickcash3.jobdetail.ApplicantsFragment;
+import dal.cs.quickcash3.search.RegexSearchFilter;
 
-
-public class EmployerDashboard extends FragmentActivity {
-    Database database;
-    MyGeocoder geocoder;
+public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
+    private Database database;
+    private MyGeocoder geocoder;
+    private Fragment listingFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -39,28 +45,34 @@ public class EmployerDashboard extends FragmentActivity {
 
         initInterfaces();
 
+        // Get a search filter for the current user.
+        String currentUser = getIntent().getStringExtra(getString(R.string.USER));
+        RegexSearchFilter<AvailableJob> searchFilter = new RegexSearchFilter<>("employer");
+        if (currentUser == null) {
+            searchFilter.setPattern(Pattern.compile(".*"));
+        }
+        else {
+            searchFilter.setPattern(Pattern.compile(currentUser));
+        }
+
         // Initialize the fragments.
+        listingFragment = new EmployerListingFragment(this, database, searchFilter, this::showJobPostForm, this::switchToJobDetails);
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment profileFragment = new ProfileFragment();
-        Fragment jobPostFormFragment = new PostJobForm(database, geocoder);
 
         BottomNavigationView employerNavView = findViewById(R.id.employerBottomNavView);
 
         employerNavView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            //TODO change to employer
-            if (itemId == R.id.workerReceiptPage) {
-                Log.v(LOG_TAG, "Showing receipt fragment");
+            if (itemId == R.id.employer_job_listings) {
+                replaceFragment(listingFragment);
+                return true;
+            }
+            else if (itemId == R.id.employer_history) {
                 replaceFragment(receiptsFragment);
                 return true;
             }
-            else if (itemId == R.id.employer_add_job) {
-                Log.v(LOG_TAG, "Showing post job fragment");
-                replaceFragment(jobPostFormFragment);
-                return true;
-            }
-            else if (itemId == R.id.workerProfilePage) {
-                Log.v(LOG_TAG, "Showing profile fragment");
+            else if (itemId == R.id.employer_profile) {
                 replaceFragment(profileFragment);
                 return true;
             }
@@ -69,19 +81,33 @@ public class EmployerDashboard extends FragmentActivity {
             }
         });
 
-        employerNavView.setSelectedItemId(R.id.employer_add_job);
+        employerNavView.setSelectedItemId(R.id.employer_job_listings);
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
+        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.employerDashFragment, fragment);
+        transaction.replace(R.id.employerFragmentView, fragment);
         transaction.commit();
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    private void showJobPostForm() {
+        Fragment jobPostFormFragment = new PostJobForm(database, geocoder);
+        replaceFragment(jobPostFormFragment);
+        getOnBackPressedDispatcher().addCallback(jobPostFormFragment,
+            new BackButtonListener(() -> replaceFragment(listingFragment)));
+    }
 
-    /**
-     * Initialize mock database
-     */
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Fragment applicantsFragment = new ApplicantsFragment(availableJob);
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob, applicantsFragment);
+        replaceFragment(jobDetailsPage);
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+            new BackButtonListener(() -> replaceFragment(listingFragment)));
+    }
+
     @SuppressLint("RestrictedApi")
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();
@@ -110,12 +136,7 @@ public class EmployerDashboard extends FragmentActivity {
         return geocoder;
     }
 
-    /**
-     * Get the mock database
-     * @return database
-     */
     public @NonNull Database getDatabase(){
         return database;
     }
-
 }

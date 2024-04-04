@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".employer.PostJobForm">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".PostJobForm">
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".PostJobForm">
 
         <com.google.android.material.appbar.MaterialToolbar
             tools:ignore= "UnusedIds"
@@ -21,10 +21,8 @@
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <TextView
             tools:ignore= "UnusedIds"
@@ -39,10 +37,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/HeaderToolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/jobPostingTitle"
@@ -79,6 +75,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/jobPostingTitle" />
 
+        <TextView
+            tools:ignore="UnusedIds"
+            android:id="@+id/addJobDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:text="@string/addJobDuration"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/jobDurationSpinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/jobDurationSpinner" />
+
         <Spinner
             android:id="@+id/jobDurationSpinner"
             android:layout_width="165dp"
@@ -87,35 +95,19 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/addJobDuration"
-            app:layout_constraintTop_toBottomOf="@+id/addJobDate" />
-
-
-        <TextView
-            android:id="@+id/addJobDuration"
-            android:layout_width="132dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="7dp"
-            android:text="@string/addJobDuration"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/jobDurationSpinner"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addJobDate" />
 
         <TextView
             android:id="@+id/addJobUrgency"
-            android:layout_width="132dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="7dp"
             android:text="@string/addJobUrgency"
             android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/jobUrgencySpinner"
+            app:layout_constraintBottom_toBottomOf="@+id/jobUrgencySpinner"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addJobDuration" />
+            app:layout_constraintTop_toTopOf="@+id/jobUrgencySpinner" />
 
         <Spinner
             android:id="@+id/jobUrgencySpinner"
@@ -125,7 +117,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/addJobUrgency"
             app:layout_constraintTop_toBottomOf="@+id/jobDurationSpinner" />
 
         <EditText
@@ -209,18 +200,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addJobCity" />
 
-        <Button
-            android:id="@+id/addJobConfirmButton"
-            android:layout_width="289dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/confirm"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/jobSubmitStatus"
-            app:layout_constraintWidth_percent="0.75" />
-
         <TextView
             android:id="@+id/jobSubmitStatus"
             android:layout_width="wrap_content"
@@ -235,6 +214,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addJobDescription" />
 
+        <Button
+            android:id="@+id/addJobConfirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/confirm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/jobSubmitStatus"
+            app:layout_constraintWidth_percent="0.75" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
