@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.annotations.Nullable;
 
@@ -30,6 +31,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
+    private MapFragment mapFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -41,7 +43,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         // Initialize the fragments.
         Fragment receiptsFragment = new ReceiptsFragment();
-        MapFragment mapFragment = new MapFragment();
+        mapFragment = new MapFragment();
         Fragment profileFragment = new ProfileFragment();
         Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
 
@@ -61,8 +63,9 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             }
             else if (itemId == R.id.workerMapPage) {
                 Log.v(LOG_TAG, "Showing map fragment");
-                mapFragment.setCurrentLocation(locationProvider.getLastLocation());
+                locationProvider.fetchLocation(this::showLocation, this::showLocationError);
 
+                // Test account parthdoshi135@gmail.com : Password
                 // Here we would grab all job locations from database, then add to map
                 //while (job!=null) {
                 //  mapFragment.addJob("JobName", LatLong position); }
@@ -118,5 +121,15 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
     public @NonNull LocationProvider getLocationProvider() {
         return locationProvider;
+    }
+
+    private void showLocation(@NonNull LatLng location) {
+        LatLng latlng = new LatLng(location.latitude, location.longitude);
+        mapFragment.setCurrentLocation(latlng);
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void showLocationError(@NonNull String error) {
+        Log.w(LOG_TAG, error);
     }
 }
