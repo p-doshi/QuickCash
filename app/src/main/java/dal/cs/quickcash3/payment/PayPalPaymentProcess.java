@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -26,15 +27,15 @@ import java.util.function.BiConsumer;
 import dal.cs.quickcash3.BuildConfig;
 import dal.cs.quickcash3.R;
 
-public class PayPalPaymentProcess {
-    private static final String TAG = EmployerPayPalActivity.class.getName();
+public class PayPalPaymentProcess implements Payment {
+    private static final String TAG = EmployerPayPal.class.getName();
     private final ComponentActivity activity;
     private final BiConsumer<String, String> successFunction;
     private final PayPalConfiguration payPalConfig;
     private final ActivityResultLauncher<Intent> activityLauncher;
     private String amount;
 
-    public PayPalPaymentProcess(@NonNull ComponentActivity activity, @NonNull BiConsumer<String, String> successFunction) {
+    public PayPalPaymentProcess(@NonNull FragmentActivity activity, @NonNull BiConsumer<String, String> successFunction) {
         this.activity = activity;
         this.successFunction = successFunction;
         payPalConfig = new PayPalConfiguration()
@@ -59,7 +60,7 @@ public class PayPalPaymentProcess {
     }
 
     @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
-    private void handlePaymentResult(@NonNull ActivityResult result) {
+    public void handlePaymentResult(@NonNull ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_OK) {
             assert result.getData() != null;
             //noinspection RedundantSuppression

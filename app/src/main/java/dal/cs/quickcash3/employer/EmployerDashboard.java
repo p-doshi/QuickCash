@@ -1,12 +1,14 @@
 package dal.cs.quickcash3.employer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,12 +29,17 @@ import dal.cs.quickcash3.jobs.JobListingsFragment;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
+import dal.cs.quickcash3.payment.EmployerPayPal;
+import dal.cs.quickcash3.payment.EmployerPaymentConfirmationActivity;
+import dal.cs.quickcash3.payment.PayPalPaymentProcess;
+import dal.cs.quickcash3.payment.Payment;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 
 public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
     private Database database;
     private MyGeocoder geocoder;
+    private Payment payment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -116,6 +123,9 @@ public class EmployerDashboard extends AppCompatActivity {
         else {
             geocoder = new GeocoderProxy(this);
         }
+
+        // TODO: mock payment
+        payment =  new PayPalPaymentProcess(this, this::moveToConfirmPaymentWindow);
     }
 
     public @NonNull MyGeocoder getGeocoder() {
@@ -124,5 +134,17 @@ public class EmployerDashboard extends AppCompatActivity {
 
     public @NonNull Database getDatabase(){
         return database;
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
+    private void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {
+        Intent paymentConfirmationIntent;
+
+        paymentConfirmationIntent = new Intent(this, EmployerPaymentConfirmationActivity.class);
+
+        paymentConfirmationIntent.putExtra("PAY_ID", payID);
+        paymentConfirmationIntent.putExtra("STATUS", state);
+        payment.setPaymentAmount("60");
+        startActivity(paymentConfirmationIntent);
     }
 }

@@ -24,6 +24,7 @@ import dal.cs.quickcash3.fragments.ReceiptsFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.location.MockLocationProvider;
+import dal.cs.quickcash3.payment.EmployerPayPal;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
 
 public class WorkerDashboard extends AppCompatPermissionActivity {
