@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.data.Employer;
 import dal.cs.quickcash3.data.Worker;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
@@ -107,7 +108,9 @@ public class DatabaseTest {
         resource.increment();
         resource.increment();
         resource.increment();
+        resource.increment();
         database.delete(AvailableJob.DIR, resource::decrement, Assert::fail);
+        database.delete(CompletedJob.DIR, resource::decrement, Assert::fail);
         database.delete(Employer.DIR, resource::decrement, Assert::fail);
         database.delete(Worker.DIR, resource::decrement, Assert::fail);
         Espresso.onIdle();

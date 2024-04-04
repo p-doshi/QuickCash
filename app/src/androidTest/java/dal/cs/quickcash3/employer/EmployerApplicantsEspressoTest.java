@@ -12,7 +12,7 @@ import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.r
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
-import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
+import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
 import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
 import static dal.cs.quickcash3.test.ExampleUserList.WORKER2;
@@ -94,7 +94,7 @@ public class EmployerApplicantsEspressoTest {
             database = activity.getDatabase();
         });
 
-        runOnUiThread(() -> generateJobPosts(database, Assert::fail));
+        runOnUiThread(() -> generateAvailableJobs(database, Assert::fail));
         generateUsers(database, Assert::fail);
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="PAYMENT_STATUS">Payment Status</string>
-    <string name="PAYID">Pay ID:</string>
+    <string name="paymentReceipt">Payment Receipt</string>
+    <string name="payId">Pay ID:</string>
 </resources>

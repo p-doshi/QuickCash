@@ -21,14 +21,6 @@ public class Employer extends User {
     @Override
     public void writeToDatabase(
         @NonNull Database database,
-        @NonNull Consumer<String> errorFunction)
-    {
-        writeToDatabase(database, () -> {}, errorFunction);
-    }
-
-    @Override
-    public void writeToDatabase(
-        @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
@@ -43,11 +35,16 @@ public class Employer extends User {
     }
 
     @Override
-    public void deleteFromDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+    public void deleteFromDatabase(
+        @NonNull Database database,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         if (key() == null) {
             throw new IllegalArgumentException("User doesn't exist");
         }
-        database.delete(DIR + key(), errorFunction);
+        database.delete(DIR + key(), successFunction, errorFunction);
+        key(null);
     }
 
     public static void readFromDatabase(

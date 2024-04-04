@@ -3,7 +3,7 @@ package dal.cs.quickcash3.employer;
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
+import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
 import static dal.cs.quickcash3.test.ExampleUserList.generateUsers;
 
@@ -75,7 +75,7 @@ public class EmployerPaynowUITest {
             database = activity.getDatabase();
         });
 
-        runOnUiThread(() -> generateJobPosts(database, Assert::fail));
+        runOnUiThread(() -> generateAvailableJobs(database, Assert::fail));
         runOnUiThread(() -> generateUsers(database, Assert::fail));
 
         // Navigate to the job with applicants.

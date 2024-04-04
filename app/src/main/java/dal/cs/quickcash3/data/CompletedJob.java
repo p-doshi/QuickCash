@@ -3,6 +3,7 @@ package dal.cs.quickcash3.data;
 import static dal.cs.quickcash3.util.CopyHelper.copyTo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.database.annotations.Nullable;
 
@@ -18,7 +19,13 @@ public class CompletedJob extends JobPost {
     private String worker;
     private String completionDate;
     private String payId;
-    private String status;
+
+    @VisibleForTesting
+    public static @NonNull CompletedJob createForTest(@NonNull String key) {
+        CompletedJob job = new CompletedJob();
+        job.key(key);
+        return job;
+    }
 
     public @Nullable String getWorker() {
         return worker;
@@ -44,14 +51,6 @@ public class CompletedJob extends JobPost {
         this.payId = payId;
     }
 
-    public @Nullable String getStatus() {
-        return status;
-    }
-
-    public void setStatus(@NonNull String status) {
-        this.status = status;
-    }
-
     public static @NonNull CompletedJob completeJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {
         CompletedJob completedJob = new CompletedJob();
         copyTo(completedJob, availableJob);
@@ -72,14 +71,6 @@ public class CompletedJob extends JobPost {
     @Override
     public void writeToDatabase(
         @NonNull Database database,
-        @NonNull Consumer<String> errorFunction)
-    {
-        writeToDatabase(database, () -> {}, errorFunction);
-    }
-
-    @Override
-    public void writeToDatabase(
-        @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
@@ -94,11 +85,16 @@ public class CompletedJob extends JobPost {
     }
 
     @Override
-    public void deleteFromDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
+    public void deleteFromDatabase(
+        @NonNull Database database,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
         if (key() == null) {
             throw new IllegalArgumentException("Job doesn't exist");
         }
-        database.delete(DIR + key(), errorFunction);
+        database.delete(DIR + key(), successFunction, errorFunction);
+        key(null);
     }
 
     public static void readFromDatabase(

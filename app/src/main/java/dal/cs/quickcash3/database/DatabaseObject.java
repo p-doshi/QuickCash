@@ -6,8 +6,6 @@ import androidx.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import dal.cs.quickcash3.data.User;
-
 /**
  * Interface for writing to a database with error handling and optional success handling.
  */
@@ -28,7 +26,7 @@ public abstract class DatabaseObject {
      *
      * @param key The key for the object.
      */
-    protected void key(@NonNull String key) {
+    protected void key(@Nullable String key) {
         this.mKey = key;
     }
 
@@ -38,9 +36,12 @@ public abstract class DatabaseObject {
      * @param database The database to write to.
      * @param errorFunction The function to handle errors.
      */
-    public abstract void writeToDatabase(
+    public void writeToDatabase(
         @NonNull Database database,
-        @NonNull Consumer<String> errorFunction);
+        @NonNull Consumer<String> errorFunction)
+    {
+        writeToDatabase(database, () -> {}, errorFunction);
+    }
 
     /**
      * Writes to the database with success and error handling.
@@ -60,8 +61,22 @@ public abstract class DatabaseObject {
      * @param database The database to delete from.
      * @param errorFunction The function to handle errors.
      */
+    public void deleteFromDatabase(
+        @NonNull Database database,
+        @NonNull Consumer<String> errorFunction)
+    {
+        deleteFromDatabase(database, () -> {}, errorFunction);
+    }
+
+    /**
+     * Deletes this object from the database.
+     *
+     * @param database The database to delete from.
+     * @param errorFunction The function to handle errors.
+     */
     public abstract void deleteFromDatabase(
         @NonNull Database database,
+        @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction);
 
     @Override

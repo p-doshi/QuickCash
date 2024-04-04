@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.DALHOUSIE;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
 import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
-import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
+import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
 import static dal.cs.quickcash3.test.RangeSliderSwiper.adjustRangeSliderThumbs;
 import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
 
@@ -82,7 +82,7 @@ public class SearchFiltersEspressoTests {
 
     @Test
     public void hundredMeterSearch() {
-        generateJobPosts(database, Assert::fail);
+        generateAvailableJobs(database, Assert::fail);
 
         locationProvider.setLocation(GOOGLEPLEX);
 
@@ -100,7 +100,7 @@ public class SearchFiltersEspressoTests {
     public void fiveKmSearch() {
         locationProvider.setLocation(GOOGLEPLEX);
 
-        generateJobPosts(database, Assert::fail);
+        generateAvailableJobs(database, Assert::fail);
 
         onView(withId(R.id.maxDistanceSlider)).perform(adjustRangeSliderThumbs(0.5f));
         onView(withId(R.id.applyButton)).perform(click());
@@ -117,7 +117,7 @@ public class SearchFiltersEspressoTests {
 
     @Test
     public void differentLocation() {
-        generateJobPosts(database, Assert::fail);
+        generateAvailableJobs(database, Assert::fail);
 
         locationProvider.setLocation(DALHOUSIE);
 
@@ -134,7 +134,7 @@ public class SearchFiltersEspressoTests {
     public void greaterThanOneDay() {
         locationProvider.setLocation(GOOGLEPLEX);
 
-        generateJobPosts(database, Assert::fail);
+        generateAvailableJobs(database, Assert::fail);
 
         onView(withId(R.id.durationRangeSlider)).perform(adjustRangeSliderThumbs(0.5f, 1.0f));
         onView(withId(R.id.applyButton)).perform(click());
@@ -148,7 +148,7 @@ public class SearchFiltersEspressoTests {
 
     @Test
     public void lessThan40Dollars() {
-        generateJobPosts(database, Assert::fail);
+        generateAvailableJobs(database, Assert::fail);
 
         locationProvider.setLocation(GOOGLEPLEX);
 

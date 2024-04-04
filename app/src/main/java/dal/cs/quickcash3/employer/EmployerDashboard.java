@@ -1,6 +1,5 @@
 package dal.cs.quickcash3.employer;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -129,28 +128,22 @@ public class EmployerDashboard extends AppCompatActivity {
     }
 
     private void acceptJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {
-        Intent paymentConfirmationIntent = new Intent(getBaseContext(), EmployerPaymentConfirmationActivity.class);
+        Intent paymentConfirmationIntent = new Intent(this, EmployerPaymentConfirmationActivity.class);
 
         // TODO: Set this up properly.
         String payId = "lkajsdoiuqdlkaklsjdq";
-        String status = "approved";
         paymentConfirmationIntent.putExtra("PAY_ID", payId);
-        paymentConfirmationIntent.putExtra("STATUS", status);
 
         CompletedJob completedJob = CompletedJob.completeJob(availableJob, worker);
         completedJob.setPayId(payId);
-        completedJob.setStatus(status);
 
         pendingWork.set(null);
-        availableJob.deleteFromDatabase(database, error -> Log.e(LOG_TAG, "Deleting job: " + error));
+        availableJob.deleteFromDatabase(database, () -> replaceFragment(listingFragment), error -> Log.e(LOG_TAG, "Deleting job: " + error));
         completedJob.writeToDatabase(database, error -> Log.e(LOG_TAG, "Creating completed job: " + error));
 
         startActivity(paymentConfirmationIntent);
-
-        replaceFragment(listingFragment);
     }
 
-    @SuppressLint("RestrictedApi")
     private void initInterfaces() {
         Set<String> categories = getIntent().getCategories();
         if (categories == null) {

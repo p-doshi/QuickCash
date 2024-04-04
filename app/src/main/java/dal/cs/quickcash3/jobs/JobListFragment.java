@@ -96,6 +96,7 @@ public class JobListFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        Log.i(LOG_TAG, "Stopping database search listener");
         database.removeListener(callbackId);
         super.onDestroyView();
     }

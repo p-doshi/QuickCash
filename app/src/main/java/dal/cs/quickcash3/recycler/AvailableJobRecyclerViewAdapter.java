@@ -42,7 +42,8 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
     }
 
     @SuppressLint("NotifyDataSetChanged") // TODO: fix this.
-    public void newList(@NonNull List<AvailableJob> newJobs) {
+    public void
+    newList(@NonNull List<AvailableJob> newJobs) {
         jobs = newJobs;
         notifyDataSetChanged();
     }

@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.GOOGLEPLEX;
 import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.NEW_YORK;
-import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
+import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
 
 import android.app.Instrumentation;
 import android.content.Context;
@@ -112,7 +112,7 @@ public class SearchFiltersUITests {
     @Test
     public void successfulSearch() throws Throwable {
         locationProvider.setLocation(GOOGLEPLEX);
-        runOnUiThread(() -> generateJobPosts(database, Assert::fail));
+        runOnUiThread(() -> generateAvailableJobs(database, Assert::fail));
 
         findText("Apply Filters").click();
 
@@ -134,7 +134,7 @@ public class SearchFiltersUITests {
     @Test
     public void failedSearch() throws UiObjectNotFoundException {
         locationProvider.setLocation(NEW_YORK);
-        generateJobPosts(database, Assert::fail);
+        generateAvailableJobs(database, Assert::fail);
 
         findText("Apply Filters").click();
 

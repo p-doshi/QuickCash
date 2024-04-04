@@ -19,12 +19,9 @@ public class WorkerPaymentConfirmationActivity extends AppCompatActivity {
     }
 
     private void init() {
-        TextView paymentStatus = findViewById(R.id.workerStatusMessage);
         TextView payID = findViewById(R.id.workerPayID);
         Intent intent = getIntent();
-        String status = intent.getStringExtra("Status");
         String paymentID = intent.getStringExtra("PayID");
-        paymentStatus.setText(status);
         payID.setText(paymentID);
     }
 
