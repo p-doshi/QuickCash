@@ -69,6 +69,14 @@ public class JobListFragment extends Fragment {
         });
     }
 
+
+    /**
+     Searches through a list of available jobs based on the provided search filter and updates the adapter with the filtered results.
+     @param filter The search filter to apply to the list of available jobs.
+     It should implement the SearchFilter interface with the generic type of AvailableJob.
+     The isValid method of the filter will be used to determine if a job should be included in the filtered results.
+     @throws IllegalArgumentException if the filter parameter is null.
+     */
     public void searchList(@NonNull SearchFilter<AvailableJob> filter){
         List<AvailableJob> newJobs = searchResults.stream().filter(filter::isValid).collect(Collectors.toList());
         adapter.newList(newJobs);
