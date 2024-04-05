@@ -1,7 +1,5 @@
 package dal.cs.quickcash3.database.firebase;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
