@@ -1,4 +1,4 @@
-package dal.cs.quickcash3.jobs;
+package dal.cs.quickcash3.employer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,23 +17,23 @@ import java.util.regex.Pattern;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.jobs.JobListFragment;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.AsyncLatch;
 
-public class JobListingsFragment extends Fragment {
+public class EmployerListingFragment extends Fragment {
     private final JobListFragment jobListFragment;
     private final Runnable showJobPostForm;
 
-    public JobListingsFragment(
+    public EmployerListingFragment(
         @NonNull Context context,
         @NonNull Database database,
         @NonNull SearchFilter<AvailableJob> searchFilter,
         @NonNull Runnable showJobPostForm,
-        @NonNull Consumer<AvailableJob> showCurrJob)
+        @NonNull Consumer<AvailableJob> showJobDetails)
     {
         super();
-        this.jobListFragment = new JobListFragment(context, database, new AsyncLatch<>(searchFilter), showCurrJob);
+        this.jobListFragment = new JobListFragment(context, database, new AsyncLatch<>(searchFilter), showJobDetails);
         this.showJobPostForm = showJobPostForm;
     }
 
@@ -43,7 +43,7 @@ public class JobListingsFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.job_listing_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_employer_listing, container, false);
         replaceFragment(jobListFragment);
         view.findViewById(R.id.addJobButton).setOnClickListener(unused -> showJobPostForm.run());
         return view;

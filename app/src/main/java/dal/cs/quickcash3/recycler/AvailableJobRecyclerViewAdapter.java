@@ -16,11 +16,11 @@ import java.util.function.Consumer;
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 
-public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements OnItemClickListener {
+public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<AvailableJobRecyclerViewAdapter.ViewHolder> implements OnItemClickListener {
     private List<AvailableJob> jobs = new ArrayList<>();
     private final Consumer<AvailableJob> displayCurrJob;
 
-    public MyItemRecyclerViewAdapter(@NonNull Consumer<AvailableJob> displayCurrJob){
+    public AvailableJobRecyclerViewAdapter(@NonNull Consumer<AvailableJob> displayCurrJob){
         super();
         this.displayCurrJob = displayCurrJob;
 
@@ -68,10 +68,8 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
 
     @Override
     public void onLongItemClick(@NonNull View view, int position) {
-
-     //No Use
+        // Not used.
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
@@ -89,5 +87,4 @@ public  class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyc
             subheading.setText(job.getDescription());
         }
     }
-
 }
