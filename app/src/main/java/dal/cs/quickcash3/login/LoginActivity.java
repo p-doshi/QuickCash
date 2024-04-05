@@ -123,8 +123,9 @@ public class LoginActivity extends AppCompatActivity  {
 
     private void handleGoogleSignIn(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            // Signed in successfully, show authenticated UI.
+            // Make sure there are no problems with the result.
+            completedTask.getResult(ApiException.class);
+            
             FirebaseUser user = mAuth.getCurrentUser();
             if (user != null) {
                 launchDashboard(user);

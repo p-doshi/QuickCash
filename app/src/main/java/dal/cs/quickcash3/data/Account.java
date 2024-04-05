@@ -9,12 +9,13 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseObject;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
+@SuppressWarnings("PMD.ShortVariable") // We already have data in the database that relies on "id".
 public class Account extends DatabaseObject {
     public static final String DIR = "private/users/";
     private String role;
     private String id;
 
-    public static Account create(@NonNull String key) {
+    public static @NonNull Account create(@NonNull String key) {
         Account account = new Account();
         account.key(key);
         return account;
