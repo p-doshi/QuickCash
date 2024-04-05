@@ -52,6 +52,7 @@ public class WorkerRecyclerViewAdapter<T extends RecyclerView.ViewHolder & Worke
         return viewConstructor.apply(view);
     }
 
+    @SuppressWarnings("PMD.UselessOperationOnImmutable") // This is just wrong.
     @Override
     public void onBindViewHolder(@NonNull T holder, int position) {
         holder.onBind(workers.get(position));
