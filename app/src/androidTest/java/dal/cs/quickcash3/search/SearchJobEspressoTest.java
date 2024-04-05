@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
-import static dal.cs.quickcash3.test.ExampleJobList.generateJobPosts;
+import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
 
 import android.Manifest;
 import android.content.Context;
@@ -55,7 +55,7 @@ public class SearchJobEspressoTest {
             database = activity.getDatabase();
         });
 
-        generateJobPosts(database, Assert::fail);
+        generateAvailableJobs(database, Assert::fail);
     }
 
     @Test

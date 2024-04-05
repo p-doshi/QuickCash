@@ -25,9 +25,16 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
         this.displayCurrJob = displayCurrJob;
 
     }
+
     public void addJob(@NonNull AvailableJob availableJob) {
         jobs.add(availableJob);
         notifyItemInserted(jobs.size() - 1);
+    }
+
+    public void removeJob(@NonNull AvailableJob availableJob) {
+        int index = jobs.indexOf(availableJob);
+        jobs.remove(index);
+        notifyItemRemoved(index);
     }
 
     public void reset() {
@@ -52,7 +59,6 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.setJob(jobs.get(position));
-
     }
 
     @Override

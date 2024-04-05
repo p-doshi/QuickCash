@@ -8,9 +8,7 @@
     android:layout_marginBottom="3dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    app:cardElevation="3dp"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    app:cardElevation="3dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,6 +16,7 @@
         android:padding="5dp">
 
         <TextView
+            android:id="@+id/worker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -41,12 +40,12 @@
             app:backgroundTint="@color/red"
             app:fabCustomSize="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/undoButton"
+            app:layout_constraintEnd_toStartOf="@+id/acceptButton"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/fab_rounded" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/undoButton"
+            android:id="@+id/acceptButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/accept"
