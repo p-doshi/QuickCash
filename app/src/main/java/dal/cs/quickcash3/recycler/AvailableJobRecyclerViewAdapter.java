@@ -32,8 +32,9 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
     }
 
     public void removeJob(@NonNull AvailableJob availableJob) {
-        jobs.add(availableJob);
-        notifyItemInserted(jobs.size() - 1);
+        int index = jobs.indexOf(availableJob);
+        jobs.remove(index);
+        notifyItemRemoved(index);
     }
 
     public void reset() {

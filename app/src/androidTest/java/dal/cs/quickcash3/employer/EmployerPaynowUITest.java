@@ -77,14 +77,13 @@ public class EmployerPaynowUITest {
 
         runOnUiThread(() -> generateAvailableJobs(database, Assert::fail));
         runOnUiThread(() -> generateUsers(database, Assert::fail));
-
-        // Navigate to the job with applicants.
-        UiScrollable jobListings = new UiScrollable(withResource("jobListRecyclerView"));
-        scrollToText(jobListings, "Coding problem").click();
     }
 
     @Test
     public void accept() throws UiObjectNotFoundException {
+        UiScrollable jobListings = new UiScrollable(withResource("jobListRecyclerView"));
+        scrollToText(jobListings, "Coding problem").click();
+
         UiScrollable jobDetails = new UiScrollable(new UiSelector().className(ScrollView.class));
         assertTrue(scrollToResource(jobDetails, "applicantsRecyclerView").exists());
 
@@ -95,18 +94,20 @@ public class EmployerPaynowUITest {
 
         // TODO: paynow stuff.
 
-        UiObject approveStatus = device.findObject(new UiSelector().textContains("Pay ID"));
-        assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
+        UiObject payId = device.findObject(new UiSelector().textContains("Pay ID"));
+        assertTrue(payId.waitForExists(MAX_TIMEOUT));
 
         // Make sure that the job is gone.
         device.pressBack();
-        UiScrollable jobListings = new UiScrollable(withResource("jobListRecyclerView"));
         assertFalse(scrollToText(jobListings, "Coding problem").exists());
     }
 
     @Ignore("This requires paynow to be setup")
     @Test
     public void doubleAccept() throws UiObjectNotFoundException {
+        UiScrollable jobListings = new UiScrollable(withResource("jobListRecyclerView"));
+        scrollToText(jobListings, "Coding problem").click();
+
         UiScrollable jobDetails = new UiScrollable(new UiSelector().className(ScrollView.class));
         assertTrue(scrollToResource(jobDetails, "applicantsRecyclerView").exists());
 
@@ -124,12 +125,11 @@ public class EmployerPaynowUITest {
 
         // TODO: paynow stuff.
 
-        UiObject approveStatus = device.findObject(new UiSelector().textContains("approved"));
-        assertTrue(approveStatus.waitForExists(MAX_TIMEOUT));
+        UiObject payId = device.findObject(new UiSelector().textContains("Pay ID"));
+        assertTrue(payId.waitForExists(MAX_TIMEOUT));
 
         // Make sure that the job is gone.
         device.pressBack();
-        UiScrollable jobListings = new UiScrollable(withResource("jobListRecyclerView"));
         assertFalse(scrollToText(jobListings, "Coding problem").exists());
     }
 }

@@ -1,5 +1,7 @@
 package dal.cs.quickcash3.database.firebase;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -11,12 +13,12 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-class FilteredChildEventListener<T> implements ChildEventListener {
+class MyChildEventListener<T> implements ChildEventListener {
     private final Class<T> type;
     private final BiConsumer<String, T> readFunction;
     private final Consumer<String> errorFunction;
 
-    public FilteredChildEventListener(
+    public MyChildEventListener(
         @NonNull Class<T> type,
         @NonNull BiConsumer<String, T> readFunction,
         @NonNull Consumer<String> errorFunction)

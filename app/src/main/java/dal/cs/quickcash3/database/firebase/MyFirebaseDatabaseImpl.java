@@ -107,7 +107,7 @@ class MyFirebaseDatabaseImpl implements Database {
     {
         DatabaseReference reference = database.getReference(directory);
         ChildEventListener listener = reference.addChildEventListener(
-            new FilteredChildEventListener<>(type, readFunction, errorFunction));
+            new MyChildEventListener<>(type, readFunction, errorFunction));
 
         FirebaseDatabaseListener pair = new ReferenceChildListenerPair(reference, listener);
         return addListener(pair);

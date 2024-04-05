@@ -134,14 +134,17 @@ public class EmployerDashboard extends AppCompatActivity {
 
         // TODO: Set this up properly.
         String payId = COMPLETED_JOB1_PAY_ID;
-        paymentConfirmationIntent.putExtra("PAY_ID", payId);
+        paymentConfirmationIntent.putExtra(getString(R.string.PAY_ID), payId);
 
         CompletedJob completedJob = CompletedJob.completeJob(availableJob, worker);
         completedJob.setPayId(payId);
 
         pendingWork.set(null);
-        availableJob.deleteFromDatabase(database, () -> replaceFragment(listingFragment), error -> Log.e(LOG_TAG, "Deleting job: " + error));
-        completedJob.writeToDatabase(database, error -> Log.e(LOG_TAG, "Creating completed job: " + error));
+        availableJob.deleteFromDatabase(database,
+            () -> replaceFragment(listingFragment),
+            error -> Log.e(LOG_TAG, "Deleting job: " + error));
+        completedJob.writeToDatabase(database,
+            error -> Log.e(LOG_TAG, "Creating completed job: " + error));
 
         startActivity(paymentConfirmationIntent);
     }
