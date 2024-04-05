@@ -10,12 +10,9 @@ public class Person {
     private String lastName;
     private int age;
 
-    /**
-     * Empty constructor needed for Firebase database.
-     * @noinspection unused
-     */
-    @SuppressWarnings("PMD.UncommentedEmptyConstructor")
-    public Person() {}
+    public Person() {
+        // Firebase needs an empty constructor.
+    }
 
     public Person(@NonNull String firstName, @NonNull String lastName, int age) {
         this.firstName = firstName;

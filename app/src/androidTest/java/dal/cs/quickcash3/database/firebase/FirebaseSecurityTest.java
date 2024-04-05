@@ -3,11 +3,15 @@ package dal.cs.quickcash3.database.firebase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -162,5 +166,42 @@ public class FirebaseSecurityTest {
         Espresso.onIdle();
 
         assertEquals("Hello", value.get());
+    }
+
+    @Test
+    public void readSecurePrivateDatabaseSuccess() {
+        Database database = new MyFirebaseDatabase();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        resource.increment();
+        auth.signInWithEmailAndPassword("ethroz@gmail.com", "Password")
+            .addOnSuccessListener(result -> resource.decrement())
+            .addOnFailureListener(result -> Assert.fail(result.getMessage()));
+
+        Espresso.onIdle();
+
+        FirebaseUser user = auth.getCurrentUser();
+        assertNotNull(user);
+        String uid = user.getUid();
+
+        // We need a value that shows that we have not received anything.
+        AtomicReference<String> value = new AtomicReference<>(RANDOM_STRING);
+
+        resource.increment();
+
+        database.read(
+            "private/users/" + uid + "/role",
+            String.class,
+            newValue -> {
+                value.set(newValue);
+                resource.decrement();
+            },
+            Assert::fail);
+
+        Espresso.onIdle();
+
+        // We cannot guarantee what will be read from the database.
+        // We just know we will receive _something_ or null.
+        assertNotEquals(RANDOM_STRING, value.get());
     }
 }

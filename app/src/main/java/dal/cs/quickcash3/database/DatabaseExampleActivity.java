@@ -59,7 +59,7 @@ public class DatabaseExampleActivity extends AppCompatActivity {
 
         if (categories.contains(getString(R.string.MOCK_DATABASE))) {
             database = new MockDatabase();
-            Log.d(LOG_TAG, "Using Mock Database");
+            Log.i(LOG_TAG, "Using Mock Database");
         }
         else {
             database = new MyFirebaseDatabase();
