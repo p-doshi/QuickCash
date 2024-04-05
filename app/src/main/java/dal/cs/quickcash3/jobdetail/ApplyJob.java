@@ -17,17 +17,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.Worker;
 
 
 public class ApplyJob extends Fragment {
 
     private DatabaseReference databaseReference;
-    @Override @NonNull
-    public void onCreate(@NonNull Bundle savedInstanceState) {
+    private FirebaseDatabase database;
+    private AvailableJob currentJob;
+    public ApplyJob(@NonNull AvailableJob currentJob,@NonNull Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        this.database = FirebaseDatabase.getInstance();
         this.databaseReference = database.getReference("available_jobs");
+        this.currentJob = currentJob;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view,@NonNull Bundle savedInstanceState) {
@@ -46,8 +51,8 @@ public class ApplyJob extends Fragment {
             String userId = currentUser.getUid();
 
             String jobId = "your_job_id";
-            DatabaseReference applicantsRef = databaseReference.child(jobId).child("applicants").child(userId);
-            applicantsRef.child("UserId").setValue(currentUser.getUid());
+            Worker worker = new Worker();
+            ApplicantManager applicantManager = new ApplicantManager(database,currentJob,);
 
 
             Toast.makeText(getContext(), "Applied for job successfully", Toast.LENGTH_SHORT).show();
