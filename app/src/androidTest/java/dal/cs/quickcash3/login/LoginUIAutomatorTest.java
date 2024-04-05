@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import android.app.Activity;
 
 import androidx.lifecycle.Lifecycle;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
@@ -35,9 +36,6 @@ public class LoginUIAutomatorTest {
     private static final int MAX_TIMEOUT = 30000;
 
     @Rule
-    public final ActivityScenarioRule<LoginActivity> activityRule =
-        new ActivityScenarioRule<>(LoginActivity.class);
-    @Rule
     public final ActivityMonitorRule<EmployerDashboard> employerDashboard =
         new ActivityMonitorRule<>(EmployerDashboard.class);
     @Rule
@@ -48,18 +46,19 @@ public class LoginUIAutomatorTest {
         new ActivityMonitorRule<>(RegistrationPage.class);
     private final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
+    private void launchApp() {
+        ActivityScenario.launch(LoginActivity.class);
+    }
+
     @Before
     public void setup() {
         FirebaseAuth.getInstance().signOut();
+        launchApp();
     }
 
     @After
     public void teardown() {
         FirebaseAuth.getInstance().signOut();
-    }
-
-    private void relaunchApp() {
-        activityRule.getScenario().onActivity(Activity::recreate);
     }
 
     @Test
@@ -105,7 +104,7 @@ public class LoginUIAutomatorTest {
         UiObject signInButton = device.findObject(new UiSelector().text(CONTINUE));
         signInButton.click();
         employerDashboard.waitForActivity(MAX_TIMEOUT).finish();
-        relaunchApp();
+        launchApp();
         employerDashboard.waitForActivity(MAX_TIMEOUT).finish();
     }
 
