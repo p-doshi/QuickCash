@@ -2,8 +2,10 @@ package dal.cs.quickcash3.jobs;
 
 import static dal.cs.quickcash3.database.DatabaseDirectory.AVAILABLE_JOBS;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.recycler.AvailableJobRecyclerViewAdapter;
+import dal.cs.quickcash3.recycler.RecyclerItemClickListener;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.AsyncLatch;
 
@@ -31,15 +37,23 @@ import dal.cs.quickcash3.util.AsyncLatch;
 public class JobListFragment extends Fragment {
     private static final String LOG_TAG = JobListFragment.class.getSimpleName();
     private final Database database;
+    private final Context context;
     private final AsyncLatch<SearchFilter<AvailableJob>> asyncFilter;
-    private final MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter();
+    private final AvailableJobRecyclerViewAdapter adapter;
     private final Map<String,AvailableJob> availableJobMap = new HashMap<>();
     private final AtomicInteger callbackId = new AtomicInteger();
 
-    public JobListFragment(@NonNull Database database, @NonNull AsyncLatch<SearchFilter<AvailableJob>> asyncFilter) {
+    public JobListFragment(
+        @NonNull Context context,
+        @NonNull Database database,
+        @NonNull AsyncLatch<SearchFilter<AvailableJob>> asyncFilter,
+        @NonNull Consumer<AvailableJob> displayCurrJob)
+    {
         super();
         this.database = database;
         this.asyncFilter = asyncFilter;
+        this.adapter = new AvailableJobRecyclerViewAdapter(displayCurrJob);
+        this.context = context;
     }
 
     private void setFilterCallback() {
@@ -64,6 +78,14 @@ public class JobListFragment extends Fragment {
         });
     }
 
+
+    /**
+     Searches through a list of available jobs based on the provided search filter and updates the adapter with the filtered results.
+     @param filter The search filter to apply to the list of available jobs.
+     It should implement the SearchFilter interface with the generic type of AvailableJob.
+     The isValid method of the filter will be used to determine if a job should be included in the filtered results.
+     @throws IllegalArgumentException if the filter parameter is null.
+     */
     public void searchList(@NonNull SearchFilter<AvailableJob> filter){
         List<AvailableJob> newJobs = new ArrayList<>();
 
@@ -84,12 +106,13 @@ public class JobListFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_job_list, container, false);
         if (!(view instanceof RecyclerView)) {
-            throw new ClassCastException("JOb list fragment not a recycler view");
+            throw new ClassCastException("Job list fragment not a recycler view");
         }
 
         RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setAdapter(adapter);
-
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, recyclerView ,adapter ));
         setFilterCallback();
 
         return view;

@@ -14,9 +14,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.jobdetail.ApplyJob;
+import dal.cs.quickcash3.util.BackButtonListener;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
@@ -30,6 +34,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
+    private Fragment jobSearchFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -43,29 +48,25 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         Fragment receiptsFragment = new ReceiptsFragment();
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
-        Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
+        jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
         workerNavView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            if (itemId == R.id.workerReceiptPage) {
-                Log.v(LOG_TAG, "Showing receipt fragment");
+            if (itemId == R.id.workerHistoryPage) {
                 replaceFragment(receiptsFragment);
                 return true;
             }
             else if (itemId == R.id.workerSearchPage) {
-                Log.v(LOG_TAG, "Showing job search fragment");
                 replaceFragment(jobSearchFragment);
                 return true;
             }
             else if (itemId == R.id.workerMapPage) {
-                Log.v(LOG_TAG, "Showing map fragment");
                 replaceFragment(mapFragment);
                 return true;
             }
             else if (itemId == R.id.workerProfilePage) {
-                Log.v(LOG_TAG, "Showing profile fragment");
                 replaceFragment(profileFragment);
                 return true;
             }
@@ -78,9 +79,19 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
+        Log.v(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Fragment applyFragment = new ApplyJob();
+        Fragment jobDetailsPage = new JobDetailsPage(availableJob, applyFragment);
+        replaceFragment(jobDetailsPage);
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+            new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
     }
 
     private void initInterfaces() {
