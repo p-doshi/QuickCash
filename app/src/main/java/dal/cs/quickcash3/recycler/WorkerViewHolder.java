@@ -6,9 +6,9 @@ import dal.cs.quickcash3.data.Worker;
 
 public interface WorkerViewHolder {
     /**
-     * Set the worker on a view holder.
+     * Binds the worker to a view holder.
      *
-     * @param worker The worker.
+     * @param worker The worker to bind.
      */
-    void setWorker(@NonNull Worker worker);
+    void onBind(@NonNull Worker worker);
 }

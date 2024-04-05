@@ -26,7 +26,7 @@ public class RejectantViewHolder extends RecyclerView.ViewHolder implements Work
     }
 
     @Override
-    public void setWorker(@NonNull Worker worker) {
+    public void onBind(@NonNull Worker worker) {
         workerText.setText(worker.fullName());
         undoButton.setOnClickListener(view -> undoCallback.accept(worker));
     }

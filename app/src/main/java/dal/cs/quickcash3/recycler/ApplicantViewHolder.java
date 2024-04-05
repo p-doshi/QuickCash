@@ -34,7 +34,7 @@ public class ApplicantViewHolder extends RecyclerView.ViewHolder implements Work
     }
 
     @Override
-    public void setWorker(@NonNull Worker worker) {
+    public void onBind(@NonNull Worker worker) {
         workerText.setText(worker.fullName());
         acceptButton.setOnClickListener(view -> acceptCallback.accept(worker));
         rejectButton.setOnClickListener(view -> rejectCallback.accept(worker));

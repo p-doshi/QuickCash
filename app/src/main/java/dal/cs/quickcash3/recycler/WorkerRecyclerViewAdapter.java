@@ -54,7 +54,7 @@ public class WorkerRecyclerViewAdapter<T extends RecyclerView.ViewHolder & Worke
 
     @Override
     public void onBindViewHolder(@NonNull T holder, int position) {
-        holder.setWorker(workers.get(position));
+        holder.onBind(workers.get(position));
     }
 
     @Override
