@@ -10,34 +10,27 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import dal.cs.quickcash3.search.SearchFilter;
-
 class MockDatabaseSearchListener<T> extends MockDatabaseListener<T> {
     private final BiConsumer<String, T> readFunction;
-    private final SearchFilter<T> filter;
     private final Map<String, Object> map = new MockDatabase.MapType();
 
     public MockDatabaseSearchListener(
         @NonNull String location,
         @NonNull Class<T> type,
-        @NonNull SearchFilter<T> filter,
         @NonNull BiConsumer<String, T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
         super(location, type, errorFunction);
-        this.filter = filter;
         this.readFunction = readFunction;
     }
 
-    private void read(@Nullable String key, @Nullable Object object) {
+    private void read(@NonNull String key, @Nullable Object object) {
         if (object != null && !type.isInstance(object)) {
             throw new ClassCastException("Cannot cast " + object.getClass() + " to " + type);
         }
 
         T value = type.cast(object);
-        if (value == null || filter.isValid(value)) {
-            readFunction.accept(key, value);
-        }
+        readFunction.accept(key, value);
     }
 
     public void update(@NonNull Map<String, Object> newMap) {

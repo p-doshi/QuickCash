@@ -17,14 +17,14 @@ public class ApplyJob extends Fragment {
 
     @Override @NonNull
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @NonNull ViewGroup container,
-                             @NonNull Bundle savedInstanceState) {
+                              @NonNull ViewGroup container,
+                              @NonNull Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_apply_job, container, false);
     }
 
-    @Override @NonNull
-    public void onViewCreated(@NonNull View view, @NonNull Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(@NonNull View view,@NonNull Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Button button = view.findViewById(R.id.applyForJob);
