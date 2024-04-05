@@ -69,7 +69,6 @@ public class JobSearchFragment extends Fragment  {
         transaction.commit();
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void showList(){
         replaceFragment(jobListFragment);
         filterIcon.setVisibility(View.VISIBLE);

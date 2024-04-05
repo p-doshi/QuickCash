@@ -1,28 +1,23 @@
 package dal.cs.quickcash3.search;
 
-import static dal.cs.quickcash3.util.GsonHelper.getAt;
-import static dal.cs.quickcash3.util.StringHelper.SLASH;
-import static dal.cs.quickcash3.util.StringHelper.splitString;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.JsonElement;
 
-import java.util.List;
+import java.util.function.Function;
 
 import dal.cs.quickcash3.location.LocationHelper;
 
 public class LocationSearchFilter<T> extends SearchFilter<T> {
-    private final List<String> latKeys;
-    private final List<String> longKeys;
+    private final Function<T, Double> latFunction;
+    private final Function<T, Double> longFunction;
     private LatLng location;
     private double maxDistance;
 
-    public LocationSearchFilter(@NonNull String latKey, @NonNull String longKey) {
+    public LocationSearchFilter(@NonNull Function<T, Double> latFunction, @NonNull Function<T, Double> longFunction) {
         super();
-        latKeys = splitString(latKey, SLASH);
-        longKeys = splitString(longKey, SLASH);
+        this.latFunction = latFunction;
+        this.longFunction = longFunction;
     }
 
     public void setLocation(@NonNull LatLng location) {
@@ -34,13 +29,13 @@ public class LocationSearchFilter<T> extends SearchFilter<T> {
     }
 
     @Override
-    public boolean isCurrentValid(@NonNull JsonElement root) {
+    public boolean isCurrentValid(@NonNull T elem) {
         if (location == null) {
             throw new NullPointerException("Please provide a location to use the location search filter");
         }
 
-        double latitude = getAt(root, latKeys).getAsDouble();
-        double longitude = getAt(root, longKeys).getAsDouble();
+        double latitude = latFunction.apply(elem);
+        double longitude = longFunction.apply(elem);
 
         double distance = LocationHelper.distanceBetween(location, new LatLng(latitude, longitude));
 
