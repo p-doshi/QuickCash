@@ -18,12 +18,13 @@ import java.util.Locale;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.JobPost;
 
 public class JobDetailsPage extends Fragment {
-    private final AvailableJob currentJob;
+    private final JobPost currentJob;
     private final Fragment subfragment;
 
-    public JobDetailsPage(@NonNull AvailableJob currentJob, @NonNull Fragment subfragment) {
+    public JobDetailsPage(@NonNull JobPost currentJob, @Nullable Fragment subfragment) {
         super();
         this.currentJob = currentJob;
         this.subfragment = subfragment;
@@ -49,9 +50,11 @@ public class JobDetailsPage extends Fragment {
         jobAddress.setText(addressCoordinates.toString());
 
         // Add child fragment for the bottom half
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.bottomHalfContainer, subfragment);
-        transaction.commit();
+        if (subfragment != null) {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.bottomHalfContainer, subfragment);
+            transaction.commit();
+        }
 
         return rootView;
     }
