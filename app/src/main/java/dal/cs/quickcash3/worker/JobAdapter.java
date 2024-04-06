@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.CompletedJob;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
-    private final List<JobHistory> jobList;
+    private final List<CompletedJob> jobList;
 
-    public JobAdapter(List<JobHistory> jobList) {
+    public JobAdapter(List<CompletedJob> jobList) {
         this.jobList = jobList;
     }
 
@@ -30,10 +31,10 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
-        JobHistory currentJob = jobList.get(position);
-        holder.jobName.setText(currentJob.getName());
-        holder.jobIncome.setText(String.format("Income: %.2f", currentJob.getIncome()));
-        holder.jobRating.setText(String.format("Reputation: %.1f", currentJob.getReputation()));
+        CompletedJob currentJob = jobList.get(position);
+        holder.jobName.setText(currentJob.getTitle());
+        holder.jobIncome.setText(String.format("Income: %.2f", currentJob.getSalary()));
+        holder.jobRating.setText(String.format("Reputation: %.1f: NA"));
 
         final int ID_BASE = 10000;
         holder.jobName.setId(ID_BASE + position * 3);
