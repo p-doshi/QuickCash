@@ -2,7 +2,6 @@ package dal.cs.quickcash3.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -14,15 +13,17 @@ import dal.cs.quickcash3.R;
  * preferences locally.
  *
  */
-public class StoreToSharedPref {
+public class SharedPrefHelper {
     private final Context context;
+    private final SharedPreferences sharedPreferences;
 
     /**
      * StoreToSharedPref class constructor.
      * @param context get the context from activity class
      */
-    public StoreToSharedPref(@NonNull Context context) {
+    public SharedPrefHelper(@NonNull Context context) {
         this.context = context;
+        sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
     }
 
     /**
@@ -30,7 +31,6 @@ public class StoreToSharedPref {
      * @param salaryRange the range of salary that worker wants to save as their preference
      */
     public void storeSalaryPrefToSharedPref(@NonNull Range<Double> salaryRange) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putFloat(context.getString(R.string.salary_max), salaryRange.getEnd().floatValue());
         editor.putFloat(context.getString(R.string.salary_min), salaryRange.getStart().floatValue());
@@ -42,7 +42,6 @@ public class StoreToSharedPref {
      * @param timeRange the range of time that worker wants to save as their preference
      */
     public void storeTimePrefToSharedPref(@NonNull Range<Double> timeRange) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putFloat(context.getString(R.string.time_max), timeRange.getEnd().floatValue());
         editor.putFloat(context.getString(R.string.time_min), timeRange.getStart().floatValue());
@@ -54,7 +53,6 @@ public class StoreToSharedPref {
      * to disable the salary range preference.
      */
     public void clearSalaryPref() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(context.getString(R.string.salary_max));
         editor.remove(context.getString(R.string.salary_min));
@@ -66,7 +64,6 @@ public class StoreToSharedPref {
      * to disable the duration range preference.
      */
     public void clearTimePref() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(context.getString(R.string.time_max));
         editor.remove(context.getString(R.string.time_min));

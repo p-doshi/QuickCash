@@ -82,7 +82,6 @@ public class GeocoderProxy implements MyGeocoder {
         return new LatLng(address.getLatitude(), address.getLongitude());
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private static @NonNull String addressesToString(@NonNull List<Address> addresses) {
         if (addresses.isEmpty()) {
             throw new IllegalArgumentException("Could not get the address from the geocoder");

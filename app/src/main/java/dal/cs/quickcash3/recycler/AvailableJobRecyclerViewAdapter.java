@@ -59,7 +59,6 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.setJob(jobs.get(position));
-
     }
 
     @Override
