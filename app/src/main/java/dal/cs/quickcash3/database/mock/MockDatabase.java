@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.database.mock;
 
+import static dal.cs.quickcash3.util.CopyHelper.deepClone;
 import static dal.cs.quickcash3.util.StringHelper.SLASH;
 import static dal.cs.quickcash3.util.StringHelper.splitString;
 
@@ -14,11 +15,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.search.SearchFilter;
 
 @SuppressWarnings("PMD.GodClass") // Shush! I am God.
 public class MockDatabase implements Database {
-    public static final String EMPTY_LOCATION = "Location cannot be empty.";
+    public static final String EMPTY_PATH = "Path cannot be empty.";
     public static final String KEY_NOT_FOUND = "Could not find the key: ";
     private final Map<Integer, MockDatabaseValueListener<?>> valueListenerMap = new TreeMap<>();
     private final Map<Integer, MockDatabaseSearchListener<?>> searchListenerMap = new TreeMap<>();
@@ -32,7 +32,7 @@ public class MockDatabase implements Database {
 
     private Object get(@NonNull List<String> keys) {
         if (keys.isEmpty()) {
-            throw new IllegalArgumentException(EMPTY_LOCATION);
+            throw new IllegalArgumentException(EMPTY_PATH);
         }
 
         Object currentObj = data;
@@ -55,7 +55,7 @@ public class MockDatabase implements Database {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops") // There is no reason to make this recursive.
     private <T> void set(@NonNull List<String> keys, @NonNull T value) {
         if (keys.isEmpty()) {
-            throw new IllegalArgumentException(EMPTY_LOCATION);
+            throw new IllegalArgumentException(EMPTY_PATH);
         }
 
         Map<String, Object> currentMap = data;
@@ -77,7 +77,7 @@ public class MockDatabase implements Database {
 
     private @NonNull List<Map<String, Object>> getMapsToDelete(@NonNull List<String> keys) {
         if (keys.isEmpty()) {
-            throw new IllegalArgumentException(EMPTY_LOCATION);
+            throw new IllegalArgumentException(EMPTY_PATH);
         }
 
         Map<String, Object> currentMap = data;
@@ -126,7 +126,6 @@ public class MockDatabase implements Database {
         }
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is definitely used.
     private void runListener(@NonNull MockDatabaseSearchListener<?> listener) {
         try {
             Object object = get(listener.getKeys());
@@ -140,13 +139,13 @@ public class MockDatabase implements Database {
 
     private void runListeners(@NonNull List<String> keys) {
         for (MockDatabaseValueListener<?> listener : valueListenerMap.values()) {
-            if (listener.isLocation(keys)) {
+            if (listener.isPath(keys)) {
                 runListener(listener);
             }
         }
 
         for (MockDatabaseSearchListener<?> listener : searchListenerMap.values()) {
-            if (listener.isLocation(keys)) {
+            if (listener.isPath(keys)) {
                 runListener(listener);
             }
         }
@@ -154,23 +153,24 @@ public class MockDatabase implements Database {
 
     @Override
     public <T> void write(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull T value,
         @NonNull Consumer<String> errorFunction)
     {
-        write(location, value, () -> {}, errorFunction);
+        write(path, value, () -> {}, errorFunction);
     }
 
     @Override
     public <T> void write(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull T value,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
         try {
-            List<String> keys = splitString(location, SLASH);
-            set(keys, value);
+            List<String> keys = splitString(path, SLASH);
+            // Make a copy of the value.
+            set(keys, deepClone(value));
             runListeners(keys);
             successFunction.run();
         }
@@ -181,13 +181,13 @@ public class MockDatabase implements Database {
 
     @Override
     public <T> void read(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
         try {
-            List<String> keys = splitString(location, SLASH);
+            List<String> keys = splitString(path, SLASH);
             Object object = get(keys);
             T value = type.cast(object);
             readFunction.accept(value);
@@ -199,14 +199,14 @@ public class MockDatabase implements Database {
 
     @Override
     public <T> int addListener(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
         int callbackId = nextListenerId++;
         MockDatabaseValueListener<T> listener =
-            new MockDatabaseValueListener<>(location, type, readFunction, errorFunction);
+            new MockDatabaseValueListener<>(path, type, readFunction, errorFunction);
         valueListenerMap.put(callbackId, listener);
 
         runListener(listener);
@@ -215,16 +215,15 @@ public class MockDatabase implements Database {
     }
 
     @Override
-    public <T> int addSearchListener(
-        @NonNull String location,
+    public <T> int addDirectoryListener(
+        @NonNull String path,
         @NonNull Class<T> type,
-        @NonNull SearchFilter<T> filter,
         @NonNull BiConsumer<String, T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
         int callbackId = nextListenerId++;
         MockDatabaseSearchListener<T> listener =
-            new MockDatabaseSearchListener<>(location, type, filter, readFunction, errorFunction);
+            new MockDatabaseSearchListener<>(path, type, readFunction, errorFunction);
         searchListenerMap.put(callbackId, listener);
 
         runListener(listener);
@@ -237,20 +236,20 @@ public class MockDatabase implements Database {
         if (valueListenerMap.containsKey(listenerId)) {
             valueListenerMap.remove(listenerId);
         }
-        else if (searchListenerMap.containsKey(listenerId)) {
+        else {
             searchListenerMap.remove(listenerId);
         }
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) {
-        delete(location, () -> {}, errorFunction);
+    public void delete(@NonNull String path, @NonNull Consumer<String> errorFunction) {
+        delete(path, () -> {}, errorFunction);
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
+    public void delete(@NonNull String path, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
         try {
-            List<String> keys = splitString(location, SLASH);
+            List<String> keys = splitString(path, SLASH);
             List<Map<String, Object>> maps = getMapsToDelete(keys);
             removeEmptyMaps(maps);
 
