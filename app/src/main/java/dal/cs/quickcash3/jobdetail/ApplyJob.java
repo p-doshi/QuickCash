@@ -1,61 +1,74 @@
 package dal.cs.quickcash3.jobdetail;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.Worker;
+import dal.cs.quickcash3.database.Database;
 
 
 public class ApplyJob extends Fragment {
 
-    private DatabaseReference databaseReference;
-    private FirebaseDatabase database;
-    private AvailableJob currentJob;
-    public ApplyJob(@NonNull AvailableJob currentJob,@NonNull Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        this.database = FirebaseDatabase.getInstance();
-        this.databaseReference = database.getReference("available_jobs");
-        this.currentJob = currentJob;
-    }
+    private static final String LOG_TAG = ApplyJob.class.getSimpleName();
 
+    private final Database database;
+    private final AvailableJob currentJob;
+    private final Worker worker;
+
+    public ApplyJob(@NonNull Database database, @NonNull AvailableJob currentJob,@NonNull Worker worker){
+        super();
+        this.database=database;
+        this.currentJob=currentJob;
+        this.worker=worker;
+    }
 
     @Override
-    public void onViewCreated(@NonNull View view,@NonNull Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public @NonNull View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState)
+    {
 
+        View view = inflater.inflate(R.layout.fragment_apply_job, container, false);
         Button button = view.findViewById(R.id.applyForJob);
+        button.setEnabled(false);
+        if(worker.key() != null) {
+            if( !currentJob.isApplicant(worker)) {
+                button.setEnabled(true);
+                button.setOnClickListener(v -> applyForJob(view));
+            }else{
+                TextView statusLabel = view.findViewById(R.id.statusApplyJob);
+                statusLabel.setText(R.string.appliedJob);
+            }
+        }else{
+            TextView statusLabel = view.findViewById(R.id.statusApplyJob);
+            statusLabel.setText(R.string.log_in);
+        }
 
-        button.setOnClickListener(v -> {
-            applyForJob();
-        });
+        return view;
     }
 
-    private void applyForJob() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
+    private void applyForJob(@NonNull View view) {
 
-            String jobId = "your_job_id";
-            Worker worker = new Worker();
-            ApplicantManager applicantManager = new ApplicantManager(database,currentJob,);
-
-
-            Toast.makeText(getContext(), "Applied for job successfully", Toast.LENGTH_SHORT).show();
-        }
+        currentJob.addApplicant(worker);
+        currentJob.writeToDatabase(database,error ->Log.d(LOG_TAG,"Database error : "+error));
+        Toast.makeText(getContext(), getString(R.string.applySuccess),Toast.LENGTH_SHORT).show();
+        TextView statusLabel = view.findViewById(R.id.statusApplyJob);
+        statusLabel.setText(R.string.applySuccess);
     }
 }

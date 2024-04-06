@@ -117,6 +117,14 @@ public class AvailableJob extends JobPost {
         }
     }
 
+    public  void  addApplicant(@NonNull Worker worker){
+        String key = worker.key();
+        if (applicants == null) {
+            applicants = new ArrayList<>();
+        }
+        applicants.add(key);
+    }
+
     @Override
     public @NonNull String toString() {
         return super.toString() +

@@ -15,6 +15,7 @@ import java.util.TreeSet;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.Worker;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
@@ -60,6 +61,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             }
             else if (itemId == R.id.workerSearchPage) {
                 replaceFragment(jobSearchFragment);
+
                 return true;
             }
             else if (itemId == R.id.workerMapPage) {
@@ -86,7 +88,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     }
 
     private void switchToJobDetails(@NonNull AvailableJob availableJob) {
-        Fragment applyFragment = new ApplyJob();
+        Fragment applyFragment = new ApplyJob(database,availableJob,new Worker());
         Fragment jobDetailsPage = new JobDetailsPage(availableJob, applyFragment);
         replaceFragment(jobDetailsPage);
         getOnBackPressedDispatcher().addCallback(jobDetailsPage,
