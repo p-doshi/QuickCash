@@ -1,6 +1,7 @@
 package dal.cs.quickcash3.worker;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,17 +20,14 @@ import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.ObjectSearchAdapter;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.util.CustomObserver;
 
 public class WorkHistoryActivity extends AppCompatActivity {
-
-    private double totalIncome;
-    private double totalRating;
+    private static final String TAG = WorkHistoryActivity.class.getSimpleName();
     RecyclerView jobHistoryList;
-    TextView tvTotalIncome;
-    TextView tvAverageReputation;
-    private final List<CompletedJob> jobList = new ArrayList<>();
+    private List<CompletedJob> jobList;
     JobAdapter adapter;
     private int callbackId;
     private Database database;
@@ -39,22 +37,19 @@ public class WorkHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_history);
         init();
+        database = new MockDatabase();
+        jobList = new ArrayList<>();
+        fetchJobsFromDatabase();
         adapter = new JobAdapter(jobList);
         jobHistoryList.setAdapter(adapter);
         jobHistoryList.setLayoutManager(new LinearLayoutManager(this));
+        if(jobList.isEmpty()){
+            Log.e(TAG, "JobList is empty");
+        }
     }
 
     private void init() {
         jobHistoryList = findViewById(R.id.jobRecyclerView);
-        tvTotalIncome = findViewById(R.id.totalIncome);
-        tvAverageReputation = findViewById(R.id.averageReputation);
-        database = new MyFirebaseDatabase();
-        fetchJobsFromDatabase();
-
-        adapter = new JobAdapter(jobList);
-        jobHistoryList.setAdapter(adapter);
-        jobHistoryList.setLayoutManager(new LinearLayoutManager(this));
-        updateUI();
     }
 
     private void fetchJobsFromDatabase() {
@@ -70,34 +65,14 @@ public class WorkHistoryActivity extends AppCompatActivity {
                 error -> {
                     // TODO: handle errors. You can probably just log it and move on.
                 });
+        Log.e(TAG, "Data load complete.");
     }
 
     private void addJob(@NonNull CompletedJob job) {
-        runOnUiThread(() -> {
-            jobList.add(job);
-            adapter.notifyItemInserted(jobList.size() - 1);
-            updateUI();
-            // TODO:
-        });
+        jobList.add(job);
     }
 
     private void removeWorker(@NonNull CompletedJob job) {
-        runOnUiThread(() -> {
-            int index = jobList.indexOf(job);
-            if (index != -1) {
-                jobList.remove(index);
-                adapter.notifyItemRemoved(index);
-                updateUI();
-                // TODO:
-            }
-        });
-    }
-
-    private void updateUI() {
-        double totalIncome = jobList.stream().mapToDouble(CompletedJob::getSalary).sum();
-        double averageReputation = 0;
-
-        tvTotalIncome.setText(getString(R.string.total_income, String.format(Locale.US, "%.2f", totalIncome)));
-        tvAverageReputation.setText(getString(R.string.average_reputation, String.format(Locale.US, "%.2f", averageReputation)));
+        jobList.remove(job);
     }
 }
