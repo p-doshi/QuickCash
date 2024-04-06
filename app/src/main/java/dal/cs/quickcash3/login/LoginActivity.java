@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity  {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(this, task -> {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("Login_Tag", "signInWithCustomToken:success");
+                        Log.i("Login_Tag", "signInWithCustomToken:success");
                         editor.putBoolean("remember", rememberMe.isChecked());
                         editor.apply();
                         moveToDashboard();
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity  {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Login_Tag", "signInResult:failed code=" + e.getStatusCode());
+            Log.e("Login_Tag", "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
         }
     }

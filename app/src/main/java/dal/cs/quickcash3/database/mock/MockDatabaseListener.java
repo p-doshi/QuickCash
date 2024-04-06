@@ -14,16 +14,16 @@ abstract class MockDatabaseListener<T> {
     private final Consumer<String> errorFunction;
 
     protected MockDatabaseListener(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<String> errorFunction)
     {
-        this.keys = splitString(location, SLASH);
+        this.keys = splitString(path, SLASH);
         this.type = type;
         this.errorFunction = errorFunction;
     }
 
-    public boolean isLocation(@NonNull List<String> keys) {
+    public boolean isPath(@NonNull List<String> keys) {
         if (this.keys.size() > keys.size()) {
             return false;
         }

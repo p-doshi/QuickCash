@@ -30,6 +30,12 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
         notifyItemInserted(jobs.size() - 1);
     }
 
+    public void removeJob(@NonNull AvailableJob availableJob) {
+        int index = jobs.indexOf(availableJob);
+        jobs.remove(index);
+        notifyItemRemoved(index);
+    }
+
     public void reset() {
         notifyItemRangeRemoved(0, jobs.size());
         jobs.clear();

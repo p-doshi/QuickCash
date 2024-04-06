@@ -51,7 +51,7 @@ public class GeocoderProxy implements MyGeocoder {
                     break;
                 } catch (IllegalArgumentException e) {
                     error = e.getMessage();
-                    Log.v(LOG_TAG, "Geocoder error: " + error);
+                    Log.d(LOG_TAG, "Geocoder error: " + error);
                 }
             }
 
@@ -73,7 +73,6 @@ public class GeocoderProxy implements MyGeocoder {
         }
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private static @NonNull LatLng addressesToLocation(@NonNull List<Address> addresses) {
         if (addresses.isEmpty()) {
             throw new IllegalArgumentException("Could not get the location from the geocoder");
