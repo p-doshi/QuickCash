@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Quick Cash</string>
-    <string name="worker">Worker</string>
-    <string name="employer">Employer</string>
+    <string name="worker">worker</string>
+    <string name="employer">employer</string>
     <string name="confirm">Confirm</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
