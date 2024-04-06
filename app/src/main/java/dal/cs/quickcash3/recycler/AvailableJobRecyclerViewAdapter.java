@@ -25,6 +25,8 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
         this.displayCurrJob = displayCurrJob;
 
     }
+
+    }
     public void addJob(@NonNull AvailableJob availableJob) {
         jobs.add(availableJob);
         notifyItemInserted(jobs.size() - 1);
