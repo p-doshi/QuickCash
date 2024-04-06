@@ -49,13 +49,13 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         initInterfaces();
 
         // Get a search filter for the current user.
-        String currentUser = getIntent().getStringExtra(getString(R.string.USER));
-        RegexSearchFilter<CompletedJob> searchFilter = new RegexSearchFilter<>(CompletedJob::getEmployer);
-        if (currentUser == null) {
+        String userId = getIntent().getStringExtra(getString(R.string.USER));
+        RegexSearchFilter<CompletedJob> searchFilter = new RegexSearchFilter<>(CompletedJob::getWorker);
+        if (userId == null) {
             searchFilter.setPattern(Pattern.compile(".*"));
         }
         else {
-            searchFilter.setPattern(Pattern.compile(currentUser));
+            searchFilter.setPattern(Pattern.compile(userId));
         }
 
         // Initialize the fragments.

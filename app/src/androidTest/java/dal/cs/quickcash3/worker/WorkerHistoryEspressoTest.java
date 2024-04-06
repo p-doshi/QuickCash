@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.generateCompletedJobs;
-import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
 import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
 
 import android.Manifest;
@@ -39,7 +39,6 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
-import dal.cs.quickcash3.employer.EmployerDashboard;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
@@ -50,7 +49,7 @@ public class WorkerHistoryEspressoTest {
         new ActivityScenarioRule<>(
             new Intent(context, WorkerDashboard.class)
                 .addCategory(context.getString(R.string.MOCK_DATABASE))
-                .putExtra("user", EMPLOYER1));
+                .putExtra("user", WORKER1));
     @Rule
     public GrantPermissionRule permissionRule =
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -86,8 +85,8 @@ public class WorkerHistoryEspressoTest {
     @Test
     public void checkHistory() {
         List<String> expectedJobTitles = Arrays.asList(
-            "House Cleaner",
-            "Gardener"
+            "Painter",
+            "Computer Technician"
         );
 
         checkJobPosts(expectedJobTitles);
@@ -95,9 +94,9 @@ public class WorkerHistoryEspressoTest {
 
     @Test
     public void viewJobDetails() {
-        onView(allOf(withId(R.id.title), withText("House Cleaner"))).perform(scrollTo(), click());
+        onView(allOf(withId(R.id.title), withText("Painter"))).perform(scrollTo(), click());
 
-        onView(withId(R.id.jobTitle)).check(matches(withText("House Cleaner")));
+        onView(withId(R.id.jobTitle)).check(matches(withText("Painter")));
         onView(withId(R.id.jobAddress)).check(matches(isDisplayed()));
         onView(withId(R.id.jobPay)).check(matches(isDisplayed()));
         onView(withId(R.id.jobDescription)).check(matches(isDisplayed()));

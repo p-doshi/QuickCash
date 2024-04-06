@@ -1,7 +1,6 @@
 package dal.cs.quickcash3.employer;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -14,10 +13,7 @@ import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.generateCompletedJobs;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
-import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
-import static dal.cs.quickcash3.test.ExampleUserList.WORKER2;
 import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
-import static dal.cs.quickcash3.test.SiblingMatcher.withSibling;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +30,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

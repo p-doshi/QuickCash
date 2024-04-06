@@ -2,6 +2,7 @@ package dal.cs.quickcash3.test;
 
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER2;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
 import static dal.cs.quickcash3.test.ExampleUserList.WORKERS;
 
 import android.annotation.SuppressLint;
@@ -215,7 +216,7 @@ public final class ExampleJobList {
         job12.setLatitude(43.6532);
         job12.setLongitude(-79.3832);
         job12.setSalary(300);
-        job12.setWorker("HZcm9GKqsRXJ9bM2U9xXfgnda7MNXB");
+        job12.setWorker(WORKER1);
         job12.setCompletionDate(new Date().toString());
         job12.setPayId("VAUZPRyjQhBkcV44RXv0");
         COMPLETED_JOBS.add(job12);
@@ -239,7 +240,7 @@ public final class ExampleJobList {
         job14.setLatitude(43.6532);
         job14.setLongitude(-79.3832);
         job14.setSalary(150);
-        job14.setWorker("aWYTVZiIVmkWmhtU0qYZKisTB6wfrY");
+        job14.setWorker(WORKER1);
         job14.setCompletionDate(new Date().toString());
         job14.setPayId("jaJOMTKX1xIp0YBvXzSz");
         COMPLETED_JOBS.add(job14);
