@@ -198,7 +198,7 @@ public final class ExampleJobList {
 
         CompletedJob job11 = CompletedJob.createForTest(COMPLETED_JOB1);
         job11.setTitle("House Cleaner");
-        job11.setEmployer("8NugQ8moqZ9KnrxG4nuCSyPPRTnjEr");
+        job11.setEmployer(EMPLOYER1);
         job11.setDescription("Clean houses and apartments");
         job11.setLatitude(51.5074);
         job11.setLongitude(-0.1278);
@@ -222,7 +222,7 @@ public final class ExampleJobList {
 
         CompletedJob job13 = CompletedJob.createForTest("7ArMK8bmHyM8uLr9BKxo");
         job13.setTitle("Gardener");
-        job13.setEmployer("G8FjL9qYTytF7nyqrGhiMW0WfGGZON");
+        job13.setEmployer(EMPLOYER1);
         job13.setDescription("Maintain gardens and landscapes");
         job13.setLatitude(51.5074);
         job13.setLongitude(-0.1278);
