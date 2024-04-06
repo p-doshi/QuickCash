@@ -1,10 +1,6 @@
 package dal.cs.quickcash3.worker;
 
-import static dal.cs.quickcash3.database.DatabaseDirectory.COMPLETED_JOBS;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,26 +9,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.database.ObjectSearchAdapter;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.search.RegexSearchFilter;
-import dal.cs.quickcash3.search.SearchFilter;
-import dal.cs.quickcash3.util.AsyncLatch;
+import dal.cs.quickcash3.util.CustomObserver;
 
 public class WorkHistoryActivity extends AppCompatActivity {
 
@@ -43,7 +31,8 @@ public class WorkHistoryActivity extends AppCompatActivity {
     TextView tvAverageReputation;
     private final List<CompletedJob> jobList = new ArrayList<>();
     JobAdapter adapter;
-    private DatabaseReference mDatabase;
+    private int callbackId;
+    private Database database;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,8 +48,13 @@ public class WorkHistoryActivity extends AppCompatActivity {
         jobHistoryList = findViewById(R.id.jobRecyclerView);
         tvTotalIncome = findViewById(R.id.totalIncome);
         tvAverageReputation = findViewById(R.id.averageReputation);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("public").child("completed_jobs");
+        database = new MyFirebaseDatabase();
         fetchJobsFromDatabase();
+
+        adapter = new JobAdapter(jobList);
+        jobHistoryList.setAdapter(adapter);
+        jobHistoryList.setLayoutManager(new LinearLayoutManager(this));
+        updateUI();
     }
 
     private void fetchJobsFromDatabase() {
@@ -79,18 +73,31 @@ public class WorkHistoryActivity extends AppCompatActivity {
     }
 
     private void addJob(@NonNull CompletedJob job) {
-        jobList.add(job);
-        // TODO: handle new jobs here.
+        runOnUiThread(() -> {
+            jobList.add(job);
+            adapter.notifyItemInserted(jobList.size() - 1);
+            updateUI();
+            // TODO:
+        });
     }
 
     private void removeWorker(@NonNull CompletedJob job) {
-        jobList.remove(job);
-        // TODO: handle deleted jobs here
+        runOnUiThread(() -> {
+            int index = jobList.indexOf(job);
+            if (index != -1) {
+                jobList.remove(index);
+                adapter.notifyItemRemoved(index);
+                updateUI();
+                // TODO:
+            }
+        });
     }
 
-    private void updateUI(){
+    private void updateUI() {
+        double totalIncome = jobList.stream().mapToDouble(CompletedJob::getSalary).sum();
+        double averageReputation = 0;
+
         tvTotalIncome.setText(getString(R.string.total_income, String.format(Locale.US, "%.2f", totalIncome)));
-        tvAverageReputation.setText(getString(R.string.average_reputation,
-                jobList.size() > 0 ? String.format(Locale.US, "%.2f", totalRating / jobList.size()) : "0"));
+        tvAverageReputation.setText(getString(R.string.average_reputation, String.format(Locale.US, "%.2f", averageReputation)));
     }
 }
