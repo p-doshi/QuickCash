@@ -23,7 +23,8 @@ public class WorkerCheckPayment extends Fragment {
     private static final String LOG_TAG = WorkerCheckPayment.class.getSimpleName();
     private final Database database;
 
-    public WorkerCheckPayment(Database database) {
+    public WorkerCheckPayment(@NonNull Database database) {
+        super();
         this.database = database;
     }
 

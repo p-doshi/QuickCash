@@ -17,7 +17,7 @@ public class MockPayment implements Payment {
      *
      * @param message Pay ID of the payment that was made by the employer
      */
-    public void setSuccess (String message) {
+    public void setSuccess (@NonNull String message) {
         this.message = message;
         success = true;
     }
@@ -27,13 +27,13 @@ public class MockPayment implements Payment {
      *
      * @param message error message given by the payment gateway
      */
-    public void setFailure (String message) {
+    public void setFailure (@NonNull String message) {
         this.message = message;
         success = false;
     }
 
     @Override
-    public void processPayment(Consumer<String> successFunction, Consumer<String> errorFunction) {
+    public void processPayment(@NonNull Consumer<String> successFunction, @NonNull Consumer<String> errorFunction) {
         if (success) {
             successFunction.accept(message);
         } else {
@@ -47,7 +47,7 @@ public class MockPayment implements Payment {
     }
 
     @Override
-    public String getPaymentAmount() {
+    public @NonNull String getPaymentAmount() {
         return amount;
     }
 }

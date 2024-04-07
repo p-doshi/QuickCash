@@ -47,7 +47,7 @@ public class PayPalPaymentProcess implements Payment {
     }
 
     @Override
-    public void processPayment(Consumer<String> successFunction, Consumer<String> errorFunction) {
+    public void processPayment(@NonNull Consumer<String> successFunction, @NonNull Consumer<String> errorFunction) {
         this.successFunction = successFunction;
         this.errorFunction = errorFunction;
         final PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(
@@ -77,7 +77,7 @@ public class PayPalPaymentProcess implements Payment {
                     // Extract json response and display it in a text view.
                     String payID = payObj.getJSONObject("response").getString("id");
                     String state = payObj.getJSONObject("response").getString("state");
-                    if (state.equals("approved")) {
+                    if ("approved".equals(state)) {
                         successFunction.accept(payID);
                     } else {
                         errorFunction.accept(state);
@@ -99,8 +99,9 @@ public class PayPalPaymentProcess implements Payment {
         this.amount = amount;
     }
 
+    @NonNull
     @Override
-    public @Nullable String getPaymentAmount() {
+    public String getPaymentAmount() {
         return this.amount;
     }
 }

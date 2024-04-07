@@ -1,6 +1,5 @@
 package dal.cs.quickcash3.payment;
 
-import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 
 import java.util.function.Consumer;
@@ -9,7 +8,7 @@ public interface Payment {
     /**
      * Method to initialize payment process.
      */
-    void processPayment(Consumer<String> successFunction, Consumer<String> errorFunction);
+    void processPayment(@NonNull Consumer<String> successFunction, @NonNull Consumer<String> errorFunction);
 
     /**
      * Method to set the amount of money that employer needs to pay to
@@ -24,5 +23,5 @@ public interface Payment {
      * their worker.
      *
      */
-    String getPaymentAmount();
+    @NonNull String getPaymentAmount();
 }

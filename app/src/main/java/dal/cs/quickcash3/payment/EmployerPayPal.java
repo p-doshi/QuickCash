@@ -24,7 +24,8 @@ public class EmployerPayPal extends Fragment {
 
     private final Payment payment;
 
-    public EmployerPayPal(@NonNull Payment payment, Consumer<String> successFunction, Consumer<String> errorFunction) {
+    public EmployerPayPal(@NonNull Payment payment, @NonNull Consumer<String> successFunction, @NonNull Consumer<String> errorFunction) {
+        super();
         this.payment = payment;
         this.successFunction = successFunction;
         this.errorFunction = errorFunction;
