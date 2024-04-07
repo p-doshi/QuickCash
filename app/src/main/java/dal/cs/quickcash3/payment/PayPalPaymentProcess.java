@@ -59,8 +59,7 @@ public class PayPalPaymentProcess implements Payment {
         activityLauncher.launch(intent);
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
-    public void handlePaymentResult(@NonNull ActivityResult result) {
+    private void handlePaymentResult(@NonNull ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_OK) {
             assert result.getData() != null;
             //noinspection RedundantSuppression
@@ -70,7 +69,7 @@ public class PayPalPaymentProcess implements Payment {
                 try {
                     // Get the payment details
                     JSONObject payObj = confirmation.toJSONObject();
-                    Log.d(TAG, payObj.toString(4));
+                    Log.v(TAG, payObj.toString(4));
                     // Extract json response and display it in a text view.
                     String payID = payObj.getJSONObject("response").getString("id");
                     String state = payObj.getJSONObject("response").getString("state");
@@ -82,7 +81,7 @@ public class PayPalPaymentProcess implements Payment {
         } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
             Log.e(TAG, "Launcher Result Invalid");
         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-            Log.w(TAG, "Launcher Result Cancelled");
+            Log.i(TAG, "Launcher Result Cancelled");
         }
     }
 

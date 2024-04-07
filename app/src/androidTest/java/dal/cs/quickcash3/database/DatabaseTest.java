@@ -6,7 +6,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static dal.cs.quickcash3.test.ExampleJobList.JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
+import static dal.cs.quickcash3.test.ExampleJobList.COMPLETED_JOBS;
+import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYERS;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKERS;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
@@ -22,19 +25,17 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.CompletedJob;
+import dal.cs.quickcash3.data.Employer;
+import dal.cs.quickcash3.data.Worker;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
-import dal.cs.quickcash3.search.NumericRangeSearchFilter;
-import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.test.CountingResourceRule;
 import dal.cs.quickcash3.test.Person;
 import dal.cs.quickcash3.util.RandomStringGenerator;
-import dal.cs.quickcash3.util.Range;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // This increases code readability.
 @RunWith(AndroidJUnit4.class)
@@ -93,18 +94,51 @@ public class DatabaseTest {
         assertEquals("Hello", value.get());
     }
 
-    @Ignore("Manual job creation")
+    @Ignore("Manual Test Helper")
     @Test
-    public void createJobs() {
-        for (Map.Entry<String, AvailableJob> entry : JOBS.entrySet()) {
-            resource.increment();
-            database.write(
-                DatabaseDirectory.AVAILABLE_JOBS.getValue() + entry.getKey(),
-                entry.getValue(),
-                resource::decrement,
-                Assert::fail);
-        }
+    public void clearTestDir() {
+        resource.increment();
+        database.delete("test", resource::decrement, Assert::fail);
+        Espresso.onIdle();
+    }
 
+    @Ignore("Manual data creation")
+    @Test
+    public void createDemoPublic() {
+        // Delete.
+        resource.increment();
+        resource.increment();
+        resource.increment();
+        resource.increment();
+        database.delete(AvailableJob.DIR, resource::decrement, Assert::fail);
+        database.delete(CompletedJob.DIR, resource::decrement, Assert::fail);
+        database.delete(Employer.DIR, resource::decrement, Assert::fail);
+        database.delete(Worker.DIR, resource::decrement, Assert::fail);
+        Espresso.onIdle();
+
+        // Create Job Posts.
+        AVAILABLE_JOBS.forEach(job -> {
+            resource.increment();
+            job.writeToDatabase(database, resource::decrement, Assert::fail);
+        });
+
+        COMPLETED_JOBS.forEach(job -> {
+            resource.increment();
+            job.writeToDatabase(database, resource::decrement, Assert::fail);
+        });
+
+        // Create Users.
+        EMPLOYERS.forEach(employer -> {
+            resource.increment();
+            employer.writeToDatabase(database, resource::decrement, Assert::fail);
+        });
+
+        WORKERS.forEach(worker -> {
+            resource.increment();
+            worker.writeToDatabase(database, resource::decrement, Assert::fail);
+        });
+
+        // Wait for them all to finish.
         Espresso.onIdle();
     }
 
@@ -217,21 +251,17 @@ public class DatabaseTest {
     }
 
     @Test
-    public void searchOneFilter() {
+    public void directoryListener() {
         writePeople();
 
         List<Person> actualPeople = new ArrayList<>();
 
-        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
-        filter.setPattern(Pattern.compile("aaa"));
-
-        List<Person> expectedPeople = PEOPLE.subList(0, 2);
+        List<Person> expectedPeople = PEOPLE;
         expectedPeople.forEach(unused -> resource.increment());
 
-        int listenerId = database.addSearchListener(
+        int listenerId = database.addDirectoryListener(
             testDir,
             Person.class,
-            filter,
             (key, person) -> {
                 actualPeople.add(person);
                 resource.decrement();
@@ -246,57 +276,18 @@ public class DatabaseTest {
     }
 
     @Test
-    public void searchTwoFilters() {
-        writePeople();
-
-        List<Person> actualPeople = new ArrayList<>();
-
-        RegexSearchFilter<Person> filter1 = new RegexSearchFilter<>("firstName");
-        filter1.setPattern(Pattern.compile(".*a.*"));
-        NumericRangeSearchFilter<Person> filter2 = new NumericRangeSearchFilter<>("age");
-        filter2.setRange(new Range<>(2.0, 3.0));
-        filter1.addNext(filter2);
-
-        List<Person> expectedPeople = PEOPLE.subList(1, 1);
-        expectedPeople.forEach(unused -> resource.increment());
-
-        int listenerId = database.addSearchListener(
-            testDir,
-            Person.class,
-            filter1,
-            (key, person) -> {
-                actualPeople.add(person);
-                resource.decrement();
-            },
-            Assert::fail);
-
-        Espresso.onIdle();
-
-        database.removeListener(listenerId);
-
-        assertThat(actualPeople, containsInAnyOrder(expectedPeople.toArray()));
-    }
-
-    @Test
-    public void searchForOneThenRead() {
+    public void directoryListenThenRead() {
         writePeople();
 
         List<String> keys = new ArrayList<>();
         List<Person> actualPeople = new ArrayList<>();
 
-        RegexSearchFilter<Person> filter1 = new RegexSearchFilter<>("firstName");
-        filter1.setPattern(Pattern.compile("aaa"));
-        RegexSearchFilter<Person> filter2 = new RegexSearchFilter<>("lastName");
-        filter2.setPattern(Pattern.compile("aaa"));
-        filter1.addNext(filter2);
-
-        List<Person> expectedPeople = PEOPLE.subList(0, 1);
+        List<Person> expectedPeople = PEOPLE;
         expectedPeople.forEach(unused -> resource.increment());
 
-        int listenerId = database.addSearchListener(
+        int listenerId = database.addDirectoryListener(
             testDir,
             Person.class,
-            filter1,
             (key, person) -> {
                 keys.add(key);
                 actualPeople.add(person);
@@ -309,7 +300,7 @@ public class DatabaseTest {
         database.removeListener(listenerId);
 
         assertThat(actualPeople, containsInAnyOrder(expectedPeople.toArray()));
-        assertEquals(1, keys.size());
+        assertEquals(expectedPeople.size(), keys.size());
 
         String key = keys.get(0);
         Person expectedPerson = actualPeople.get(0);

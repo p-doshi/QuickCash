@@ -7,83 +7,80 @@ import androidx.annotation.NonNull;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import dal.cs.quickcash3.search.SearchFilter;
-
 public class MyFirebaseDatabase extends MyFirebaseDatabaseImpl {
     private static final String DB_KEY = "nP5exoTNYnlqpPD1B3BHeuNDcWaPxI";
 
-    protected @NonNull String relocate(@NonNull String location) {
-        StringBuilder newLocation = new StringBuilder(DB_KEY);
+    protected @NonNull String relocate(@NonNull String path) {
+        StringBuilder newPath = new StringBuilder(DB_KEY);
 
-        if (location.charAt(0) != SLASH) {
-            newLocation.append(SLASH);
+        if (path.charAt(0) != SLASH) {
+            newPath.append(SLASH);
         }
-        newLocation.append(location);
+        newPath.append(path);
 
-        return newLocation.toString();
+        return newPath.toString();
     }
 
     @Override
     public <T> void read(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        super.read(relocate(location), type, readFunction, errorFunction);
+        super.read(relocate(path), type, readFunction, errorFunction);
     }
 
     @Override
     public <T> void write(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull T value,
         @NonNull Consumer<String> errorFunction)
     {
-        super.write(relocate(location), value, errorFunction);
+        super.write(relocate(path), value, errorFunction);
     }
 
     @Override
     public <T> void write(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull T value,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        super.write(relocate(location), value, successFunction, errorFunction);
+        super.write(relocate(path), value, successFunction, errorFunction);
     }
 
     @Override
     public <T> int addListener(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        return super.addListener(relocate(location), type, readFunction, errorFunction);
+        return super.addListener(relocate(path), type, readFunction, errorFunction);
     }
 
     @Override
-    public <T> int addSearchListener(
-        @NonNull String location,
+    public <T> int addDirectoryListener(
+        @NonNull String path,
         @NonNull Class<T> type,
-        @NonNull SearchFilter<T> filter,
         @NonNull BiConsumer<String, T> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        return super.addSearchListener(relocate(location), type, filter, readFunction, errorFunction);
+        return super.addDirectoryListener(relocate(path), type, readFunction, errorFunction);
     }
 
     @Override
-    public void delete(@NonNull String location, @NonNull Consumer<String> errorFunction) {
-        super.delete(relocate(location), errorFunction);
+    public void delete(@NonNull String path, @NonNull Consumer<String> errorFunction) {
+        super.delete(relocate(path), errorFunction);
     }
 
     @Override
     public void delete(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        super.delete(relocate(location), successFunction, errorFunction);
+        super.delete(relocate(path), successFunction, errorFunction);
     }
 }

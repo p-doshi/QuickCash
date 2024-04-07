@@ -12,15 +12,23 @@ import com.google.firebase.database.annotations.Nullable;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.CompletedJob;
+import dal.cs.quickcash3.data.JobPost;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.jobdetail.ApplyJob;
+import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.util.BackButtonListener;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
-import dal.cs.quickcash3.fragments.ReceiptsFragment;
+import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.location.MockLocationProvider;
@@ -31,6 +39,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
+    private Fragment jobSearchFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -40,33 +49,39 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         initInterfaces();
 
+        // Get a search filter for the current user.
+        String userId = getIntent().getStringExtra(getString(R.string.USER));
+        RegexSearchFilter<CompletedJob> searchFilter = new RegexSearchFilter<>(CompletedJob::getWorker);
+        if (userId == null) {
+            searchFilter.setPattern(Pattern.compile(".*"));
+        }
+        else {
+            searchFilter.setPattern(Pattern.compile(userId));
+        }
+
         // Initialize the fragments.
-        Fragment receiptsFragment = new ReceiptsFragment();
+        Fragment historyFragment = new HistoryFragment(this, database, searchFilter, this::switchToJobDetails);
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
-        Fragment jobSearchFragment = new JobSearchFragment(this, database, locationProvider);
+        jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
 
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
         workerNavView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            if (itemId == R.id.workerReceiptPage) {
-                Log.v(LOG_TAG, "Showing receipt fragment");
-                replaceFragment(receiptsFragment);
+            if (itemId == R.id.workerHistoryPage) {
+                replaceFragment(historyFragment);
                 return true;
             }
             else if (itemId == R.id.workerSearchPage) {
-                Log.v(LOG_TAG, "Showing job search fragment");
                 replaceFragment(jobSearchFragment);
                 return true;
             }
             else if (itemId == R.id.workerMapPage) {
-                Log.v(LOG_TAG, "Showing map fragment");
                 replaceFragment(mapFragment);
                 return true;
             }
             else if (itemId == R.id.workerProfilePage) {
-                Log.v(LOG_TAG, "Showing profile fragment");
                 replaceFragment(profileFragment);
                 return true;
             }
@@ -79,9 +94,18 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
+        Log.i(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
+    }
+
+    private void switchToJobDetails(@NonNull JobPost job) {
+        Fragment applyFragment = new ApplyJob();
+        Fragment jobDetailsPage = new JobDetailsPage(job, applyFragment);
+        replaceFragment(jobDetailsPage);
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+            new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
     }
 
     private void initInterfaces() {
@@ -92,7 +116,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         if (categories.contains(getString(R.string.MOCK_DATABASE))) {
             database = new MockDatabase();
-            Log.d(LOG_TAG, "Using Mock Database");
+            Log.i(LOG_TAG, "Using Mock Database");
         }
         else {
             database = new MyFirebaseDatabase();
@@ -100,7 +124,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         if (categories.contains(getString(R.string.MOCK_LOCATION))) {
             locationProvider = new MockLocationProvider();
-            Log.d(LOG_TAG, "Using Mock Location Provider");
+            Log.i(LOG_TAG, "Using Mock Location Provider");
         }
         else {
             locationProvider = new AndroidLocationProvider(this, 5000); // Update location every 5 seconds.

@@ -45,13 +45,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".payment.EmployerPaymentConfirmationActivity"
+            android:name=".payment.EmployerPayPalActivity"
+            android:exported="true" />
+        <activity
+            android:name=".payment.PaymentConfirmationActivity"
             android:exported="true"/>
         <activity
             android:name=".payment.WorkerPayPalActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".payment.WorkerPaymentConfirmationActivity"
             android:exported="true"/>
         <activity
             android:name=".registration.ChooseRoleActivity"
@@ -60,6 +60,9 @@
             android:name=".registration.RegistrationPage"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".worker.StorePreferencesActivity"
+            android:exported="true" />
         <activity
             android:name=".worker.WorkerDashboard"
             android:exported="true"

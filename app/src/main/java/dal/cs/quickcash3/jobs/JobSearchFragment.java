@@ -13,23 +13,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.function.Consumer;
+
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.location.LocationProvider;
 
-public class JobSearchFragment extends Fragment {
+public class JobSearchFragment extends Fragment  {
     private ImageView filterIcon ;
-    private final JobListFragment jobListFragment;
+    private final JobListFragment<AvailableJob> jobListFragment;
     private final SearchFilterFragment searchFragment;
 
     public JobSearchFragment(
         @NonNull Activity activity,
         @NonNull Database database,
-        @NonNull LocationProvider locationProvider)
+        @NonNull LocationProvider locationProvider,
+        @NonNull Consumer<AvailableJob> displayCurrJob)
     {
         super();
         this.searchFragment = new SearchFilterFragment(activity, locationProvider, this::showList);
-        this.jobListFragment = new JobListFragment(database, searchFragment.getFilter());
+        this.jobListFragment = new JobListFragment<>(
+            activity, database, AvailableJob.DIR, AvailableJob.class, searchFragment.getFilter(), displayCurrJob);
     }
 
     @Override
@@ -45,12 +50,12 @@ public class JobSearchFragment extends Fragment {
         return view;
     }
 
-    public void setUpSearchBar(@NonNull View currentView){
+    public void setUpSearchBar(@NonNull View currentView) {
         SearchView searchView = currentView.findViewById(R.id.searchBar);
         searchView.setOnQueryTextListener(new JobQueryTextListener(jobListFragment));
     }
 
-    public void setUpFilterIcon(@NonNull View currentView){
+    public void setUpFilterIcon(@NonNull View currentView) {
         filterIcon = currentView.findViewById(R.id.filterIcon);
         filterIcon.setOnClickListener(v -> {
             replaceFragment(searchFragment);
@@ -64,8 +69,7 @@ public class JobSearchFragment extends Fragment {
         transaction.commit();
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
-    private void showList(){
+    private void showList() {
         replaceFragment(jobListFragment);
         filterIcon.setVisibility(View.VISIBLE);
     }

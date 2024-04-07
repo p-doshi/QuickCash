@@ -48,7 +48,7 @@ public final class PostAvailableJobHelper {
         job.setEmployer(RandomStringGenerator.generate(30));
         job.setPostTime(new Date().toString());
         job.setApplicants(new ArrayList<>());
-        job.setBlackList(new ArrayList<>());
+        job.setRejectants(new ArrayList<>());
 
         PostalAddress address = PostalAddress.createCanadianAddress(
             Objects.requireNonNull(fields.get("address")),

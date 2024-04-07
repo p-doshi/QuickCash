@@ -6,23 +6,37 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import androidx.annotation.NonNull;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.database.mock.MockDatabase;
-import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.test.Person;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // Hard coded literals increase test code clarity.
 public class MockDatabaseTest {
+    private static final List<Person> PEOPLE = Arrays.asList(
+        new Person("aaa", "aaa", 1),
+        new Person("aaa", "aab", 2),
+        new Person("aab", "aaa", 3),
+        new Person("aab", "aab", 4)
+    );
     private MockDatabase database;
+
+    private void writePeople() {
+        for (int i = 0; i < PEOPLE.size(); i++) {
+            database.write("a/" + i, PEOPLE.get(i), Assert::fail);
+        }
+    }
 
     @Before
     public void setup() {
@@ -358,99 +372,78 @@ public class MockDatabaseTest {
         assertNull(error.get());
     }
 
-    private void writePeople() {
-        Person[] people = {
-            new Person("aaa", "aaa", 1),
-            new Person("aaa", "aab", 2),
-            new Person("aab", "aaa", 3),
-            new Person("aab", "aab", 4)
-        };
-
-        for (int i = 0; i < people.length; i++) {
-            database.write("a/" + i, people[i], Assert::fail);
+    private static <T> boolean containsInAnyOrder(@NonNull List<T> list1, @NonNull List<T> list2) {
+        for (T v1: list1) {
+            boolean found = false;
+            for (T v2 : list2) {
+                if (Objects.equals(v1, v2)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return false;
+            }
         }
+        return true;
     }
 
     @Test
-    public void writeSearch() {
+    public void directoryListen() {
         writePeople();
 
         List<Person> people = new ArrayList<>();
 
-        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
-        filter.setPattern(Pattern.compile("aaa"));
-
-        int listenerId = database.addSearchListener(
+        int listenerId = database.addDirectoryListener(
             "a",
             Person.class,
-            filter,
             (key, person) -> people.add(person),
             Assert::fail);
 
         assertEquals(0, listenerId);
-        assertEquals(2, people.size());
-        for (Person person : people) {
-            assertEquals("aaa", person.getFirstName());
-        }
+        assertTrue(containsInAnyOrder(people, PEOPLE));
     }
 
     @Test
-    public void writeSearchWrite() {
+    public void directoryListenWrite() {
         writePeople();
 
         List<Person> people = new ArrayList<>();
 
-        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
-        filter.setPattern(Pattern.compile("aaa"));
-
-        int listenerId = database.addSearchListener(
+        int listenerId = database.addDirectoryListener(
             "a",
             Person.class,
-            filter,
             (key, person) -> people.add(person),
             Assert::fail);
 
         Person newPerson = new Person("aaa", "aaa", 5);
         database.write("a/4", newPerson, Assert::fail);
 
+        List<Person> expectedPeople = new ArrayList<>(PEOPLE);
+        expectedPeople.add(newPerson);
+
         assertEquals(0, listenerId);
-        assertEquals(3, people.size());
-        for (Person person : people) {
-            assertEquals("aaa", person.getFirstName());
-        }
+        assertTrue(containsInAnyOrder(people, expectedPeople));
     }
 
     @Test
-    public void writeSearchDelete() {
+    public void directoryListenDelete() {
         writePeople();
 
-        AtomicReference<List<Person>> peopleRef = new AtomicReference<>(new ArrayList<>());
+        List<Person> people = new ArrayList<>();
 
-        RegexSearchFilter<Person> filter = new RegexSearchFilter<>("firstName");
-        filter.setPattern(Pattern.compile("aaa"));
-
-        int listenerId = database.addSearchListener(
+        int listenerId = database.addDirectoryListener(
             "a",
             Person.class,
-            filter,
-            (key, person) -> peopleRef.get().add(person),
+            (key, person) -> people.add(person),
             Assert::fail);
-
-        List<Person> people = peopleRef.get();
-        peopleRef.set(new ArrayList<>());
 
         database.delete("a/0", Assert::fail);
 
-        assertEquals(0, listenerId);
-        assertEquals(2, people.size());
-        for (Person person : people) {
-            assertEquals("aaa", person.getFirstName());
-        }
+        List<Person> expectedPeople = new ArrayList<>(PEOPLE);
+        expectedPeople.add(null);
 
-        people = peopleRef.get();
-        assertEquals(1, people.size());
-        for (Person person : people) {
-            assertNull(person);
-        }
+        assertEquals(0, listenerId);
+        assertTrue(containsInAnyOrder(people, expectedPeople));
     }
 }

@@ -16,7 +16,7 @@ import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.search.LocationSearchFilter;
-import dal.cs.quickcash3.search.NumericRangeSearchFilter;
+import dal.cs.quickcash3.search.RangeSearchFilter;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.slider.DurationRangeSlider;
 import dal.cs.quickcash3.slider.MaxDistanceSlider;
@@ -29,8 +29,8 @@ public class SearchFilterFragment extends Fragment {
     private final LocationProvider locationProvider;
     private final Runnable showResultsFunction;
     private final LocationSearchFilter<AvailableJob> locationFilter;
-    private final NumericRangeSearchFilter<AvailableJob> salaryRangeFilter;
-    private final NumericRangeSearchFilter<AvailableJob> durationFilter;
+    private final RangeSearchFilter<AvailableJob, Double> salaryRangeFilter;
+    private final RangeSearchFilter<AvailableJob, Double> durationFilter;
     private final SalaryRangeSlider salarySlider;
     private final DurationRangeSlider durationRangeSlider;
     private final MaxDistanceSlider maxDistanceSlider;
@@ -45,9 +45,9 @@ public class SearchFilterFragment extends Fragment {
         this.showResultsFunction = showResultsFunction;
         this.locationProvider = locationProvider;
 
-        locationFilter = new LocationSearchFilter<>("latitude", "longitude");
-        salaryRangeFilter = new NumericRangeSearchFilter<>("salary");
-        durationFilter = new NumericRangeSearchFilter<>("duration");
+        locationFilter = new LocationSearchFilter<>(AvailableJob::getLatitude, AvailableJob::getLongitude);
+        salaryRangeFilter = new RangeSearchFilter<>(AvailableJob::getSalary);
+        durationFilter = new RangeSearchFilter<>(AvailableJob::getDuration);
 
         salarySlider = new SalaryRangeSlider(activity);
         durationRangeSlider = new DurationRangeSlider(activity);
