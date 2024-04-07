@@ -67,9 +67,6 @@
             android:name=".worker.WorkerDashboard"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".worker.WorkHistoryGraphFragment"
-            android:exported="true" />
     </application>
 
 </manifest>
