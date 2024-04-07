@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
 import static dal.cs.quickcash3.test.ExampleUserList.generateUsers;
 
 import android.Manifest;
@@ -38,6 +39,7 @@ public class ApplyButtonUITest {
     private Database database;
     private static final String GROCERIES = "Groceries";
     private static final String SUCCESS = "Application Successful";
+    private static final String APPLIED = "You have already applied to this job";
     private final Context context = ApplicationProvider.getApplicationContext();
 
     @Rule
@@ -45,7 +47,7 @@ public class ApplyButtonUITest {
             new ActivityScenarioRule<>(
                     new Intent(context, WorkerDashboard.class)
                             .addCategory(context.getString(R.string.MOCK_DATABASE))
-                            .putExtra("user", EMPLOYER1));
+                            .putExtra("user", WORKER1));
     @Rule
     public GrantPermissionRule permissionRule =
             GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -73,7 +75,7 @@ public class ApplyButtonUITest {
         UiObject searchPage = findResource("workerSearchPage");
         assertTrue(searchPage.waitForExists(MAX_TIMEOUT));
         searchPage.click();
-        UiObject jobDetailsPage = findResource("title");
+        UiObject jobDetailsPage = device.findObject(new UiSelector().textContains(GROCERIES));
         jobDetailsPage.click();
     }
     @Test
@@ -82,23 +84,26 @@ public class ApplyButtonUITest {
         assertTrue(findResource("jobAddress").waitForExists(MAX_TIMEOUT));
     }
 
-    @Test
-    public void checkIfMovedToJobDetailPage() throws UiObjectNotFoundException {
-        UiObject jobItem = device.findObject(new UiSelector().textContains(GROCERIES));
-        assertTrue(jobItem.waitForExists(MAX_TIMEOUT));
-        jobItem.click();
-        assertTrue(findResource("jobPay").waitForExists(MAX_TIMEOUT));
-    }
-
     @Ignore("After connecting activities")
     @Test
     public void checkIfApplySuccessful() throws UiObjectNotFoundException {
-        UiObject jobItem = device.findObject(new UiSelector().textContains(GROCERIES));
-        assertTrue(jobItem.waitForExists(MAX_TIMEOUT));
-        jobItem.click();
         assertTrue(findResource("jobAddress").waitForExists(MAX_TIMEOUT));
         UiObject applyButton = findResource("applyForJob");
         applyButton.click();
         assertTrue(findResource("statusApplyJob").getText().matches(SUCCESS));
+    }
+
+    @Ignore("After connecting activities")
+    @Test
+    public void checkIfAlreadyApplied() throws UiObjectNotFoundException {
+        assertTrue(findResource("jobAddress").waitForExists(MAX_TIMEOUT));
+        UiObject applyButton = findResource("applyForJob");
+        applyButton.click();
+        assertTrue(findResource("statusApplyJob").getText().matches(SUCCESS));
+        UiObject searchPage = findResource("workerSearchPage");
+        searchPage.click();
+        UiObject jobDetailsPage = device.findObject(new UiSelector().textContains(GROCERIES));
+        jobDetailsPage.click();
+        assertTrue(findResource("statusApplyJob").getText().matches(APPLIED));
     }
 }
