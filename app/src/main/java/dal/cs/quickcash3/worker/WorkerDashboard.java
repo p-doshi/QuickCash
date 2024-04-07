@@ -45,7 +45,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         initInterfaces();
 
         // Initialize the fragments.
-        Fragment receiptsFragment = new ReceiptsFragment();
+        Fragment receiptsFragment = new WorkHistoryFragment(database);
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
         jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
