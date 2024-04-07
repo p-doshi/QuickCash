@@ -17,20 +17,16 @@ import com.google.firebase.database.annotations.Nullable;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.data.Worker;
-import dal.cs.quickcash3.data.CompletedJob;
-import dal.cs.quickcash3.data.Worker;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.ProfileFragment;
-import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
@@ -43,11 +39,9 @@ import dal.cs.quickcash3.payment.PayPalPaymentProcess;
 import dal.cs.quickcash3.payment.Payment;
 import dal.cs.quickcash3.payment.PaymentConfirmationActivity;
 import dal.cs.quickcash3.search.RegexSearchFilter;
-import dal.cs.quickcash3.util.BackButtonListener;
 
 public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
-    private final AtomicReference<Runnable> pendingWork = new AtomicReference<>(null);
     private final AtomicReference<Runnable> pendingWork = new AtomicReference<>(null);
     private Database database;
     private MyGeocoder geocoder;
@@ -70,25 +64,17 @@ public class EmployerDashboard extends AppCompatActivity {
         if (userId == null) {
             availableJobSearchFilter.setPattern(Pattern.compile(".*"));
             completedJobSearchFilter.setPattern(Pattern.compile(".*"));
-        String userId = getIntent().getStringExtra(getString(R.string.USER));
-        RegexSearchFilter<AvailableJob> availableJobSearchFilter = new RegexSearchFilter<>(AvailableJob::getEmployer);
-        RegexSearchFilter<CompletedJob> completedJobSearchFilter = new RegexSearchFilter<>(CompletedJob::getEmployer);
-        if (userId == null) {
-            availableJobSearchFilter.setPattern(Pattern.compile(".*"));
-            completedJobSearchFilter.setPattern(Pattern.compile(".*"));
         }
         else {
-            availableJobSearchFilter.setPattern(Pattern.compile(userId));
-            completedJobSearchFilter.setPattern(Pattern.compile(userId));
             availableJobSearchFilter.setPattern(Pattern.compile(userId));
             completedJobSearchFilter.setPattern(Pattern.compile(userId));
         }
 
         // Initialize the fragments.
         listingFragment = new EmployerListingFragment(
-            this, database, availableJobSearchFilter, this::showJobPostForm, this::showAvailableJobDetails);
+                this, database, availableJobSearchFilter, this::showJobPostForm, this::showAvailableJobDetails);
         historyFragment = new HistoryFragment(
-            this, database, completedJobSearchFilter, this::showCompletedJobDetails);
+                this, database, completedJobSearchFilter, this::showCompletedJobDetails);
         Fragment profileFragment = new ProfileFragment();
 
         BottomNavigationView employerNavView = findViewById(R.id.employerBottomNavView);
@@ -97,11 +83,8 @@ public class EmployerDashboard extends AppCompatActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.employer_job_listings) {
                 replaceFragment(listingFragment);
-                replaceFragment(listingFragment);
                 return true;
             }
-            else if (itemId == R.id.employer_history) {
-                replaceFragment(historyFragment);
             else if (itemId == R.id.employer_history) {
                 replaceFragment(historyFragment);
                 return true;
@@ -116,20 +99,6 @@ public class EmployerDashboard extends AppCompatActivity {
         });
 
         employerNavView.setSelectedItemId(R.id.employer_job_listings);
-    }
-
-    @Override
-    protected void onDestroy() {
-        runPendingWork();
-        super.onDestroy();
-    }
-
-    private void runPendingWork() {
-        Runnable function = pendingWork.getAndSet(null);
-        if (function != null) {
-            Log.i(LOG_TAG, "Running pending work");
-            function.run();
-        }
     }
 
     @Override
@@ -224,7 +193,6 @@ public class EmployerDashboard extends AppCompatActivity {
         if (categories.contains(getString(R.string.MOCK_DATABASE))) {
             database = new MockDatabase();
             Log.i(LOG_TAG, "Using Mock Database");
-            Log.i(LOG_TAG, "Using Mock Database");
         }
         else {
             database = new MyFirebaseDatabase();
@@ -232,7 +200,6 @@ public class EmployerDashboard extends AppCompatActivity {
 
         if (categories.contains(getString(R.string.MOCK_GEOCODER))) {
             geocoder = new MockGeocoder();
-            Log.i(LOG_TAG, "Using Mock Geocoder");
             Log.i(LOG_TAG, "Using Mock Geocoder");
         }
         else {
