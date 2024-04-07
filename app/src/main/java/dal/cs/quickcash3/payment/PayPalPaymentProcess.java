@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import dal.cs.quickcash3.BuildConfig;
 import dal.cs.quickcash3.R;
@@ -30,14 +31,14 @@ import dal.cs.quickcash3.R;
 public class PayPalPaymentProcess implements Payment {
     private static final String TAG = EmployerPayPal.class.getName();
     private final ComponentActivity activity;
-    private final BiConsumer<String, String> successFunction;
+    private Consumer<String> successFunction;
+    private Consumer<String> errorFunction;
     private final PayPalConfiguration payPalConfig;
     private final ActivityResultLauncher<Intent> activityLauncher;
     private String amount;
 
-    public PayPalPaymentProcess(@NonNull FragmentActivity activity, @NonNull BiConsumer<String, String> successFunction) {
+    public PayPalPaymentProcess(@NonNull FragmentActivity activity) {
         this.activity = activity;
-        this.successFunction = successFunction;
         payPalConfig = new PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(BuildConfig.PAYPAL_CLIENT_ID);
@@ -45,7 +46,10 @@ public class PayPalPaymentProcess implements Payment {
             new ActivityResultContracts.StartActivityForResult(), this::handlePaymentResult);
     }
 
-    public void processPayment() {
+    @Override
+    public void processPayment(Consumer<String> successFunction, Consumer<String> errorFunction) {
+        this.successFunction = successFunction;
+        this.errorFunction = errorFunction;
         final PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(
                 amount), activity.getResources().getString(R.string.currency_cad), activity.getResources().getString(R.string.services), PayPalPayment.PAYMENT_INTENT_SALE);
 
@@ -59,7 +63,7 @@ public class PayPalPaymentProcess implements Payment {
         activityLauncher.launch(intent);
     }
 
-    private void handlePaymentResult(@NonNull ActivityResult result) {
+    public void handlePaymentResult(@NonNull ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_OK) {
             assert result.getData() != null;
             //noinspection RedundantSuppression
@@ -73,22 +77,29 @@ public class PayPalPaymentProcess implements Payment {
                     // Extract json response and display it in a text view.
                     String payID = payObj.getJSONObject("response").getString("id");
                     String state = payObj.getJSONObject("response").getString("state");
-                    successFunction.accept(payID, state);
+                    if (state.equals("approved")) {
+                        successFunction.accept(payID);
+                    } else {
+                        errorFunction.accept(state);
+                    }
                 } catch (JSONException e) {
                     Log.e(TAG, "An extremely unlikely failure occurred: ", e);
+                    errorFunction.accept(e.getMessage());
                 }
             }
         } else if (result.getResultCode() == PaymentActivity.RESULT_EXTRAS_INVALID) {
-            Log.e(TAG, "Launcher Result Invalid");
+            errorFunction.accept("Launcher Result Invalid");
         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-            Log.i(TAG, "Launcher Result Cancelled");
+            errorFunction.accept(activity.getString(R.string.payment_cancelled));
         }
     }
 
+    @Override
     public void setPaymentAmount(@NonNull String amount) {
         this.amount = amount;
     }
 
+    @Override
     public @Nullable String getPaymentAmount() {
         return this.amount;
     }

@@ -3,18 +3,13 @@ package dal.cs.quickcash3.payment;
 import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 
+import java.util.function.Consumer;
+
 public interface Payment {
     /**
      * Method to initialize payment process.
      */
-    void processPayment();
-
-    /**
-     * Method to get the payment result from payment gateway.
-     *
-     * @param result outcome of payment activity
-     */
-    void handlePaymentResult(@NonNull ActivityResult result);
+    void processPayment(Consumer<String> successFunction, Consumer<String> errorFunction);
 
     /**
      * Method to set the amount of money that employer needs to pay to

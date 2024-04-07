@@ -13,15 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.function.Consumer;
+
 import dal.cs.quickcash3.R;
 
 public class EmployerPayPal extends Fragment {
     private static final String LOG_TAG = EmployerPayPal.class.getSimpleName();
+    private final Consumer<String> successFunction;
+    private final Consumer<String> errorFunction;
 
     private final Payment payment;
 
-    public EmployerPayPal(@NonNull Payment payment) {
+    public EmployerPayPal(@NonNull Payment payment, Consumer<String> successFunction, Consumer<String> errorFunction) {
         this.payment = payment;
+        this.successFunction = successFunction;
+        this.errorFunction = errorFunction;
     }
 
     @Nullable
@@ -39,7 +45,7 @@ public class EmployerPayPal extends Fragment {
 
         employerPayConfirmationButton.setOnClickListener(v -> {
             Log.d(LOG_TAG, "pressed button");
-            payment.processPayment();
+            payment.processPayment(successFunction, errorFunction);
         });
         paymentStatus.setText(payment.getPaymentAmount());
 

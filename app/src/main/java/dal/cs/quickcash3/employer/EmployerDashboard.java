@@ -1,15 +1,14 @@
 package dal.cs.quickcash3.employer;
 
-import static dal.cs.quickcash3.test.ExampleJobList.COMPLETED_JOB1_PAY_ID;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,16 +33,21 @@ import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
 import dal.cs.quickcash3.jobdetail.ApplicantsFragment;
 import dal.cs.quickcash3.jobdetail.JobDetailsPage;
+import dal.cs.quickcash3.payment.EmployerPayPal;
+import dal.cs.quickcash3.payment.MockPayment;
+import dal.cs.quickcash3.payment.PayPalPaymentProcess;
+import dal.cs.quickcash3.payment.Payment;
 import dal.cs.quickcash3.payment.PaymentConfirmationActivity;
 import dal.cs.quickcash3.search.RegexSearchFilter;
-import dal.cs.quickcash3.util.BackButtonListener;
 
 public class EmployerDashboard extends AppCompatActivity {
     private static final String LOG_TAG = EmployerDashboard.class.getSimpleName();
     private final AtomicReference<Runnable> pendingWork = new AtomicReference<>(null);
     private Database database;
     private MyGeocoder geocoder;
+    private Fragment historyFragment;
     private Fragment listingFragment;
+    private Payment payment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -69,7 +73,7 @@ public class EmployerDashboard extends AppCompatActivity {
         // Initialize the fragments.
         listingFragment = new EmployerListingFragment(
             this, database, availableJobSearchFilter, this::showJobPostForm, this::showAvailableJobDetails);
-        Fragment historyFragment = new HistoryFragment(
+        historyFragment = new HistoryFragment(
             this, database, completedJobSearchFilter, this::showCompletedJobDetails);
         Fragment profileFragment = new ProfileFragment();
 
@@ -114,52 +118,70 @@ public class EmployerDashboard extends AppCompatActivity {
     private void replaceFragment(@NonNull Fragment fragment) {
         Log.i(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
         runPendingWork();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        for(int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.employerFragmentView, fragment);
+        transaction.commit();
+    }
+
+    private void addFragment(@NonNull Fragment fragment) {
+        Log.i(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
+        runPendingWork();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.employerFragmentView, fragment);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 
     private void showJobPostForm() {
         Fragment jobPostFormFragment = new PostJobForm(database, geocoder);
-        replaceFragment(jobPostFormFragment);
-        getOnBackPressedDispatcher().addCallback(jobPostFormFragment,
-            new BackButtonListener(() -> replaceFragment(listingFragment)));
+        addFragment(jobPostFormFragment);
     }
 
     private void showAvailableJobDetails(@NonNull AvailableJob job) {
         Fragment applicantsFragment = new ApplicantsFragment(database, job, worker -> acceptJob(job, worker));
         Fragment jobDetailsPage = new JobDetailsPage(job, applicantsFragment);
-        replaceFragment(jobDetailsPage);
+        addFragment(jobDetailsPage);
         pendingWork.set(() -> job.writeToDatabase(database, error -> Log.e(LOG_TAG, "Saving job: " + error)));
-        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
-            new BackButtonListener(() -> replaceFragment(listingFragment)));
     }
 
     private void showCompletedJobDetails(@NonNull CompletedJob job) {
         Fragment jobDetailsPage = new JobDetailsPage(job, null);
-        replaceFragment(jobDetailsPage);
-        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
-            new BackButtonListener(() -> replaceFragment(listingFragment)));
+        addFragment(jobDetailsPage);
     }
 
     private void acceptJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {
-        Intent paymentConfirmationIntent = new Intent(this, PaymentConfirmationActivity.class);
 
-        // TODO: Set this up properly.
-        String payId = COMPLETED_JOB1_PAY_ID;
-        paymentConfirmationIntent.putExtra(getString(R.string.PAY_ID), payId);
+        Fragment makePayment = new EmployerPayPal(payment,
+                payID -> {
+                    Intent paymentConfirmationIntent = new Intent(this, PaymentConfirmationActivity.class);
 
-        CompletedJob completedJob = CompletedJob.completeJob(availableJob, worker);
-        completedJob.setPayId(payId);
+                    paymentConfirmationIntent.putExtra(getString(R.string.PAY_ID), payID);
 
-        pendingWork.set(null);
-        availableJob.deleteFromDatabase(database,
-            () -> replaceFragment(listingFragment),
-            error -> Log.e(LOG_TAG, "Deleting job: " + error));
-        completedJob.writeToDatabase(database,
-            error -> Log.e(LOG_TAG, "Creating completed job: " + error));
+                    CompletedJob completedJob = CompletedJob.completeJob(availableJob, worker);
+                    completedJob.setPayId(payID);
 
-        startActivity(paymentConfirmationIntent);
+                    availableJob.deleteFromDatabase(database,
+                            error -> Log.e(LOG_TAG, "Deleting job: " + error));
+                    completedJob.writeToDatabase(database,
+                            error -> Log.e(LOG_TAG, "Creating completed job: " + error));
+
+                    replaceFragment(listingFragment);
+                    startActivity(paymentConfirmationIntent);
+                },
+                error -> {
+                    if (error.equals(getString(R.string.payment_cancelled))) {
+                        getSupportFragmentManager().popBackStack();
+                    } else {
+                        Log.e(LOG_TAG, "Payment failure: " + error);
+                        error = "Payment failure";
+                    }
+                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+                });
+        addFragment(makePayment);
     }
 
     private void initInterfaces() {
@@ -184,8 +206,13 @@ public class EmployerDashboard extends AppCompatActivity {
             geocoder = new GeocoderProxy(this);
         }
 
-        // TODO: mock payment
-        payment =  new PayPalPaymentProcess(this, this::moveToConfirmPaymentWindow);
+        if (categories.contains(getString(R.string.MOCK_PAYMENT))) {
+            payment =  new MockPayment();
+            Log.i(LOG_TAG, "Using Mock Payment");
+        }
+        else {
+            payment =  new PayPalPaymentProcess(this);
+        }
     }
 
     public @NonNull MyGeocoder getGeocoder() {
@@ -196,15 +223,7 @@ public class EmployerDashboard extends AppCompatActivity {
         return database;
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
-    private void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {
-        Intent paymentConfirmationIntent;
-
-        paymentConfirmationIntent = new Intent(this, EmployerPaymentConfirmationActivity.class);
-
-        paymentConfirmationIntent.putExtra("PAY_ID", payID);
-        paymentConfirmationIntent.putExtra("STATUS", state);
-        payment.setPaymentAmount("60");
-        startActivity(paymentConfirmationIntent);
+    public @NonNull Payment getPayment(){
+        return payment;
     }
 }
