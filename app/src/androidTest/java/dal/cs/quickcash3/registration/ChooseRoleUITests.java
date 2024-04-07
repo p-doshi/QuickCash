@@ -24,9 +24,9 @@ public class ChooseRoleUITests {
 
     @Test
     public void checkIfUiVisible() {
-        UiObject workerBox = device.findObject(new UiSelector().text("Worker"));
+        UiObject workerBox = device.findObject(new UiSelector().text("worker"));
         assertTrue(workerBox.exists());
-        UiObject employerBox = device.findObject(new UiSelector().textContains("Employer"));
+        UiObject employerBox = device.findObject(new UiSelector().textContains("employer"));
         assertTrue(employerBox.exists());
         UiObject confirmBox = device.findObject(new UiSelector().textContains("Confirm"));
         assertTrue(confirmBox.exists());
