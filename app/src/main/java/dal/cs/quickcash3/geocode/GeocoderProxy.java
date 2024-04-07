@@ -3,6 +3,9 @@ package dal.cs.quickcash3.geocode;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -11,34 +14,63 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /** @noinspection RedundantSuppression*/
 @SuppressWarnings({"unchecked", "deprecation"})
 public class GeocoderProxy implements MyGeocoder {
+    private static final String LOG_TAG = GeocoderProxy.class.getSimpleName();
     private static final int NUM_GEOCODE_TRIES = 3;
     private final Geocoder geocoder;
+    private final Looper mainLooper;
 
     public GeocoderProxy(@NonNull Context context) {
         this.geocoder = new Geocoder(context);
+        mainLooper = context.getMainLooper();
     }
 
-    private static @NonNull List<Address> geocodeRunner(@NonNull Supplier<List<Address>> geocodeFunction) {
-        String error = null;
-
-        for (int i = 0; i < NUM_GEOCODE_TRIES; i++) {
-            try {
-                List<Address> addresses;
-                do {
-                    addresses = geocodeFunction.get();
-                } while (addresses == null);
-                return addresses;
-            } catch (IllegalArgumentException e) {
-                error = e.getMessage();
+    private <T> void geocodeRunner(
+        @NonNull Supplier<List<Address>> geocodeFunction,
+        @NonNull Function<List<Address>, T> conversionFunction,
+        @NonNull Consumer<T> readFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        new Thread(() -> {
+            T value = null;
+            String error = null;
+            for (int i = 0; i < NUM_GEOCODE_TRIES; i++) {
+                try {
+                    List<Address> addresses;
+                    do {
+                        Log.v(LOG_TAG, "Running geocoder function");
+                        addresses = geocodeFunction.get();
+                    } while (addresses == null);
+                    Log.v(LOG_TAG, "Converting the geocoder results");
+                    value = conversionFunction.apply(addresses);
+                    break;
+                } catch (IllegalArgumentException e) {
+                    error = e.getMessage();
+                    Log.d(LOG_TAG, "Geocoder error: " + error);
+                }
             }
-        }
 
-        throw new IllegalArgumentException(error);
+            if (value != null) {
+                readFunction.accept(value);
+            }
+            else {
+                errorFunction.accept(error);
+            }
+        }).start();
+    }
+
+    private <T> @NonNull Consumer<T> runOnSameThread(@NonNull Consumer<T> function) {
+        if (mainLooper.isCurrentThread()) {
+            return value -> new Handler(mainLooper).post(() -> function.accept(value));
+        }
+        else {
+            return function;
+        }
     }
 
     private static @NonNull LatLng addressesToLocation(@NonNull List<Address> addresses) {
@@ -71,20 +103,17 @@ public class GeocoderProxy implements MyGeocoder {
         @NonNull Consumer<LatLng> locationFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        try {
-            List<Address> addresses = geocodeRunner(() -> {
+        geocodeRunner(
+            () -> {
                 try {
                     return geocoder.getFromLocationName(address, 1);
                 } catch (IOException e) {
                     throw new IllegalArgumentException(e);
                 }
-            });
-            LatLng location = addressesToLocation(addresses);
-            locationFunction.accept(location);
-        }
-        catch (IllegalArgumentException e) {
-            errorFunction.accept(e.getMessage());
-        }
+            },
+            GeocoderProxy::addressesToLocation,
+            runOnSameThread(locationFunction),
+            runOnSameThread(errorFunction));
     }
 
     @SuppressWarnings("PMD.ExceptionAsFlowControl") // That is not what this is in the slightest.
@@ -94,19 +123,16 @@ public class GeocoderProxy implements MyGeocoder {
         @NonNull Consumer<String> addressFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        try {
-            List<Address> addresses = geocodeRunner(() -> {
+        geocodeRunner(
+            () -> {
                 try {
                     return geocoder.getFromLocation(location.latitude, location.longitude, 1);
                 } catch (IOException e) {
                     throw new IllegalArgumentException(e);
                 }
-            });
-            String address = addressesToString(addresses);
-            addressFunction.accept(address);
-        }
-        catch (IllegalArgumentException e) {
-            errorFunction.accept(e.getMessage());
-        }
+            },
+            GeocoderProxy::addressesToString,
+            runOnSameThread(addressFunction),
+            runOnSameThread(errorFunction));
     }
 }

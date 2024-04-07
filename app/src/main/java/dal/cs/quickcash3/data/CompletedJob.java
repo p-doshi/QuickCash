@@ -1,20 +1,31 @@
 package dal.cs.quickcash3.data;
 
+import static dal.cs.quickcash3.util.CopyHelper.copyTo;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.database.annotations.Nullable;
 
+import java.util.Date;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class CompletedJob extends JobPost {
+    public static final String DIR = "public/completed_jobs/";
     private String worker;
     private String completionDate;
     private String payId;
-    private String status;
+
+    @VisibleForTesting
+    public static @NonNull CompletedJob createForTest(@NonNull String key) {
+        CompletedJob job = new CompletedJob();
+        job.key(key);
+        return job;
+    }
 
     public @Nullable String getWorker() {
         return worker;
@@ -40,12 +51,13 @@ public class CompletedJob extends JobPost {
         this.payId = payId;
     }
 
-    public @Nullable String getStatus() {
-        return status;
-    }
-
-    public void setStatus(@NonNull String status) {
-        this.status = status;
+    public static @NonNull CompletedJob completeJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {
+        CompletedJob completedJob = new CompletedJob();
+        copyTo(completedJob, availableJob);
+        completedJob.key(Objects.requireNonNull(availableJob.key()));
+        completedJob.setWorker(Objects.requireNonNull(worker.key()));
+        completedJob.setCompletionDate(new Date().toString());
+        return completedJob;
     }
 
     @Override
@@ -56,25 +68,33 @@ public class CompletedJob extends JobPost {
             "\npayId='" + payId + '\'';
     }
 
-    public @NonNull String writeToDatabase(
-        @NonNull Database database,
-        @NonNull Consumer<String> errorFunction)
-    {
-        return writeToDatabase(database, () -> {}, errorFunction);
-    }
-
-    public @NonNull String writeToDatabase(
+    @Override
+    public void writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        String key = RandomStringGenerator.generate(HASH_SIZE);
+        if (key() == null) {
+            key(RandomStringGenerator.generate(HASH_SIZE));
+        }
         database.write(
-            DatabaseDirectory.COMPLETED_JOBS.getValue() + key,
+            DIR + key(),
             this,
             successFunction,
             errorFunction);
-        return key;
+    }
+
+    @Override
+    public void deleteFromDatabase(
+        @NonNull Database database,
+        @NonNull Runnable successFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        if (key() == null) {
+            throw new IllegalArgumentException("Job doesn't exist");
+        }
+        database.delete(DIR + key(), successFunction, errorFunction);
+        key(null);
     }
 
     public static void readFromDatabase(
@@ -83,7 +103,11 @@ public class CompletedJob extends JobPost {
         @NonNull Consumer<CompletedJob> readFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        String location = DatabaseDirectory.COMPLETED_JOBS.getValue() + key;
-        database.read(location, CompletedJob.class, readFunction, errorFunction);
+        String location = DIR + key;
+        database.read(location, CompletedJob.class, job -> {
+                job.key(key);
+                readFunction.accept(job);
+            },
+            errorFunction);
     }
 }

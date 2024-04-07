@@ -10,9 +10,9 @@ import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 
 class JobQueryTextListener implements SearchView.OnQueryTextListener {
-    private final JobListFragment jobListFragment;
+    private final JobListFragment<AvailableJob> jobListFragment;
 
-    public JobQueryTextListener(@NonNull JobListFragment jobListFragment) {
+    public JobQueryTextListener(@NonNull JobListFragment<AvailableJob> jobListFragment) {
         this.jobListFragment = jobListFragment;
     }
 
@@ -32,7 +32,7 @@ class JobQueryTextListener implements SearchView.OnQueryTextListener {
 
         Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
 
-        RegexSearchFilter<AvailableJob> regexSearchFilter = new RegexSearchFilter<>("title");
+        RegexSearchFilter<AvailableJob> regexSearchFilter = new RegexSearchFilter<>(AvailableJob::getTitle);
         regexSearchFilter.setPattern(pattern);
 
         jobListFragment.searchList(regexSearchFilter);

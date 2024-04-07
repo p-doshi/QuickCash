@@ -42,7 +42,6 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
         locationProvider.fetchLocation(this::showAddress, this::showError);
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     @SuppressLint("SetTextI18n")
     private void showAddress(@NonNull LatLng location) {
         geocoder.fetchAddressFromLocation(
@@ -51,7 +50,6 @@ public class EmployerDashLocation extends AppCompatPermissionActivity {
             this::showError);
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void showError(@NonNull String error) {
         addressText.setText(error);
     }
