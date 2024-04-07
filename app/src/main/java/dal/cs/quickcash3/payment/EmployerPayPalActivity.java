@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import dal.cs.quickcash3.R;
 
 public class EmployerPayPalActivity extends AppCompatActivity {
+    private static final String LOG_TAG = EmployerPayPalActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,20 +27,19 @@ public class EmployerPayPalActivity extends AppCompatActivity {
         TextView paymentStatus = findViewById(R.id.AmountNumText);
 
         employerPayConfirmationButton.setOnClickListener(v -> {
-            Log.d("test", "pressed button");
             paymentProcess.processPayment();
         });
         paymentStatus.setText(paymentProcess.getPaymentAmount());
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     private void moveToConfirmPaymentWindow(@NonNull String payID, @NonNull String state) {
+        Log.i(LOG_TAG, "State: " + state);
+
         Intent paymentConfirmationIntent;
 
-        paymentConfirmationIntent = new Intent(getBaseContext(), EmployerPaymentConfirmationActivity.class);
+        paymentConfirmationIntent = new Intent(getBaseContext(), PaymentConfirmationActivity.class);
 
-        paymentConfirmationIntent.putExtra("PAY_ID", payID);
-        paymentConfirmationIntent.putExtra("STATUS", state);
+        paymentConfirmationIntent.putExtra(getString(R.string.PAY_ID), payID);
 
         startActivity(paymentConfirmationIntent);
     }

@@ -163,7 +163,6 @@ public class AndroidLocationProvider implements LocationProvider {
         }
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is very much used.
     private void onRequestPermissionsResult(@NonNull PermissionResult result) {
         if (result.isMatchingCode(PermissionRequestCode.LOCATION) &&
             result.containsPermission(Manifest.permission.ACCESS_FINE_LOCATION))

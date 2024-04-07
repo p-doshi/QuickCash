@@ -38,10 +38,7 @@ public class LocationExampleActivity extends AppCompatPermissionActivity {
             locationProvider.fetchLocation(this::showLocation, this::showError));
     }
 
-    @SuppressWarnings({
-        "PMD.LawOfDemeter", // There is not other way to do this.
-        "PMD.UnusedPrivateMethod" // This is used.
-    })
+    @SuppressWarnings("PMD.LawOfDemeter") // There is not other way to do this.
     @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
     private void showLocation(@NonNull LatLng location) {
         status.setText(getString(R.string.location_permission) + ": Granted");
@@ -49,7 +46,6 @@ public class LocationExampleActivity extends AppCompatPermissionActivity {
         longText.setText(getString(R.string.longitude) + ": " + location.longitude);
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod") // This is used.
     @SuppressLint("SetTextI18n") // There are two conflicting lint warnings, so I silenced one.
     private void showError(@NonNull String error) {
         Log.w(LOG_TAG, error);

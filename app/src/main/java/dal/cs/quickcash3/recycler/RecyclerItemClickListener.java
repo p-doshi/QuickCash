@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
+
     private final OnItemClickListener mListener;
     GestureDetector mGestureDetector;
 
@@ -21,7 +22,8 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     }
 
 
-    @Override public boolean onInterceptTouchEvent(@NonNull RecyclerView view,@NonNull MotionEvent motionEvent) {
+    @Override
+    public boolean onInterceptTouchEvent(@NonNull RecyclerView view,@NonNull MotionEvent motionEvent) {
         View childView = view.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
         if (childView != null && mGestureDetector.onTouchEvent(motionEvent)) {
             this.mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
@@ -37,8 +39,10 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
      * @param view The RecyclerView that received the touch event.
      * @param motionEvent The MotionEvent object containing full information about the event.
      */
-    @Override public void onTouchEvent(@NonNull RecyclerView view, @NonNull MotionEvent motionEvent) { //Not used
-         }
+    @Override
+    public void onTouchEvent(@NonNull RecyclerView view, @NonNull MotionEvent motionEvent) {
+        //Not used
+    }
 
     /**
      * Called when a child of RecyclerView does not want RecyclerView and its ancestors to intercept touch events.
@@ -46,6 +50,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
      * @param disallowIntercept True if RecyclerView should disallow intercepting touch events.
      */
     @Override
-    public void onRequestDisallowInterceptTouchEvent (boolean disallowIntercept){//Not used
-         }
+    public void onRequestDisallowInterceptTouchEvent (boolean disallowIntercept){
+        //Not used
+    }
 }

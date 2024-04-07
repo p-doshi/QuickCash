@@ -1,4 +1,3 @@
-
 package dal.cs.quickcash3.login;
 
 import android.app.Activity;
@@ -80,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(this, task -> {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("Login_Tag", "signInWithCustomToken:success");
+                        Log.i("Login_Tag", "signInWithCustomToken:success");
                         editor.putBoolean("remember", rememberMe.isChecked());
                         editor.apply();
                         moveToDashboard();
@@ -90,8 +89,8 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
                         Log.w("Login_Tag", "signInWithCustomToken:failure", task.getCause());
                         setStatusMessage(getString(R.string.INVALID_CREDENTIALS));
                 });
-
     }
+
 
     protected @NonNull String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);
@@ -127,9 +126,6 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
         TextView statusLabel = findViewById(R.id.statusLabel);
         statusLabel.setText(message);
     }
-
-
-
 
     public void handleLoginButtonClick(){
         String emailAddress = getEmailAddress();

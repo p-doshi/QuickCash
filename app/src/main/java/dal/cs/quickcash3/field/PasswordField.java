@@ -19,12 +19,11 @@ public class PasswordField implements FormField {
     @Override
     public void validate() throws FieldValidationException {
         String password = passwordEditText.getText().toString();
-        String confirmPassword = confirmPasswordEditText.getText().toString();
-
         if (!isPasswordValid(password)) {
             throw new FieldValidationException(R.string.invalid_password);
         }
 
+        String confirmPassword = confirmPasswordEditText.getText().toString();
         if (!doPasswordsMatch(password, confirmPassword)) {
             throw new FieldValidationException(R.string.passwords_do_not_match);
         }

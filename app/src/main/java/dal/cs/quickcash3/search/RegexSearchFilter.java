@@ -1,23 +1,17 @@
 package dal.cs.quickcash3.search;
 
-import static dal.cs.quickcash3.util.GsonHelper.getAt;
-import static dal.cs.quickcash3.util.StringHelper.SLASH;
-import static dal.cs.quickcash3.util.StringHelper.splitString;
-
 import androidx.annotation.NonNull;
 
-import com.google.gson.JsonElement;
-
-import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class RegexSearchFilter<T> extends SearchFilter<T> {
-    private final List<String> keys;
+    private final Function<T, String> stringFunction;
     private Pattern pattern;
 
-    public RegexSearchFilter(@NonNull String key) {
+    public RegexSearchFilter(@NonNull Function<T, String> stringFunction) {
         super();
-        keys = splitString(key, SLASH);
+        this.stringFunction = stringFunction;
     }
 
     public void setPattern(@NonNull Pattern pattern) {
@@ -25,12 +19,12 @@ public class RegexSearchFilter<T> extends SearchFilter<T> {
     }
 
     @Override
-    public boolean isCurrentValid(@NonNull JsonElement root) {
+    public boolean isCurrentValid(@NonNull T elem) {
         if (pattern == null) {
             throw new NullPointerException("Cannot apply " + this + " without a pattern");
         }
 
-        String value = getAt(root, keys).getAsString();
+        String value = stringFunction.apply(elem);
         return pattern.matcher(value).matches();
     }
 }
