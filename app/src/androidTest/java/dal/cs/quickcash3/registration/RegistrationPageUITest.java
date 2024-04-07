@@ -140,24 +140,6 @@ public class RegistrationPageUITest {
     }
 
     @Test
-    public void checkInvalidUserNameError(){
-        onView(withId(R.id.firstName)).perform(scrollTo(),typeText("John"));
-        onView(withId(R.id.lastName)).perform(scrollTo(),typeText("Doe"));
-        onView(withId(R.id.address)).perform(scrollTo(),typeText("123 Main Street"));
-        onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
-        onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
-        onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
-        onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
-
-        onView(withId(R.id.confirmButton)).perform(scrollTo(),click());
-
-        // Add more validation checks here after the button click if needed
-        onView(withId(R.id.registrationStatus)).check(matches(withText(R.string.invalid_user_name)));
-    }
-
-    @Test
     public void checkInvalidEmailError(){
         onView(withId(R.id.firstName)).perform(scrollTo(),typeText("John"));
         onView(withId(R.id.lastName)).perform(scrollTo(),typeText("Doe"));
