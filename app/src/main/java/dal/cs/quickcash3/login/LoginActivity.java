@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         initInterfaces();
@@ -124,7 +125,7 @@ public class LoginActivity extends AppCompatActivity  {
         try {
             // Make sure there are no problems with the result.
             completedTask.getResult(ApiException.class);
-            
+
             FirebaseUser user = mAuth.getCurrentUser();
             if (user != null) {
                 launchDashboard(user);

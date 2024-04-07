@@ -127,13 +127,6 @@ public class DatabaseTest {
             job.writeToDatabase(database, resource::decrement, Assert::fail);
         });
 
-        // TODO: Remove this. This is here for test compatibility reasons.
-        resource.increment();
-        resource.increment();
-        database.write(CompletedJob.DIR + "kawnerv9823fh/NOTE", "DO NOT REMOVE THIS JOB", resource::decrement, Assert::fail);
-        database.write(CompletedJob.DIR + "kawnerv9823fh/payId", "Hello Yuki", resource::decrement, Assert::fail);
-        database.write(CompletedJob.DIR + "kawnerv9823fh/status", "approved", resource::decrement, Assert::fail);
-
         // Create Users.
         EMPLOYERS.forEach(employer -> {
             resource.increment();

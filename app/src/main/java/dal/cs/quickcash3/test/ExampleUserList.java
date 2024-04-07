@@ -18,8 +18,9 @@ public final class ExampleUserList {
     public final static List<Worker> WORKERS;
     public final static String EMPLOYER1 = "5uD10neFj73BcfdgLAPG1SbViAXWtW";
     public final static String EMPLOYER2 = "11garPSt5m6yPr7KhGfgLIdFXbZjlx";
-    public final static String WORKER1;
-    public final static String WORKER2;
+    public final static String WORKER1 = "LKAOIUoasd01kl1ASDoknd19kladio";
+    public final static String WORKER1_NAME;
+    public final static String WORKER2_NAME;
 
     static {
         EMPLOYERS = new ArrayList<>();
@@ -34,16 +35,16 @@ public final class ExampleUserList {
         EMPLOYERS.add(employer2);
 
         WORKERS = new ArrayList<>();
-        Worker worker1 = Worker.createForTest("LKAOIUoasd01kl1ASDoknd19kladio");
+        Worker worker1 = Worker.createForTest(WORKER1);
         worker1.setFirstName("Ethan");
         worker1.setLastName("Rozee");
-        WORKER1 = worker1.fullName();
+        WORKER1_NAME = worker1.fullName();
         WORKERS.add(worker1);
 
         Worker worker2 = Worker.createForTest("98u1d1oj0ud1oijadoijaod010asdl");
         worker2.setFirstName("Hayley");
         worker2.setLastName("Vezeau");
-        WORKER2 = worker2.fullName();
+        WORKER2_NAME = worker2.fullName();
         WORKERS.add(worker2);
     }
 
