@@ -72,6 +72,7 @@ public class PayPalPaymentProcess implements Payment {
                     // Get the payment details
                     JSONObject payObj = confirmation.toJSONObject();
                     Log.v(TAG, payObj.toString(4));
+                    Log.v(TAG, payObj.toString(4));
                     // Extract json response and display it in a text view.
                     String payID = payObj.getJSONObject("response").getString("id");
                     String state = payObj.getJSONObject("response").getString("state");
