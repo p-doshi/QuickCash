@@ -9,7 +9,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.paypal.android.sdk.payments.PayPalConfiguration;
@@ -22,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.BuildConfig;
@@ -77,7 +75,7 @@ public class PayPalPaymentProcess implements Payment {
                     // Extract json response and display it in a text view.
                     String payID = payObj.getJSONObject("response").getString("id");
                     String state = payObj.getJSONObject("response").getString("state");
-                    if ("approved".equals(state)) {
+                    if (state.equals(activity.getString(R.string.approved))) {
                         successFunction.accept(payID);
                     } else {
                         errorFunction.accept(state);
