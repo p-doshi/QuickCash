@@ -33,7 +33,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -51,7 +50,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -69,7 +67,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -87,7 +84,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -105,7 +101,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.address)).perform(scrollTo(),typeText("123 Main Street"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -121,7 +116,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.address)).perform(scrollTo(),typeText("123 Main Street"));
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -137,7 +131,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.address)).perform(scrollTo(),typeText("123 Main Street"));
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -172,7 +165,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doeexample.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("Password123"),closeSoftKeyboard());
@@ -191,7 +183,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("xxx"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("xxx"),closeSoftKeyboard());
@@ -210,7 +201,6 @@ public class RegistrationPageUITest {
         onView(withId(R.id.birthYear)).perform(scrollTo(),typeText("1985"));
         onView(withId(R.id.birthMonth)).perform(scrollTo(),typeText("01"));
         onView(withId(R.id.birthDay)).perform(scrollTo(),typeText("01"));
-        onView(withId(R.id.userName)).perform(scrollTo(),typeText("john_doe"));
         onView(withId(R.id.emailAddress)).perform(scrollTo(),typeText("john.doe@example.com"));
         onView(withId(R.id.password)).perform(scrollTo(),typeText("Password123"));
         onView(withId(R.id.confirmPassword)).perform(scrollTo(),typeText("xxx"),closeSoftKeyboard());

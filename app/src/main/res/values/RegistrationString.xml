@@ -4,7 +4,6 @@
     <string name="day">Day</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="user_name">User Name</string>
     <string name="invalid_first_name">Invalid first name</string>
     <string name="invalid_last_name">Invalid last name</string>
     <string name="invalid_address">Invalid address</string>
