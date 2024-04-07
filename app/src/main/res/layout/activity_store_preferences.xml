@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.549">
+
+        <TextView
+            android:id="@+id/JobPreferencesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/job_preferences"
+            android:textColor="#273F31"
+            android:textIsSelectable="true"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/preferenceSalaryRangeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:text="@string/salary_range"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/preferenceSalaryRangeSlider"
+            app:layout_constraintTop_toBottomOf="@+id/JobPreferencesTitle" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/preferenceSalaryRangeSlider"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="27dp"
+            android:layout_marginEnd="24dp"
+            app:labelBehavior="withinBounds"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/preferenceSalaryRangeText"
+            app:tickVisible="true" />
+
+        <CheckBox
+            android:id="@+id/salaryCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            app:layout_constraintStart_toStartOf="@+id/preferenceSalaryRangeSlider"
+            app:layout_constraintTop_toBottomOf="@+id/preferenceSalaryRangeSlider" />
+
+        <TextView
+            android:id="@+id/preferenceDurationRangeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="@string/duration_range"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/preferenceSalaryRangeText"
+            app:layout_constraintTop_toBottomOf="@+id/salaryCheckBox" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/preferenceDurationRangeSlider"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="27dp"
+            android:layout_marginEnd="27dp"
+            app:labelBehavior="withinBounds"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/preferenceDurationRangeText"
+            app:tickVisible="true" />
+
+        <CheckBox
+            android:id="@+id/durationCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            app:layout_constraintStart_toStartOf="@+id/preferenceDurationRangeSlider"
+            app:layout_constraintTop_toBottomOf="@+id/preferenceDurationRangeSlider" />
+
+        <Button
+            android:id="@+id/confirmPreferencesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#273F31"
+            android:text="@string/update_preferences"
+            android:textSize="34sp"
+            app:cornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/durationCheckBox"
+            tools:layout_editor_absoluteY="458dp" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

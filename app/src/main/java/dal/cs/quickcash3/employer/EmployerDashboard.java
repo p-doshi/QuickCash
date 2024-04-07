@@ -27,7 +27,7 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.ProfileFragment;
-import dal.cs.quickcash3.fragments.ReceiptsFragment;
+import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.geocode.GeocoderProxy;
 import dal.cs.quickcash3.geocode.MockGeocoder;
 import dal.cs.quickcash3.geocode.MyGeocoder;
@@ -53,18 +53,23 @@ public class EmployerDashboard extends AppCompatActivity {
         initInterfaces();
 
         // Get a search filter for the current user.
-        String currentUser = getIntent().getStringExtra(getString(R.string.USER));
-        RegexSearchFilter<AvailableJob> searchFilter = new RegexSearchFilter<>(AvailableJob::getEmployer);
-        if (currentUser == null) {
-            searchFilter.setPattern(Pattern.compile(".*"));
+        String userId = getIntent().getStringExtra(getString(R.string.USER));
+        RegexSearchFilter<AvailableJob> availableJobSearchFilter = new RegexSearchFilter<>(AvailableJob::getEmployer);
+        RegexSearchFilter<CompletedJob> completedJobSearchFilter = new RegexSearchFilter<>(CompletedJob::getEmployer);
+        if (userId == null) {
+            availableJobSearchFilter.setPattern(Pattern.compile(".*"));
+            completedJobSearchFilter.setPattern(Pattern.compile(".*"));
         }
         else {
-            searchFilter.setPattern(Pattern.compile(currentUser));
+            availableJobSearchFilter.setPattern(Pattern.compile(userId));
+            completedJobSearchFilter.setPattern(Pattern.compile(userId));
         }
 
         // Initialize the fragments.
-        listingFragment = new EmployerListingFragment(this, database, searchFilter, this::showJobPostForm, this::switchToJobDetails);
-        Fragment receiptsFragment = new ReceiptsFragment();
+        listingFragment = new EmployerListingFragment(
+            this, database, availableJobSearchFilter, this::showJobPostForm, this::showAvailableJobDetails);
+        Fragment historyFragment = new HistoryFragment(
+            this, database, completedJobSearchFilter, this::showCompletedJobDetails);
         Fragment profileFragment = new ProfileFragment();
 
         BottomNavigationView employerNavView = findViewById(R.id.employerBottomNavView);
@@ -76,7 +81,7 @@ public class EmployerDashboard extends AppCompatActivity {
                 return true;
             }
             else if (itemId == R.id.employer_history) {
-                replaceFragment(receiptsFragment);
+                replaceFragment(historyFragment);
                 return true;
             }
             else if (itemId == R.id.employer_profile) {
@@ -120,11 +125,18 @@ public class EmployerDashboard extends AppCompatActivity {
             new BackButtonListener(() -> replaceFragment(listingFragment)));
     }
 
-    private void switchToJobDetails(@NonNull AvailableJob job) {
+    private void showAvailableJobDetails(@NonNull AvailableJob job) {
         Fragment applicantsFragment = new ApplicantsFragment(database, job, worker -> acceptJob(job, worker));
         Fragment jobDetailsPage = new JobDetailsPage(job, applicantsFragment);
         replaceFragment(jobDetailsPage);
         pendingWork.set(() -> job.writeToDatabase(database, error -> Log.e(LOG_TAG, "Saving job: " + error)));
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+            new BackButtonListener(() -> replaceFragment(listingFragment)));
+    }
+
+    private void showCompletedJobDetails(@NonNull CompletedJob job) {
+        Fragment jobDetailsPage = new JobDetailsPage(job, null);
+        replaceFragment(jobDetailsPage);
         getOnBackPressedDispatcher().addCallback(jobDetailsPage,
             new BackButtonListener(() -> replaceFragment(listingFragment)));
     }

@@ -12,24 +12,27 @@ import com.google.firebase.database.annotations.Nullable;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.Worker;
+import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
-import dal.cs.quickcash3.jobdetail.ApplyJob;
-import dal.cs.quickcash3.util.BackButtonListener;
-import dal.cs.quickcash3.jobdetail.JobDetailsPage;
-import dal.cs.quickcash3.jobs.JobSearchFragment;
+import dal.cs.quickcash3.database.mock.MockDatabase;
+import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
-import dal.cs.quickcash3.fragments.ReceiptsFragment;
+import dal.cs.quickcash3.jobdetail.ApplyJob;
+import dal.cs.quickcash3.jobdetail.JobDetailsPage;
+import dal.cs.quickcash3.jobs.JobSearchFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
+import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.util.BackButtonListener;
 
 public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
@@ -45,23 +48,32 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         initInterfaces();
 
+        // Get a search filter for the current user.
+        String userId = getIntent().getStringExtra(getString(R.string.USER));
+        RegexSearchFilter<CompletedJob> searchFilter = new RegexSearchFilter<>(CompletedJob::getWorker);
+        if (userId == null) {
+            searchFilter.setPattern(Pattern.compile(".*"));
+        }
+        else {
+            searchFilter.setPattern(Pattern.compile(userId));
+        }
+
         // Initialize the fragments.
-        Fragment receiptsFragment = new ReceiptsFragment();
+        Fragment historyFragment = new HistoryFragment(this, database, searchFilter, this::switchToHistoryDetails);
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
         jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
-
+        Fragment statsFragment = new WorkHistoryGraphFragment(database);
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
         workerNavView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.workerHistoryPage) {
-                replaceFragment(receiptsFragment);
+                replaceFragment(historyFragment);
                 return true;
             }
             else if (itemId == R.id.workerSearchPage) {
                 replaceFragment(jobSearchFragment);
-
                 return true;
             }
             else if (itemId == R.id.workerMapPage) {
@@ -71,8 +83,10 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             else if (itemId == R.id.workerProfilePage) {
                 replaceFragment(profileFragment);
                 return true;
-            }
-            else {
+            } else if (itemId == R.id.workerStatsPage) {
+                replaceFragment(statsFragment);
+                return true;
+            } else {
                 throw new IllegalArgumentException("Unrecognized item ID: " + itemId);
             }
         });
@@ -87,6 +101,12 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         transaction.commit();
     }
 
+    private void switchToHistoryDetails(@NonNull CompletedJob completedJob){
+        Fragment jobDetailsPage = new JobDetailsPage(completedJob, null);
+        replaceFragment(jobDetailsPage);
+        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
+                new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
+    }
     private void switchToJobDetails(@NonNull AvailableJob availableJob) {
         Fragment applyFragment = new ApplyJob(database,availableJob,new Worker());
         Fragment jobDetailsPage = new JobDetailsPage(availableJob, applyFragment);

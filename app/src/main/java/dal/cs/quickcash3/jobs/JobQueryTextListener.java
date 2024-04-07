@@ -10,9 +10,9 @@ import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 
 class JobQueryTextListener implements SearchView.OnQueryTextListener {
-    private final JobListFragment jobListFragment;
+    private final JobListFragment<AvailableJob> jobListFragment;
 
-    public JobQueryTextListener(@NonNull JobListFragment jobListFragment) {
+    public JobQueryTextListener(@NonNull JobListFragment<AvailableJob> jobListFragment) {
         this.jobListFragment = jobListFragment;
     }
 
