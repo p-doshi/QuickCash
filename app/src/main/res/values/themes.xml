@@ -1,9 +1,22 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.Csci3130_group_3" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:colorBackground">@color/darker_background</item>
     </style>
 
-    <style name="Theme.Csci3130_group_3" parent="Base.Theme.Csci3130_group_3" />
+    <style name="Employer.Theme.Csci3130_group_3" parent="Base.Theme.Csci3130_group_3">
+        <item name="android:statusBarColor">@color/dark_blue</item>
+        <item name="colorOnBackground">@color/extra_light_blue</item>
+        <item name="colorPrimary">@color/mid_blue</item>
+        <item name="colorAccent">@color/light_blue</item>
+        <item name="colorPrimaryDark">@color/dark_blue</item>
+    </style>
+
+    <style name="Worker.Theme.Csci3130_group_3" parent="Base.Theme.Csci3130_group_3">
+        <item name="android:statusBarColor">@color/dark_green</item>
+        <item name="colorOnBackground">@color/extra_light_green</item>
+        <item name="colorPrimary">@color/mid_green</item>
+        <item name="colorAccent">@color/light_green</item>
+        <item name="colorPrimaryDark">@color/dark_green</item>
+    </style>
 </resources>

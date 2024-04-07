@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="62dp"
-        android:backgroundTint="#247BA0"
         android:text="@string/worker_payment_button"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
