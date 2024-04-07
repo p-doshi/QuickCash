@@ -42,6 +42,7 @@ public class WorkHistoryGraphFragment extends Fragment {
     private final List<CompletedJob> jobList = new ArrayList<>();
     private final List<BarEntry> barEntries = new ArrayList<>();
     private Database database;
+    private int callbackId;
     public WorkHistoryGraphFragment(@NonNull Database database){
         super();
         this.database = database;
@@ -71,7 +72,7 @@ public class WorkHistoryGraphFragment extends Fragment {
         ObjectSearchAdapter<CompletedJob> searchAdapter = new ObjectSearchAdapter<>(searchFilter);
         searchAdapter.addObserver(new CustomObserver<>(this::addJob, this::removeWorker));
 
-        int callbackId = database.addDirectoryListener(CompletedJob.DIR, CompletedJob.class, searchAdapter::receive,
+        callbackId = database.addDirectoryListener(CompletedJob.DIR, CompletedJob.class, searchAdapter::receive,
                 error -> Log.w(TAG, "Received database error: " + error));
     }
 
@@ -131,8 +132,15 @@ public class WorkHistoryGraphFragment extends Fragment {
                 return outputFormat.format(date);
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Date parsing failed", e);
         }
         return "";
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(TAG, "Stopping database search listener");
+        database.removeListener(callbackId);
+        super.onDestroyView();
     }
 }
