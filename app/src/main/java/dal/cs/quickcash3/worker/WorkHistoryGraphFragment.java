@@ -37,12 +37,12 @@ import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.util.CustomObserver;
 
-public class WorkHistoryFragment extends Fragment {
+public class WorkHistoryGraphFragment extends Fragment {
     private BarChart barChart;
     private final List<CompletedJob> jobList = new ArrayList<>();
     private final List<BarEntry> barEntries = new ArrayList<>();
     private Database database;
-    public WorkHistoryFragment(@NonNull Database database){
+    public WorkHistoryGraphFragment(@NonNull Database database){
         super();
         this.database = database;
     }

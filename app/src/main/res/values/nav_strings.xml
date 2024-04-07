@@ -5,4 +5,5 @@
     <string name="profileTitle">Profile</string>
     <string name="mapTitle">Map</string>
     <string name="searchTitle">Search</string>
+    <string name="stats">View Chart</string>
 </resources>

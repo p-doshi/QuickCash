@@ -14,24 +14,24 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
-import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.JobPost;
 
-public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<AvailableJobRecyclerViewAdapter.ViewHolder> implements OnItemClickListener {
-    private List<AvailableJob> jobs = new ArrayList<>();
-    private final Consumer<AvailableJob> displayCurrJob;
+public  class JobPostRecyclerView<T extends JobPost> extends RecyclerView.Adapter<JobPostRecyclerView.ViewHolder<T>> implements OnItemClickListener {
+    private List<T> jobs = new ArrayList<>();
+    private final Consumer<T> displayCurrJob;
 
-    public AvailableJobRecyclerViewAdapter(@NonNull Consumer<AvailableJob> displayCurrJob){
+    public JobPostRecyclerView(@NonNull Consumer<T> displayCurrJob){
         super();
         this.displayCurrJob = displayCurrJob;
 
     }
 
-    public void addJob(@NonNull AvailableJob availableJob) {
+    public void addJob(@NonNull T availableJob) {
         jobs.add(availableJob);
         notifyItemInserted(jobs.size() - 1);
     }
 
-    public void removeJob(@NonNull AvailableJob availableJob) {
+    public void removeJob(@NonNull T availableJob) {
         int index = jobs.indexOf(availableJob);
         jobs.remove(index);
         notifyItemRemoved(index);
@@ -43,21 +43,21 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
     }
 
 
-    public void newList(@NonNull List<AvailableJob> newJobs) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new AvailableJobDiffCallback(jobs, newJobs));
+    public void newList(@NonNull List<T> newJobs) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ListDiffCallback<>(jobs, newJobs));
         jobs = newJobs;
         diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder<>(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder<T> holder, int position) {
         holder.setJob(jobs.get(position));
     }
 
@@ -68,8 +68,7 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
 
     @Override
     public void onItemClick(@NonNull View view, int position) {
-        AvailableJob currJob = jobs.get(position);
-        this.displayCurrJob.accept(currJob);
+        displayCurrJob.accept(jobs.get(position));
     }
 
     @Override
@@ -77,7 +76,7 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
         // Not used.
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder<T extends JobPost> extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView subheading;
 
@@ -87,7 +86,7 @@ public  class AvailableJobRecyclerViewAdapter extends RecyclerView.Adapter<Avail
             subheading = itemView.findViewById(R.id.subhead);
         }
 
-        public void setJob(@NonNull AvailableJob job) {
+        public void setJob(@NonNull T job) {
 
             title.setText(job.getTitle());
             subheading.setText(job.getDescription());

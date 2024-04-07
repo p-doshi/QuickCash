@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="job_preferences">Job Preferences</string>
+    <string name="update_preferences">Update</string>
+    <string name="disable">Disable</string>
+    <string name="pref_file">job preferences file</string>
+    <string name="salary_max">Salary Max</string>
+    <string name="salary_min">Salary Min</string>
+    <string name="time_max">Time Max</string>
+    <string name="time_min">Time Min</string>
+</resources>

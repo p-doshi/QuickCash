@@ -19,9 +19,10 @@ import java.util.stream.Collectors;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
+import dal.cs.quickcash3.data.JobPost;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.ObjectSearchAdapter;
-import dal.cs.quickcash3.recycler.AvailableJobRecyclerViewAdapter;
+import dal.cs.quickcash3.recycler.JobPostRecyclerView;
 import dal.cs.quickcash3.recycler.RecyclerItemClickListener;
 import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.AsyncLatch;
@@ -31,26 +32,32 @@ import dal.cs.quickcash3.util.ListObserver;
 /**
  * A fragment representing a list of Items.
  */
-public class JobListFragment extends Fragment {
+public class JobListFragment<T extends JobPost> extends Fragment {
     private static final String LOG_TAG = JobListFragment.class.getSimpleName();
-    private final Database database;
     private final Context context;
-    private final AsyncLatch<SearchFilter<AvailableJob>> asyncFilter;
-    private final AvailableJobRecyclerViewAdapter adapter;
-    private final List<AvailableJob> searchResults = new ArrayList<>();
+    private final Database database;
+    private final String directory;
+    private final Class<T> type;
+    private final AsyncLatch<SearchFilter<T>> asyncFilter;
+    private final JobPostRecyclerView<T> adapter;
+    private final List<T> searchResults = new ArrayList<>();
     private int callbackId;
 
     public JobListFragment(
         @NonNull Context context,
         @NonNull Database database,
-        @NonNull AsyncLatch<SearchFilter<AvailableJob>> asyncFilter,
-        @NonNull Consumer<AvailableJob> displayCurrJob)
+        @NonNull String directory,
+        @NonNull Class<T> type,
+        @NonNull AsyncLatch<SearchFilter<T>> asyncFilter,
+        @NonNull Consumer<T> displayCurrJob)
     {
         super();
-        this.database = database;
-        this.asyncFilter = asyncFilter;
-        this.adapter = new AvailableJobRecyclerViewAdapter(displayCurrJob);
         this.context = context;
+        this.database = database;
+        this.directory = directory;
+        this.type = type;
+        this.asyncFilter = asyncFilter;
+        this.adapter = new JobPostRecyclerView<>(displayCurrJob);
     }
 
     private void setFilterCallback() {
@@ -59,11 +66,11 @@ public class JobListFragment extends Fragment {
             adapter.reset();
             searchResults.clear();
 
-            ObjectSearchAdapter<AvailableJob> searchAdapter = new ObjectSearchAdapter<>(searchFilter);
+            ObjectSearchAdapter<T> searchAdapter = new ObjectSearchAdapter<>(searchFilter);
             searchAdapter.addObserver(new CustomObserver<>(adapter::addJob, adapter::removeJob));
             searchAdapter.addObserver(new ListObserver<>(searchResults));
 
-            callbackId = database.addDirectoryListener(AvailableJob.DIR, AvailableJob.class,
+            callbackId = database.addDirectoryListener(directory, type,
                 searchAdapter::receive,
                 error -> Log.w(LOG_TAG, "Received database error: " + error));
         });
@@ -77,8 +84,8 @@ public class JobListFragment extends Fragment {
      The isValid method of the filter will be used to determine if a job should be included in the filtered results.
      @throws IllegalArgumentException if the filter parameter is null.
      */
-    public void searchList(@NonNull SearchFilter<AvailableJob> filter){
-        List<AvailableJob> newJobs = searchResults.stream().filter(filter::isValid).collect(Collectors.toList());
+    public void searchList(@NonNull SearchFilter<T> filter){
+        List<T> newJobs = searchResults.stream().filter(filter::isValid).collect(Collectors.toList());
         adapter.newList(newJobs);
     }
 

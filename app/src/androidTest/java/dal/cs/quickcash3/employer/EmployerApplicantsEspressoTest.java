@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 import static dal.cs.quickcash3.test.ExampleJobList.AVAILABLE_JOBS;
 import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
 import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
-import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
-import static dal.cs.quickcash3.test.ExampleUserList.WORKER2;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKER1_NAME;
+import static dal.cs.quickcash3.test.ExampleUserList.WORKER2_NAME;
 import static dal.cs.quickcash3.test.ExampleUserList.generateUsers;
 import static dal.cs.quickcash3.test.RecyclerViewItemCountMatcher.recyclerHasItemCount;
 import static dal.cs.quickcash3.test.SiblingMatcher.withSibling;
@@ -113,10 +113,10 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.applicantsRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1_NAME)))))
             .perform(scrollTo(), click());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText(WORKER2)))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER2_NAME)))))
             .perform(scrollTo(), click());
 
         List<String> expectedApplicants = new ArrayList<>();
@@ -124,8 +124,8 @@ public class EmployerApplicantsEspressoTest {
         checkApplicants(expectedApplicants);
 
         List<String> expectedRejectants = Arrays.asList(
-            WORKER1,
-            WORKER2
+            WORKER1_NAME,
+            WORKER2_NAME
         );
 
         checkRejected(expectedRejectants);
@@ -136,16 +136,16 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.applicantsRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1_NAME)))))
             .perform(scrollTo(), click());
         onView(withId(R.id.rejectedRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.undoButton),
-            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1_NAME)))))
             .perform(scrollTo(), click());
 
         List<String> expectedApplicants = Arrays.asList(
-            WORKER1,
-            WORKER2
+            WORKER1_NAME,
+            WORKER2_NAME
         );
 
         checkApplicants(expectedApplicants);
@@ -160,7 +160,7 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.applicantsRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.rejectButton),
-            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1_NAME)))))
             .perform(scrollTo(), click());
 
         pressBack();
@@ -168,12 +168,12 @@ public class EmployerApplicantsEspressoTest {
         onView(allOf(withId(R.id.title), withText("Coding problem"))).perform(scrollTo(), click());
         onView(withId(R.id.rejectedRecyclerView)).perform(scrollTo());
         onView(allOf(withId(R.id.undoButton),
-            withSibling(allOf(withId(R.id.worker), withText(WORKER1)))))
+            withSibling(allOf(withId(R.id.worker), withText(WORKER1_NAME)))))
             .perform(scrollTo(), click());
 
         List<String> expectedApplicants = Arrays.asList(
-            WORKER1,
-            WORKER2
+            WORKER1_NAME,
+            WORKER2_NAME
         );
 
         checkApplicants(expectedApplicants);
