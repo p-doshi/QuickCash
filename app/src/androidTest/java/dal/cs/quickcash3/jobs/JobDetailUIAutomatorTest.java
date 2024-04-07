@@ -45,7 +45,7 @@ public class JobDetailUIAutomatorTest {
     @Test
     public void checkIfSearchPageIsVisible() {
         assertTrue(findResource("searchBar").waitForExists(MAX_TIMEOUT));
-        assertTrue(findResource("filterIcon").waitForExists(MAX_TIMEOUT));
+        assertTrue(findResource("filterButton").waitForExists(MAX_TIMEOUT));
     }
 
     @Test

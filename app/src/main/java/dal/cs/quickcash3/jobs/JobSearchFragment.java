@@ -46,7 +46,7 @@ public class JobSearchFragment extends Fragment  {
     {
         View view = inflater.inflate(R.layout.jobs_search_page, container, false);
         this.setUpSearchBar(view);
-        this.setUpFilterIcon(view);
+        this.setUpfilterButton(view);
         replaceFragment(jobListFragment);
         return view;
     }
@@ -56,7 +56,7 @@ public class JobSearchFragment extends Fragment  {
         searchView.setOnQueryTextListener(new JobQueryTextListener(jobListFragment));
     }
 
-    public void setUpFilterIcon(@NonNull View currentView) {
+    public void setUpfilterButton(@NonNull View currentView) {
         filterButton = currentView.findViewById(R.id.filterButton);
         filterButton.setOnClickListener(v -> {
             replaceFragment(searchFragment);

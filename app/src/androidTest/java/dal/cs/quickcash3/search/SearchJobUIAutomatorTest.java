@@ -46,22 +46,22 @@ public class SearchJobUIAutomatorTest {
     @Test
     public void checkIfLandingPageIsVisible() {
         assertTrue(findResource("searchBar").waitForExists(MAX_TIMEOUT));
-        assertTrue(findResource("filterIcon").waitForExists(MAX_TIMEOUT));
+        assertTrue(findResource("filterButton").waitForExists(MAX_TIMEOUT));
     }
 
     @Test
     public void checkIfMovedToSearchFilter() throws UiObjectNotFoundException {
-        UiObject filterIcon = findResource("filterIcon");
-        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
-        filterIcon.click();
+        UiObject filterButton = findResource("filterButton");
+        assertTrue(filterButton.waitForExists(MAX_TIMEOUT));
+        filterButton.click();
         assertTrue(findResource("filterFragment").waitForExists(MAX_TIMEOUT));
     }
 
     @Test
     public void checkIfMovedToJobSearchPage() throws UiObjectNotFoundException {
-        UiObject filterIcon = findResource("filterIcon");
-        assertTrue(filterIcon.waitForExists(MAX_TIMEOUT));
-        filterIcon.click();
+        UiObject filterButton = findResource("filterButton");
+        assertTrue(filterButton.waitForExists(MAX_TIMEOUT));
+        filterButton.click();
         UiObject applyButton = findResource("applyButton");
         assertTrue(applyButton.waitForExists(MAX_TIMEOUT));
         applyButton.click();
