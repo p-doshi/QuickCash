@@ -43,6 +43,10 @@ public class WorkHistoryGraphFragment extends Fragment {
     private final List<BarEntry> barEntries = new ArrayList<>();
     private Database database;
     private int callbackId;
+
+    public WorkHistoryGraphFragment() {
+        super();
+    }
     public WorkHistoryGraphFragment(@NonNull Database database){
         super();
         this.database = database;
