@@ -143,14 +143,14 @@ public class EmployerDashboard extends AppCompatActivity {
 
     private void showAvailableJobDetails(@NonNull AvailableJob job) {
         Fragment applicantsFragment = new ApplicantsFragment(database, job, worker -> acceptJob(job, worker));
-        Fragment jobDetailsPage = new JobDetailsPage(job, applicantsFragment);
-        addFragment(jobDetailsPage);
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,job, applicantsFragment);
+        replaceFragment(jobDetailsPage);
         pendingWork.set(() -> job.writeToDatabase(database, error -> Log.e(LOG_TAG, "Saving job: " + error)));
     }
 
     private void showCompletedJobDetails(@NonNull CompletedJob job) {
-        Fragment jobDetailsPage = new JobDetailsPage(job, null);
-        addFragment(jobDetailsPage);
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,job, null);
+        replaceFragment(jobDetailsPage);
     }
 
     private void acceptJob(@NonNull AvailableJob availableJob, @NonNull Worker worker) {

@@ -4,5 +4,6 @@
     <string name="jobAddress">I live here !!</string>
     <string name="jobDescription">DO some shit, then I give money </string>
     <string name="jobApply">Apply Now!</string>
-
+    <string name="appliedJob">You have already applied to this job</string>
+    <string name="applySuccess">Application Successful</string>
 </resources>

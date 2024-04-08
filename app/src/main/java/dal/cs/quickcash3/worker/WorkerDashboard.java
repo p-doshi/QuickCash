@@ -21,14 +21,16 @@ import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
+import dal.cs.quickcash3.fragments.HistoryFragment;
+import dal.cs.quickcash3.fragments.MapsFragment;
+import dal.cs.quickcash3.fragments.ProfileFragment;
+import dal.cs.quickcash3.geocode.GeocoderProxy;
+import dal.cs.quickcash3.geocode.MockGeocoder;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 import dal.cs.quickcash3.jobdetail.ApplyJob;
-import dal.cs.quickcash3.payment.WorkerCheckPayment;
 import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
-import dal.cs.quickcash3.fragments.MapsFragment;
-import dal.cs.quickcash3.fragments.ProfileFragment;
-import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.location.MockLocationProvider;
@@ -40,6 +42,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     private LocationProvider locationProvider;
     private Fragment historyFragment;
     private Fragment jobSearchFragment;
+    private MyGeocoder geocoder;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -60,7 +63,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         }
 
         // Initialize the fragments.
-        historyFragment = new HistoryFragment(this, database, searchFilter, this::switchToJobHistory);
+        historyFragment = new HistoryFragment(this, database, searchFilter, this::switchToHistoryDetails);
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
         jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
@@ -115,15 +118,13 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         transaction.commit();
     }
 
-    private void switchToJobDetails(@NonNull AvailableJob job) {
-        Fragment applyFragment = new ApplyJob();
-        Fragment jobDetailsPage = new JobDetailsPage(job, applyFragment);
+    private void switchToHistoryDetails(@NonNull CompletedJob completedJob){
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,completedJob, null);
         addFragment(jobDetailsPage);
     }
-
-    private void switchToJobHistory(@NonNull CompletedJob job) {
-        Fragment workerCheckPayment = new WorkerCheckPayment(database);
-        Fragment jobDetailsPage = new JobDetailsPage(job, workerCheckPayment);
+    private void switchToJobDetails(@NonNull AvailableJob availableJob) {
+        Fragment applyFragment = new ApplyJob(database,availableJob, getIntent().getStringExtra(getString(R.string.USER)));
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,availableJob, applyFragment);
         addFragment(jobDetailsPage);
     }
 
@@ -147,6 +148,14 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         }
         else {
             locationProvider = new AndroidLocationProvider(this, 5000); // Update location every 5 seconds.
+        }
+
+        if (categories.contains(getString(R.string.MOCK_GEOCODER))) {
+            geocoder = new MockGeocoder();
+            Log.i(LOG_TAG, "Using Mock Geocoder");
+        }
+        else {
+            geocoder = new GeocoderProxy(this);
         }
     }
 

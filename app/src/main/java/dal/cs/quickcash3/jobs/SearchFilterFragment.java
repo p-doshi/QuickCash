@@ -60,10 +60,9 @@ public class SearchFilterFragment extends Fragment {
         // Location filter is the first filter to apply.
         locationFilter.addNext(salaryRangeFilter).addNext(durationFilter);
 
-        fetchLocationForFilter();
     }
 
-    private void fetchLocationForFilter() {
+    public void fetchLocationForFilter() {
         locationProvider.fetchLocation(
             location -> {
                 locationFilter.setLocation(location);
@@ -107,7 +106,6 @@ public class SearchFilterFragment extends Fragment {
             Log.d(LOG_TAG, "Max Distance: " + newMaxDistance + " m");
             locationFilter.setMaxDistance(newMaxDistance);
 
-            fetchLocationForFilter();
 
             showResultsFunction.run();
         });

@@ -63,7 +63,7 @@ public final class ExampleJobList {
         job2.setUrgency(JobUrgency.MEDIUM.getValue());
         job2.setPostTime(new Date().toString());
         List<String> applicants2 = new ArrayList<>();
-        WORKERS.forEach(worker -> applicants2.add(worker.key()));
+        applicants2.add(WORKERS.get(1).key());
         job2.setApplicants(applicants2);
         AVAILABLE_JOBS.add(job2);
 

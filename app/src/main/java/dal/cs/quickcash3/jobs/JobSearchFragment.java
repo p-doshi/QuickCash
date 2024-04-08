@@ -46,7 +46,7 @@ public class JobSearchFragment extends Fragment  {
         View view = inflater.inflate(R.layout.jobs_search_page, container, false);
         this.setUpSearchBar(view);
         this.setUpFilterIcon(view);
-        replaceFragment(jobListFragment);
+        showList();
         return view;
     }
 
@@ -69,8 +69,10 @@ public class JobSearchFragment extends Fragment  {
         transaction.commit();
     }
 
-    private void showList() {
+    private void showList(){
+        searchFragment.fetchLocationForFilter();
         replaceFragment(jobListFragment);
         filterIcon.setVisibility(View.VISIBLE);
     }
+
 }
