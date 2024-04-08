@@ -33,8 +33,9 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.registration.RegistrationPage;
+import dal.cs.quickcash3.util.DashboardLauncher;
 
-public class LoginActivity extends AppCompatActivity implements SignInInterface {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
     private Database database;
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
         }
 
         setContentView(R.layout.activity_login);
+        statusLabel = findViewById(R.id.statusLabel);
 
         this.setUpLoginButton();
         this.setUpSignUpButtonManual();
@@ -116,7 +118,6 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
             });
     }
 
-
     private @NonNull String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);
         return emailInput.getText().toString().trim();
@@ -125,6 +126,16 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
     private @NonNull String getPassword(){
         EditText passwordInput = findViewById(R.id.etPassword);
         return passwordInput.getText().toString().trim();
+    }
+
+    public void setUpLoginButton(){
+        Button loginButton = findViewById(R.id.continueButton);
+        loginButton.setOnClickListener(view -> handleLoginButtonClick());
+    }
+
+    protected void setUpSignUpButtonManual(){
+        Button signupButton = findViewById(R.id.signupManually);
+        signupButton.setOnClickListener(view -> moveToRegistration());
     }
 
     private void launchDashboard(@NonNull FirebaseUser user) {
@@ -175,5 +186,25 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
 
     public @NonNull Database getDatabase() {
         return database;
+    }
+
+    public void handleLoginButtonClick(){
+        String emailAddress = getEmailAddress();
+        String password = getPassword();
+        String errorMessage;
+
+        if (LoginValidator.isEmptyEmail(emailAddress)) {
+            errorMessage = getResources().getString(R.string.EMPTY_EMAIL_TOAST);
+            statusLabel.setText(errorMessage);
+        }else if (LoginValidator.isEmptyPassword(password)) {
+            errorMessage = getResources().getString(R.string.EMPTY_PASSWORD_TOAST);
+            statusLabel.setText(errorMessage);
+        }else if (!LoginValidator.isValidEmail(emailAddress)) {
+            errorMessage = getResources().getString(R.string.INVALID_EMAIL_TOAST);
+            statusLabel.setText(errorMessage);
+        }else {
+            signIn(emailAddress,password);
+        }
+
     }
 }

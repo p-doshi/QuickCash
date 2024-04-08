@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.test.ActivityMonitorRule;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals") // I don't think it would increase code clarity here.
 @RunWith(AndroidJUnit4.class)
@@ -25,8 +26,13 @@ public class RegistrationPageUITest {
     public final ActivityScenarioRule<RegistrationPage> activityRule =
         new ActivityScenarioRule<>(RegistrationPage.class);
 
+    @Rule
+    public final ActivityMonitorRule<ChooseRoleActivity> monitorRule =
+            new ActivityMonitorRule<>(ChooseRoleActivity.class);
+    private static final int MAX_TIMEOUT = 5000;
+
     @Test
-    public void fillRegistrationForm() {
+    public void successRegistration() {
         onView(withId(R.id.firstName)).perform(scrollTo(),typeText("John"));
         onView(withId(R.id.lastName)).perform(scrollTo(),typeText("Doe"));
         onView(withId(R.id.address)).perform(scrollTo(),typeText("123 Main Street"));
@@ -39,8 +45,7 @@ public class RegistrationPageUITest {
 
         onView(withId(R.id.confirmButton)).perform(scrollTo(),click());
 
-        // Add more validation checks here after the button click if needed
-        onView(withId(R.id.registrationStatus)).check(matches(withText(R.string.registration_successful)));
+        monitorRule.waitForActivity(MAX_TIMEOUT).finish();
     }
 
     @Test

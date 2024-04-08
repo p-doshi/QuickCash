@@ -1,22 +1,16 @@
-package dal.cs.quickcash3.login;
+package dal.cs.quickcash3.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.Account;
 import dal.cs.quickcash3.data.UserRole;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.employer.EmployerDashboard;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 

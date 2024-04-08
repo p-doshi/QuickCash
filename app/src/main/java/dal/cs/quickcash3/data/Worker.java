@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.util.CopyHelper;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class Worker extends User {
@@ -36,6 +37,12 @@ public class Worker extends User {
 
     public void setSkills(@NonNull List<String> skills) {
         this.skills = skills;
+    }
+
+    public static @NonNull Worker create(RegisteringUser registeringUser) {
+        Worker worker = new Worker();
+        CopyHelper.copyTo(worker, registeringUser);
+        return worker;
     }
 
     @Override

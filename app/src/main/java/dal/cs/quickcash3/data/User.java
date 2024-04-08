@@ -3,15 +3,20 @@ package dal.cs.quickcash3.data;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.time.LocalDate;
+import java.util.function.Consumer;
+
+import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.DatabaseObject;
 
 @SuppressWarnings("PMD.ShortClassName") // I think it's fine.
-public abstract class User extends DatabaseObject {
+public class User extends DatabaseObject {
     protected static final int HASH_SIZE = 30;
     private String firstName;
     private String lastName;
     private String email;
-    private String phone;
+    private LocalDate birthDate;
+    private String address;
 
     public @Nullable String getFirstName() {
         return firstName;
@@ -37,12 +42,20 @@ public abstract class User extends DatabaseObject {
         this.email = email;
     }
 
-    public @Nullable String getPhone() {
-        return phone;
+    public @Nullable LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setPhone(@NonNull String phone) {
-        this.phone = phone;
+    public void setBirthDate(@NonNull LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public @Nullable String getAddress() {
+        return address;
+    }
+
+    public void setAddress(@NonNull String address) {
+        this.address = address;
     }
 
     public @Nullable String fullName() {
@@ -61,6 +74,17 @@ public abstract class User extends DatabaseObject {
             "\nfirstName='" + firstName + '\'' +
             "\nlastName='" + lastName + '\'' +
             "\nemail='" + email + '\'' +
-            "\nphone=" + phone;
+            "\nbirth date='" + birthDate + '\''+
+            "\naddress='" + address + '\'';
+    }
+
+    @Override
+    public void writeToDatabase(@NonNull Database database, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
+        throw new IllegalStateException("Cannot write a User to database");
+    }
+
+    @Override
+    public void deleteFromDatabase(@NonNull Database database, @NonNull Runnable successFunction, @NonNull Consumer<String> errorFunction) {
+        throw new IllegalStateException("Cannot delete a User from database");
     }
 }

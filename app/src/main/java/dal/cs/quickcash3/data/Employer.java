@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
+import dal.cs.quickcash3.util.CopyHelper;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
 public class Employer extends User {
@@ -15,6 +16,12 @@ public class Employer extends User {
     public static @NonNull Employer createForTest(@NonNull String key) {
         Employer employer = new Employer();
         employer.key(key);
+        return employer;
+    }
+
+    public static @NonNull Employer create(RegisteringUser registeringUser) {
+        Employer employer = new Employer();
+        CopyHelper.copyTo(employer, registeringUser);
         return employer;
     }
 
