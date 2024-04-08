@@ -64,8 +64,9 @@ public class EmployerPostJobEspressoTest {
         scenario.onActivity(activity ->{
             // Do not run the test if we are not using the mock database.
             assertTrue("Not using Mock Database",
-                    activity.getDatabase() instanceof MockDatabase);
-            assertTrue("Not using Mock Geocoder", activity.getGeocoder() instanceof MockGeocoder);
+                activity.getDatabase() instanceof MockDatabase);
+            assertTrue("Not using Mock Geocoder",
+                activity.getGeocoder() instanceof MockGeocoder);
 
             geocoder = (MockGeocoder) activity.getGeocoder();
         });

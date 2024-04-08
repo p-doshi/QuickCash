@@ -46,13 +46,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".payment.EmployerPayPalActivity"
-            android:exported="true" />
-        <activity
             android:name=".payment.PaymentConfirmationActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".payment.WorkerPayPalActivity"
             android:exported="true"/>
         <activity
             android:name=".registration.ChooseRoleActivity"
