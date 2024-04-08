@@ -63,6 +63,7 @@ public class JobDetailsPage extends Fragment {
         return rootView;
     }
 
+    @SuppressWarnings("PMD.LawOfDemeter")
     private String coordinatesFormat (LatLng latLng){
         char north = latLng.latitude < 0.0 ? 'S' : 'N';
         char west = latLng.longitude < 0.0 ? 'W' : 'E';

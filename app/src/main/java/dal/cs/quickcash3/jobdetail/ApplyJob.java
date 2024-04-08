@@ -59,7 +59,7 @@ public class ApplyJob extends Fragment {
         return view;
     }
 
-    @SuppressWarnings("PMD.LawOfDemeter")
+
     private void applyForJob(@NonNull View view, Button button) {
 
         assert userID != null;
