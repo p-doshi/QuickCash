@@ -44,9 +44,6 @@ public class WorkHistoryGraphFragment extends Fragment {
     private Database database;
     private int callbackId;
 
-    public WorkHistoryGraphFragment() {
-        super();
-    }
     public WorkHistoryGraphFragment(@NonNull Database database){
         super();
         this.database = database;
