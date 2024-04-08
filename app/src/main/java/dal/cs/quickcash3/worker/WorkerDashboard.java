@@ -14,12 +14,12 @@ import com.google.firebase.database.annotations.Nullable;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.CompletedJob;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.jobdetail.ApplyJob;
 import dal.cs.quickcash3.payment.WorkerCheckPayment;
@@ -33,6 +33,8 @@ import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
+import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.util.BackButtonListener;
 
 public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
@@ -59,6 +61,16 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             searchFilter.setPattern(Pattern.compile(userId));
         }
 
+        // Get a search filter for the current user.
+        String userId = getIntent().getStringExtra(getString(R.string.USER));
+        RegexSearchFilter<CompletedJob> searchFilter = new RegexSearchFilter<>(CompletedJob::getWorker);
+        if (userId == null) {
+            searchFilter.setPattern(Pattern.compile(".*"));
+        }
+        else {
+            searchFilter.setPattern(Pattern.compile(userId));
+        }
+
         // Initialize the fragments.
         historyFragment = new HistoryFragment(this, database, searchFilter, this::switchToJobHistory);
         Fragment mapFragment = new MapsFragment();
@@ -70,6 +82,8 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         workerNavView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
+            if (itemId == R.id.workerHistoryPage) {
+                replaceFragment(historyFragment);
             if (itemId == R.id.workerHistoryPage) {
                 replaceFragment(historyFragment);
                 return true;
@@ -85,6 +99,10 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
             else if (itemId == R.id.workerProfilePage) {
                 replaceFragment(profileFragment);
                 return true;
+            } else if (itemId == R.id.workerStatsPage) {
+                replaceFragment(statsFragment);
+                return true;
+            } else {
             } else if (itemId == R.id.workerStatsPage) {
                 replaceFragment(statsFragment);
                 return true;
@@ -136,6 +154,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         if (categories.contains(getString(R.string.MOCK_DATABASE))) {
             database = new MockDatabase();
             Log.i(LOG_TAG, "Using Mock Database");
+            Log.i(LOG_TAG, "Using Mock Database");
         }
         else {
             database = new MyFirebaseDatabase();
@@ -143,6 +162,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
         if (categories.contains(getString(R.string.MOCK_LOCATION))) {
             locationProvider = new MockLocationProvider();
+            Log.i(LOG_TAG, "Using Mock Location Provider");
             Log.i(LOG_TAG, "Using Mock Location Provider");
         }
         else {
