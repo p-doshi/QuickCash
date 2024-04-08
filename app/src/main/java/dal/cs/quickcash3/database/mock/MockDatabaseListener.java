@@ -8,23 +8,22 @@ import androidx.annotation.NonNull;
 import java.util.List;
 import java.util.function.Consumer;
 
-@SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod") // No one should be instantiating one of these.
 abstract class MockDatabaseListener<T> {
     private final List<String> keys;
     protected final Class<T> type;
     private final Consumer<String> errorFunction;
 
     protected MockDatabaseListener(
-        @NonNull String location,
+        @NonNull String path,
         @NonNull Class<T> type,
         @NonNull Consumer<String> errorFunction)
     {
-        this.keys = splitString(location, SLASH);
+        this.keys = splitString(path, SLASH);
         this.type = type;
         this.errorFunction = errorFunction;
     }
 
-    public boolean isLocation(@NonNull List<String> keys) {
+    public boolean isPath(@NonNull List<String> keys) {
         if (this.keys.size() > keys.size()) {
             return false;
         }

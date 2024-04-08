@@ -1,12 +1,11 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
-
-import com.google.firebase.database.annotations.Nullable;
+import androidx.annotation.Nullable;
 
 import dal.cs.quickcash3.database.DatabaseObject;
 
-public abstract class JobPost implements DatabaseObject {
+public abstract class JobPost extends DatabaseObject {
     protected static final int HASH_SIZE = 20;
     private String title;
     private String employer;
@@ -66,20 +65,12 @@ public abstract class JobPost implements DatabaseObject {
     @Override
     public @NonNull String toString() {
         return
+            "\nkey='" + key() + '\'' +
             "\ntitle='" + title + '\'' +
             "\nemployer='" + employer + '\'' +
             "\ndescription='" + description + '\'' +
             "\nlatitude=" + latitude +
             "\nlongitude=" + longitude +
             "\nsalary=" + salary;
-    }
-
-    protected void copyFrom(@NonNull JobPost other) {
-        title = other.title;
-        employer = other.employer;
-        description = other.description;
-        latitude = other.latitude;
-        longitude = other.longitude;
-        salary = other.salary;
     }
 }

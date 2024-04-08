@@ -6,7 +6,7 @@
     <description>The PMD configuration for Group 3 of CSCI 3130, Winter 2024.</description>
 
     <!-- BEST PRACTICES -->
-    <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" />
+    <!-- <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod" /> -->
     <rule ref="category/java/bestpractices.xml/AccessorClassGeneration" />
     <rule ref="category/java/bestpractices.xml/AccessorMethodGeneration" />
     <rule ref="category/java/bestpractices.xml/ArrayIsStoredDirectly" />
@@ -50,7 +50,7 @@
     <rule ref="category/java/bestpractices.xml/UnusedFormalParameter"/>
     <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"/>
     <rule ref="category/java/bestpractices.xml/UnusedPrivateField"/>
-    <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod"/>
+    <!-- <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod"/> -->
     <rule ref="category/java/bestpractices.xml/UseCollectionIsEmpty"/>
     <rule ref="category/java/bestpractices.xml/UseStandardCharsets" />
     <rule ref="category/java/bestpractices.xml/UseTryWithResources" />

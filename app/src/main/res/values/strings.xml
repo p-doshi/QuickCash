@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">csci3130_group_3</string>
+    <string name="app_name">Quick Cash</string>
     <string name="worker">Worker</string>
     <string name="employer">Employer</string>
     <string name="confirm">Confirm</string>
@@ -7,7 +7,12 @@
     <string name="password">Password</string>
     <string name="MOCK_DATABASE">MOCK_DATABASE</string>
     <string name="MOCK_LOCATION">MOCK_LOCATION</string>
+    <string name="MOCK_GEOCODER">MOCK_GEOCODER</string>
+    <string name="MOCK_PAYMENT">MOCK_PAYMENT</string>
     <string name="empty" />
     <string name="address">Address</string>
     <string name="addJob">Add Job</string>
+    <string name="USER">user</string>
+    <string name="PAY_ID">PAY_ID</string>
+    <string name="payment_cancelled">Payment Cancelled</string>
 </resources>

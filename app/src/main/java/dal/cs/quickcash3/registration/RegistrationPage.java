@@ -1,32 +1,26 @@
 package dal.cs.quickcash3.registration;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.field.AddressField;
+import dal.cs.quickcash3.field.DateField;
+import dal.cs.quickcash3.field.EmailAddressField;
+import dal.cs.quickcash3.field.FieldValidationException;
+import dal.cs.quickcash3.field.FormField;
+import dal.cs.quickcash3.field.GeneralField;
+import dal.cs.quickcash3.field.PasswordField;
+
 
 public class RegistrationPage extends AppCompatActivity {
-    private EditText firstName;
-    private EditText lastName;
-    private EditText address;
-    private EditText birthYear;
-    private EditText birthMonth;
-    private EditText birthDay;
-    private EditText userName;
-    private EditText emailAddress;
-    private EditText password;
-    private EditText confirmPassword;
+    private final List<FormField> formFields = new ArrayList<>();
     private TextView statusTextView;
 
     @Override
@@ -36,60 +30,36 @@ public class RegistrationPage extends AppCompatActivity {
         init();
     }
 
+    /**
+     * Initializes UI components and sets up event listeners. It finds UI elements
+     * by their IDs and sets an onClickListener for the confirmation button.
+     */
     private void init(){
-        firstName = findViewById(R.id.firstName);
-        lastName = findViewById(R.id.lastName);
-        address = findViewById(R.id.address);
-        birthYear = findViewById(R.id.birthYear);
-        birthMonth = findViewById(R.id.birthMonth);
-        birthDay = findViewById(R.id.birthDay);
-        userName = findViewById(R.id.userName);
-        emailAddress = findViewById(R.id.emailAddress);
-        password = findViewById(R.id.password);
-        confirmPassword = findViewById(R.id.confirmPassword);
+        formFields.add(new GeneralField(findViewById(R.id.firstName), R.string.invalid_first_name));
+        formFields.add(new GeneralField(findViewById(R.id.lastName), R.string.invalid_last_name));
+        formFields.add(new AddressField(findViewById(R.id.address)));
+        formFields.add(new DateField(findViewById(R.id.birthYear), findViewById(R.id.birthMonth), findViewById(R.id.birthDay)));
+        formFields.add(new EmailAddressField(findViewById(R.id.emailAddress)));
+        formFields.add(new PasswordField(findViewById(R.id.password), findViewById(R.id.confirmPassword)));
         statusTextView = findViewById(R.id.registrationStatus);
+
         findViewById(R.id.confirmButton).setOnClickListener(v -> submitForm());
     }
 
-    @SuppressWarnings("PMD.CyclomaticComplexity")
+    /**
+     * Submits the registration form after validating all input fields. It validates
+     * each field using {@code validateField} method and shows an error message
+     * if any validation fails.
+     */
     private void submitForm(){
-        FormValidator formValidator = new FormValidator();
-
-        String firstNameText = firstName.getText().toString().trim();
-        String lastNameText = lastName.getText().toString().trim();
-        String addressText = address.getText().toString().trim();
-        String userNameText = userName.getText().toString().trim();
-        String emailText = emailAddress.getText().toString().trim();
-        String passwordText = password.getText().toString().trim();
-        String confirmPasswordText = confirmPassword.getText().toString().trim();
-
-        Date birthDate = null;
         try {
-            String birthDateString = birthYear.getText().toString() + "-" + birthMonth.getText().toString() + "-" + birthDay.getText().toString();
-            birthDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(birthDateString);
-        } catch (ParseException e) {
-            Log.w("RegistrationPage", Objects.requireNonNull(e.getMessage()));
-        }
-
-        if (!formValidator.isFirstNameValid(firstNameText)) {
-            statusTextView.setText(R.string.invalid_first_name);
-        } else if (!formValidator.isLastNameValid(lastNameText)) {
-            statusTextView.setText(R.string.invalid_last_name);
-        } else if (!formValidator.isAddressValid(addressText)) {
-            statusTextView.setText(R.string.invalid_address);
-        } else if (!formValidator.isBirthDateValid(birthDate)) {
-            statusTextView.setText(R.string.invalid_birth_date);
-        } else if (!formValidator.isUserNameValid(userNameText)) {
-            statusTextView.setText(R.string.invalid_user_name);
-        } else if (!formValidator.isEmailValid(emailText)) {
-            statusTextView.setText(R.string.invalid_email_address);
-        } else if (!formValidator.isPasswordValid(passwordText)) {
-            statusTextView.setText(R.string.invalid_password);
-        } else if (!formValidator.doPasswordsMatch(passwordText, confirmPasswordText)) {
-            statusTextView.setText(R.string.passwords_do_not_match);
-        } else {
-            // all inputs is valid
+            for (FormField field : formFields) {
+                field.validate();
+            }
+            // if all text valid, set view to valid
             statusTextView.setText(R.string.registration_successful);
+        } catch (FieldValidationException e) {
+            statusTextView.setText(e.getErrorMessageId());
         }
     }
 }

@@ -1,28 +1,31 @@
 package dal.cs.quickcash3.data;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.database.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.DatabaseDirectory;
-import dal.cs.quickcash3.util.Copyable;
 import dal.cs.quickcash3.util.RandomStringGenerator;
 
-public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
+public class AvailableJob extends JobPost {
+    public static final String DIR = "public/available_jobs/";
     private String startDate;
     private double duration;
     private String urgency;
     private String postTime;
     private List<String> applicants;
-    private List<String> blackList;
+    private List<String> rejectants;
 
-    @SuppressWarnings("PMD.UnnecessaryConstructor") // Empty constructor needed to read from Firebase.
-    public AvailableJob() { 
-        super();
+    @VisibleForTesting
+    public static @NonNull AvailableJob createForTest(@NonNull String key) {
+        AvailableJob job = new AvailableJob();
+        job.key(key);
+        return job;
     }
 
     public @Nullable String getStartDate() {
@@ -65,12 +68,58 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
         this.applicants = applicants;
     }
 
-    public @Nullable List<String> getBlackList() {
-        return blackList;
+    public @Nullable List<String> getRejectants() {
+        return rejectants;
     }
 
-    public void setBlackList(@NonNull List<String> blackList) {
-        this.blackList = blackList;
+    public void setRejectants(@NonNull List<String> rejectants) {
+        this.rejectants = rejectants;
+    }
+
+    public @NonNull List<String> allApplicants() {
+        List<String> all = new ArrayList<>();
+        if (applicants != null) {
+            all.addAll(applicants);
+        }
+        if (rejectants != null) {
+            all.addAll(rejectants);
+        }
+        return all;
+    }
+
+    public boolean isApplicant(@Nullable String workerKey) {
+        return applicants != null && applicants.contains(workerKey);
+    }
+
+    public boolean isRejectant(@Nullable String workerKey) {
+        return rejectants != null && rejectants.contains(workerKey);
+    }
+
+    public void rejectWorker(@NonNull String workerKey) {
+        if (applicants != null && applicants.contains(workerKey)) {
+            if (rejectants == null) {
+                rejectants = new ArrayList<>();
+            }
+            rejectants.add(workerKey);
+            applicants.remove(workerKey);
+        }
+    }
+
+    public void reconsiderWorker(@NonNull String workerKey) {
+        if (rejectants != null && rejectants.contains(workerKey)) {
+            if (applicants == null) {
+                applicants = new ArrayList<>();
+            }
+            applicants.add(workerKey);
+            rejectants.remove(workerKey);
+        }
+    }
+
+    public  void  addApplicant(@NonNull String workerKey){
+        if (applicants == null) {
+            applicants = new ArrayList<>();
+        }
+        applicants.add(workerKey);
     }
 
     @Override
@@ -81,63 +130,49 @@ public class AvailableJob extends JobPost implements Copyable<AvailableJob> {
             "\nurgency='" + urgency + '\'' +
             "\npostTime='" + postTime + '\'' +
             "\napplicants=" + applicants +
-            "\nblackList=" + blackList;
+            "\nblackList=" + rejectants;
     }
 
     @Override
-    public @NonNull String writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction) {
-        return writeToDatabase(database, () -> {}, errorFunction);
-    }
-
-    @Override
-    public @NonNull String writeToDatabase(
+    public void writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        String key = RandomStringGenerator.generate(HASH_SIZE);
+        if (key() == null) {
+            key(RandomStringGenerator.generate(HASH_SIZE));
+        }
         database.write(
-            DatabaseDirectory.AVAILABLE_JOBS.getValue() + key,
+            DIR + key(),
             this,
             successFunction,
             errorFunction);
-        return key;
     }
 
     @Override
-    public void readFromDatabase(
+    public void deleteFromDatabase(
         @NonNull Database database,
-        @NonNull String key,
-        @NonNull Consumer<String> errorFunction)
-    {
-        readFromDatabase(database, key, () -> {}, errorFunction);
-    }
-
-    @Override
-    public void readFromDatabase(
-        @NonNull Database database,
-        @NonNull String key,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction)
     {
-        database.read(
-            DatabaseDirectory.AVAILABLE_JOBS.getValue() + key,
-            getClass(),
-            job -> {
-                this.copyFrom(job);
-                successFunction.run();
-            },
-            errorFunction);
+        if (key() == null) {
+            throw new IllegalArgumentException("Job doesn't exist");
+        }
+        database.delete(DIR + key(), successFunction, errorFunction);
+        key(null);
     }
 
-    @Override
-    public void copyFrom(@NonNull AvailableJob other) {
-        super.copyFrom(other);
-        startDate = other.startDate;
-        duration = other.duration;
-        urgency = other.urgency;
-        postTime = other.postTime;
-        applicants = other.applicants;
-        blackList = other.blackList;
+    public static void readFromDatabase(
+        @NonNull Database database,
+        @NonNull String key,
+        @NonNull Consumer<AvailableJob> readFunction,
+        @NonNull Consumer<String> errorFunction)
+    {
+        String location = DIR + key;
+        database.read(location, AvailableJob.class, job -> {
+                job.key(key);
+                readFunction.accept(job);
+            },
+            errorFunction);
     }
 }

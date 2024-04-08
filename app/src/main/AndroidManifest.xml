@@ -24,14 +24,11 @@
             android:exported="true"/>
         <activity
             android:name=".employer.EmployerDashboard"
-            android:exported="true"/>
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".employer.EmployerDashLocation"
             android:exported="true" />
-        <activity
-            android:name=".employer.PostJobForm"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".location.LocationExampleActivity"
             android:exported="true"/>
@@ -48,16 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".payment.EmployerPayPalActivity"
-            android:exported="true" />
-        <activity
-            android:name=".payment.EmployerPaymentConfirmationActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".payment.WorkerPayPalActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".payment.WorkerPaymentConfirmationActivity"
+            android:name=".payment.PaymentConfirmationActivity"
             android:exported="true"/>
         <activity
             android:name=".registration.ChooseRoleActivity"
@@ -66,6 +54,9 @@
             android:name=".registration.RegistrationPage"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".worker.StorePreferencesActivity"
+            android:exported="true" />
         <activity
             android:name=".worker.WorkerDashboard"
             android:exported="true"

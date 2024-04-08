@@ -1,60 +1,95 @@
 package dal.cs.quickcash3.database;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.google.errorprone.annotations.CheckReturnValue;
-
+import java.util.Objects;
 import java.util.function.Consumer;
 
-public interface DatabaseObject {
-    /**
-     * Writes this object to the database.
-     *
-     * @param database The database to write to.
-     * @param errorFunction The function that is called in case of an error.
-     * @return Returns the key that the job was written to.
-     */
-    @CheckReturnValue
-    @NonNull String writeToDatabase(@NonNull Database database, @NonNull Consumer<String> errorFunction);
+/**
+ * Interface for writing to a database with error handling and optional success handling.
+ */
+public abstract class DatabaseObject {
+    private String mKey;
 
     /**
-     * Writes this object to the database and executes the successFunction upon successful completion.
+     * Get the key for this object.
+     *
+     * @return The key for the object.
+     */
+    public @Nullable String key() {
+        return mKey;
+    }
+
+    /**
+     * Set the key for this object.
+     *
+     * @param key The key for the object.
+     */
+    protected void key(@Nullable String key) {
+        this.mKey = key;
+    }
+
+    /**
+     * Writes to the database with error handling.
      *
      * @param database The database to write to.
-     * @param successFunction The function that is called upon successful completion of the write operation.
-     * @param errorFunction The function that is called in case of an error during the write operation.
-     * @return Returns the key that the job was written to.
+     * @param errorFunction The function to handle errors.
      */
-    @CheckReturnValue
-    @NonNull String writeToDatabase(
+    public void writeToDatabase(
+        @NonNull Database database,
+        @NonNull Consumer<String> errorFunction)
+    {
+        writeToDatabase(database, () -> {}, errorFunction);
+    }
+
+    /**
+     * Writes to the database with success and error handling.
+     *
+     * @param database The database to write to.
+     * @param successFunction The function to handle success.
+     * @param errorFunction The function to handle errors.
+     */
+    public abstract void writeToDatabase(
         @NonNull Database database,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction);
 
     /**
-     * Reads this object from its known location with the given key in the database.
+     * Deletes this object from the database.
      *
-     * @param database The database to read from.
-     * @param key The key for the particular object to read.
-     * @param errorFunction The function that is called in case of an error.
+     * @param database The database to delete from.
+     * @param errorFunction The function to handle errors.
      */
-    void readFromDatabase(
+    public void deleteFromDatabase(
         @NonNull Database database,
-        @NonNull String key,
-        @NonNull Consumer<String> errorFunction);
+        @NonNull Consumer<String> errorFunction)
+    {
+        deleteFromDatabase(database, () -> {}, errorFunction);
+    }
 
     /**
-     * Reads this object from its known location with the given key in the database and executes the
-     * successFunction upon successful completion.
+     * Deletes this object from the database.
      *
-     * @param database The database to read from.
-     * @param key The key for the particular object to read.
-     * @param successFunction The function that is called upon successful completion of the read operation.
-     * @param errorFunction The function that is called in case of an error.
+     * @param database The database to delete from.
+     * @param errorFunction The function to handle errors.
      */
-    void readFromDatabase(
+    public abstract void deleteFromDatabase(
         @NonNull Database database,
-        @NonNull String key,
         @NonNull Runnable successFunction,
         @NonNull Consumer<String> errorFunction);
+
+    @Override
+    public final int hashCode() {
+        return mKey.hashCode();
+    }
+
+    @Override
+    public final boolean equals(@Nullable Object obj) {
+        if (obj instanceof DatabaseObject) {
+            DatabaseObject other = (DatabaseObject) obj;
+            return Objects.equals(mKey, other.mKey);
+        }
+        return false;
+    }
 }

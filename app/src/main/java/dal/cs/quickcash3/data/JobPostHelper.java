@@ -42,7 +42,7 @@ public final class JobPostHelper {
             job.setEmployer(RandomStringGenerator.generate(30));
             job.setPostTime(new Date().toString());
             job.setApplicants(new ArrayList<>());
-            job.setBlackList(new ArrayList<>());
+            job.setRejectants(new ArrayList<>());
             job.setSalary(roundToNearestCent(RANDOM.nextDouble() * 1000.0));
 
             LatLng location = randomLocation(area);

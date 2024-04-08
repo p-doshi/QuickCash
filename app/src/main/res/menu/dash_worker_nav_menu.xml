@@ -2,20 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/workerReceiptPage"
-        android:title="@string/receiptsTitle"
-        android:icon="@drawable/ic_reciept_foreground" />
+        android:id="@+id/workerHistoryPage"
+        android:title="@string/historyTitle"
+        android:icon="@drawable/ic_clock" />
     <item
         android:id="@+id/workerSearchPage"
         android:title="@string/searchTitle"
-        android:icon="@drawable/ic_search_foreground" />
+        android:icon="@drawable/ic_search" />
     <item
         android:id="@+id/workerMapPage"
         android:title="@string/mapTitle"
-        android:icon="@drawable/ic_map_foreground" />
+        android:icon="@drawable/ic_map" />
     <item
         android:id="@+id/workerProfilePage"
         android:title="@string/profileTitle"
-        android:icon="@drawable/ic_profile_box_foreground" />
+        android:icon="@drawable/ic_profile_box" />
+    <item
+        android:id="@+id/workerStatsPage"
+        android:title="@string/stats"
+        android:icon="@drawable/ic_stats" />
 
 </menu>

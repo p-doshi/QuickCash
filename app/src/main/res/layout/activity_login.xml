@@ -72,8 +72,8 @@
 
         <TextView
             android:id="@+id/statusLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="278dp"
+            android:layout_height="40dp"
             android:layout_marginTop="15dp"
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -125,8 +125,8 @@
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signupGoogle"
-            android:layout_width="200dp"
-            android:layout_height="49dp"
+            android:layout_width="257dp"
+            android:layout_height="55dp"
             android:layout_marginTop="30dp"
             android:contentDescription="@string/signup_google"
             android:text="@string/signup_google"
@@ -137,8 +137,8 @@
 
         <Button
             android:id="@+id/continueButton"
-            android:layout_width="275dp"
-            android:layout_height="49dp"
+            android:layout_width="282dp"
+            android:layout_height="61dp"
             android:layout_marginTop="10dp"
             android:text="@string/continue_login"
             app:layout_constraintEnd_toEndOf="parent"
@@ -148,8 +148,8 @@
 
         <Button
             android:id="@+id/signupManually"
-            android:layout_width="200dp"
-            android:layout_height="49dp"
+            android:layout_width="274dp"
+            android:layout_height="53dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:text="@string/signup_manually"
