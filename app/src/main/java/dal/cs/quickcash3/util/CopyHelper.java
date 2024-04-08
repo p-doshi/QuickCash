@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public final class CopyHelper {
-    public static final Gson GSON = new Gson();
 
     // Utility class.
     private CopyHelper() {}
@@ -22,7 +21,8 @@ public final class CopyHelper {
      * @return The deep copied value.
      */
     public static @NonNull Object deepClone(@NonNull Object value) {
-        return GSON.fromJson(GSON.toJsonTree(value), value.getClass());
+        Gson gson = GsonManager.create();
+        return gson.fromJson(gson.toJsonTree(value), value.getClass());
     }
 
     private static @NonNull Map<String, Method> methodsThatStartWith(@NonNull Object obj, @NonNull String prefix) {
