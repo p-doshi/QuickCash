@@ -88,12 +88,12 @@ public class GeocoderProxy implements MyGeocoder {
         }
 
         Address address = addresses.get(0);
-        String addressLine = address.getAddressLine(0);
-        if (addressLine == null) {
-            throw new IllegalArgumentException("Geocoder returned null address");
+        StringBuilder addressLine = new StringBuilder();
+        for(int i=0;i<=address.getMaxAddressLineIndex();i++){
+            addressLine.append(address.getAddressLine(i));
         }
 
-        return addressLine;
+        return addressLine.toString();
     }
 
     @SuppressWarnings("PMD.ExceptionAsFlowControl") // That is not what this is in the slightest.

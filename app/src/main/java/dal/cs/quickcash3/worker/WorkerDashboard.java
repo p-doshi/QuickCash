@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.worker;
 
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -24,6 +26,9 @@ import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.fragments.MapsFragment;
 import dal.cs.quickcash3.fragments.ProfileFragment;
+import dal.cs.quickcash3.geocode.GeocoderProxy;
+import dal.cs.quickcash3.geocode.MockGeocoder;
+import dal.cs.quickcash3.geocode.MyGeocoder;
 import dal.cs.quickcash3.jobdetail.ApplyJob;
 import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
@@ -39,6 +44,7 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     private Database database;
     private LocationProvider locationProvider;
     private Fragment jobSearchFragment;
+    private MyGeocoder geocoder;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
     @Override
@@ -102,14 +108,14 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
     }
 
     private void switchToHistoryDetails(@NonNull CompletedJob completedJob){
-        Fragment jobDetailsPage = new JobDetailsPage(completedJob, null);
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,completedJob, null);
         replaceFragment(jobDetailsPage);
         getOnBackPressedDispatcher().addCallback(jobDetailsPage,
                 new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
     }
     private void switchToJobDetails(@NonNull AvailableJob availableJob) {
-        Fragment applyFragment = new ApplyJob(database,availableJob,new Worker());
-        Fragment jobDetailsPage = new JobDetailsPage(availableJob, applyFragment);
+        Fragment applyFragment = new ApplyJob(database,availableJob, getIntent().getStringExtra(getString(R.string.USER)));
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,availableJob, applyFragment);
         replaceFragment(jobDetailsPage);
         getOnBackPressedDispatcher().addCallback(jobDetailsPage,
             new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
@@ -135,6 +141,14 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         }
         else {
             locationProvider = new AndroidLocationProvider(this, 5000); // Update location every 5 seconds.
+        }
+
+        if (categories.contains(getString(R.string.MOCK_GEOCODER))) {
+            geocoder = new MockGeocoder();
+            Log.i(LOG_TAG, "Using Mock Geocoder");
+        }
+        else {
+            geocoder = new GeocoderProxy(this);
         }
     }
 

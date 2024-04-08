@@ -12,13 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.auth.FirebaseUser;
 
 import dal.cs.quickcash3.R;
 import dal.cs.quickcash3.data.AvailableJob;
-import dal.cs.quickcash3.data.Worker;
 import dal.cs.quickcash3.database.Database;
 
 
@@ -28,13 +24,13 @@ public class ApplyJob extends Fragment {
 
     private final Database database;
     private final AvailableJob currentJob;
-    private final Worker worker;
+    private final String userID;
 
-    public ApplyJob(@NonNull Database database, @NonNull AvailableJob currentJob,@NonNull Worker worker){
+    public ApplyJob(@NonNull Database database, @NonNull AvailableJob currentJob,@Nullable String userID){
         super();
         this.database=database;
         this.currentJob=currentJob;
-        this.worker=worker;
+        this.userID=userID;
     }
 
     @Override
@@ -47,10 +43,10 @@ public class ApplyJob extends Fragment {
         View view = inflater.inflate(R.layout.fragment_apply_job, container, false);
         Button button = view.findViewById(R.id.applyForJob);
         button.setEnabled(false);
-        if(worker.key() != null) {
-            if( !currentJob.isApplicant(worker)) {
+        if(userID != null) {
+            if( !currentJob.isApplicant(userID)) {
                 button.setEnabled(true);
-                button.setOnClickListener(v -> applyForJob(view));
+                button.setOnClickListener(v -> applyForJob(view,button));
             }else{
                 TextView statusLabel = view.findViewById(R.id.statusApplyJob);
                 statusLabel.setText(R.string.appliedJob);
@@ -63,12 +59,14 @@ public class ApplyJob extends Fragment {
         return view;
     }
 
-    private void applyForJob(@NonNull View view) {
+    private void applyForJob(@NonNull View view, Button button) {
 
-        currentJob.addApplicant(worker);
+        assert userID != null;
+        currentJob.addApplicant(userID);
         currentJob.writeToDatabase(database,error ->Log.d(LOG_TAG,"Database error : "+error));
         Toast.makeText(getContext(), getString(R.string.applySuccess),Toast.LENGTH_SHORT).show();
         TextView statusLabel = view.findViewById(R.id.statusApplyJob);
         statusLabel.setText(R.string.applySuccess);
+        button.setEnabled(false);
     }
 }

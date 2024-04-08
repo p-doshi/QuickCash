@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import dal.cs.quickcash3.R;
@@ -66,10 +67,10 @@ public class ApplicantManager {
 
     private void addWorker(@NonNull Worker worker) {
         Log.v(LOG_TAG, "Added worker: " + worker);
-        if (job.isApplicant(worker)) {
+        if (job.isApplicant(worker.key())) {
             applicantsAdapter.addWorker(worker);
         }
-        else if (job.isRejectant(worker)) {
+        else if (job.isRejectant(worker.key())) {
             rejectantsAdapter.addWorker(worker);
         }
         else {
@@ -79,10 +80,10 @@ public class ApplicantManager {
 
     private void removeWorker(@NonNull Worker worker) {
         Log.v(LOG_TAG, "Removed worker: " + worker);
-        if (job.isApplicant(worker)) {
+        if (job.isApplicant(worker.key())) {
             applicantsAdapter.removeWorker(worker);
         }
-        else if (job.isRejectant(worker)) {
+        else if (job.isRejectant(worker.key())) {
             rejectantsAdapter.removeWorker(worker);
         }
         else {
@@ -97,14 +98,14 @@ public class ApplicantManager {
 
     private void rejectWorker(@NonNull Worker worker) {
         Log.v(LOG_TAG, "Rejected worker: " + worker);
-        job.rejectWorker(worker);
+        job.rejectWorker(Objects.requireNonNull(worker.key()));
         applicantsAdapter.removeWorker(worker);
         rejectantsAdapter.addWorker(worker);
     }
 
     private void reconsiderWorker(@NonNull Worker worker) {
         Log.v(LOG_TAG, "Reconsidered worker: " + worker);
-        job.reconsiderWorker(worker);
+        job.reconsiderWorker(Objects.requireNonNull(worker.key()));
         rejectantsAdapter.removeWorker(worker);
         applicantsAdapter.addWorker(worker);
     }

@@ -87,42 +87,39 @@ public class AvailableJob extends JobPost {
         return all;
     }
 
-    public boolean isApplicant(@NonNull Worker worker) {
-        return applicants != null && applicants.contains(worker.key());
+    public boolean isApplicant(@Nullable String workerKey) {
+        return applicants != null && applicants.contains(workerKey);
     }
 
-    public boolean isRejectant(@NonNull Worker worker) {
-        return rejectants != null && rejectants.contains(worker.key());
+    public boolean isRejectant(@Nullable String workerKey) {
+        return rejectants != null && rejectants.contains(workerKey);
     }
 
-    public void rejectWorker(@NonNull Worker worker) {
-        String key = worker.key();
-        if (applicants != null && applicants.contains(key)) {
+    public void rejectWorker(@NonNull String workerKey) {
+        if (applicants != null && applicants.contains(workerKey)) {
             if (rejectants == null) {
                 rejectants = new ArrayList<>();
             }
-            rejectants.add(key);
-            applicants.remove(key);
+            rejectants.add(workerKey);
+            applicants.remove(workerKey);
         }
     }
 
-    public void reconsiderWorker(@NonNull Worker worker) {
-        String key = worker.key();
-        if (rejectants != null && rejectants.contains(key)) {
+    public void reconsiderWorker(@NonNull String workerKey) {
+        if (rejectants != null && rejectants.contains(workerKey)) {
             if (applicants == null) {
                 applicants = new ArrayList<>();
             }
-            applicants.add(key);
-            rejectants.remove(key);
+            applicants.add(workerKey);
+            rejectants.remove(workerKey);
         }
     }
 
-    public  void  addApplicant(@NonNull Worker worker){
-        String key = worker.key();
+    public  void  addApplicant(@NonNull String workerKey){
         if (applicants == null) {
             applicants = new ArrayList<>();
         }
-        applicants.add(key);
+        applicants.add(workerKey);
     }
 
     @Override

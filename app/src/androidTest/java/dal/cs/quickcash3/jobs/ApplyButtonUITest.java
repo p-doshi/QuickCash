@@ -3,9 +3,7 @@ package dal.cs.quickcash3.jobs;
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertTrue;
-
 import static dal.cs.quickcash3.test.ExampleJobList.generateAvailableJobs;
-import static dal.cs.quickcash3.test.ExampleUserList.EMPLOYER1;
 import static dal.cs.quickcash3.test.ExampleUserList.WORKER1;
 import static dal.cs.quickcash3.test.ExampleUserList.generateUsers;
 
@@ -25,7 +23,6 @@ import androidx.test.uiautomator.UiSelector;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -84,7 +81,6 @@ public class ApplyButtonUITest {
         assertTrue(findResource("jobAddress").waitForExists(MAX_TIMEOUT));
     }
 
-    @Ignore("After connecting activities")
     @Test
     public void checkIfApplySuccessful() throws UiObjectNotFoundException {
         assertTrue(findResource("jobAddress").waitForExists(MAX_TIMEOUT));
@@ -93,7 +89,6 @@ public class ApplyButtonUITest {
         assertTrue(findResource("statusApplyJob").getText().matches(SUCCESS));
     }
 
-    @Ignore("After connecting activities")
     @Test
     public void checkIfAlreadyApplied() throws UiObjectNotFoundException {
         assertTrue(findResource("jobAddress").waitForExists(MAX_TIMEOUT));

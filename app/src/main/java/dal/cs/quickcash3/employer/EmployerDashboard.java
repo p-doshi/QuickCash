@@ -127,7 +127,7 @@ public class EmployerDashboard extends AppCompatActivity {
 
     private void showAvailableJobDetails(@NonNull AvailableJob job) {
         Fragment applicantsFragment = new ApplicantsFragment(database, job, worker -> acceptJob(job, worker));
-        Fragment jobDetailsPage = new JobDetailsPage(job, applicantsFragment);
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,job, applicantsFragment);
         replaceFragment(jobDetailsPage);
         pendingWork.set(() -> job.writeToDatabase(database, error -> Log.e(LOG_TAG, "Saving job: " + error)));
         getOnBackPressedDispatcher().addCallback(jobDetailsPage,
@@ -135,7 +135,7 @@ public class EmployerDashboard extends AppCompatActivity {
     }
 
     private void showCompletedJobDetails(@NonNull CompletedJob job) {
-        Fragment jobDetailsPage = new JobDetailsPage(job, null);
+        Fragment jobDetailsPage = new JobDetailsPage(geocoder,job, null);
         replaceFragment(jobDetailsPage);
         getOnBackPressedDispatcher().addCallback(jobDetailsPage,
             new BackButtonListener(() -> replaceFragment(listingFragment)));
