@@ -11,9 +11,7 @@
         android:id="@+id/jobListingHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_green"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:background="?attr/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +43,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/addJob"
         android:src="@drawable/ic_add_foreground"
-        app:backgroundTint="@color/light_green"
+        app:backgroundTint="?attr/colorAccent"
         app:shapeAppearanceOverlay="@style/fab_rounded"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

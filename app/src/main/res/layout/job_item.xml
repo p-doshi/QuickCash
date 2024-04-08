@@ -8,6 +8,7 @@
     android:layout_marginBottom="3dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
+    android:backgroundTint="?attr/android:colorBackground"
     app:cardElevation="4dp"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground">

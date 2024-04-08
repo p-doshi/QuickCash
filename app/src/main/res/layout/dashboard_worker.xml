@@ -22,7 +22,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:backgroundTint="?attr/android:colorBackground"
+        app:itemActiveIndicatorStyle="@style/nav_selected"
         app:menu="@menu/dash_worker_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

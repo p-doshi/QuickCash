@@ -77,7 +77,7 @@ public class SearchFiltersEspressoTests {
 
         // Navigate to the search filter.
         onView(withId(R.id.workerSearchPage)).perform(click());
-        onView(withId(R.id.filterIcon)).perform(click());
+        onView(withId(R.id.filterButton)).perform(click());
     }
 
     @Test

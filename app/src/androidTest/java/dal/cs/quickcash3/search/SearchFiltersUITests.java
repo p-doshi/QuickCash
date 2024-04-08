@@ -95,7 +95,7 @@ public class SearchFiltersUITests {
 
         // Navigate to the search filter.
         findResource("workerSearchPage").click();
-        findResource("filterIcon").click();
+        findResource("filterButton").click();
     }
 
     @Test

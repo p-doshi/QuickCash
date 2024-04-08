@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.function.Consumer;
 
@@ -21,7 +22,7 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.location.LocationProvider;
 
 public class JobSearchFragment extends Fragment  {
-    private ImageView filterIcon ;
+    private FloatingActionButton filterButton;
     private final JobListFragment<AvailableJob> jobListFragment;
     private final SearchFilterFragment searchFragment;
 
@@ -45,7 +46,7 @@ public class JobSearchFragment extends Fragment  {
     {
         View view = inflater.inflate(R.layout.jobs_search_page, container, false);
         this.setUpSearchBar(view);
-        this.setUpFilterIcon(view);
+        this.setUpfilterButton(view);
         replaceFragment(jobListFragment);
         return view;
     }
@@ -55,11 +56,11 @@ public class JobSearchFragment extends Fragment  {
         searchView.setOnQueryTextListener(new JobQueryTextListener(jobListFragment));
     }
 
-    public void setUpFilterIcon(@NonNull View currentView) {
-        filterIcon = currentView.findViewById(R.id.filterIcon);
-        filterIcon.setOnClickListener(v -> {
+    public void setUpfilterButton(@NonNull View currentView) {
+        filterButton = currentView.findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(v -> {
             replaceFragment(searchFragment);
-            filterIcon.setVisibility(View.INVISIBLE);
+            filterButton.setVisibility(View.INVISIBLE);
         });
     }
 
@@ -71,6 +72,6 @@ public class JobSearchFragment extends Fragment  {
 
     private void showList() {
         replaceFragment(jobListFragment);
-        filterIcon.setVisibility(View.VISIBLE);
+        filterButton.setVisibility(View.VISIBLE);
     }
 }
