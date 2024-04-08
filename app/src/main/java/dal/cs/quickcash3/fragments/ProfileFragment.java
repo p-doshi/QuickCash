@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.worker.StorePreferencesFragment;
 
 public class ProfileFragment extends Fragment {
 
