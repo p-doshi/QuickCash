@@ -35,47 +35,40 @@ import dal.cs.quickcash3.database.Database;
 import dal.cs.quickcash3.database.ObjectSearchAdapter;
 import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.search.RegexSearchFilter;
+import dal.cs.quickcash3.search.SearchFilter;
 import dal.cs.quickcash3.util.CustomObserver;
 
 public class WorkHistoryGraphFragment extends Fragment {
-    private BarChart barChart;
     private final List<CompletedJob> jobList = new ArrayList<>();
     private final List<BarEntry> barEntries = new ArrayList<>();
     private Database database;
+    private SearchFilter<CompletedJob> searchFilter;
+    private BarChart barChart;
     private int callbackId;
 
     public WorkHistoryGraphFragment() {
         super();
     }
-    public WorkHistoryGraphFragment(@NonNull Database database){
+    public WorkHistoryGraphFragment(@NonNull Database database, @NonNull SearchFilter<CompletedJob> searchFilter){
         super();
         this.database = database;
+        this.searchFilter = searchFilter;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_work_history, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_work_history, container, false);
         barChart = view.findViewById(R.id.barChart);
-        database = new MyFirebaseDatabase();
+        configureYAxis();
         fetchJobsFromDatabase();
+        return view;
     }
 
     private void fetchJobsFromDatabase() {
-        String workerId = ".*";
-
-        RegexSearchFilter<CompletedJob> searchFilter = new RegexSearchFilter<>(CompletedJob::getWorker);
-        searchFilter.setPattern(Pattern.compile(workerId));
-
         ObjectSearchAdapter<CompletedJob> searchAdapter = new ObjectSearchAdapter<>(searchFilter);
         searchAdapter.addObserver(new CustomObserver<>(this::addJob, this::removeWorker));
-
         callbackId = database.addDirectoryListener(CompletedJob.DIR, CompletedJob.class, searchAdapter::receive,
                 error -> Log.w(TAG, "Received database error: " + error));
     }
@@ -85,22 +78,22 @@ public class WorkHistoryGraphFragment extends Fragment {
         updateChartData();
     }
 
-
-
     private void removeWorker(@NonNull CompletedJob job) {
         jobList.remove(job);
+        updateChartData();
     }
 
     private void updateChartData() {
+        jobList.clear();
         barEntries.clear();
         List<String> xLabels = generateBarEntriesAndLabels();
         BarDataSet dataSet = new BarDataSet(barEntries, "Completed Jobs");
         BarData barData = new BarData(dataSet);
         barChart.setData(barData);
         configureXAxis(xLabels);
-        configureYAxis();
         barChart.invalidate();
     }
+
     private List<String> generateBarEntriesAndLabels() {
         List<String> xLabels = new ArrayList<>();
         for (int i = 0; i < jobList.size(); i++) {
@@ -111,12 +104,14 @@ public class WorkHistoryGraphFragment extends Fragment {
         }
         return xLabels;
     }
+
     private void configureXAxis(List<String> labels) {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setGranularity(1f);
         barChart.getXAxis().setGranularityEnabled(true);
     }
+
     private void configureYAxis() {
         barChart.getAxisLeft().setValueFormatter(new ValueFormatter() {
             private final DecimalFormat decimalFormat = new DecimalFormat("$###,###,###,##0.00");
@@ -127,6 +122,7 @@ public class WorkHistoryGraphFragment extends Fragment {
             }
         });
     }
+
     private String formatDateForLabel(String rawDate) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         SimpleDateFormat outputFormat = new SimpleDateFormat("MM-dd", Locale.ENGLISH);
