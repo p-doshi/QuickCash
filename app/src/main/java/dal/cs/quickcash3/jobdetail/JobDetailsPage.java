@@ -25,7 +25,7 @@ public class JobDetailsPage extends Fragment {
     private final JobPost currentJob;
     private final Fragment subfragment;
     private final MyGeocoder geocoder;
-    public JobDetailsPage(MyGeocoder geocoder, @NonNull JobPost currentJob, @Nullable Fragment subfragment) {
+    public JobDetailsPage(@NonNull MyGeocoder geocoder, @NonNull JobPost currentJob, @Nullable Fragment subfragment) {
         super();
         this.currentJob = currentJob;
         this.subfragment = subfragment;
