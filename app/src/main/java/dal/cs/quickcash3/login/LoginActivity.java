@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements SignInInterface 
 
     protected void checkUserInDatabase(@NonNull String email, @NonNull String password){
 
-        CheckBox rememberMe = findViewById(R.id.checkBox);
+        CheckBox rememberMe = findViewById(R.id.salaryCheckBox);
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(this, task -> {
                         // Sign in success, update UI with the signed-in user's information

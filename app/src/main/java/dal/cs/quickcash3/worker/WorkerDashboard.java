@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,28 +16,29 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import dal.cs.quickcash3.R;
+import dal.cs.quickcash3.data.AvailableJob;
 import dal.cs.quickcash3.data.CompletedJob;
-import dal.cs.quickcash3.data.JobPost;
 import dal.cs.quickcash3.database.Database;
-import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
-import dal.cs.quickcash3.fragments.HistoryFragment;
-import dal.cs.quickcash3.fragments.MapsFragment;
-import dal.cs.quickcash3.fragments.ProfileFragment;
+import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.jobdetail.ApplyJob;
+import dal.cs.quickcash3.payment.WorkerCheckPayment;
+import dal.cs.quickcash3.search.RegexSearchFilter;
 import dal.cs.quickcash3.jobdetail.JobDetailsPage;
 import dal.cs.quickcash3.jobs.JobSearchFragment;
+import dal.cs.quickcash3.fragments.MapsFragment;
+import dal.cs.quickcash3.fragments.ProfileFragment;
+import dal.cs.quickcash3.fragments.HistoryFragment;
 import dal.cs.quickcash3.location.AndroidLocationProvider;
 import dal.cs.quickcash3.location.LocationProvider;
 import dal.cs.quickcash3.location.MockLocationProvider;
 import dal.cs.quickcash3.permission.AppCompatPermissionActivity;
-import dal.cs.quickcash3.search.RegexSearchFilter;
-import dal.cs.quickcash3.util.BackButtonListener;
 
 public class WorkerDashboard extends AppCompatPermissionActivity {
     private static final String LOG_TAG = WorkerDashboard.class.getSimpleName();
     private Database database;
     private LocationProvider locationProvider;
+    private Fragment historyFragment;
     private Fragment jobSearchFragment;
 
     @SuppressWarnings("PMD.LawOfDemeter") // There is no other way to do this.
@@ -58,11 +60,12 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
         }
 
         // Initialize the fragments.
-        Fragment historyFragment = new HistoryFragment(this, database, searchFilter, this::switchToJobDetails);
+        historyFragment = new HistoryFragment(this, database, searchFilter, this::switchToJobHistory);
         Fragment mapFragment = new MapsFragment();
         Fragment profileFragment = new ProfileFragment();
         jobSearchFragment = new JobSearchFragment(this, database, locationProvider,this::switchToJobDetails);
         Fragment statsFragment = new WorkHistoryGraphFragment(database);
+
         BottomNavigationView workerNavView = findViewById(R.id.workerBottomNavView);
 
         workerNavView.setOnItemSelectedListener(item -> {
@@ -95,17 +98,33 @@ public class WorkerDashboard extends AppCompatPermissionActivity {
 
     private void replaceFragment(@NonNull Fragment fragment) {
         Log.i(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        for(int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.workerFragmentView, fragment);
         transaction.commit();
     }
 
-    private void switchToJobDetails(@NonNull JobPost job) {
+    private void addFragment(@NonNull Fragment fragment) {
+        Log.i(LOG_TAG, "Showing " + fragment.getClass().getSimpleName());
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.workerFragmentView, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void switchToJobDetails(@NonNull AvailableJob job) {
         Fragment applyFragment = new ApplyJob();
         Fragment jobDetailsPage = new JobDetailsPage(job, applyFragment);
-        replaceFragment(jobDetailsPage);
-        getOnBackPressedDispatcher().addCallback(jobDetailsPage,
-            new BackButtonListener(() -> replaceFragment(jobSearchFragment)));
+        addFragment(jobDetailsPage);
+    }
+
+    private void switchToJobHistory(@NonNull CompletedJob job) {
+        Fragment workerCheckPayment = new WorkerCheckPayment(database);
+        Fragment jobDetailsPage = new JobDetailsPage(job, workerCheckPayment);
+        addFragment(jobDetailsPage);
     }
 
     private void initInterfaces() {
