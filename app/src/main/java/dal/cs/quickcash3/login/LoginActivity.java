@@ -1,5 +1,6 @@
 package dal.cs.quickcash3.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,12 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,12 +34,14 @@ import dal.cs.quickcash3.database.firebase.MyFirebaseDatabase;
 import dal.cs.quickcash3.database.mock.MockDatabase;
 import dal.cs.quickcash3.registration.RegistrationPage;
 
-public class LoginActivity extends AppCompatActivity  {
+public class LoginActivity extends AppCompatActivity implements SignInInterface {
+
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
     private Database database;
     private FirebaseAuth mAuth;
-    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInHelper mGoogleSignInHelper;
     private SharedPreferences.Editor editor;
+    private ActivityResultLauncher<Intent> signInLauncher;
     private DashboardLauncher launcher;
     private TextView statusLabel;
 
@@ -70,29 +70,24 @@ public class LoginActivity extends AppCompatActivity  {
 
         setContentView(R.layout.activity_login);
 
-        Button loginButton = findViewById(R.id.continueButton);
-        statusLabel = findViewById(R.id.statusLabel);
-        Button signupButton = findViewById(R.id.signupManually);
+        this.setUpLoginButton();
+        this.setUpSignUpButtonManual();
 
-        loginButton.setOnClickListener(view -> handleLoginButton());
-        signupButton.setOnClickListener(view1 -> moveToRegistration());
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.WebClient))
-                .requestEmail()
-                .build();
-        ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    // Handle the sign-in success
-                    Intent data = result.getData();
-                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                    handleGoogleSignIn(task);
-                });
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInHelper = new GoogleSignInHelper(this,  new SignInImplementation(this));
         SignInButton signInButton = findViewById(R.id.signupGoogle);
+        signInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        Task<GoogleSignInAccount> task = mGoogleSignInHelper.getSignedInAccountFromIntent(data);
+                        mGoogleSignInHelper.handleSignInResult(task);
+                    } else {
+                        Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         signInButton.setOnClickListener(view -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            Intent signInIntent = mGoogleSignInHelper.getSignInIntent();
             signInLauncher.launch(signInIntent);
         });
     }
@@ -121,26 +116,6 @@ public class LoginActivity extends AppCompatActivity  {
             });
     }
 
-    private void handleGoogleSignIn(Task<GoogleSignInAccount> completedTask) {
-        try {
-            // Make sure there are no problems with the result.
-            completedTask.getResult(ApiException.class);
-
-            FirebaseUser user = mAuth.getCurrentUser();
-            if (user != null) {
-                launchDashboard(user);
-            }
-            else {
-                Log.e(LOG_TAG, "Google Sign In didn't give a FirebaseUser");
-                statusLabel.setText(getString(R.string.INVALID_CREDENTIALS));
-            }
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.e(LOG_TAG, "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private @NonNull String getEmailAddress(){
         EditText emailInput = findViewById(R.id.emailaddress);

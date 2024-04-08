@@ -61,7 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="0dp"
+            android:autofillHints="birthDateYear"
             android:hint="@string/year"
             android:imeOptions="actionNext"
             android:inputType="number"
@@ -69,8 +69,7 @@
             app:layout_constraintEnd_toStartOf="@+id/birthMonth"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address"
-            app:layout_constraintWidth_percent="0.4"
-            android:autofillHints="birthDateYear" />
+            app:layout_constraintWidth_percent="0.4" />
 
         <EditText
             android:id="@+id/birthMonth"
@@ -96,7 +95,7 @@
             android:hint="@string/day"
             android:imeOptions="actionNext"
             android:inputType="number"
-            android:nextFocusDown="@+id/userName"
+            android:nextFocusDown="@+id/emailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/birthMonth"
             app:layout_constraintTop_toBottomOf="@id/address"
@@ -104,34 +103,19 @@
             android:autofillHints="birthDateDay" />
 
         <EditText
-            android:id="@+id/userName"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:hint="@string/user_name"
-            android:imeOptions="actionNext"
-            android:inputType="textPersonName"
-            android:nextFocusDown="@+id/emailAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/birthYear"
-            app:layout_constraintWidth_percent="0.9"
-            android:autofillHints="newUsername" />
-
-        <EditText
             android:id="@+id/emailAddress"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
+            android:autofillHints="emailAddress"
             android:hint="@string/email_address"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:nextFocusDown="@+id/password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userName"
-            app:layout_constraintWidth_percent="0.9"
-            android:autofillHints="emailAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/birthYear"
+            app:layout_constraintWidth_percent="0.9" />
 
         <TextView
             android:id="@+id/passwordCriteria"

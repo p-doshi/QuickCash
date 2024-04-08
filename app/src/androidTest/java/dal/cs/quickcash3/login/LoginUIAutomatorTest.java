@@ -7,7 +7,9 @@ import android.app.Activity;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
@@ -27,6 +29,7 @@ import dal.cs.quickcash3.test.ActivityMonitorRule;
 import dal.cs.quickcash3.worker.WorkerDashboard;
 
 public class LoginUIAutomatorTest {
+    private static final int LAUNCH_TIMEOUT = 10000;
     private static final String EMAIL = "Email";
     private static final String PASSWORD = "Password";
     private static final String CONTINUE = "Continue";
@@ -65,8 +68,8 @@ public class LoginUIAutomatorTest {
     public void checkIfLandingPageIsVisible() {
         UiObject emailIDBox = device.findObject(new UiSelector().textContains(EMAIL));
         assertTrue(emailIDBox.exists());
-        UiObject roleSpinner = device.findObject(new UiSelector().textContains(PASSWORD));
-        assertTrue(roleSpinner.exists());
+        UiObject passwordBox= device.findObject(new UiSelector().textContains(PASSWORD));
+        assertTrue(passwordBox.exists());
         UiObject registerButton = device.findObject(new UiSelector().text(CONTINUE));
         assertTrue(registerButton.exists());
     }
