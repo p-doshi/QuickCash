@@ -4,12 +4,10 @@
     <string name="day">Day</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="user_name">User Name</string>
     <string name="invalid_first_name">Invalid first name</string>
     <string name="invalid_last_name">Invalid last name</string>
     <string name="invalid_address">Invalid address</string>
     <string name="invalid_birth_date">Invalid birth date</string>
-    <string name="invalid_user_name">Invalid user name</string>
     <string name="invalid_email_address">Invalid email address</string>
     <string name="invalid_password">Password criteria not match</string>
     <string name="passwords_do_not_match">Passwords do not match</string>

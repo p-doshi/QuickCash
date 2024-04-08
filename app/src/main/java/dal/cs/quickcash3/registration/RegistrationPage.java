@@ -39,7 +39,6 @@ public class RegistrationPage extends AppCompatActivity {
         formFields.add(new GeneralField(findViewById(R.id.lastName), R.string.invalid_last_name));
         formFields.add(new AddressField(findViewById(R.id.address)));
         formFields.add(new DateField(findViewById(R.id.birthYear), findViewById(R.id.birthMonth), findViewById(R.id.birthDay)));
-        formFields.add(new GeneralField(findViewById(R.id.userName), R.string.invalid_user_name));
         formFields.add(new EmailAddressField(findViewById(R.id.emailAddress)));
         formFields.add(new PasswordField(findViewById(R.id.password), findViewById(R.id.confirmPassword)));
         statusTextView = findViewById(R.id.registrationStatus);
